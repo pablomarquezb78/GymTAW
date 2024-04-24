@@ -23,8 +23,10 @@ DROP TABLE IF EXISTS `asignacion_cliente_dietista`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `asignacion_cliente_dietista` (
+  `idasignacion_cliente_dietista` int NOT NULL AUTO_INCREMENT,
   `cliente` int DEFAULT NULL,
   `dietista` int DEFAULT NULL,
+  PRIMARY KEY (`idasignacion_cliente_dietista`),
   KEY `asignacion-cliente_fk_idx` (`cliente`),
   KEY `asignacion-dietista_fk_idx` (`dietista`),
   CONSTRAINT `asignacion-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
@@ -49,8 +51,10 @@ DROP TABLE IF EXISTS `asignacion_cliente_entrenador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `asignacion_cliente_entrenador` (
+  `idasignacion_cliente_entrenador` int NOT NULL AUTO_INCREMENT,
   `cliente` int DEFAULT NULL,
   `entrenador` int DEFAULT NULL,
+  PRIMARY KEY (`idasignacion_cliente_entrenador`),
   KEY `asignacion_cliente_fk_idx` (`cliente`),
   KEY `asignacion-entrenador_fk_idx` (`entrenador`),
   CONSTRAINT `asignacion-entrenador_fk` FOREIGN KEY (`entrenador`) REFERENCES `user` (`iduser`),
@@ -477,4 +481,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-15 12:22:56
+-- Dump completed on 2024-04-24 10:54:36
