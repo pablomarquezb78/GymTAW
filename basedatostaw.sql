@@ -437,7 +437,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`iduser`),
   KEY `user-rol_fk_idx` (`rol`),
   CONSTRAINT `user-rol_fk` FOREIGN KEY (`rol`) REFERENCES `user_rol` (`iduser_rol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -446,6 +446,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'cliente_test','cliente','cliente','clientado',999,80,180,'2000-04-20 00:00:00','soy una cuenta de testeo de cliente',2),(2,'admin_test','admin','admin','administrador',111,100,200,'2000-01-01 00:00:00','soy una cuenta de testeo de administrador',1),(3,'bodybuilder_test','bodybuilder','bodybuilder','bodybuilding',222,120,150,'2003-03-02 00:00:00','soy una cuenta de testeo',3),(4,'crosstrainer_test','crosstrainer','crosstrainer','crosstraining',333,72,185,'1990-05-27 00:00:00','soy una cuenta de testeo',4),(5,'dietista_test','dietista','dietista','dieta',444,92,175,'1995-10-10 00:00:00','soy una cuenta de testeo',5);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,7 +461,7 @@ CREATE TABLE `user_rol` (
   `iduser_rol` int NOT NULL AUTO_INCREMENT,
   `rol_usuario` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`iduser_rol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -469,6 +470,7 @@ CREATE TABLE `user_rol` (
 
 LOCK TABLES `user_rol` WRITE;
 /*!40000 ALTER TABLE `user_rol` DISABLE KEYS */;
+INSERT INTO `user_rol` VALUES (1,'admin'),(2,'cliente'),(3,'bodybuilder'),(4,'crosstrainer'),(5,'dietista');
 /*!40000 ALTER TABLE `user_rol` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -481,4 +483,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-24 10:54:36
+-- Dump completed on 2024-04-26 19:40:54

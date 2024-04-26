@@ -1,0 +1,48 @@
+----------------------------------------------------------------
+Mon Apr 08 11:28:35 CEST 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-018e-bd09-baeb-000002a52cf0 
+on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\ad5ee64a-1183-4a5c-a9be-5dd2aefeac04 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
+Loaded from file:/C:/Users/Usuario/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+java.vendor=Amazon.com Inc.
+java.runtime.version=17.0.10+7-LTS
+user.dir=C:\Users\Usuario\IdeaProjects\GymTAW
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Apr 08 11:28:43 CEST 2024:
+Shutting down instance a816c00e-018e-bd09-baeb-000002a52cf0 on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\ad5ee64a-1183-4a5c-a9be-5dd2aefeac04 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
+----------------------------------------------------------------
+Mon Apr 08 11:28:44 CEST 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance e66540fa-018e-bd09-baeb-000002a52cf0 
+on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\7e853f33-3d9d-4f0c-beff-63abe020a970 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
+Loaded from file:/C:/Users/Usuario/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+java.vendor=Amazon.com Inc.
+java.runtime.version=17.0.10+7-LTS
+user.dir=C:\Users\Usuario\IdeaProjects\GymTAW
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Apr 08 11:28:46 CEST 2024:
+Shutting down instance e66540fa-018e-bd09-baeb-000002a52cf0 on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\7e853f33-3d9d-4f0c-beff-63abe020a970 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
+----------------------------------------------------------------
+Mon Apr 08 11:28:47 CEST 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance 5b17c1e6-018e-bd09-baeb-000002a52cf0 
+on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\8d4a1129-9f54-4124-b1e1-d0e146cf8e30 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
+Loaded from file:/C:/Users/Usuario/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+java.vendor=Amazon.com Inc.
+java.runtime.version=17.0.10+7-LTS
+user.dir=C:\Users\Usuario\IdeaProjects\GymTAW
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Apr 08 11:28:53 CEST 2024:
+Shutting down instance 5b17c1e6-018e-bd09-baeb-000002a52cf0 on database directory memory:C:\Users\Usuario\IdeaProjects\GymTAW\8d4a1129-9f54-4124-b1e1-d0e146cf8e30 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
