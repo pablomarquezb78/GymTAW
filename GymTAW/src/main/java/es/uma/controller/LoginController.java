@@ -1,5 +1,6 @@
 package es.uma.controller;
 
+import es.uma.dao.PlatosRepository;
 import es.uma.dao.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,15 @@ public class LoginController {
 
     @Autowired
     protected UserRepository userRepository;
+
+    @Autowired
+    protected PlatosRepository platosRepository;
+
+    final String admin = "admin";
+    final String cliente = "cliente";
+    final String bodybuilder = "bodybuilder";
+    final String crosstrainer = "crosstrainer";
+    final String dietista = "dietista";
 
     @GetMapping("/")
     public String doLoad (Model model) {
@@ -37,8 +47,31 @@ public class LoginController {
             session.setAttribute("user", userEntity);
             UserRol userRolEntity = userEntity.getRol();
             session.setAttribute("rol", userRolEntity);
-            return "loginTest";
+
+            String webRedirect = "loginTest";
+            switch(userRolEntity.getRolUsuario())
+            {
+                case admin:
+
+                break;
+                case cliente:
+
+                break;
+                case bodybuilder:
+
+                break;
+                case crosstrainer:
+
+                break;
+                case dietista:
+                    model.addAttribute("panel", "main");
+                    model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
+                    webRedirect = "dietista/dietista_platos";
+                break;
+                default:
+                    webRedirect = "loginTest";
+            }
+            return webRedirect;
         }
     }
-
 }

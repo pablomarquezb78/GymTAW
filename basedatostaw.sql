@@ -95,7 +95,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
   CONSTRAINT `cantidad-ingrediente_fk` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `cantidad-plato_fk` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`),
   CONSTRAINT `cantidad-tipo_cantidad_fk` FOREIGN KEY (`tipo_cantidad`) REFERENCES `tipo_cantidad` (`idtipo_cantidad`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,6 +104,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
 
 LOCK TABLES `cantidad_ingrediente-plato-comida` WRITE;
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` DISABLE KEYS */;
+INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (13,100,1,0,1,1,1),(14,20,1,0,2,1,1),(15,20,1,0,3,2,1),(16,100,1,0,1,2,1);
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +125,7 @@ CREATE TABLE `comida` (
   KEY `comida-dia_dieta_fk_idx` (`dia_dieta`),
   CONSTRAINT `comida-dia_dieta_fk` FOREIGN KEY (`dia_dieta`) REFERENCES `dia_dieta` (`iddia_dieta`),
   CONSTRAINT `comida-tipo_comida_fk` FOREIGN KEY (`tipo_comida`) REFERENCES `tipo_comida` (`idtipo_comida`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,6 +134,7 @@ CREATE TABLE `comida` (
 
 LOCK TABLES `comida` WRITE;
 /*!40000 ALTER TABLE `comida` DISABLE KEYS */;
+INSERT INTO `comida` VALUES (1,1,1,1);
 /*!40000 ALTER TABLE `comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +156,7 @@ CREATE TABLE `dia_dieta` (
   KEY `dia_dieta-dietista_fk_idx` (`dietista`),
   CONSTRAINT `dia_dieta-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_dieta-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,6 +165,7 @@ CREATE TABLE `dia_dieta` (
 
 LOCK TABLES `dia_dieta` WRITE;
 /*!40000 ALTER TABLE `dia_dieta` DISABLE KEYS */;
+INSERT INTO `dia_dieta` VALUES (1,'2000-01-01 00:00:00','Este dia de dieta esta hecho para testear',1,5);
 /*!40000 ALTER TABLE `dia_dieta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +284,7 @@ CREATE TABLE `ingrediente` (
   `azucares` varchar(30) DEFAULT NULL,
   `hidratos_de_carbono` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idingrediente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,6 +293,7 @@ CREATE TABLE `ingrediente` (
 
 LOCK TABLES `ingrediente` WRITE;
 /*!40000 ALTER TABLE `ingrediente` DISABLE KEYS */;
+INSERT INTO `ingrediente` VALUES (1,'Pasta','5','5','5','5','5'),(2,'Tomate','1','1','1','1','1'),(3,'Nata','2','2','2','2','2');
 /*!40000 ALTER TABLE `ingrediente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +311,7 @@ CREATE TABLE `plato` (
   `receta` varchar(1500) DEFAULT NULL,
   `enlace_receta` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idplato`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,6 +320,7 @@ CREATE TABLE `plato` (
 
 LOCK TABLES `plato` WRITE;
 /*!40000 ALTER TABLE `plato` DISABLE KEYS */;
+INSERT INTO `plato` VALUES (1,'Pasta con tomate','15 minutos','Esto es un test de receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ'),(2,'Pasta con nata','20 minutos','Esto es otra receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 /*!40000 ALTER TABLE `plato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,7 +362,7 @@ CREATE TABLE `tipo_cantidad` (
   `idtipo_cantidad` int NOT NULL AUTO_INCREMENT,
   `tipo_cantidad_medida` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idtipo_cantidad`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,6 +371,7 @@ CREATE TABLE `tipo_cantidad` (
 
 LOCK TABLES `tipo_cantidad` WRITE;
 /*!40000 ALTER TABLE `tipo_cantidad` DISABLE KEYS */;
+INSERT INTO `tipo_cantidad` VALUES (1,'cantidad_implementacion');
 /*!40000 ALTER TABLE `tipo_cantidad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -380,7 +386,7 @@ CREATE TABLE `tipo_comida` (
   `idtipo_comida` int NOT NULL AUTO_INCREMENT,
   `comida_del_dia` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idtipo_comida`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -389,6 +395,7 @@ CREATE TABLE `tipo_comida` (
 
 LOCK TABLES `tipo_comida` WRITE;
 /*!40000 ALTER TABLE `tipo_comida` DISABLE KEYS */;
+INSERT INTO `tipo_comida` VALUES (1,'tipo_implementacion');
 /*!40000 ALTER TABLE `tipo_comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -483,4 +490,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-26 19:40:54
+-- Dump completed on 2024-04-29 10:59:24
