@@ -29,14 +29,8 @@ public class PlatosController {
         }
         model.addAttribute("panel", "main");
         model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista((User) session.getAttribute("user")));
-<<<<<<< Updated upstream
 
 
         return "dietista/dietista_platos";
-=======
-        model.addAttribute("selectedPlato", plato);
-        model.addAttribute("listaIngredientes",platosRepository.getIngredientesFromPlato(plato));
-        return "dietista_platos";
->>>>>>> Stashed changes
     }
 }
