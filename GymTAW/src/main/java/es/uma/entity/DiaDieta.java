@@ -3,6 +3,7 @@ package es.uma.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "dia_dieta")
@@ -12,7 +13,7 @@ public class DiaDieta {
     private Integer id;
 
     @Column(name = "fecha")
-    private Instant fecha;
+    private LocalDate fecha;
 
     @Column(name = "seguimiento", length = 1500)
     private String seguimiento;
@@ -33,11 +34,11 @@ public class DiaDieta {
         this.id = id;
     }
 
-    public Instant getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Instant fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

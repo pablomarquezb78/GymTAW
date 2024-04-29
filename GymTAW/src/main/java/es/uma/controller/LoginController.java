@@ -84,6 +84,7 @@ public class LoginController extends  BaseController {
                 break;
                 case cliente:
 
+                    webRedirect = "redirect:/cliente/";
                 break;
                 case bodybuilder:
 

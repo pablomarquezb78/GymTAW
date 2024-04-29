@@ -8,9 +8,11 @@ import es.uma.entity.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/dietista")
 public class PlatosController {
 
     @Autowired
@@ -27,8 +29,14 @@ public class PlatosController {
         }
         model.addAttribute("panel", "main");
         model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista((User) session.getAttribute("user")));
+<<<<<<< Updated upstream
 
 
         return "dietista/dietista_platos";
+=======
+        model.addAttribute("selectedPlato", plato);
+        model.addAttribute("listaIngredientes",platosRepository.getIngredientesFromPlato(plato));
+        return "dietista_platos";
+>>>>>>> Stashed changes
     }
 }
