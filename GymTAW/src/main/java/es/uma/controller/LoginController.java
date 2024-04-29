@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class LoginController {
+public class LoginController extends  BaseController {
 
     @Autowired
     protected UserRepository userRepository;
@@ -28,11 +28,39 @@ public class LoginController {
     final String dietista = "dietista";
 
     @GetMapping("/")
-    public String doLoad (Model model) {
-        return "login";
+    public String doLoad (Model model,HttpSession session) {
+        String webRedirect= "login";
+        if (estaAutenticado(session)) {
+            UserRol userRolEntity =(UserRol) session.getAttribute("rol");
+            User userEntity = (User) session.getAttribute("user");
+            switch(userRolEntity.getRolUsuario())
+            {
+                case admin:
+
+                    break;
+                case cliente:
+
+                    break;
+                case bodybuilder:
+
+                    break;
+                case crosstrainer:
+                    webRedirect = "loginTest";
+                    break;
+                case dietista:
+                    model.addAttribute("panel", "main");
+                    model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
+                    webRedirect = "redirect:/mostrarPlato";
+                    break;
+                default:
+                    webRedirect = "loginTest";
+            }
+
+        }
+        return webRedirect;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/autentica")
     public String doLogin(@RequestParam("usuario_login") String username
                         , @RequestParam("password_login") String password
                         , HttpSession session
@@ -40,7 +68,7 @@ public class LoginController {
         User userEntity = this.userRepository.findByUsernamePassword(username, password);
         if (userEntity == null) {
             model.addAttribute("error", "Credenciales no encontradas");
-            return "redirect:/login";
+            return "redirect:/";
         }
         else
         {
@@ -66,7 +94,7 @@ public class LoginController {
                 case dietista:
                     model.addAttribute("panel", "main");
                     model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
-                    webRedirect = "dietista/dietista_platos";
+                    webRedirect = "redirect:/mostrarPlato";
                 break;
                 default:
                     webRedirect = "loginTest";

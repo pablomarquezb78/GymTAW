@@ -17,14 +17,18 @@ public class PlatosController {
     protected PlatosRepository platosRepository;
 
     @GetMapping("/mostrarPlato")
-    public String doLoad (@RequestParam("platosDisplay") String platoId
+    public String doLoad (@RequestParam(value = "platosDisplay",required = false) String platoId
                          , HttpSession session
                          , Model model) {
-        Plato plato = platosRepository.findPlatoById(Integer.valueOf(platoId));
+        if(platoId != null){
+            Plato plato = platosRepository.findPlatoById(Integer.valueOf(platoId));
+            model.addAttribute("selectedPlato", plato);
+            model.addAttribute("listaIngredientes",platosRepository.getIngredientesFromPlato(plato));
+        }
         model.addAttribute("panel", "main");
         model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista((User) session.getAttribute("user")));
-        model.addAttribute("selectedPlato", plato);
-        model.addAttribute("listaIngredientes",platosRepository.getIngredientesFromPlato(plato));
-        return "/dietista/dietista_platos";
+
+
+        return "dietista/dietista_platos";
     }
 }

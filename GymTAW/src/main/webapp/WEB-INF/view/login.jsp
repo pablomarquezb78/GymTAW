@@ -9,7 +9,7 @@
     <title>Login</title>
 </head>
 <body>
-<form method="post" action="/login">
+<form method="post" action="/autentica">
     Usuario: <input type="text" name="usuario_login"> <br>
     Contraseña: <input type="password" name="password_login"> <br>
     <button>Acceder</button>
