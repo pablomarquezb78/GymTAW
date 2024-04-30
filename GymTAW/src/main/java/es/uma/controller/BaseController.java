@@ -8,4 +8,9 @@ public class BaseController {
         return session.getAttribute("user") != null;
     }
 
+    protected boolean esEntrenador(HttpSession session) {
+        return session.getAttribute("rol") == "3" || session.getAttribute("rol") == "4";
+    }
+
+
 }

@@ -45,7 +45,7 @@ public class LoginController extends  BaseController {
 
                     break;
                 case crosstrainer:
-                    webRedirect = "loginTest";
+                    webRedirect = "redirect:/entrenamientos/";
                     break;
                 case dietista:
                     model.addAttribute("panel", "main");
@@ -90,7 +90,7 @@ public class LoginController extends  BaseController {
 
                 break;
                 case crosstrainer:
-
+                    webRedirect = "redirect:/entrenamientos/";
                 break;
                 case dietista:
                     model.addAttribute("panel", "main");
