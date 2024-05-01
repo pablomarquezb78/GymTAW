@@ -33,13 +33,41 @@
             </ul>
         </div>
     </nav>
+
+    <br/>
+    <table border="1" cellpadding="10" cellspacing="10">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>APELLIDOS</th>
+            <th>ROL</th>
+            <th>FECHA NACIMIENTO</th>
+            <th>PESO</th>
+            <th>ALTURA</th>
+            <th>TELEFONO</th>
+            <th></th>
+            <th></th>
+        </tr>
+
 <%
     for(User usuario : usuarios){
 
 %>
-    <p><%=usuario.getNombre()%></p>
+        <tr>
+            <td><%=usuario.getId()%></td>
+            <td><%=usuario.getNombre()%></td>
+            <td><%=usuario.getApellidos()%></td>
+            <td><%=usuario.getRol().getRolUsuario()%></td>
+            <td><%=usuario.getFechaNacimiento()%></td>
+            <td><%=usuario.getPeso()%></td>
+            <td><%=usuario.getAltura()%></td>
+            <td><%=usuario.getTelefono()%></td>
+            <td><a href="/admin/editar?id=<%=usuario.getId()%>">Editar</a></td>
+            <td><a href="/admin/borrar?id=<%=usuario.getId()%>">Borrar</a></td>
+        </tr>
 <%
     }
 %>
+    </table>
 </body>
 </html>

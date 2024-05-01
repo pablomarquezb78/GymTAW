@@ -14,7 +14,7 @@
                 </li>
                 <li class="nav-item">
                     <form class="nav-link" action="/admin/mostrarUsuarios" method="post">
-                        <button>Usuarios</button>
+                        <a href="/admin/mostrarUsuarios">Usuarios</a>
                     </form>
                 </li>
                 <li class="nav-item">
