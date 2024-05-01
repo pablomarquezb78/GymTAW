@@ -36,7 +36,7 @@ public class LoginController extends  BaseController {
             switch(userRolEntity.getRolUsuario())
             {
                 case admin:
-
+                    webRedirect = "redirect:/admin/";
                     break;
                 case cliente:
 
@@ -80,7 +80,7 @@ public class LoginController extends  BaseController {
             switch(userRolEntity.getRolUsuario())
             {
                 case admin:
-
+                    webRedirect = "redirect:/admin/";
                 break;
                 case cliente:
 
