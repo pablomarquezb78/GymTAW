@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>
-        Listado de Clientes Asociados
+        Clientes Asociados
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
@@ -23,7 +23,8 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Apellidos</th>
-
+            <th></th>
+            <th></th>
         </tr>
 
         <%
@@ -33,7 +34,8 @@
         <td><%=usuario.getId()%></td>
         <td><%=usuario.getNombre()%></td>
         <td><%=usuario.getApellidos()%></td>
-
+        <td><a href="/entrenamientos/verperfil">Ver Perfil</a></td>
+        <td><a href="/entrenamientos/versemana?id=<%=usuario.getId()%>">Ver Entrenamientos</a></td>
         <%
             }
         %>
