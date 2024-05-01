@@ -3,7 +3,6 @@
 
 <%
     List<User> lista = (List<User>) request.getAttribute("lista");
-
 %>
 
 <html>

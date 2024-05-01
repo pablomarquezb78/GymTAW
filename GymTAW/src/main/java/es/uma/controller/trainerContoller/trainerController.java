@@ -1,6 +1,7 @@
 package es.uma.controller.trainerContoller;
 
 
+import es.uma.dao.UserRepository;
 import es.uma.entity.Ejercicio;
 import org.springframework.ui.Model;
 import es.uma.entity.User;
@@ -11,11 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/trainer")
 public class trainerController {
 
 
+    private final UserRepository userRepository;
+
+    public trainerController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/")
     public String trainerIndex(Model model, HttpSession session) {
@@ -39,9 +47,17 @@ public class trainerController {
         model.addAttribute("ejercicio",ejercicio);
 
         return "trainer/trainer_crear_ejercicio";
-
     }
 
+    @GetMapping("/clientes")
+    public String listadoUsarios(Model model, HttpSession session) {
+
+        List<User> lista = userRepository.clientesAsociadosConEntrenador((User) session.getAttribute("user"));
+
+        model.addAttribute("listaUsuarios",lista);
+
+        return "trainer/trainer_listado_usuarios";
+    }
 
 
 
