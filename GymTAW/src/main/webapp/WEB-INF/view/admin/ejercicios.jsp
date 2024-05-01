@@ -1,9 +1,10 @@
-<%@ page import="es.uma.entity.User" %>
+
 <%@ page import="java.util.*" %>
+<%@ page import="es.uma.entity.Ejercicio" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<User> usuarios = (List<User>) request.getAttribute("usuarios");
+    List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
 %>
 
 <html>
@@ -50,20 +51,14 @@
         </tr>
 
 <%
-    for(User usuario : usuarios){
+    for(Ejercicio ejercicio : ejercicios){
 
 %>
         <tr>
-            <td><%=usuario.getId()%></td>
-            <td><%=usuario.getNombre()%></td>
-            <td><%=usuario.getApellidos()%></td>
-            <td><%=usuario.getRol().getRolUsuario()%></td>
-            <td><%=usuario.getFechaNacimiento()%></td>
-            <td><%=usuario.getPeso()%></td>
-            <td><%=usuario.getAltura()%></td>
-            <td><%=usuario.getTelefono()%></td>
-            <td><a href="/admin/editar?id=<%=usuario.getId()%>">Editar</a></td>
-            <td><a href="/admin/borrarUsuario?id=<%=usuario.getId()%>">Borrar</a></td>
+            <td><%=ejercicio.getId()%></td>
+
+            <td><a href="/admin/editar?id=<%=ejercicio.getId()%>">Editar</a></td>
+            <td><a href="/admin/borrar?id=<%=ejercicio.getId()%>">Borrar</a></td>
         </tr>
 <%
     }

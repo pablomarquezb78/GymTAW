@@ -13,18 +13,17 @@
                     <a class="nav-link">Autenticar</a>
                 </li>
                 <li class="nav-item">
-                    <form class="nav-link" action="/admin/mostrarUsuarios" method="post">
-                        <a href="/admin/mostrarUsuarios">Usuarios</a>
+                    <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>
                     </form>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link">Asignar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Ejercicios</a>
+                    <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Platos</a>
+                    <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>
                 </li>
             </ul>
         </div>
