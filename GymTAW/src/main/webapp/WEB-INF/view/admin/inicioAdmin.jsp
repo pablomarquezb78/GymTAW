@@ -1,4 +1,16 @@
+<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="java.util.List" %>
+<%@ page import="es.uma.entity.User" %>
+<%@ page import="es.uma.entity.Plato" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    Integer clientes = (Integer) request.getAttribute("clientes");
+    Integer entrenadores = (Integer) request.getAttribute("entrenadores");
+    Integer dietistas = (Integer) request.getAttribute("clientes");
+    Integer ejercicios = (Integer) request.getAttribute("ejercicios");
+    Integer platos = (Integer) request.getAttribute("platos");
+%>
 
 <html>
 <head>
@@ -10,14 +22,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav nav-fill w-100">
                 <li class="nav-item active">
+                    <a class="nav-link" href="/admin/">Inicio</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link">Autenticar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>
-                    </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Asignar</a>
+                    <a class="nav-link" href="/admin/asignarCliente">Asignar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
@@ -31,5 +45,24 @@
     <h1>
         Bienvenido admin
     </h1>
+    <section>
+        <ul>
+            <li>
+                Clientes registrados: <%=clientes%>
+            </li>
+            <li>
+                Número de entrenadores totales registrados: <%=entrenadores%>
+            </li>
+            <li>
+                Número de dietistas registrados: <%=entrenadores%>
+            </li>
+            <li>
+                Ejercicios totales creados: <%=ejercicios%>
+            </li>
+            <li>
+                Platos creados: <%=platos%>
+            </li>
+        </ul>
+    </section>
 </body>
 </html>

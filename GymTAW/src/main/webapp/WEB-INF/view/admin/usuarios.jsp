@@ -16,19 +16,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav nav-fill w-100">
                 <li class="nav-item active">
+                    <a class="nav-link" href="/admin/">Inicio</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link">Autenticar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Usuarios</a>
+                    <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Asignar</a>
+                    <a class="nav-link" href="/admin/asignarCliente">Asignar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Ejercicios</a>
+                    <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Platos</a>
+                    <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>
                 </li>
             </ul>
         </div>

@@ -18,5 +18,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u,AsignacionClienteEntrenador asig WHERE u.id = asig.cliente.id and asig.entrenador = :entrenador")
     public List<User> clientesAsociadosConEntrenador(@Param("entrenador") User entrenador);
 
+    @Query("select u from User u WHERE u.rol.id = 2")
+    public List<User> listarClientes();
+
+    @Query("select u from User u WHERE u.rol.id = 3 or u.rol.id = 4")
+    public List<User> listarEntrenadores();
+
+    @Query("select u from User u WHERE u.rol.id = 5")
+    public List<User> listarDietistas();
+
+
 
 }
