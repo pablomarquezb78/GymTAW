@@ -14,4 +14,7 @@ public interface RutinaRepository extends JpaRepository<Rutina,Integer> {
     @Query("SELECT r FROM Rutina r WHERE r IN (SELECT d.rutina FROM DiaEntrenamiento d WHERE d.cliente = :user AND d.fecha >= :fechaInicio AND d.fecha <= :fechaFin)")
     List<Rutina> encontrarRutinasPorClienteYFechas(@Param("user") User user, @Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
+    @Query("SELECT r FROM Rutina r WHERE r IN (SELECT d.rutina FROM DiaEntrenamiento d WHERE d.cliente = :user AND d.fecha = :fecha)")
+    Rutina encontrarRutinasPorClienteYFecha(@Param("user") User user, @Param("fecha") LocalDate fecha);
+
 }
