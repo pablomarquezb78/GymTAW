@@ -74,6 +74,37 @@ INSERT INTO `asignacion_cliente_entrenador` VALUES (1,1,3);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `asignacion_plato_ingrediente_dietistacreador`
+--
+
+DROP TABLE IF EXISTS `asignacion_plato_ingrediente_dietistacreador`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `asignacion_plato_ingrediente_dietistacreador` (
+  `idasignacion_plato_ingrediente_dietistaCreador` int NOT NULL AUTO_INCREMENT,
+  `plato` int DEFAULT NULL,
+  `ingrediente` int DEFAULT NULL,
+  `dietista` int DEFAULT NULL,
+  PRIMARY KEY (`idasignacion_plato_ingrediente_dietistaCreador`),
+  KEY `asignacion_plato_con_plato_idx` (`plato`),
+  KEY `asignacion_con_ingrediente_idx` (`ingrediente`),
+  KEY `asignacion_con_dietista_idx` (`dietista`),
+  CONSTRAINT `asignacion_con_dietista` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`),
+  CONSTRAINT `asignacion_con_ingrediente` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
+  CONSTRAINT `asignacion_plato_con_plato` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `asignacion_plato_ingrediente_dietistacreador`
+--
+
+LOCK TABLES `asignacion_plato_ingrediente_dietistacreador` WRITE;
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` DISABLE KEYS */;
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cantidad_ingrediente-plato-comida`
 --
 
@@ -232,6 +263,34 @@ INSERT INTO `ejercicio` VALUES (1,'Press de Banca',1,'Ejercicio orientado a el p
 UNLOCK TABLES;
 
 --
+-- Table structure for table `feedback_ejercicio`
+--
+
+DROP TABLE IF EXISTS `feedback_ejercicio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `feedback_ejercicio` (
+  `idfeedback_ejercicio` int NOT NULL AUTO_INCREMENT,
+  `implementacion_ejercicio-rutina` int DEFAULT NULL,
+  `Serie` varchar(45) DEFAULT NULL,
+  `Repeticiones_realizadas` varchar(45) DEFAULT NULL,
+  `Peso_realizado` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idfeedback_ejercicio`),
+  KEY `implementacion_ejercicio-rutinaFK_idx` (`implementacion_ejercicio-rutina`),
+  CONSTRAINT `implementacion_ejercicio-rutinaFK` FOREIGN KEY (`implementacion_ejercicio-rutina`) REFERENCES `implementacion_ejercicio-rutina` (`idimplementacion_ejercicio-rutina`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_ejercicio`
+--
+
+LOCK TABLES `feedback_ejercicio` WRITE;
+/*!40000 ALTER TABLE `feedback_ejercicio` DISABLE KEYS */;
+/*!40000 ALTER TABLE `feedback_ejercicio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `implementacion_ejercicio-rutina`
 --
 
@@ -249,8 +308,6 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
   `kilocalorias` varchar(45) DEFAULT NULL,
   `metros` varchar(45) DEFAULT NULL,
   `seguimiento_sets_done` varchar(45) DEFAULT NULL,
-  `seguimiento_repeticiones_done` varchar(45) DEFAULT NULL,
-  `seguimiento_peso_done` varchar(45) DEFAULT NULL,
   `seguimiento_tiempo_done` varchar(45) DEFAULT NULL,
   `seguimiento_kilocalorias_done` varchar(45) DEFAULT NULL,
   `seguimiento_metros_done` varchar(45) DEFAULT NULL,
@@ -269,7 +326,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
 
 LOCK TABLES `implementacion_ejercicio-rutina` WRITE;
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` DISABLE KEYS */;
-INSERT INTO `implementacion_ejercicio-rutina` VALUES (1,1,1,'4','8','60',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,2,1,'4','8','45',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `implementacion_ejercicio-rutina` VALUES (1,1,1,'4','8','60',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,2,1,'4','8','45',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,6 +384,35 @@ LOCK TABLES `plato` WRITE;
 /*!40000 ALTER TABLE `plato` DISABLE KEYS */;
 INSERT INTO `plato` VALUES (1,'Pasta con tomate','15 minutos','Esto es un test de receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ'),(2,'Pasta con nata','20 minutos','Esto es otra receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 /*!40000 ALTER TABLE `plato` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `registro`
+--
+
+DROP TABLE IF EXISTS `registro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `registro` (
+  `idregistro` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) DEFAULT NULL,
+  `password` varchar(70) DEFAULT NULL,
+  `nombre` varchar(70) DEFAULT NULL,
+  `apellidos` varchar(150) DEFAULT NULL,
+  `telefono` int DEFAULT NULL,
+  `fecha_nacimiento` datetime DEFAULT NULL,
+  `rol` int DEFAULT NULL,
+  PRIMARY KEY (`idregistro`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `registro`
+--
+
+LOCK TABLES `registro` WRITE;
+/*!40000 ALTER TABLE `registro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registro` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -497,4 +583,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-04 20:25:23
+-- Dump completed on 2024-05-05 14:10:46
