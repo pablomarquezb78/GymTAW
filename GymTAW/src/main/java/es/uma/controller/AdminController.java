@@ -31,10 +31,16 @@ public class AdminController extends BaseController {
     protected RegistroRepository registroRepository;
 
     @Autowired
+    protected UserRolRepository rolRepository;
+
+    @Autowired
     protected PlatosRepository platosRepository;
 
     @Autowired
-    protected UserRolRepository rolRepository;
+    protected IngredienteRepository ingredienteRepository;
+
+    @Autowired
+    protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -118,6 +124,20 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/borrarUsuario")
+    public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarUsuarios";
+            this.userRepository.deleteById(id);
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
     @GetMapping("/asignarCliente")
     public String doAsignar(Model model, HttpSession session) {
         String dir;
@@ -146,36 +166,6 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @GetMapping("/mostrarPlatos")
-    public String doPlatos(Model model, HttpSession session) {
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/platos";
-            List<Plato> platos = this.platosRepository.findAll();
-            model.addAttribute("platos", platos);
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
-
-
-
-    @GetMapping("/borrarUsuario")
-    public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarUsuarios";
-            this.userRepository.deleteById(id);
-
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
-
     @GetMapping("/borrarEjercicio")
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
         String dir;
@@ -184,6 +174,24 @@ public class AdminController extends BaseController {
             dir = "redirect:/admin/mostrarEjercicios";
             this.ejercicioRutinaRepository.deleteById(id);
 
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/mostrarPlatos")
+    public String doPlatos(Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/platos";
+            List<Plato> platos = this.platosRepository.findAll();
+            List<Ingrediente> ingredientes = this.ingredienteRepository.findAll();
+            List<CantidadIngredientePlatoComida> cantidad = this.cantidadIngredientePlatoComidaRepository.findAll();
+            model.addAttribute("platos", platos);
+            model.addAttribute("ingredientes", ingredientes);
+            model.addAttribute("cantidad", cantidad);
         } else {
             dir = "redirect:/";
         }
