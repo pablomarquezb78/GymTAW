@@ -10,10 +10,17 @@
 
 <html>
 <head>
-    Semana Entrenamientos
+    <title>Semana Entrenamientos</title>
 </head>
 
 <body>
+
+<form method="post" action="/entrenamientos/creardia">
+    <input type="hidden" name="clienteid" value="<%=cliente.getId()%>">
+    <button type="submit">Crear Entrenamiento</button>
+</form>
+
+
 <table border="1">
     <tr>
         <th>ID</th>
@@ -30,9 +37,14 @@
     <tr>
         <td><%=dia.getId()%></td>
         <td><%= dia.getFecha() %></td>
-        <td>Ver</td>
-        <td><a href="/entrenamientos/borrar?id=<%=dia.getId()%>">Borrar</a></td>
         <td>Editar</td>
+        <td>
+            <form method="post" action="/entrenamientos/borrar">
+                <input type="hidden"  name="id" value="<%=dia.getId()%>">
+                <button type="submit"> Borrar </button>
+            </form>
+        </td>
+
     </tr>
 
     <%

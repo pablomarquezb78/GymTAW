@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,6 @@ public class EntrenamientosController extends BaseController{
         }else{
             User cliente = (User) userRepository.findById(idcliente).orElse(null);
             List<DiaEntrenamiento> dias =  diaEntrenamientoRepository.diasEntrenamientosdeCliente(cliente);
-
             model.addAttribute("dias",dias);
             model.addAttribute("cliente",cliente);
         }
@@ -62,7 +62,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    @GetMapping("/borrar")
+    @PostMapping("/borrar")
     public String doBorrarDiaEntrenamiento (@RequestParam("id") Integer id,HttpSession session){
 
         DiaEntrenamiento dia = (DiaEntrenamiento) diaEntrenamientoRepository.findById(id).orElse(null);
@@ -78,7 +78,22 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    @PostMapping("/creardia")
+    public String doCrearDia(@RequestParam("clienteid") Integer clienteid,HttpSession session){
+        String strTo = "redirect:/entrenamientos/versemana?id=" + clienteid;
+        if(!estaAutenticado(session)){
+            strTo = "redirect:/";
+        }else{
+            User cliente = (User) userRepository.findById(clienteid).orElse(null);
+            DiaEntrenamiento dia = new DiaEntrenamiento();
+            dia.setFecha(LocalDate.now());
+            dia.setCliente(cliente);
+            this.diaEntrenamientoRepository.save(dia);
+        }
 
+
+        return strTo;
+    }
 
 
 }

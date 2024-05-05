@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DiaEntrenamientoRepository extends JpaRepository <DiaEntrenamiento,Integer> {
 
-    @Query("SELECT d FROM DiaEntrenamiento d WHERE d.cliente = :cliente")
+    @Query("SELECT d FROM DiaEntrenamiento d WHERE d.cliente = :cliente ORDER BY d.fecha ASC")
     public List<DiaEntrenamiento> diasEntrenamientosdeCliente (@Param("cliente") User cliente);
 
 }
