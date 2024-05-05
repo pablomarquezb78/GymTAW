@@ -1,5 +1,6 @@
 package es.uma.dao;
 
+import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

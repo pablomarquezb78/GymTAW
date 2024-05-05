@@ -1,6 +1,7 @@
 package es.uma.controller;
 
 import es.uma.dao.EjercicioRepository;
+import es.uma.dao.FeedbackejercicioRepository;
 import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dao.RutinaRepository;
 import es.uma.entity.*;
@@ -26,6 +27,8 @@ public class ClienteController {
     protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
     @Autowired
     protected EjercicioRepository ejercicioRepository;
+    @Autowired
+    protected FeedbackejercicioRepository feedbackejercicioRepository;
 
     @GetMapping("/")
     public String doMostrarInicio(){
@@ -53,12 +56,16 @@ public class ClienteController {
     }
 
     @GetMapping("/ejercicio")
-    public String doMostrarEjercicio(@RequestParam("id")String id, Model model){
-        Ejercicio e = ejercicioRepository.findById(Integer.parseInt(id)).orElse(null);
+    public String doMostrarEjercicio(@RequestParam("id")String id, @RequestParam(value = "set", required = false) String set, Model model){
+        ImplementacionEjercicioRutina i = implementacionEjercicioRutinaRepository.findById(Integer.parseInt(id)).orElse(null);
+        if(set == null) {
+            set = "1";
+        }
 
-        model.addAttribute("descripcion", e.getDescripcion());
-        model.addAttribute("enlaceVideo",e.getEnlaceVideo());
-        model.addAttribute("tipoEjercicio",e.getTipo().getTipoDeEjercicio());
+        FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeebackEjercicioPorImplementacionYSet(Integer.parseInt(id),set);
+        model.addAttribute("feedback",feedback);
+
+        model.addAttribute("implementacion",i);
 
         return "/cliente/cliente_ejercicio";
     }
@@ -90,6 +97,48 @@ public class ClienteController {
 
         }
         return strTo;
+    }
+
+    @PostMapping("/guardarFeedbackEjercicio")
+    public String doGuardarFeedbackEjercicio(@RequestParam("realizado") Byte realizado,
+                                             @RequestParam("seriesRealizadas")String seriesRealizadas,
+                                             @RequestParam("implementacion") Integer implementacionId){
+        ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
+
+        if (implementacion != null) {
+            implementacion.setRealizado(realizado);
+            implementacion.setSeguimientoSetsDone(seriesRealizadas);
+
+            implementacionEjercicioRutinaRepository.save(implementacion);
+        }
+
+        return "redirect:/cliente/ejercicio?id=" + implementacionId;
+    }
+
+    @PostMapping("/guardarFeedbackSerie")
+    public String doGuardarFeedbackSerie(@RequestParam("repeticionesRealizadas") String repeticionesRealizadas,
+                                             @RequestParam("pesoRealizado")String pesoRealizado,
+                                             @RequestParam("implementacion") Integer implementacionId,
+                                             @RequestParam("serieSeleccionada") String serieSeleccionada){
+        ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
+
+        if (implementacion != null) {
+            FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeebackEjercicioPorImplementacionYSet(implementacionId,serieSeleccionada);
+
+            feedback.setPesoRealizado(pesoRealizado);
+            feedback.setRepeticionesRealizadas(repeticionesRealizadas);
+
+            feedbackejercicioRepository.save(feedback);
+        }
+
+        return "redirect:/cliente/ejercicio?id=" + implementacionId;
+    }
+
+    @PostMapping("/seleccionarSerie")
+    public String doSeleccionarSerie(@RequestParam ("set") String set,
+                                     @RequestParam("implementacion") Integer implementacionId,Model model){
+
+        return "redirect:/cliente/ejercicio?id=" + implementacionId + "&set=" + set;
     }
 
     @GetMapping("/irInicio")
