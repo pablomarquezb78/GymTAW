@@ -87,8 +87,10 @@ public class LoginController extends  BaseController {
                     webRedirect = "redirect:/cliente/";
                 break;
                 case bodybuilder:
-                case crosstrainer:
                     webRedirect = "redirect:/trainer/";
+                break;
+                case crosstrainer:
+                    webRedirect = "redirect:/entrenamientos/";
                 break;
                 case dietista:
                     model.addAttribute("panel", "main");

@@ -5,15 +5,18 @@ import es.uma.dao.DiaEntrenamientoRepository;
 import es.uma.dao.UserRepository;
 import es.uma.entity.DiaEntrenamiento;
 import es.uma.entity.User;
+import es.uma.entity.UserRol;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/entrenamientos")
@@ -29,12 +32,12 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
-
-        if(estaAutenticado(sesion) == false){
-            strTo= "redirect:/";
-        }else {
+        UserRol rol = (UserRol) sesion.getAttribute("rol");
+        if(estaAutenticado(sesion) == true && esEntrenador(rol) ){
             List<User> lista = userRepository.clientesAsociadosConEntrenador((User) sesion.getAttribute("user"));
             model.addAttribute("lista",lista);
+        }else {
+            strTo= "redirect:/";
         }
 
         return strTo;
@@ -42,21 +45,40 @@ public class EntrenamientosController extends BaseController{
 
 
     @GetMapping("/versemana")
-    public String doVerSemanaEntrenamientos (@RequestParam("id") Integer id,Model model, HttpSession sesion){
+    public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
         String strTo = "/crosstrainer/entrenador_semana";
 
-        if(estaAutenticado(sesion) == false){
+        if(!estaAutenticado(session)){
             strTo = "redicrect:/";
         }else{
-            User cliente = (User) userRepository.findById(id).orElse(null);
+            User cliente = (User) userRepository.findById(idcliente).orElse(null);
             List<DiaEntrenamiento> dias =  diaEntrenamientoRepository.diasEntrenamientosdeCliente(cliente);
 
             model.addAttribute("dias",dias);
+            model.addAttribute("cliente",cliente);
         }
 
 
         return strTo;
     }
+
+    @GetMapping("/borrar")
+    public String doBorrarDiaEntrenamiento (@RequestParam("id") Integer id,HttpSession session){
+
+        DiaEntrenamiento dia = (DiaEntrenamiento) diaEntrenamientoRepository.findById(id).orElse(null);
+
+        String strTo = "redirect:/entrenamientos/versemana?id=" + dia.getCliente().getId();
+
+
+        if(!estaAutenticado(session)){
+            strTo = "redicrect:/";
+        }else{
+            diaEntrenamientoRepository.deleteById(id);
+        }
+        return strTo;
+    }
+
+
 
 
 }

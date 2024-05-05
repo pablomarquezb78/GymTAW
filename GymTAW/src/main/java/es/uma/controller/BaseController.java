@@ -9,9 +9,7 @@ public class BaseController {
         return session.getAttribute("user") != null;
     }
     protected boolean esAdmin(UserRol rol){return rol.getRolUsuario().equals("admin");}
-    protected boolean esEntrenador(HttpSession session) {
-        return session.getAttribute("rol") == "3" || session.getAttribute("rol") == "4";
-    }
+    protected boolean esEntrenador(UserRol rol){return rol.getRolUsuario().equals("crosstrainer") || rol.getRolUsuario().equals("bodybuilder");}
 
 
 }

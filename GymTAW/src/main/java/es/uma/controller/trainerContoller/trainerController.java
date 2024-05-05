@@ -54,7 +54,7 @@ public class trainerController {
 
         List<User> lista = userRepository.clientesAsociadosConEntrenador((User) session.getAttribute("user"));
 
-        model.addAttribute("listaUsuarios",lista);
+        model.addAttribute("listadoUsuarios",lista);
 
         return "trainer/trainer_listado_usuarios";
     }
