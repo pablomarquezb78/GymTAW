@@ -97,11 +97,11 @@ public class EntrenamientosController extends BaseController{
     }
 
     @GetMapping("editardia")
-    public String doEditar(@RequestParam("iddia")Integer idDia,Model model,HttpSession session){
+    public String doEditarDia(@RequestParam("iddia")Integer idDia,Model model,HttpSession session){
         String strTo = "/crosstrainer/entrenador_rutina";
 
         if(!estaAutenticado(session)) {
-            strTo = "Redirect:/";
+            strTo = "redirect:/";
         }else{
             DiaEntrenamiento dia = diaEntrenamientoRepository.findById(idDia).orElse(null);
             int idRutina = dia.getRutina().getId();
@@ -114,5 +114,27 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    @GetMapping("editarimplementacion")
+    public String doEditarImplementacion(@RequestParam("id") Integer id,Model model,HttpSession sesion){
+        String strTo = "/crosstrainer/entrenador_implementacion";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            model.addAttribute("imp", imp);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.findAll();
+            model.addAttribute("ejercicios",ejercicios);
+
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
+
+        }
+
+
+        return strTo;
+    }
+    
 
 }

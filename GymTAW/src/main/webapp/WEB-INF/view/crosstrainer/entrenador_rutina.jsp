@@ -22,6 +22,7 @@
         <th>Metros</th>
         <th>Tiempo</th>
         <th>RealizadoCheck</th>
+        <th></th>
     </tr>
 
     <%
@@ -29,12 +30,13 @@
     %>
         <tr>
             <td><%=imp.getEjercicio().getNombre()%></td>
-            <td><%=imp.getSets()%></td>
-            <td><%=imp.getRepeticiones()%></td>
-            <td><%=imp.getPeso()%>Kg</td>
-            <td><%=imp.getMetros()%>Mts</td>
-            <td><%=imp.getTiempo()%></td>
-            <td><%=imp.getRealizado()%></td>
+            <td><%=imp.getSets() != null ? imp.getSets() : ""%></td>
+            <td><%=imp.getRepeticiones() != null ? imp.getRepeticiones() : ""%></td>
+            <td><%=imp.getPeso() != null ? imp.getPeso() : ""%>Kg</td>
+            <td><%=imp.getMetros() != null ? imp.getMetros() : ""%>Mts</td>
+            <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
+            <td><%=imp.getRealizado() != null ? imp.getRealizado() : "NO"%></td>
+            <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>">Editar</a></td>
         </tr>
     <%
         }
