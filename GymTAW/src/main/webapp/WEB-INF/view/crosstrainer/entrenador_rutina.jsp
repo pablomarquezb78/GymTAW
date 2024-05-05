@@ -1,3 +1,9 @@
+<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="java.util.List" %>
+<%@ page import="es.uma.dao.EjercicioRepository" %>
+<%
+    List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
+%>
 
 
 <html>
@@ -7,7 +13,7 @@
 </head>
 <body>
 
-<table>
+<table border="1">
     <tr>
         <th>Ejercicio</th>
         <th>Sets</th>
@@ -18,17 +24,21 @@
         <th>RealizadoCheck</th>
     </tr>
 
-
-    <tr>
-        <tr>Ejercicio</tr>
-        <tr>Sets</tr>
-        <tr>Repeticiones</tr>
-        <tr>Peso</tr>
-        <tr>Metros</tr>
-        <tr>Tiempo</tr>
-        <tr>RealizadoCheck</tr>
-    </tr>
-
+    <%
+        for(ImplementacionEjercicioRutina imp : lista){
+    %>
+        <tr>
+            <td><%=imp.getEjercicio().getNombre()%></td>
+            <td><%=imp.getSets()%></td>
+            <td><%=imp.getRepeticiones()%></td>
+            <td><%=imp.getPeso()%>Kg</td>
+            <td><%=imp.getMetros()%>Mts</td>
+            <td><%=imp.getTiempo()%></td>
+            <td><%=imp.getRealizado()%></td>
+        </tr>
+    <%
+        }
+    %>
 
 </table>
 

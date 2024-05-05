@@ -1,11 +1,8 @@
 package es.uma.controller;
 
 
-import es.uma.dao.DiaEntrenamientoRepository;
-import es.uma.dao.UserRepository;
-import es.uma.entity.DiaEntrenamiento;
-import es.uma.entity.User;
-import es.uma.entity.UserRol;
+import es.uma.dao.*;
+import es.uma.entity.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,12 @@ public class EntrenamientosController extends BaseController{
 
     @Autowired
     protected DiaEntrenamientoRepository diaEntrenamientoRepository;
-
+    @Autowired
+    private EjercicioRepository ejercicioRepository;
+    @Autowired
+    private RutinaRepository rutinaRepository;
+    @Autowired
+    private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
 
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
@@ -62,7 +64,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    @PostMapping("/borrar")
+    @PostMapping("/borrardia")
     public String doBorrarDiaEntrenamiento (@RequestParam("id") Integer id,HttpSession session){
 
         DiaEntrenamiento dia = (DiaEntrenamiento) diaEntrenamientoRepository.findById(id).orElse(null);
@@ -89,6 +91,23 @@ public class EntrenamientosController extends BaseController{
             dia.setFecha(LocalDate.now());
             dia.setCliente(cliente);
             this.diaEntrenamientoRepository.save(dia);
+        }
+
+        return strTo;
+    }
+
+    @GetMapping("editardia")
+    public String doEditar(@RequestParam("iddia")Integer idDia,Model model,HttpSession session){
+        String strTo = "/crosstrainer/entrenador_rutina";
+
+        if(!estaAutenticado(session)) {
+            strTo = "Redirect:/";
+        }else{
+            DiaEntrenamiento dia = diaEntrenamientoRepository.findById(idDia).orElse(null);
+            int idRutina = dia.getRutina().getId();
+            Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
+            List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(rutina);
+            model.addAttribute("implementaciones",implementaciones);
         }
 
 

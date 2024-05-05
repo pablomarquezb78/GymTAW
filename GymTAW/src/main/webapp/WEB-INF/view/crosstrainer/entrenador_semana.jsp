@@ -37,9 +37,14 @@
     <tr>
         <td><%=dia.getId()%></td>
         <td><%= dia.getFecha() %></td>
-        <td>Editar</td>
         <td>
-            <form method="post" action="/entrenamientos/borrar">
+            <form method="get" action="/entrenamientos/editardia">
+                <input type="hidden" name="iddia" value="<%=dia.getId()%>">
+                <button type="submit">Editar</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" action="/entrenamientos/borrardia">
                 <input type="hidden"  name="id" value="<%=dia.getId()%>">
                 <button type="submit"> Borrar </button>
             </form>
