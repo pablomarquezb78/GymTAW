@@ -74,6 +74,37 @@ INSERT INTO `asignacion_cliente_entrenador` VALUES (1,1,3);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `asignacion_plato_ingrediente_dietistacreador`
+--
+
+DROP TABLE IF EXISTS `asignacion_plato_ingrediente_dietistacreador`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `asignacion_plato_ingrediente_dietistacreador` (
+  `idasignacion_plato_ingrediente_dietistaCreador` int NOT NULL AUTO_INCREMENT,
+  `plato` int DEFAULT NULL,
+  `ingrediente` int DEFAULT NULL,
+  `dietista` int DEFAULT NULL,
+  PRIMARY KEY (`idasignacion_plato_ingrediente_dietistaCreador`),
+  KEY `asignacion_plato_con_plato_idx` (`plato`),
+  KEY `asignacion_con_ingrediente_idx` (`ingrediente`),
+  KEY `asignacion_con_dietista_idx` (`dietista`),
+  CONSTRAINT `asignacion_con_dietista` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`),
+  CONSTRAINT `asignacion_con_ingrediente` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
+  CONSTRAINT `asignacion_plato_con_plato` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `asignacion_plato_ingrediente_dietistacreador`
+--
+
+LOCK TABLES `asignacion_plato_ingrediente_dietistacreador` WRITE;
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` DISABLE KEYS */;
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cantidad_ingrediente-plato-comida`
 --
 
@@ -552,4 +583,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-05 14:04:19
+-- Dump completed on 2024-05-05 14:10:46
