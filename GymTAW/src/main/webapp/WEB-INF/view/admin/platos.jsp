@@ -20,7 +20,7 @@
                 <a class="nav-link" href="/admin/">Inicio</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link">Autenticar</a>
+                <a class="nav-link" href="/admin/autenticarUsuarios">Autenticar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>

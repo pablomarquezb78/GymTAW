@@ -1,9 +1,9 @@
-<%@ page import="es.uma.entity.User" %>
 <%@ page import="java.util.*" %>
+<%@ page import="es.uma.entity.Registro" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<User> clientes = (List<User>) request.getAttribute("clientes");
+    List<Registro> peticiones = (List<Registro>) request.getAttribute("peticiones");
 %>
 
 <html>
@@ -45,28 +45,33 @@
         <th>APELLIDOS</th>
         <th>ROL</th>
         <th>FECHA NACIMIENTO</th>
-        <th>PESO</th>
-        <th>ALTURA</th>
         <th>TELEFONO</th>
         <th></th>
         <th></th>
     </tr>
 
     <%
-        for(User cliente : clientes){
-
+        String rol = "";
+        for(Registro usuario : peticiones){
+            if(usuario.getRol() == 2){
+                rol = "cliente";
+            }else if(usuario.getRol() == 3){
+                rol = "bodybuilder";
+            }else if(usuario.getRol() == 4){
+                rol = "crosstrainer";
+            }else if(usuario.getRol() == 5){
+                rol = "dietista";
+            }
     %>
     <tr>
-        <td><%=cliente.getId()%></td>
-        <td><%=cliente.getNombre()%></td>
-        <td><%=cliente.getApellidos()%></td>
-        <td><%=cliente.getRol().getRolUsuario()%></td>
-        <td><%=cliente.getFechaNacimiento()%></td>
-        <td><%=cliente.getPeso()%></td>
-        <td><%=cliente.getAltura()%></td>
-        <td><%=cliente.getTelefono()%></td>
-        <td><a href="/admin/editar?id=<%=cliente.getId()%>">Asignar entrenador</a></td>
-        <td><a href="/admin/borrarUsuario?id=<%=cliente.getId()%>">Asignar dietista</a></td>
+        <td><%=usuario.getId()%></td>
+        <td><%=usuario.getNombre()%></td>
+        <td><%=usuario.getApellidos()%></td>
+        <td><%=rol%></td>
+        <td><%=usuario.getFechaNacimiento()%></td>
+        <td><%=usuario.getTelefono()%></td>
+        <td><a href="/admin/autenticar?id=<%=usuario.getId()%>">Autenticar</a></td>
+        <td><a href="/admin/borrarPeticion?id=<%=usuario.getId()%>">Borrar</a></td>
     </tr>
     <%
         }

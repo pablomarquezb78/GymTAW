@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ public class Registro {
     private Integer telefono;
 
     @Column(name = "fecha_nacimiento")
-    private Instant fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Column(name = "rol")
     private Integer rol;

@@ -28,10 +28,13 @@ public class AdminController extends BaseController {
     protected ImplementacionEjercicioRutinaRepository ejercicioRutinaRepository;
 
     @Autowired
+    protected RegistroRepository registroRepository;
+
+    @Autowired
     protected PlatosRepository platosRepository;
 
     @Autowired
-    protected IngredienteRepository ingredienteRepository;
+    protected UserRolRepository rolRepository;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -44,6 +47,58 @@ public class AdminController extends BaseController {
             model.addAttribute("ejercicios", this.ejercicioRutinaRepository.findAll().size());
             model.addAttribute("platos", this.platosRepository.findAll().size());
             dir = "admin/inicioAdmin";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/autenticarUsuarios")
+    public String doAutenticarUsuarios(Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            model.addAttribute("peticiones", this.registroRepository.findAll());
+            dir = "admin/registro";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/autenticar")
+    public String doAutenticar(@RequestParam("id") Integer id, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            User newUser = new User();
+            Registro registro = this.registroRepository.getById(id);
+            UserRol newRol = this.rolRepository.getById(registro.getRol());
+
+            newUser.setUsername(registro.getUsername());
+            newUser.setNombre(registro.getNombre());
+            newUser.setPassword(registro.getPassword());
+            newUser.setRol(newRol);
+            newUser.setFechaNacimiento(registro.getFechaNacimiento());
+            newUser.setTelefono(registro.getTelefono());
+
+            this.userRepository.save(newUser);
+            this.registroRepository.deleteById(id);
+            dir = "redirect:/admin/autenticarUsuarios";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/borrarPeticion")
+    public String doBorrarPeticion(@RequestParam("id") Integer id, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/autenticarUsuarios";
+            this.registroRepository.deleteById(id);
+
         } else {
             dir = "redirect:/";
         }
@@ -98,14 +153,14 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/platos";
             List<Plato> platos = this.platosRepository.findAll();
-            List<Ingrediente> ingredientes = this.ingredienteRepository.findAll();
             model.addAttribute("platos", platos);
-            model.addAttribute("ingredientes", ingredientes);
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
+
+
 
     @GetMapping("/borrarUsuario")
     public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){

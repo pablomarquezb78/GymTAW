@@ -1,7 +1,9 @@
 package es.uma.controller;
 
 import es.uma.dao.PlatosRepository;
+import es.uma.dao.RegistroRepository;
 import es.uma.dao.UserRepository;
+import es.uma.entity.Registro;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import es.uma.entity.User;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 @Controller
 public class LoginController extends  BaseController {
@@ -28,13 +32,12 @@ public class LoginController extends  BaseController {
     final String dietista = "dietista";
 
     @GetMapping("/")
-    public String doLoad (Model model,HttpSession session) {
-        String webRedirect= "login";
+    public String doLoad(Model model, HttpSession session) {
+        String webRedirect = "login";
         if (estaAutenticado(session)) {
-            UserRol userRolEntity =(UserRol) session.getAttribute("rol");
+            UserRol userRolEntity = (UserRol) session.getAttribute("rol");
             User userEntity = (User) session.getAttribute("user");
-            switch(userRolEntity.getRolUsuario())
-            {
+            switch (userRolEntity.getRolUsuario()) {
                 case admin:
                     webRedirect = "redirect:/admin/";
                     break;
@@ -62,41 +65,38 @@ public class LoginController extends  BaseController {
 
     @PostMapping("/autentica")
     public String doLogin(@RequestParam("usuario_login") String username
-                        , @RequestParam("password_login") String password
-                        , HttpSession session
-                        , Model model) {
+            , @RequestParam("password_login") String password
+            , HttpSession session
+            , Model model) {
         User userEntity = this.userRepository.findByUsernamePassword(username, password);
         if (userEntity == null) {
             model.addAttribute("error", "Credenciales no encontradas");
             return "redirect:/";
-        }
-        else
-        {
+        } else {
             session.setAttribute("user", userEntity);
             UserRol userRolEntity = userEntity.getRol();
             session.setAttribute("rol", userRolEntity);
 
             String webRedirect = "loginTest";
-            switch(userRolEntity.getRolUsuario())
-            {
+            switch (userRolEntity.getRolUsuario()) {
                 case admin:
                     webRedirect = "redirect:/admin/";
-                break;
+                    break;
                 case cliente:
 
                     webRedirect = "redirect:/cliente/";
-                break;
+                    break;
                 case bodybuilder:
                     webRedirect = "redirect:/trainer/";
-                break;
+                    break;
                 case crosstrainer:
                     webRedirect = "redirect:/entrenamientos/";
-                break;
+                    break;
                 case dietista:
                     model.addAttribute("panel", "main");
                     model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
                     webRedirect = "redirect:/dietista/mostrarPlato";
-                break;
+                    break;
                 default:
                     webRedirect = "loginTest";
             }
