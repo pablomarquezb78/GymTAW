@@ -1,13 +1,16 @@
 package es.uma.entity;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "user")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iduser", nullable = false)
     private Integer id;
 
@@ -33,7 +36,7 @@ public class User {
     private Integer altura;
 
     @Column(name = "fecha_nacimiento")
-    private Instant fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Column(name = "descripcion_personal", length = 750)
     private String descripcionPersonal;
@@ -106,11 +109,11 @@ public class User {
         this.altura = altura;
     }
 
-    public Instant getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Instant fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

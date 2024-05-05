@@ -14,6 +14,7 @@
     Contraseña: <input type="password" name="password_login"> <br>
     <button>Acceder</button>
 </form>
+<a href="/registrar">Registrarse</a>
 
 <%
     if(error != null)

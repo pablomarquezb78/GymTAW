@@ -11,7 +11,7 @@ import lombok.Setter;
 public class AsignacionPlatoIngredienteDietistacreador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idasignacion_plato_ingrediente_dietistaCreador", nullable = false)
+    @Column(name = "idasignacion_plato_ingrediente_dietista_creador", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
