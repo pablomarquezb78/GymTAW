@@ -40,10 +40,10 @@
                 <%=user.getApellidos()%>
             </td>
             <td>
-                <a>Ver perfil</a>
+                <a href="/trainer/perfil-cliente?id=<%=user.getId()%>">Ver perfil</a>
             </td>
             <td>
-                <a href="/trainer/entrenamientos=?<%=user.getId()%>">Ver entrenamientos</a>
+                <a href="/trainer/entrenamientos?id=<%=user.getId()%>">Ver entrenamientos</a>
             </td>
         </tr>
         <%

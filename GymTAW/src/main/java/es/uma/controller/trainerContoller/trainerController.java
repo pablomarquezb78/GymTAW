@@ -3,6 +3,7 @@ package es.uma.controller.trainerContoller;
 
 import es.uma.dao.UserRepository;
 import es.uma.entity.Ejercicio;
+import es.uma.entity.TipoEjercicio;
 import org.springframework.ui.Model;
 import es.uma.entity.User;
 import es.uma.entity.UserRol;
@@ -37,6 +38,13 @@ public class trainerController {
     }
 
     @GetMapping("/crear")
+    public String trainerCrear(Model model, HttpSession session) {
+
+        return "trainer/trainer_crear";
+    }
+
+
+    @GetMapping("/crear-ejercicio")
     public String crearEjercicio(Model model, HttpSession session) {
 
         Ejercicio ejercicio = new Ejercicio();
@@ -49,6 +57,20 @@ public class trainerController {
         return "trainer/trainer_crear_ejercicio";
     }
 
+    @GetMapping("/crear-tipo")
+    public String crearTipo(Model model, HttpSession session) {
+
+        TipoEjercicio tipoEjercicio = new TipoEjercicio();
+        tipoEjercicio.setId(-1);
+
+        UserRol trainer = (UserRol) session.getAttribute("rol");
+        model.addAttribute("trainer",trainer);
+        model.addAttribute("tipoEjercicio",tipoEjercicio);
+
+        return "trainer/trainer_crear_tipo";
+    }
+
+
     @GetMapping("/clientes")
     public String listadoUsarios(Model model, HttpSession session) {
 
@@ -57,6 +79,25 @@ public class trainerController {
         model.addAttribute("listadoUsuarios",lista);
 
         return "trainer/trainer_listado_usuarios";
+    }
+
+  /*  @GetMapping("/entrenamientos")
+    public String entrenamientos(@RequestParam("id") String id ,Model model, HttpSession session) {
+
+
+
+
+
+    }*/
+
+    @GetMapping("/perfil-cliente")
+    public String perfilCliente(@RequestParam("id") Integer id ,Model model, HttpSession session) {
+
+        User user = userRepository.findById(id).orElse(null);
+        model.addAttribute("user",user);
+        UserRol trainer = (UserRol) session.getAttribute("rol");
+        model.addAttribute("rol",trainer);
+        return "cliente/perfil_cliente";
     }
 
 
