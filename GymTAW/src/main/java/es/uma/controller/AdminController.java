@@ -38,6 +38,12 @@ public class AdminController extends BaseController {
     protected UserRolRepository rolRepository;
 
     @Autowired
+    protected AsignacionClienteEntrenadorRepository asignacionClienteEntrenadorRepository;
+
+    @Autowired
+    protected AsignacionClienteDietistaRepository asignacionClienteDietistaRepository;
+
+    @Autowired
     protected PlatosRepository platosRepository;
 
     @Autowired
@@ -246,7 +252,7 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping("/asignarEntrenador")
-    public String doAsignarEntrenador(Model model, HttpSession session) {
+    public String doAsignarEntrenador(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
         //Cargar todos los entrenadores que no esten asignados al cliente
         UserRol rol = (UserRol) session.getAttribute("rol");
@@ -261,7 +267,7 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping("/asignarDietista")
-    public String doAsignarDietista(Model model, HttpSession session) {
+    public String doAsignarDietista(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
         //Cargar todos los dietistas que no esten asignados al cliente
         UserRol rol = (UserRol) session.getAttribute("rol");
@@ -275,20 +281,52 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @GetMapping("/desasignar")
-    public String doDesasignar(Model model, HttpSession session) {
+    @GetMapping("/eliminarAsignaciones")
+    public String doEliminarAsignaciones(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        //Cargar todos los entrenadores y dietistas que estan asignados al cliente
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/asignar";
-            List<User> clientes = this.userRepository.listarClientes();
-            model.addAttribute("clientes", clientes);
+            dir = "admin/eliminarAsignacion";
+            List<AsignacionClienteDietista> asignacionesDietista = asignacionClienteDietistaRepository.buscarPorCliente(id);
+            List<AsignacionClienteEntrenador> asignacionesEntrenador = asignacionClienteEntrenadorRepository.buscarPorCliente(id);
+            model.addAttribute("asignacionesEntrenador", asignacionesEntrenador);
+            model.addAttribute("asignacionesDietista", asignacionesDietista);
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
+
+    @GetMapping("/eliminarAsignacionEntrenador")
+    public String doEliminarAsignacionEntrenador(@RequestParam("id") Integer id, Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            AsignacionClienteEntrenador ace = asignacionClienteEntrenadorRepository.findById(id).orElse(null);
+            Integer clienteID = ace.getCliente().getId();
+            asignacionClienteEntrenadorRepository.delete(ace);
+            dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/eliminarAsignacionDietista")
+    public String doEliminarAsignacionDietista(@RequestParam("id") Integer id, Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            AsignacionClienteDietista acd = asignacionClienteDietistaRepository.findById(id).orElse(null);
+            Integer clienteID = acd.getCliente().getId();
+            asignacionClienteDietistaRepository.delete(acd);
+            dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
 
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {

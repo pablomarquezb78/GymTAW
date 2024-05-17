@@ -50,6 +50,7 @@
         <th>TELEFONO</th>
         <th></th>
         <th></th>
+        <th></th>
     </tr>
 
     <%
@@ -67,6 +68,7 @@
         <td><%=cliente.getTelefono()%></td>
         <td><a href="/admin/asignarEntrenador?id=<%=cliente.getId()%>">Asignar entrenador</a></td>
         <td><a href="/admin/asignarDietista?id=<%=cliente.getId()%>">Asignar dietista</a></td>
+        <td><a href="/admin/eliminarAsignaciones?id=<%=cliente.getId()%>">Eliminar asignaciones</a></td>
     </tr>
     <%
         }
