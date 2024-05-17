@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<ImplementacionEjercicioRutina> ejercicios = (List<ImplementacionEjercicioRutina>) request.getAttribute("ejercicios");
+    List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
 %>
 
 <html>
@@ -43,32 +43,24 @@
     <table border="1" cellpadding="10" cellspacing="10">
         <tr>
             <th>ID</th>
-            <th>NOMBRE EJERCICIO</th>
-            <th>RUTINA ASOCIADA</th>
-            <th>SERIES</th>
-            <th>REPETICIONES</th>
-            <th>PESO</th>
-            <th>TIEMPO</th>
-            <th>KILOCALORIAS</th>
-            <th>METROS</th>
+            <th>NOMBRE DEL EJERCICIO</th>
+            <th>TIPO DE EJERCICIO</th>
+            <th>ENLACE DEL VÍDEO</th>
+            <th>DESCRIPCIÓN</th>
             <th></th>
             <th></th>
         </tr>
 
 <%
-    for(ImplementacionEjercicioRutina ejercicio : ejercicios){
+    for(Ejercicio ejercicio : ejercicios){
 
 %>
         <tr>
             <td><%=ejercicio.getId()%></td>
-            <td><%=ejercicio.getEjercicio().getNombre()%></td>
-            <td><%=ejercicio.getRutina().getNombre()%></td>
-            <td><%=ejercicio.getSets()%></td>
-            <td><%=ejercicio.getRepeticiones()%></td>
-            <td><%=ejercicio.getPeso()%></td>
-            <td><%=ejercicio.getTiempo()%></td>
-            <td><%=ejercicio.getKilocalorias()%></td>
-            <td><%=ejercicio.getMetros()%></td>
+            <td><%=ejercicio.getNombre()%></td>
+            <td><%=ejercicio.getTipo().getTipoDeEjercicio()%></td>
+            <td><%=ejercicio.getEnlaceVideo()%></td>
+            <td><%=ejercicio.getDescripcion()%></td>
             <td><a href="/admin/editar?id=<%=ejercicio.getId()%>">Editar</a></td>
             <td><a href="/admin/borrarEjercicio?id=<%=ejercicio.getId()%>">Borrar</a></td>
         </tr>

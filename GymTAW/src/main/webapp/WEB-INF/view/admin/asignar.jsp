@@ -65,8 +65,8 @@
         <td><%=cliente.getPeso()%></td>
         <td><%=cliente.getAltura()%></td>
         <td><%=cliente.getTelefono()%></td>
-        <td><a href="/admin/editar?id=<%=cliente.getId()%>">Asignar entrenador</a></td>
-        <td><a href="/admin/borrarUsuario?id=<%=cliente.getId()%>">Asignar dietista</a></td>
+        <td><a href="/admin/asignarEntrenador?id=<%=cliente.getId()%>">Asignar entrenador</a></td>
+        <td><a href="/admin/asignarDietista?id=<%=cliente.getId()%>">Asignar dietista</a></td>
     </tr>
     <%
         }

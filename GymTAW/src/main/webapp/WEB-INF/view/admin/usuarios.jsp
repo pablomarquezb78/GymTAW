@@ -65,12 +65,14 @@
             <td><%=usuario.getPeso()%></td>
             <td><%=usuario.getAltura()%></td>
             <td><%=usuario.getTelefono()%></td>
-            <td><a href="/admin/editar?id=<%=usuario.getId()%>">Editar</a></td>
+            <td><a href="/admin/editarUsuario?id=<%=usuario.getId()%>">Editar</a></td>
             <td><a href="/admin/borrarUsuario?id=<%=usuario.getId()%>">Borrar</a></td>
         </tr>
 <%
     }
 %>
     </table>
+<a href="/admin/crearNuevoUsuario">Crear nuevo usuario</a>
+
 </body>
 </html>

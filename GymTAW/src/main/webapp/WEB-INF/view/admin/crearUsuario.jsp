@@ -1,15 +1,11 @@
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
-<%@ page import="es.uma.entity.Plato" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Plato> platos = (List<Plato>) request.getAttribute("platos");
+    List<UserRol> roles = (List<UserRol>) request.getAttribute("roles");
 %>
-%>
-
 <html>
 <head>
     <title>Admin</title>
@@ -40,36 +36,23 @@
         </ul>
     </div>
 </nav>
-
-<br/>
-<table border="1" cellpadding="10" cellspacing="10">
-    <tr>
-        <th>ID</th>
-        <th>NOMBRE</th>
-        <th>TIEMPO</th>
-        <th>RECETA</th>
-        <th>ENLACE DEL VÍDEO</th>
-        <th></th>
-        <th></th>
-    </tr>
-
-    <%
-        for(Plato plato : platos){
-
-    %>
-    <tr>
-        <td><%=plato.getId()%></td>
-        <td><%=plato.getNombre()%></td>
-        <td><%=plato.getTiempoDePreparacion()%></td>
-        <td><%=plato.getReceta()%></td>
-        <td><%=plato.getEnlaceReceta()%></td>
-
-        <td><a href="/admin/editar?id=<%=plato.getId()%>">Editar</a></td>
-        <td><a href="/admin/borrarPlato?id=<%=plato.getId()%>">Borrar</a></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
+<div>
+    <h3>
+        Añadir usuario
+    </h3>
+    <p>Introduzca los datos necesarios para añadir un nuevo usuario</p>
+    <form:form action="/admin/anyadirUsuario" method="post" modelAttribute="usuario">
+        Usuario*: <form:input path="username"></form:input>
+        Contraseña*: <form:input path="password"></form:input>
+        Nombre*: <form:input path="nombre"></form:input>
+        Apellidos*: <form:input path="apellidos"></form:input>
+        Fecha de nacimiento*:
+        Rol*: <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
+        Peso: <form:input path="peso"></form:input>
+        Altura: <form:input path="altura"></form:input>
+        Telefono: <form:input path="telefono"></form:input>
+        <form:button>Crear usuario</form:button>
+    </form:form>
+</div>
 </body>
 </html>

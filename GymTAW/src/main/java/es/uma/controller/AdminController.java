@@ -2,15 +2,14 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,7 +24,12 @@ public class AdminController extends BaseController {
     protected RutinaRepository rutinaRepository;
 
     @Autowired
-    protected ImplementacionEjercicioRutinaRepository ejercicioRutinaRepository;
+    protected EjercicioRepository ejercicioRepository;
+
+    @Autowired
+    protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
+    //La idea es añadir un enlace para acceder a las rutinas de un mismo ejercicio
+    // para editar, crear o borrar una rutina asociada a ese ejercicio.
 
     @Autowired
     protected RegistroRepository registroRepository;
@@ -50,7 +54,7 @@ public class AdminController extends BaseController {
             model.addAttribute("clientes", this.userRepository.listarClientes().size());
             model.addAttribute("entrenadores", this.userRepository.listarEntrenadores().size());
             model.addAttribute("dietistas", this.userRepository.listarDietistas().size());
-            model.addAttribute("ejercicios", this.ejercicioRutinaRepository.findAll().size());
+            model.addAttribute("ejercicios", this.ejercicioRepository.findAll().size());
             model.addAttribute("platos", this.platosRepository.findAll().size());
             dir = "admin/inicioAdmin";
         } else {
@@ -124,6 +128,95 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/crearNuevoUsuario")
+    public String doCrearUsuario(Model model, HttpSession session, Usuario usuario) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            List<UserRol> roles = rolRepository.buscarRolesNoAdmin();
+            model.addAttribute("roles", roles);
+            model.addAttribute("usuario", usuario);
+            dir = "admin/crearUsuario";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/anyadirUsuario")
+    public String doAnyadirUsuario(@ModelAttribute Usuario usuario, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarUsuarios";
+            User nuevoUsuario = new User();
+            nuevoUsuario.setUsername(usuario.getUsername());
+            nuevoUsuario.setPassword(usuario.getPassword());
+            nuevoUsuario.setRol(rolRepository.getById(usuario.getRol()));
+            nuevoUsuario.setNombre(usuario.getNombre());
+            nuevoUsuario.setPeso(usuario.getPeso());
+            nuevoUsuario.setAltura(usuario.getAltura());
+            nuevoUsuario.setApellidos(usuario.getApellidos());
+            nuevoUsuario.setTelefono(usuario.getTelefono());
+
+            userRepository.save(nuevoUsuario);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/editarUsuario")
+    public String doEditarUsuario(@RequestParam("id") Integer id, HttpSession session, Usuario usuario, Model model){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "/admin/editarUsuario";
+            User user = userRepository.findById(id).orElse(null);
+            usuario.setId(id);
+            usuario.setUsername(user.getUsername());
+            usuario.setPassword(user.getPassword());
+            usuario.setNombre(user.getNombre());
+            usuario.setApellidos(user.getApellidos());
+            usuario.setPeso(user.getPeso());
+            usuario.setAltura(user.getAltura());
+            usuario.setRol(user.getRol().getId());
+            usuario.setTelefono(user.getTelefono());
+            usuario.setFechaNacimiento(user.getFechaNacimiento());
+
+            List<UserRol> roles = rolRepository.buscarRolesNoAdmin();
+            model.addAttribute("roles", roles);
+            model.addAttribute("usuario", usuario);
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/modificarUsuario")
+    public String doModificarUsuario(@ModelAttribute Usuario usuario, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarUsuarios";
+            User usuarioAModificar = userRepository.findById(usuario.getId()).orElse(null);
+            usuarioAModificar.setUsername(usuario.getUsername());
+            usuarioAModificar.setPassword(usuario.getPassword());
+            usuarioAModificar.setRol(rolRepository.getById(usuario.getRol()));
+            usuarioAModificar.setNombre(usuario.getNombre());
+            usuarioAModificar.setPeso(usuario.getPeso());
+            usuarioAModificar.setAltura(usuario.getAltura());
+            usuarioAModificar.setApellidos(usuario.getApellidos());
+            usuarioAModificar.setTelefono(usuario.getTelefono());
+
+            userRepository.save(usuarioAModificar);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
     @GetMapping("/borrarUsuario")
     public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){
         String dir;
@@ -152,13 +245,58 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/asignarEntrenador")
+    public String doAsignarEntrenador(Model model, HttpSession session) {
+        String dir;
+        //Cargar todos los entrenadores que no esten asignados al cliente
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/asignar";
+            List<User> clientes = this.userRepository.listarClientes();
+            model.addAttribute("clientes", clientes);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/asignarDietista")
+    public String doAsignarDietista(Model model, HttpSession session) {
+        String dir;
+        //Cargar todos los dietistas que no esten asignados al cliente
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/asignar";
+            List<User> clientes = this.userRepository.listarClientes();
+            model.addAttribute("clientes", clientes);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/desasignar")
+    public String doDesasignar(Model model, HttpSession session) {
+        String dir;
+        //Cargar todos los entrenadores y dietistas que estan asignados al cliente
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/asignar";
+            List<User> clientes = this.userRepository.listarClientes();
+            model.addAttribute("clientes", clientes);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/ejercicios";
-            List<ImplementacionEjercicioRutina> ejercicios = this.ejercicioRutinaRepository.findAll();
+            List<Ejercicio> ejercicios = this.ejercicioRepository.findAll();
             model.addAttribute("ejercicios", ejercicios);
         } else {
             dir = "redirect:/";
@@ -172,7 +310,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/mostrarEjercicios";
-            this.ejercicioRutinaRepository.deleteById(id);
+            this.ejercicioRepository.deleteById(id);
 
         } else {
             dir = "redirect:/";
@@ -187,11 +325,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/platos";
             List<Plato> platos = this.platosRepository.findAll();
-            List<Ingrediente> ingredientes = this.ingredienteRepository.findAll();
-            List<CantidadIngredientePlatoComida> cantidad = this.cantidadIngredientePlatoComidaRepository.findAll();
             model.addAttribute("platos", platos);
-            model.addAttribute("ingredientes", ingredientes);
-            model.addAttribute("cantidad", cantidad);
         } else {
             dir = "redirect:/";
         }
