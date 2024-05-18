@@ -27,5 +27,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u WHERE u.rol.id = 5")
     public List<User> listarDietistas();
 
+    @Query("select u from User u where (u.rol.id = 3 or u.rol.id = 4) and u not in (select ace.entrenador from AsignacionClienteEntrenador ace) and u not in :entrenadores")
+    public List<User> entrenadoresNoAsociadosAlCliente(@Param("entrenadores") List<User> entrenadores);
+
+    @Query("select u from User u where u.rol.id = 5 and u not in (select acd.dietista from AsignacionClienteDietista acd) and u not in :dietistas")
+    public List<User> dietistasNoAsociadosAlCliente(@Param("dietistas") List<User> dietistas);
+
+
 
 }

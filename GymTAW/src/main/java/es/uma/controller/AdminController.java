@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -179,7 +180,6 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "/admin/editarUsuario";
             User user = userRepository.findById(id).orElse(null);
-            usuario.setId(id);
             usuario.setUsername(user.getUsername());
             usuario.setPassword(user.getPassword());
             usuario.setNombre(user.getNombre());
@@ -257,9 +257,32 @@ public class AdminController extends BaseController {
         //Cargar todos los entrenadores que no esten asignados al cliente
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/asignar";
-            List<User> clientes = this.userRepository.listarClientes();
-            model.addAttribute("clientes", clientes);
+            dir = "admin/asignacionEntrenador";
+            List<AsignacionClienteEntrenador> ace = asignacionClienteEntrenadorRepository.buscarPorCliente(id);
+            List<User> entrenadoresAsociados = new ArrayList<>();
+            for(AsignacionClienteEntrenador asignacion : ace){
+                entrenadoresAsociados.add(asignacion.getEntrenador());
+            }
+            List<User> entrenadores = userRepository.entrenadoresNoAsociadosAlCliente(entrenadoresAsociados);
+            model.addAttribute("entrenadores", entrenadores);
+            model.addAttribute("cliente", userRepository.findById(id).orElse(null));
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/anyadirAsignacionEntrenador")
+    public String doAnyadirAsignacionEntrenador(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/asignarEntrenador?id="+id+"&idCliente="+idCliente;
+            AsignacionClienteEntrenador ace = new AsignacionClienteEntrenador();
+            ace.setEntrenador(userRepository.findById(id).orElse(null));
+            ace.setCliente(userRepository.findById(idCliente).orElse(null));
+
+            asignacionClienteEntrenadorRepository.save(ace);
         } else {
             dir = "redirect:/";
         }
@@ -269,12 +292,34 @@ public class AdminController extends BaseController {
     @GetMapping("/asignarDietista")
     public String doAsignarDietista(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        //Cargar todos los dietistas que no esten asignados al cliente
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/asignar";
-            List<User> clientes = this.userRepository.listarClientes();
-            model.addAttribute("clientes", clientes);
+            dir = "admin/asignacionDietista";
+            List<AsignacionClienteDietista> acd = asignacionClienteDietistaRepository.buscarPorCliente(id);
+            List<User> dietistasAsociados = new ArrayList<>();
+            for(AsignacionClienteDietista asignacion : acd){
+                dietistasAsociados.add(asignacion.getDietista());
+            }
+            List<User> dietistas = userRepository.dietistasNoAsociadosAlCliente(dietistasAsociados);
+            model.addAttribute("dietistas", dietistas);
+            model.addAttribute("cliente", userRepository.findById(id).orElse(null));
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/anyadirAsignacionDietista")
+    public String doAnyadirAsignacionDietista(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/asignarDietista?id="+id+"&idCliente="+idCliente;
+            AsignacionClienteDietista acd = new AsignacionClienteDietista();
+            acd.setDietista(userRepository.findById(id).orElse(null));
+            acd.setCliente(userRepository.findById(idCliente).orElse(null));
+
+            asignacionClienteDietistaRepository.save(acd);
         } else {
             dir = "redirect:/";
         }
