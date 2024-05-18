@@ -49,6 +49,7 @@
             <th>DESCRIPCIÓN</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
 
 <%
@@ -61,12 +62,14 @@
             <td><%=ejercicio.getTipo().getTipoDeEjercicio()%></td>
             <td><%=ejercicio.getEnlaceVideo()%></td>
             <td><%=ejercicio.getDescripcion()%></td>
-            <td><a href="/admin/editar?id=<%=ejercicio.getId()%>">Editar</a></td>
+            <td><a href="/admin/editarEjercicio?id=<%=ejercicio.getId()%>">Editar</a></td>
             <td><a href="/admin/borrarEjercicio?id=<%=ejercicio.getId()%>">Borrar</a></td>
+            <td><a href="/admin/verRutinasAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
         </tr>
 <%
     }
 %>
     </table>
+<a href="/admin/crearNuevoEjercicio">Crear nuevo ejercicio</a>
 </body>
 </html>

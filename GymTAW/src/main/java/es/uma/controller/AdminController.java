@@ -2,6 +2,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.ui.EjercicioUI;
 import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,8 +30,9 @@ public class AdminController extends BaseController {
 
     @Autowired
     protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-    //La idea es añadir un enlace para acceder a las rutinas de un mismo ejercicio
-    // para editar, crear o borrar una rutina asociada a ese ejercicio.
+
+    @Autowired
+    protected TipoEjercicioRepository tipoEjercicioRepository;
 
     @Autowired
     protected RegistroRepository registroRepository;
@@ -387,6 +389,79 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/crearNuevoEjercicio")
+    public String doCrearNuevoEjercicio(Model model, HttpSession session, EjercicioUI ejercicioUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/crearEjercicio";
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos", tipos);
+            model.addAttribute("ejercicioUI", ejercicioUI);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/anyadirEjercicio")
+    public String doAnyadirEjercicio(@ModelAttribute EjercicioUI ejercicioUI, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarEjercicios";
+            Ejercicio nuevoEjercicio = new Ejercicio();
+            nuevoEjercicio.setNombre(ejercicioUI.getNombre());
+            nuevoEjercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
+            nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+            nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
+
+            ejercicioRepository.save(nuevoEjercicio);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/editarEjercicio")
+    public String doEditarEjercicio(@RequestParam("id") Integer id, Model model, HttpSession session, EjercicioUI ejercicioUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/editarEjercicio";
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
+            ejercicioUI.setNombre(ejercicio.getNombre());
+            ejercicioUI.setIdTipo(ejercicio.getTipo().getId());
+            ejercicioUI.setEnlaceVideo(ejercicio.getEnlaceVideo());
+            ejercicioUI.setDescripcion(ejercicio.getDescripcion());
+            model.addAttribute("tipos", tipos);
+            model.addAttribute("ejercicioUI", ejercicioUI);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/modificarEjercicio")
+    public String doModificarEjercicio(HttpSession session, EjercicioUI ejercicioUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarEjercicios";
+            Ejercicio ejercicio = ejercicioRepository.findById(ejercicioUI.getId()).orElse(null);
+            ejercicio.setNombre(ejercicioUI.getNombre());
+            ejercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
+            ejercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+            ejercicio.setDescripcion(ejercicioUI.getDescripcion());
+
+            ejercicioRepository.save(ejercicio);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
     @GetMapping("/borrarEjercicio")
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
         String dir;
@@ -395,6 +470,21 @@ public class AdminController extends BaseController {
             dir = "redirect:/admin/mostrarEjercicios";
             this.ejercicioRepository.deleteById(id);
 
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/verRutinasAsociadas")
+    public String doRutinasAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/mostrarRutinas";
+            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
+            List<ImplementacionEjercicioRutina> rutinas = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
+            model.addAttribute("rutinas", rutinas);
         } else {
             dir = "redirect:/";
         }
