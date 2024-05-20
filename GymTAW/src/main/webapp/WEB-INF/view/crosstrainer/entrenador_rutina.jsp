@@ -29,22 +29,27 @@
     <%
         for(ImplementacionEjercicioRutina imp : lista){
     %>
-        <tr>
-            <td><%=imp.getEjercicio().getNombre()%></td>
-            <td><%=imp.getSets() != null ? imp.getSets() : ""%></td>
-            <td><%=imp.getRepeticiones() != null ? imp.getRepeticiones() : ""%></td>
-            <td><%=imp.getPeso() != null ? imp.getPeso() : ""%>Kg</td>
-            <td><%=imp.getMetros() != null ? imp.getMetros() : ""%>Mts</td>
-            <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
-            <td><%=imp.getRealizado() != null ? imp.getRealizado() : "NO"%></td>
-            <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>&iddia=<%=iddia%>">Editar</a></td>
-        </tr>
+    <tr>
+        <td><%=imp.getEjercicio().getNombre()%></td>
+        <td><%=imp.getSets() != null ? imp.getSets() : ""%></td>
+        <td><%=imp.getRepeticiones() != null ? imp.getRepeticiones() : ""%></td>
+        <td><%=imp.getPeso() != null ? imp.getPeso() : ""%>Kg</td>
+        <td><%=imp.getMetros() != null ? imp.getMetros() : ""%>Mts</td>
+        <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
+        <td><%=imp.getRealizado() != null ? imp.getRealizado() : "NO"%></td>
+        <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>&iddia=<%=iddia%>">Editar</a></td>
+    </tr>
     <%
         }
     %>
 
 </table>
 
+<form action="/entrenamientos/crearimplementacion" method="get">
+    <input type="hidden" name="id" value="<%=-1%>">
+    <input type="hidden" name="iddia" value="<%=iddia%>">
+    <button type="submit">Crear</button>
+</form>
 
 
 </body>
