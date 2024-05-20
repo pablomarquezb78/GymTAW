@@ -6,7 +6,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Plato> platos = (List<Plato>) request.getAttribute("platos");
+    List<CantidadIngredientePlatoComida> comidas = (List<CantidadIngredientePlatoComida>) request.getAttribute("comidas");
+    List<Ingrediente> ingredientes = (List<Ingrediente>) request.getAttribute("ingredientes");
 %>
 
 <html>
@@ -41,32 +42,36 @@
 </nav>
 
 <br/>
+<p>Cliente: <%=comidas.getFirst().getComida().getDiaDieta().getCliente().getNombre()%> Dietista: <%=comidas.getFirst().getComida().getDiaDieta().getDietista().getNombre()%> </p>
 <table border="1" cellpadding="10" cellspacing="10">
     <tr>
         <th>ID</th>
-        <th>NOMBRE</th>
-        <th>TIEMPO</th>
-        <th>RECETA</th>
-        <th>ENLACE DEL VÍDEO</th>
-        <th></th>
-        <th></th>
+        <th>FECHA/DÍA</th>
+        <th>FRANJA HORARIA</th>
+        <th>CANTIDAD</th>
+        <th>INGREDIENTES</th>
         <th></th>
     </tr>
 
     <%
-        for(Plato plato : platos){
+        for(CantidadIngredientePlatoComida comida : comidas){
 
     %>
     <tr>
-        <td><%=plato.getId()%></td>
-        <td><%=plato.getNombre()%></td>
-        <td><%=plato.getTiempoDePreparacion()%></td>
-        <td><%=plato.getReceta()%></td>
-        <td><%=plato.getEnlaceReceta()%></td>
+        <td><%=comida.getId()%></td>
+        <td><%=comida.getComida().getDiaDieta().getFecha()%></td>
+        <td><%=comida.getComida().getTipoComida().getComidaDelDia()%></td>
+        <td><%=comida.getCantidad()%></td>
+        <td>
+            <% for(Ingrediente ingrediente : ingredientes){
+            %>
+                <%=ingrediente.getNombre() +", "%>
+            <%
+                }
+            %>
+        </td>
 
-        <td><a href="/admin/editar?id=<%=plato.getId()%>">Editar</a></td>
-        <td><a href="/admin/borrarPlato?id=<%=plato.getId()%>">Borrar</a></td>
-        <td><a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>">Ver comidas asociadas</a></td>
+        <td><a href="/admin/editar?id=<%=comida.getId()%>">Editar</a></td>
     </tr>
     <%
         }

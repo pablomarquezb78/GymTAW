@@ -50,9 +50,6 @@ public class AdminController extends BaseController {
     protected PlatosRepository platosRepository;
 
     @Autowired
-    protected IngredienteRepository ingredienteRepository;
-
-    @Autowired
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
 
     @GetMapping("/")
@@ -499,6 +496,22 @@ public class AdminController extends BaseController {
             dir = "admin/platos";
             List<Plato> platos = this.platosRepository.findAll();
             model.addAttribute("platos", platos);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/verComidasAsociadas")
+    public String doVerComidasAsociadas(@RequestParam("id") Integer id, Model model, HttpSession session) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/mostrarComidas";
+            List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.buscarPorPlato(id);
+            List<Ingrediente> ingredientes = cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id);
+            model.addAttribute("comidas", comidas);
+            model.addAttribute("ingredientes", ingredientes);
         } else {
             dir = "redirect:/";
         }
