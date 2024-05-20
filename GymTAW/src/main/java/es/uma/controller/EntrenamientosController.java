@@ -94,6 +94,12 @@ public class EntrenamientosController extends BaseController{
             dia.setFecha(LocalDate.now());
             dia.setCliente(cliente);
 
+            Rutina r = new Rutina();
+            User trainer = (User) session.getAttribute("user");
+            r.setEntrenador(trainer);
+            r.setFechaCreacion(Instant.now());
+            rutinaRepository.save(r);
+            dia.setRutina(r);
 
 
             this.diaEntrenamientoRepository.save(dia);
@@ -111,14 +117,6 @@ public class EntrenamientosController extends BaseController{
         }else{
             DiaEntrenamiento dia = diaEntrenamientoRepository.findById(idDia).orElse(null);
 
-            if(dia.getRutina()==null){
-                Rutina r = new Rutina();
-                User trainer = (User) session.getAttribute("user");
-                r.setEntrenador(trainer);
-                r.setFechaCreacion(Instant.now());
-                rutinaRepository.save(r);
-                dia.setRutina(r);
-            }
 
             int idRutina = dia.getRutina().getId();
             Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
@@ -134,7 +132,7 @@ public class EntrenamientosController extends BaseController{
     private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
         implementacion.setId(imp.getId());
         implementacion.setEjercicio(imp.getEjercicio());
-        implementacion.setRutina(imp.getRutina());
+        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina());
         implementacion.setSets(imp.getSets());
         implementacion.setRepeticiones(imp.getRepeticiones());
         implementacion.setPeso(imp.getPeso());
@@ -203,9 +201,17 @@ public class EntrenamientosController extends BaseController{
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
-            ImplementacionEjercicioRutina imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+            ImplementacionEjercicioRutina imp;
+            if(implementacion.getId()!=null){
+                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+                asignarImplementacionReal(imp,implementacion);
+            }else{
+                imp = new ImplementacionEjercicioRutina();
+                DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacion.getIdDia());
+                imp.setRutina(dia.getRutina());
 
-            asignarImplementacionReal(imp,implementacion);
+                asignarImplementacionReal(imp,implementacion);
+            }
 
             this.implementacionEjercicioRutinaRepository.save(imp);
         }
@@ -243,7 +249,33 @@ public class EntrenamientosController extends BaseController{
         return "redirect:/";
     }
 
+    @GetMapping("/crearimplementacion")
+    public String doCrearImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
+                                        Model model,HttpSession sesion){
+        String strTo = "/crosstrainer/entrenador_implementacion";
 
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+
+            Implementacion implementacion = new Implementacion();
+
+            implementacion.setIdDia(iddia);
+
+            model.addAttribute("implementacion",implementacion);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.findAll();
+            model.addAttribute("ejercicios",ejercicios);
+
+            Boolean editable = false;
+            model.addAttribute("editable",editable);
+
+
+        }
+
+
+        return strTo;
+    }
 
 
 }
