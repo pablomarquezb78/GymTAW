@@ -3,6 +3,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import jakarta.servlet.http.HttpSession;
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -22,7 +23,6 @@ public class EntrenamientosController extends BaseController{
 
     @Autowired
     protected UserRepository userRepository;
-
     @Autowired
     protected DiaEntrenamientoRepository diaEntrenamientoRepository;
     @Autowired
@@ -52,6 +52,94 @@ public class EntrenamientosController extends BaseController{
 
     @GetMapping("/versemana")
     public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
+
+
+        List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
+
+        model.addAttribute("idcliente",idcliente);
+        model.addAttribute("diasEntrenamientos", diaEntrenamientos);
+
+        return "/crosstrainer/entrenador_semana";
+    }
+
+    @PostMapping("/nuevo-entrenamiento")
+    public String doCreateEntrenamiento(@RequestParam("id") Integer id, Model model, HttpSession session){
+
+        model.addAttribute("idcliente",id);
+        return "/crosstrainer/entrenador_crear_entrenamiento";
+
+    }
+
+
+    @PostMapping("/entrenador-rutina")
+    public String doLoadFecha(@RequestParam("accion") String accion, @RequestParam("id") Integer idcliente, @RequestParam("fecha") String fecha,Model model, HttpSession session){
+
+       String url = "redirect:/";
+       User user = (User) session.getAttribute("user");
+       LocalDate fechaConvertida = convertirStringALocalDate(fecha);
+
+       if(accion.equals("crear")){
+
+       }
+
+       if(accion.equals("asociar")){
+           List<Rutina> rutinas = rutinaRepository.listarRutinasUsuario(user.getId());
+
+           AsociacionRutina asociacionRutina = new AsociacionRutina();
+           asociacionRutina.setIdCliente(idcliente);
+           asociacionRutina.setIdTrainer(user.getId());
+           asociacionRutina.setFecha(fecha);
+
+           model.addAttribute("rutinas",rutinas);
+           model.addAttribute("asociacionRutina",asociacionRutina);
+
+           return "/crosstrainer/entrenador_asociar_rutina";
+       }
+
+       return "redirect:/";
+
+    }
+
+    @PostMapping("/asociar-rutina")
+    public String doAsociarRutina(AsociacionRutina asociacionRutina, Model model, HttpSession session){
+
+        LocalDate fechaConvertida = convertirStringALocalDate(asociacionRutina.getFecha());
+
+        Rutina rutina = rutinaRepository.getById(asociacionRutina.getIdRutina());
+
+        User user = userRepository.getById(asociacionRutina.getIdCliente());
+
+        DiaEntrenamiento diaEntrenamiento = new DiaEntrenamiento();
+        diaEntrenamiento.setRutina(rutina);
+        diaEntrenamiento.setCliente(user);
+        diaEntrenamiento.setFecha(fechaConvertida);
+
+        diaEntrenamientoRepository.save(diaEntrenamiento);
+
+        return "redirect:/entrenamientos/versemana?id="+asociacionRutina.getIdCliente();
+    }
+
+
+    private LocalDate convertirStringALocalDate(String fechaStr) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return LocalDate.parse(fechaStr, formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private String doActualizarLoadFecha(Integer id, LocalDate fechaConvertida){
+
+        return "redirect:/entrenamientos/versemana?id="+id;
+
+    }
+
+/*
+    @GetMapping("/versemana")
+    public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
         String strTo = "/crosstrainer/entrenador_semana";
 
         if(!estaAutenticado(session)){
@@ -66,6 +154,7 @@ public class EntrenamientosController extends BaseController{
 
         return strTo;
     }
+    */
 
     @PostMapping("/borrardia")
     public String doBorrarDiaEntrenamiento (@RequestParam("id") Integer id,HttpSession session){

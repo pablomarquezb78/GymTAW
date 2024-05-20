@@ -1,67 +1,66 @@
 <%@ page import="es.uma.entity.DiaEntrenamiento" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.User" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<DiaEntrenamiento> list = (List<DiaEntrenamiento>) request.getAttribute("dias");
-    User cliente = (User) request.getAttribute("cliente");
-
+    Integer id = (Integer) request.getAttribute("idcliente");
+    List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) request.getAttribute("diasEntrenamientos");
 %>
-
 <html>
-<head>
-    <title>Semana Entrenamientos</title>
-</head>
 
-<body>
+    <head>
+        <title>Calendario Ejercicios</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
 
-<form method="post" action="/entrenamientos/creardia">
-    <input type="hidden" name="clienteid" value="<%=cliente.getId()%>">
-    <button type="submit">Crear Entrenamiento</button>
-</form>
+        <h1>ENTRENAMIENTOS</h1>
 
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+        <%
+            if(!diaEntrenamientos.isEmpty()){
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Dia</th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
+                for(DiaEntrenamiento diaEntrenamiento : diaEntrenamientos){
 
-    <%
-        if(list !=null){
-            for (DiaEntrenamiento dia : list) {
-    %>
-    <tr>
-        <td><%=dia.getId()%></td>
-        <td><%= dia.getFecha() %></td>
-        <td>
-            <form method="get" action="/entrenamientos/editardia">
-                <input type="hidden" name="iddia" value="<%=dia.getId()%>">
-                <button type="submit">Editar</button>
-            </form>
-        </td>
-        <td>
-            <form method="post" action="/entrenamientos/borrardia">
-                <input type="hidden"  name="id" value="<%=dia.getId()%>">
-                <button type="submit"> Borrar </button>
-            </form>
-        </td>
+        %>
 
-    </tr>
+        <tr>
+            <td><%=diaEntrenamiento.getFecha()%></td>
+            <td><a href="">Editar</a></td>
+            <td href="">Borrar</td>
+        </tr>
 
-    <%
-        }
-    }else{
-    %>
-    <h2> NO EXISTEN ENTRENAMIENTOS</h2>
-    <%
-        }
-    %>
-</table>
+        <%
+                }
+            }else{
+        %>
+        <h3>No hay ningún entrenamiento :(</h3>
+        <%
+            }
+        %>
+            <tbody>
+        </table>
+
+    <form method="post" action="/entrenamientos/nuevo-entrenamiento">
+        <input hidden="hidden" name="id" value="<%=id%>">
+        <button type="submit">Nuevo Entrenamiento</button>
+    </form>
 
 
-</body>
+
+    </form>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
 </html>
+
+

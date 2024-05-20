@@ -1,5 +1,6 @@
 package es.uma.dao;
 
+import es.uma.entity.Rutina;
 import es.uma.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,7 +33,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where u.rol.id = 5 and u not in (select acd.dietista from AsignacionClienteDietista acd) and u not in :dietistas")
     public List<User> dietistasNoAsociadosAlCliente(@Param("dietistas") List<User> dietistas);
-
-
-
 }
