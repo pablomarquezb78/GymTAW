@@ -38,15 +38,20 @@
         <form:hidden path="id"></form:hidden>
         <label>Nombre: </label>
         <form:input path="nombre"></form:input>
+        <br>
         <label>Clase:</label>
         <form:input path="trainerEjercicio" disabled="<%=disabled%>"></form:input>
+        <br>
         <label>Tipo:</label>
+        <br>
         <form:radiobuttons path="idTipo" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
+        <br>
         <label>Enlace:</label>
         <form:input path="enlaceVideo"></form:input>
+        <br>
         <label>Descripcion:</label>
         <form:input path="descripcion"></form:input>
-
+        <br>
         <form:button>Guardar ejercicio</form:button>
     </form:form>
 </div>
