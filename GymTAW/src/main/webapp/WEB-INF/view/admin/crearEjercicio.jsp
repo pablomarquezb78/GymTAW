@@ -2,16 +2,21 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.TipoEjercicio" %>
+<%@ page import="es.uma.ui.EjercicioUI" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<TipoEjercicio> tipos = (List<TipoEjercicio>) request.getAttribute("tipos");
+    EjercicioUI ejercicioUI = (EjercicioUI) request.getAttribute("ejercicioUI");
     UserRol userRol = (UserRol) session.getAttribute("rol");
     Boolean disabled = true;
     String actionRol = "/entrenamientos/guardar-ejercicio";
-    if(userRol.getId() == 1) {
+    if(userRol.getId() == 1 && ejercicioUI.getId() == null) {
         disabled = false;
         actionRol = "/admin/anyadirEjercicio";
+    }else if(userRol.getId() == 1 && ejercicioUI.getId() != null){
+        disabled = false;
+        actionRol = "/admin/modificarEjercicio";
     }
 
 %>
@@ -21,36 +26,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav nav-fill w-100">
-            <li class="nav-item active">
-                <a class="nav-link" href="/admin/">Inicio</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/admin/autenticarUsuarios">Autenticar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/asignarCliente">Asignar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 <div>
     <h3>
-        Crear ejercicio
+        <%=ejercicioUI.getId() == null ? "Crear ejercicio" : "Modificar ejercicio"%>
     </h3>
-    <p>Introduzca los datos necesarios para añadir un nuevo ejercicio</p>
+    <p>
+        <%=ejercicioUI.getId() == null ? "Introduzca los datos necesarios para añadir un nuevo ejercicio" : "Modifica los datos del ejercicio como desee"%>
+    </p>
     <form:form action="<%=actionRol%>" method="post" modelAttribute="ejercicioUI">
+        <form:hidden path="id"></form:hidden>
         <label>Nombre: </label>
         <form:input path="nombre"></form:input>
         <label>Clase:</label>
@@ -62,7 +47,7 @@
         <label>Descripcion:</label>
         <form:input path="descripcion"></form:input>
 
-        <form:button>Crear ejercicio</form:button>
+        <form:button>Guardar ejercicio</form:button>
     </form:form>
 </div>
 </body>

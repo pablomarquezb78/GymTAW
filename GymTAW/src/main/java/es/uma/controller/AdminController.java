@@ -177,7 +177,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "/admin/editarUsuario";
+            dir = "/admin/crearUsuario";
             User user = userRepository.findById(id).orElse(null);
             usuario.setUsername(user.getUsername());
             usuario.setPassword(user.getPassword());
@@ -425,7 +425,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/editarEjercicio";
+            dir = "admin/crearEjercicio";
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
             ejercicioUI.setNombre(ejercicio.getNombre());
