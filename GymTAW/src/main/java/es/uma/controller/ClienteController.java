@@ -58,11 +58,13 @@ public class ClienteController {
     @GetMapping("/ejercicio")
     public String doMostrarEjercicio(@RequestParam("id")String id, @RequestParam(value = "set", required = false) String set, Model model){
         ImplementacionEjercicioRutina i = implementacionEjercicioRutinaRepository.findById(Integer.parseInt(id)).orElse(null);
+
+        //CONSIDERO QUE SIEMPRE HABRÁ UNA SERIE EN EL EJERCICIO
         if(set == null) {
             set = "1";
         }
 
-        FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeebackEjercicioPorImplementacionYSet(Integer.parseInt(id),set);
+        FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYSet(Integer.parseInt(id),set);
         model.addAttribute("feedback",feedback);
 
         model.addAttribute("implementacion",i);
@@ -101,13 +103,32 @@ public class ClienteController {
 
     @PostMapping("/guardarFeedbackEjercicio")
     public String doGuardarFeedbackEjercicio(@RequestParam("realizado") Byte realizado,
-                                             @RequestParam("seriesRealizadas")String seriesRealizadas,
+                                             @RequestParam("seriesRealizadas")Integer seriesRealizadas,
                                              @RequestParam("implementacion") Integer implementacionId){
         ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
 
         if (implementacion != null) {
             implementacion.setRealizado(realizado);
-            implementacion.setSeguimientoSetsDone(seriesRealizadas);
+            implementacion.setSeguimientoSetsDone("" + seriesRealizadas);
+
+            //POR SIMPLIFICAR, SI SE MODIFICA EL NUMERO DE SETS REALIZADAS EL CLIENTE DEBERÁ VOLVER A RELLENAR EL FEEDBACK DE ESTAS NUEVAS SERIES
+            List<FeedbackEjercicio> feedbackAnterior = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacion(implementacionId);
+
+            //SI HABIA FEEDBACK LO BORRAMOS
+            if(feedbackAnterior!=null){
+                for(FeedbackEjercicio f : feedbackAnterior){
+                    feedbackejercicioRepository.delete(f);
+                }
+            }
+
+            //PREMARAMOS EL FEEBACK DE LAS NUEVAS SERIES REALIZADAS PARA QUE POSTERIORMENTE EL CLIENTE LAS RELLENE
+            for(int i = 1; i<= seriesRealizadas; i++){
+                FeedbackEjercicio feedbackEjercicio = new FeedbackEjercicio();
+                feedbackEjercicio.setSerie("" + i);
+                feedbackEjercicio.setImplementacionEjercicioRutina(implementacion);
+
+                feedbackejercicioRepository.save(feedbackEjercicio);
+            }
 
             implementacionEjercicioRutinaRepository.save(implementacion);
         }
@@ -123,7 +144,7 @@ public class ClienteController {
         ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
 
         if (implementacion != null) {
-            FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeebackEjercicioPorImplementacionYSet(implementacionId,serieSeleccionada);
+            FeedbackEjercicio feedback = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYSet(implementacionId,serieSeleccionada);
 
             feedback.setPesoRealizado(pesoRealizado);
             feedback.setRepeticionesRealizadas(repeticionesRealizadas);
@@ -131,7 +152,7 @@ public class ClienteController {
             feedbackejercicioRepository.save(feedback);
         }
 
-        return "redirect:/cliente/ejercicio?id=" + implementacionId;
+        return "redirect:/cliente/ejercicio?id=" + implementacionId + "&set=" + serieSeleccionada;
     }
 
     @PostMapping("/seleccionarSerie")
