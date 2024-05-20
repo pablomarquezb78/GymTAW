@@ -3,6 +3,7 @@
 <%@ page import="es.uma.dao.EjercicioRepository" %>
 <%
     List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
+    Integer iddia = (Integer) request.getAttribute("iddia");
 %>
 
 
@@ -36,7 +37,7 @@
             <td><%=imp.getMetros() != null ? imp.getMetros() : ""%>Mts</td>
             <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
             <td><%=imp.getRealizado() != null ? imp.getRealizado() : "NO"%></td>
-            <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>">Editar</a></td>
+            <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>&iddia=<%=iddia%>">Editar</a></td>
         </tr>
     <%
         }

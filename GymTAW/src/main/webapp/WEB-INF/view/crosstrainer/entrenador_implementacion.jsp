@@ -1,59 +1,42 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.uma.entity.Ejercicio" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="es.uma.ui.Implementacion" %>
 <%
     List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
-    ImplementacionEjercicioRutina imp = (ImplementacionEjercicioRutina) request.getAttribute("imp");
     Boolean editable = (Boolean) request.getAttribute("editable");
 
-    String sets="",repeticiones="",peso="",tiempo="",cal="",metros="";
+    Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
 
-    if(editable!=null && editable){
-        sets=imp.getSets();
-        repeticiones=imp.getRepeticiones();
-        peso=imp.getPeso();
-        tiempo=imp.getTiempo();
-        cal=imp.getKilocalorias();
-        metros=imp.getMetros();
+    String sets = "", repeticiones = "", peso = "", tiempo = "", cal = "", metros = "";
+
+    if (editable != null && editable) {
+        sets = implementacion.getSets();
+        repeticiones = implementacion.getRepeticiones();
+        peso = implementacion.getPeso();
+        tiempo = implementacion.getTiempo();
+        cal = implementacion.getKilocalorias();
+        metros = implementacion.getMetros();
     }
-
-
 %>
 <html>
-
 <head>
-
-
-
+    <title>Formulario de Implementación</title>
 </head>
 <body>
-<form action="/entrenamientos/guardarimplementacion" method="post">
-    <h3>Sets:  <input name="sets" value="<%=sets%>"></h3>
-    <h3>Repeticiones: <input name="repeticiones" value="<%=repeticiones%>"></h3>
-    <h3>Peso: <input name="peso" value="<%=peso%>"></h3>
-    <h3>Tiempo: <input name="tiempo" value="<%=tiempo%>"></h3>
-    <h3>Kcal: <input name="cal" value="<%=cal%>"></h3>
-    <h3>Metros: <input name="metros" value="<%=metros%>"></h3>
+<form:form action="/entrenamientos/guardarimplementacion" method="post" modelAttribute="implementacion">
+    <h3>Sets: <form:input path="sets" value="${sets}"/></h3>
+    <h3>Repeticiones: <form:input path="repeticiones" value="${repeticiones}"/></h3>
+    <h3>Peso: <form:input path="peso" value="${peso}"/></h3>
+    <h3>Tiempo: <form:input path="tiempo" value="${tiempo}"/></h3>
+    <h3>Kcal: <form:input path="kilocalorias" value="${cal}"/></h3>
+    <h3>Metros: <form:input path="metros" value="${metros}"/></h3>
     <h3>Ejercicio:</h3>
-
-    <select>
-        <%
-            for(Ejercicio ej: ejercicios){
-                String seleccionado= "";
-
-                if( ej.getId().equals(imp.getEjercicio().getId()) ){
-                    seleccionado = "selected";
-                }
-
-        %>
-            <option name="ejercicio" value="<%=ej.getId()%>" <%=seleccionado%>> <%=ej.getNombre()%></option>
-        <%
-            }
-        %>
-    </select>
-
-    <button>GUARDAR</button>
-</form>
-
+    <form:select path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" >
+    </form:select>
+    <form:hidden path="idDia"></form:hidden>
+    <form:hidden path="id"></form:hidden>
+    <form:button>GUARDAR</form:button>
+</form:form>
 </body>
 </html>

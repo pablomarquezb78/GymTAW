@@ -3,18 +3,17 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.ui.Implementacion;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/entrenamientos")
@@ -90,13 +89,16 @@ public class EntrenamientosController extends BaseController{
             DiaEntrenamiento dia = new DiaEntrenamiento();
             dia.setFecha(LocalDate.now());
             dia.setCliente(cliente);
+
+
+
             this.diaEntrenamientoRepository.save(dia);
         }
 
         return strTo;
     }
 
-    @GetMapping("editardia")
+    @GetMapping("/editardia")
     public String doEditarDia(@RequestParam("iddia")Integer idDia,Model model,HttpSession session){
         String strTo = "/crosstrainer/entrenador_rutina";
 
@@ -104,25 +106,63 @@ public class EntrenamientosController extends BaseController{
             strTo = "redirect:/";
         }else{
             DiaEntrenamiento dia = diaEntrenamientoRepository.findById(idDia).orElse(null);
+
+            if(dia.getRutina()==null){
+                Rutina r = new Rutina();
+                User trainer = (User) session.getAttribute("user");
+                r.setEntrenador(trainer);
+                r.setFechaCreacion(Instant.now());
+                rutinaRepository.save(r);
+                dia.setRutina(r);
+            }
+
             int idRutina = dia.getRutina().getId();
             Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
             List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(rutina);
             model.addAttribute("implementaciones",implementaciones);
+            model.addAttribute("iddia",idDia);
         }
 
 
         return strTo;
     }
 
-    @GetMapping("editarimplementacion")
-    public String doEditarImplementacion(@RequestParam("id") Integer id,Model model,HttpSession sesion){
+    private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
+        implementacion.setId(imp.getId());
+        implementacion.setEjercicio(imp.getEjercicio());
+        implementacion.setRutina(imp.getRutina());
+        implementacion.setSets(imp.getSets());
+        implementacion.setRepeticiones(imp.getRepeticiones());
+        implementacion.setPeso(imp.getPeso());
+        implementacion.setTiempo(imp.getTiempo());
+        implementacion.setKilocalorias(imp.getKilocalorias());
+        implementacion.setMetros(imp.getMetros());
+        implementacion.setSeguimientoSetsDone(imp.getSeguimientoSetsDone());
+        implementacion.setSeguimientoTiempoDone(imp.getSeguimientoTiempoDone());
+        implementacion.setSeguimientoKilocaloriasDone(imp.getSeguimientoKilocaloriasDone());
+        implementacion.setSeguimientoMetrosDone(imp.getSeguimientoMetrosDone());
+        implementacion.setRealizado(imp.getRealizado());
+    }
+
+    @GetMapping("/editarimplementacion")
+    public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
+                                         Model model,HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_implementacion";
 
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
             ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-            model.addAttribute("imp", imp);
+            //model.addAttribute("imp", imp);
+
+            Implementacion implementacion = new Implementacion();
+            asignarImplementacionUI(implementacion,imp);
+
+            implementacion.setId(id);
+            implementacion.setIdDia(iddia);
+
+
+            model.addAttribute("implementacion",implementacion);
 
             List<Ejercicio> ejercicios = ejercicioRepository.findAll();
             model.addAttribute("ejercicios",ejercicios);
@@ -130,6 +170,40 @@ public class EntrenamientosController extends BaseController{
             Boolean editable = true;
             model.addAttribute("editable",editable);
 
+
+        }
+
+
+        return strTo;
+    }
+
+    private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
+        implementacion.setEjercicio(imp.getEjercicio());
+        implementacion.setSets(imp.getSets());
+        implementacion.setRepeticiones(imp.getRepeticiones());
+        implementacion.setPeso(imp.getPeso());
+        implementacion.setTiempo(imp.getTiempo());
+        implementacion.setKilocalorias(imp.getKilocalorias());
+        implementacion.setMetros(imp.getMetros());
+        implementacion.setSeguimientoSetsDone(imp.getSeguimientoSetsDone());
+        implementacion.setSeguimientoTiempoDone(imp.getSeguimientoTiempoDone());
+        implementacion.setSeguimientoKilocaloriasDone(imp.getSeguimientoKilocaloriasDone());
+        implementacion.setSeguimientoMetrosDone(imp.getSeguimientoMetrosDone());
+        implementacion.setRealizado(imp.getRealizado());
+    }
+
+    @PostMapping("/guardarimplementacion")
+    public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/editardia?iddia=" + implementacion.getIdDia();
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+
+            asignarImplementacionReal(imp,implementacion);
+
+            this.implementacionEjercicioRutinaRepository.save(imp);
         }
 
 
