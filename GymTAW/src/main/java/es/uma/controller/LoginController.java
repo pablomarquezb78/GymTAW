@@ -45,7 +45,7 @@ public class LoginController extends  BaseController {
 
                     break;
                 case bodybuilder:
-
+                    webRedirect = "redirect:/entrenamientos/";
                     break;
                 case crosstrainer:
                     webRedirect = "redirect:/entrenamientos/";
@@ -87,7 +87,7 @@ public class LoginController extends  BaseController {
                     webRedirect = "redirect:/cliente/";
                     break;
                 case bodybuilder:
-                    webRedirect = "redirect:/trainer/";
+                    webRedirect = "redirect:/entrenamientos/";
                     break;
                 case crosstrainer:
                     webRedirect = "redirect:/entrenamientos/";

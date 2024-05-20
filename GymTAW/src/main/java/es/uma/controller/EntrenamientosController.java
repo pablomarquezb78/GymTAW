@@ -3,6 +3,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class EntrenamientosController extends BaseController{
     private RutinaRepository rutinaRepository;
     @Autowired
     private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
+    @Autowired
+    private TipoEjercicioRepository tipoEjercicioRepository;
+
 
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
@@ -209,6 +213,37 @@ public class EntrenamientosController extends BaseController{
 
         return strTo;
     }
-    
+
+    @GetMapping("/crear-ejercicio")
+    public String doCrearEjercicio(HttpSession sesion, Model model){
+
+
+        UserRol userRol = (UserRol) sesion.getAttribute("rol");
+
+        EjercicioUI ejercicioUI = new EjercicioUI();
+        ejercicioUI.setTrainerEjercicio(userRol.getRolUsuario());
+        List<TipoEjercicio> tipoEjercicios = tipoEjercicioRepository.findAll();
+        model.addAttribute("tipos",tipoEjercicios);
+        model.addAttribute("ejercicioUI",ejercicioUI);
+
+        return "admin/crearEjercicio";
+    }
+
+    @PostMapping("/guardar-ejercicio")
+    public String doGuardarEjercicio(@ModelAttribute ("ejercicioUI") EjercicioUI ejercicioUI,HttpSession sesion){
+
+        Ejercicio nuevoEjercicio = new Ejercicio();
+        nuevoEjercicio.setNombre(ejercicioUI.getNombre());
+        nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
+        nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+        TipoEjercicio tipoEjercicio = tipoEjercicioRepository.getById(ejercicioUI.getIdTipo());
+        nuevoEjercicio.setTipo(tipoEjercicio);
+
+        ejercicioRepository.save(nuevoEjercicio);
+        return "redirect:/";
+    }
+
+
+
 
 }

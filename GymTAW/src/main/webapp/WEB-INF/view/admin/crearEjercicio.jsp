@@ -6,6 +6,14 @@
 
 <%
     List<TipoEjercicio> tipos = (List<TipoEjercicio>) request.getAttribute("tipos");
+    UserRol userRol = (UserRol) session.getAttribute("rol");
+    Boolean disabled = true;
+    String actionRol = "/entrenamientos/guardar-ejercicio";
+    if(userRol.getId() == 1) {
+        disabled = false;
+        actionRol = "/admin/anyadirEjercicio";
+    }
+
 %>
 <html>
 <head>
@@ -42,11 +50,18 @@
         Crear ejercicio
     </h3>
     <p>Introduzca los datos necesarios para añadir un nuevo ejercicio</p>
-    <form:form action="/admin/anyadirEjercicio" method="post" modelAttribute="ejercicioUI">
-        Nombre: <form:input path="nombre"></form:input>
-        Tipo: <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
-        Enlace: <form:input path="enlaceVideo"></form:input>
-        Descripcion: <form:input path="descripcion"></form:input>
+    <form:form action="<%=actionRol%>" method="post" modelAttribute="ejercicioUI">
+        <label>Nombre: </label>
+        <form:input path="nombre"></form:input>
+        <label>Clase:</label>
+        <form:input path="trainerEjercicio" disabled="<%=disabled%>"></form:input>
+        <label>Tipo:</label>
+        <form:radiobuttons path="idTipo" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
+        <label>Enlace:</label>
+        <form:input path="enlaceVideo"></form:input>
+        <label>Descripcion:</label>
+        <form:input path="descripcion"></form:input>
+
         <form:button>Crear ejercicio</form:button>
     </form:form>
 </div>

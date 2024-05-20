@@ -9,6 +9,7 @@ public class EjercicioUI {
     private Integer idTipo;
     private String descripcion;
     private String enlaceVideo;
+    private String trainerEjercicio;
 
     public Integer getId() {
         return id;
@@ -50,4 +51,11 @@ public class EjercicioUI {
         this.enlaceVideo = enlaceVideo;
     }
 
+    public String getTrainerEjercicio() {
+        return trainerEjercicio;
+    }
+
+    public void setTrainerEjercicio(String trainerEjercicio) {
+        this.trainerEjercicio = trainerEjercicio;
+    }
 }
