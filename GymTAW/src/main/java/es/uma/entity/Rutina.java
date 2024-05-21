@@ -3,6 +3,7 @@ package es.uma.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "rutina")
@@ -21,6 +22,9 @@ public class Rutina {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entrenador")
     private User entrenador;
+
+    @OneToMany(mappedBy = "rutina")
+    private List<ImplementacionEjercicioRutina> implementacionesEjercicioRutina;
 
     public Integer getId() {
         return id;
@@ -52,6 +56,14 @@ public class Rutina {
 
     public void setEntrenador(User entrenador) {
         this.entrenador = entrenador;
+    }
+
+    public List<ImplementacionEjercicioRutina> getImplementacionesEjercicioRutina() {
+        return implementacionesEjercicioRutina;
+    }
+
+    public void setImplementacionesEjercicioRutina(List<ImplementacionEjercicioRutina> implementacionesEjercicioRutina) {
+        this.implementacionesEjercicioRutina = implementacionesEjercicioRutina;
     }
 
 }

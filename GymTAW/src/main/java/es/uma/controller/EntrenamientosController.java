@@ -228,11 +228,6 @@ public class EntrenamientosController extends BaseController{
         implementacion.setTiempo(imp.getTiempo());
         implementacion.setKilocalorias(imp.getKilocalorias());
         implementacion.setMetros(imp.getMetros());
-        implementacion.setSeguimientoSetsDone(imp.getSeguimientoSetsDone());
-        implementacion.setSeguimientoTiempoDone(imp.getSeguimientoTiempoDone());
-        implementacion.setSeguimientoKilocaloriasDone(imp.getSeguimientoKilocaloriasDone());
-        implementacion.setSeguimientoMetrosDone(imp.getSeguimientoMetrosDone());
-        implementacion.setRealizado(imp.getRealizado());
     }
 
     @GetMapping("/editarimplementacion")
@@ -295,11 +290,6 @@ public class EntrenamientosController extends BaseController{
         implementacion.setTiempo(imp.getTiempo());
         implementacion.setKilocalorias(imp.getKilocalorias());
         implementacion.setMetros(imp.getMetros());
-        implementacion.setSeguimientoSetsDone(imp.getSeguimientoSetsDone());
-        implementacion.setSeguimientoTiempoDone(imp.getSeguimientoTiempoDone());
-        implementacion.setSeguimientoKilocaloriasDone(imp.getSeguimientoKilocaloriasDone());
-        implementacion.setSeguimientoMetrosDone(imp.getSeguimientoMetrosDone());
-        implementacion.setRealizado(imp.getRealizado());
     }
 
     @PostMapping("/guardarimplementacion")

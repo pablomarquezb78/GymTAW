@@ -40,19 +40,4 @@ public class ImplementacionEjercicioRutina {
     @Column(name = "metros", length = 45)
     private String metros;
 
-    @Column(name = "seguimiento_sets_done", length = 45)
-    private String seguimientoSetsDone;
-
-    @Column(name = "seguimiento_tiempo_done", length = 45)
-    private String seguimientoTiempoDone;
-
-    @Column(name = "seguimiento_kilocalorias_done", length = 45)
-    private String seguimientoKilocaloriasDone;
-
-    @Column(name = "seguimiento_metros_done", length = 45)
-    private String seguimientoMetrosDone;
-
-    @Column(name = "realizado")
-    private Byte realizado;
-
 }

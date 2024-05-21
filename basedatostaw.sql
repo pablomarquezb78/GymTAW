@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `basedatostaw` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `basedatostaw`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: basedatostaw
@@ -60,7 +62,7 @@ CREATE TABLE `asignacion_cliente_entrenador` (
   KEY `asignacion-entrenador_fk_idx` (`entrenador`),
   CONSTRAINT `asignacion-entrenador_fk` FOREIGN KEY (`entrenador`) REFERENCES `user` (`iduser`),
   CONSTRAINT `asignacion_cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +71,7 @@ CREATE TABLE `asignacion_cliente_entrenador` (
 
 LOCK TABLES `asignacion_cliente_entrenador` WRITE;
 /*!40000 ALTER TABLE `asignacion_cliente_entrenador` DISABLE KEYS */;
-INSERT INTO `asignacion_cliente_entrenador` VALUES (1,1,3);
+INSERT INTO `asignacion_cliente_entrenador` VALUES (1,1,3),(2,1,4);
 /*!40000 ALTER TABLE `asignacion_cliente_entrenador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -220,7 +222,7 @@ CREATE TABLE `dia_entrenamiento` (
   KEY `dia_entrenamiento-rutina_fk_idx` (`rutina`),
   CONSTRAINT `dia_entrenamiento-cliente` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_entrenamiento-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -229,7 +231,7 @@ CREATE TABLE `dia_entrenamiento` (
 
 LOCK TABLES `dia_entrenamiento` WRITE;
 /*!40000 ALTER TABLE `dia_entrenamiento` DISABLE KEYS */;
-INSERT INTO `dia_entrenamiento` VALUES (1,'2000-01-01 00:00:00',NULL,1,1);
+INSERT INTO `dia_entrenamiento` VALUES (1,'2000-01-01 00:00:00',NULL,1,1),(4,'2024-05-20 00:00:00',NULL,1,NULL);
 /*!40000 ALTER TABLE `dia_entrenamiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +251,7 @@ CREATE TABLE `ejercicio` (
   PRIMARY KEY (`idejercicio`),
   KEY `ejercicio-tipo_ejercicio_fk_idx` (`tipo`),
   CONSTRAINT `ejercicio-tipo_ejercicio_fk` FOREIGN KEY (`tipo`) REFERENCES `tipo_ejercicio` (`idtipo_ejercicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,7 +260,7 @@ CREATE TABLE `ejercicio` (
 
 LOCK TABLES `ejercicio` WRITE;
 /*!40000 ALTER TABLE `ejercicio` DISABLE KEYS */;
-INSERT INTO `ejercicio` VALUES (1,'Press de Banca',1,'Ejercicio orientado a el pectoral mayor','https://videosample.com'),(2,'Press Inclinado',1,'Ejercicio orientado a el pectoral superior','https://videosample.com');
+INSERT INTO `ejercicio` VALUES (1,'Press de Banca',1,'Ejercicio orientado a el pectoral mayor','https://videosample.com'),(2,'Press Inclinado',1,'Ejercicio orientado a el pectoral superior','https://videosample.com'),(3,'Dominadas',2,'Descripion dominada','https://videosample.com'),(4,'Sprints',4,'Descripcion sprints','https://videosample.com'),(5,'Bicicleta estática',3,'Descripcion Bicicleta estática','https://videosample.com');
 /*!40000 ALTER TABLE `ejercicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -271,14 +273,19 @@ DROP TABLE IF EXISTS `feedback_ejercicio`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_ejercicio` (
   `idfeedback_ejercicio` int NOT NULL AUTO_INCREMENT,
-  `implementacion_ejercicio-rutina` int DEFAULT NULL,
-  `Serie` varchar(45) DEFAULT NULL,
-  `Repeticiones_realizadas` varchar(45) DEFAULT NULL,
-  `Peso_realizado` varchar(45) DEFAULT NULL,
+  `seguimiento_sets_done` varchar(45) DEFAULT NULL,
+  `seguimiento_tiempo_done` varchar(45) DEFAULT NULL,
+  `seguimiento_kilocalorias_done` varchar(45) DEFAULT NULL,
+  `seguimiento_metros__done` varchar(45) DEFAULT NULL,
+  `realizado` tinyint DEFAULT NULL,
+  `implementacion` int DEFAULT NULL,
+  `dia_entrenamiento` int DEFAULT NULL,
   PRIMARY KEY (`idfeedback_ejercicio`),
-  KEY `implementacion_ejercicio-rutinaFK_idx` (`implementacion_ejercicio-rutina`),
-  CONSTRAINT `implementacion_ejercicio-rutinaFK` FOREIGN KEY (`implementacion_ejercicio-rutina`) REFERENCES `implementacion_ejercicio-rutina` (`idimplementacion_ejercicio-rutina`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `implementacion_idx` (`implementacion`),
+  KEY `diaEntrenamiento_idx` (`dia_entrenamiento`),
+  CONSTRAINT `dia_entrenamiento` FOREIGN KEY (`dia_entrenamiento`) REFERENCES `dia_entrenamiento` (`iddia_entrenamiento`),
+  CONSTRAINT `implementacion` FOREIGN KEY (`implementacion`) REFERENCES `implementacion_ejercicio-rutina` (`idimplementacion_ejercicio-rutina`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +294,40 @@ CREATE TABLE `feedback_ejercicio` (
 
 LOCK TABLES `feedback_ejercicio` WRITE;
 /*!40000 ALTER TABLE `feedback_ejercicio` DISABLE KEYS */;
+INSERT INTO `feedback_ejercicio` VALUES (1,NULL,NULL,NULL,NULL,NULL,2,1);
 /*!40000 ALTER TABLE `feedback_ejercicio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feedback_ejercicioserie`
+--
+
+DROP TABLE IF EXISTS `feedback_ejercicioserie`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `feedback_ejercicioserie` (
+  `idfeedback_ejercicioserie` int NOT NULL AUTO_INCREMENT,
+  `Serie` varchar(45) DEFAULT NULL,
+  `Repeticiones_realizadas` varchar(45) DEFAULT NULL,
+  `Peso_realizado` varchar(45) DEFAULT NULL,
+  `Tiempo_realizado` varchar(45) DEFAULT NULL,
+  `Kilocalorias_realizado` varchar(45) DEFAULT NULL,
+  `Metros_realizado` varchar(45) DEFAULT NULL,
+  `feedback_ejercicio` int DEFAULT NULL,
+  PRIMARY KEY (`idfeedback_ejercicioserie`),
+  KEY `feedback_ejercicio_idx` (`feedback_ejercicio`),
+  CONSTRAINT `feedback_ejercicio` FOREIGN KEY (`feedback_ejercicio`) REFERENCES `feedback_ejercicio` (`idfeedback_ejercicio`)
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_ejercicioserie`
+--
+
+LOCK TABLES `feedback_ejercicioserie` WRITE;
+/*!40000 ALTER TABLE `feedback_ejercicioserie` DISABLE KEYS */;
+INSERT INTO `feedback_ejercicioserie` VALUES (64,'1',NULL,NULL,NULL,NULL,NULL,NULL),(85,'1',NULL,NULL,NULL,NULL,NULL,NULL),(86,'2',NULL,NULL,NULL,NULL,NULL,NULL),(87,'3',NULL,NULL,NULL,NULL,NULL,NULL),(88,'4',NULL,NULL,NULL,NULL,NULL,NULL),(89,'1',NULL,NULL,NULL,NULL,NULL,NULL),(90,'2',NULL,NULL,NULL,NULL,NULL,NULL),(91,'3',NULL,NULL,NULL,NULL,NULL,NULL),(92,'4',NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `feedback_ejercicioserie` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -307,17 +347,12 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
   `tiempo` varchar(45) DEFAULT NULL,
   `kilocalorias` varchar(45) DEFAULT NULL,
   `metros` varchar(45) DEFAULT NULL,
-  `seguimiento_sets_done` varchar(45) DEFAULT NULL,
-  `seguimiento_tiempo_done` varchar(45) DEFAULT NULL,
-  `seguimiento_kilocalorias_done` varchar(45) DEFAULT NULL,
-  `seguimiento_metros_done` varchar(45) DEFAULT NULL,
-  `realizado` tinyint DEFAULT NULL,
   PRIMARY KEY (`idimplementacion_ejercicio-rutina`),
   KEY `implementacion-ejercicio_idx` (`ejercicio`),
   KEY `implementacion-rutina_fk_idx` (`rutina`),
   CONSTRAINT `implementacion-ejercicio_fk` FOREIGN KEY (`ejercicio`) REFERENCES `ejercicio` (`idejercicio`),
   CONSTRAINT `implementacion-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +361,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
 
 LOCK TABLES `implementacion_ejercicio-rutina` WRITE;
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` DISABLE KEYS */;
-INSERT INTO `implementacion_ejercicio-rutina` VALUES (1,1,1,'4','8','60',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,2,1,'4','8','45',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `implementacion_ejercicio-rutina` VALUES (2,2,1,'4','8','45',NULL,NULL,NULL),(4,1,1,'4','8','60',NULL,NULL,NULL),(5,4,1,'5',NULL,NULL,'30',NULL,NULL),(6,5,1,NULL,NULL,NULL,'900',NULL,NULL);
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -430,7 +465,7 @@ CREATE TABLE `rutina` (
   PRIMARY KEY (`idrutina`),
   KEY `rutina-entrenador_fk_idx` (`entrenador`),
   CONSTRAINT `rutina-entrenador_fk` FOREIGN KEY (`entrenador`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,7 +474,7 @@ CREATE TABLE `rutina` (
 
 LOCK TABLES `rutina` WRITE;
 /*!40000 ALTER TABLE `rutina` DISABLE KEYS */;
-INSERT INTO `rutina` VALUES (1,'2000-01-01 00:00:00','rutina1',3);
+INSERT INTO `rutina` VALUES (1,'2000-01-01 00:00:00','rutina1',3),(2,'2000-01-01 00:00:00','rutina2',4),(3,'2024-05-20 11:39:27',NULL,4);
 /*!40000 ALTER TABLE `rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -583,4 +618,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-05 14:10:46
+-- Dump completed on 2024-05-21 23:47:34

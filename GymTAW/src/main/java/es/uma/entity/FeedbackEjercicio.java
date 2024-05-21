@@ -14,17 +14,27 @@ public class FeedbackEjercicio {
     @Column(name = "idfeedback_ejercicio", nullable = false)
     private Integer id;
 
+    @Column(name = "seguimiento_sets_done", length = 45)
+    private String seguimientoSetsDone;
+
+    @Column(name = "seguimiento_tiempo_done", length = 45)
+    private String seguimientoTiempoDone;
+
+    @Column(name = "seguimiento_kilocalorias_done", length = 45)
+    private String seguimientoKilocaloriasDone;
+
+    @Column(name = "seguimiento_metros__done", length = 45)
+    private String seguimientoMetrosDone;
+
+    @Column(name = "realizado")
+    private Byte realizado;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "`implementacion_ejercicio-rutina`")
-    private ImplementacionEjercicioRutina implementacionEjercicioRutina;
+    @JoinColumn(name = "implementacion")
+    private ImplementacionEjercicioRutina implementacion;
 
-    @Column(name = "Serie", length = 45)
-    private String serie;
-
-    @Column(name = "Repeticiones_realizadas", length = 45)
-    private String repeticionesRealizadas;
-
-    @Column(name = "Peso_realizado", length = 45)
-    private String pesoRealizado;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dia_entrenamiento")
+    private DiaEntrenamiento diaEntrenamiento;
 
 }
