@@ -13,7 +13,7 @@
     <title>Rutina</title>
 </head>
 <body>
-
+<h1>RUTINA</h1>
 <table border="1">
     <tr>
         <th>Ejercicio</th>
@@ -38,6 +38,13 @@
         <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
         <td><%=imp.getRealizado() != null ? imp.getRealizado() : "NO"%></td>
         <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>&iddia=<%=iddia%>">Editar</a></td>
+        <td>
+            <form action="/entrenamientos/borrarimplementacion" method="post">
+                <input type="hidden" name="id" value="<%=imp.getId()%>">
+                <input type="hidden" name="iddia" value="<%=iddia%>">
+                <button type="submit">Quitar</button>
+            </form>
+        </td>
     </tr>
     <%
         }
@@ -48,8 +55,9 @@
 <form action="/entrenamientos/crearimplementacion" method="get">
     <input type="hidden" name="id" value="<%=-1%>">
     <input type="hidden" name="iddia" value="<%=iddia%>">
-    <button type="submit">Crear</button>
+    <button type="submit">Crear Ejercicio</button>
 </form>
+
 
 
 </body>
