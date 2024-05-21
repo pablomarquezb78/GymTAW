@@ -10,45 +10,32 @@
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
-        body {
-            background-size: cover;
-            background-position: center;
-            color: white;
-        }
         .form-container {
             background: rgba(0, 0, 0, 0.7);
             padding: 30px;
             border-radius: 10px;
         }
-        h1 {
-            padding: 10px;
-            border-radius: 10px;
-            color: black;
-        }
         .form-label {
             font-weight: bold;
-        }
-        button {
-            width: 100%;
-            background-color: green;
+            color: white;
         }
     </style>
 </head>
 <body>
 
 <div class="d-flex flex-column justify-content-center align-items-center vh-100">
-    <h1 class="text-center">Login</h1>
+    <h1 class="text-center p-2">Login</h1>
     <div class="form-container">
         <form method="post" action="/autentica">
             <div class="mb-3">
-                <label for="usuario_login" class="form-label">Usuario:</label>
+                <label class="form-label">Usuario:</label>
                 <input type="text" class="form-control" id="usuario_login" name="usuario_login" required>
             </div>
             <div class="mb-3">
-                <label for="password_login" class="form-label">Contraseña:</label>
+                <label class="form-label">Contraseña:</label>
                 <input type="password" class="form-control" id="password_login" name="password_login" required>
             </div>
-            <button type="submit" class="btn btn-success">Acceder</button>
+            <button type="submit" class="btn btn-success w-100">Acceder</button>
         </form>
         <div class="text-center mt-3">
             <a href="/registrar" class="text-white">Registrarse</a>
