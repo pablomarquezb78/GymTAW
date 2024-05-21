@@ -37,20 +37,20 @@
     <form:form action="<%=actionRol%>" method="post" modelAttribute="ejercicioUI">
         <form:hidden path="id"></form:hidden>
         <label>Nombre: </label>
-        <form:input path="nombre"></form:input>
+        <form:input path="nombre" size="15"></form:input>
         <br>
         <label>Clase:</label>
-        <form:input path="trainerEjercicio" disabled="<%=disabled%>"></form:input>
+        <form:input path="trainerEjercicio" size="10" disabled="<%=disabled%>"></form:input>
         <br>
         <label>Tipo:</label>
         <br>
         <form:radiobuttons path="idTipo" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
         <br>
         <label>Enlace:</label>
-        <form:input path="enlaceVideo"></form:input>
+        <form:input path="enlaceVideo" size="50"></form:input>
         <br>
         <label>Descripcion:</label>
-        <form:input path="descripcion"></form:input>
+        <form:input path="descripcion" size="50"></form:input>
         <br>
         <form:button>Guardar ejercicio</form:button>
     </form:form>

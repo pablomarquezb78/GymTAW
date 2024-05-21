@@ -76,4 +76,4 @@
         <a href="/cancelar" type="submit" class="btn btn-danger">Cancelar</a>
     </div>
 </div>
-<script src="https://cdn
+<script src="https://cdn"></script>

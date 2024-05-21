@@ -11,33 +11,11 @@
 <head>
     <title>Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav nav-fill w-100">
-            <li class="nav-item active">
-                <a class="nav-link" href="/admin/">Inicio</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/admin/autenticarUsuarios">Autenticar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarUsuarios">Usuarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/asignarCliente">Asignar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
+<jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 <br/>
 <table border="1" cellpadding="10" cellspacing="10">
     <tr>
@@ -62,14 +40,14 @@
         <td><%=plato.getReceta()%></td>
         <td><%=plato.getEnlaceReceta()%></td>
 
-        <td><a href="/admin/editarPlato?id=<%=plato.getId()%>">Editar</a></td>
-        <td><a href="/admin/borrarPlato?id=<%=plato.getId()%>">Borrar</a></td>
+        <td><a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+        <td><a href="/admin/borrarPlato?id=<%=plato.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
         <td><a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>">Ver comidas asociadas</a></td>
     </tr>
     <%
         }
     %>
 </table>
-<td><a href="/admin/crearNuevoPlato">Crear nuevo plato</a></td>
+<td><a href="/admin/crearNuevoPlato"  class="btn btn-success mt-3">Crear nuevo plato</a></td>
 </body>
 </html>

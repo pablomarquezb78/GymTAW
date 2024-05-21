@@ -26,16 +26,33 @@
     <p><%=usuario.getId() == null ? "Introduzca los datos necesarios para añadir un nuevo usuario" : "Modifica los datos del usuario como desee"%></p>
     <form:form action="<%=action%>" method="post" modelAttribute="usuario">
         <form:hidden path="id"></form:hidden>
-        Usuario*: <form:input path="username"></form:input>
-        Contraseña*: <form:input path="password"></form:input>
-        Nombre*: <form:input path="nombre"></form:input>
-        Apellidos*: <form:input path="apellidos"></form:input>
-        Fecha de nacimiento*:
-        Rol*: <form:radiobuttons path="rol" items="${roles}" delimiter="<br>" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
-        Peso: <form:input path="peso"></form:input>
-        Altura: <form:input path="altura"></form:input>
-        Telefono: <form:input path="telefono"></form:input>
-        <form:button>Guardar usuario</form:button>
+        <label>*Usuario:</label>
+        <form:input path="username" size="15"></form:input>
+        <br>
+        <label>*Contraseña:</label>
+        <form:input path="password" size="25"></form:input>
+        <br>
+        <label>*Nombre:</label>
+        <form:input path="nombre" size="15"></form:input>
+        <br>
+        <label>*Apellidos: </label>
+        <form:input path="apellidos" size="50"></form:input>
+        <br>
+        <label>*Fecha de nacimiento:</label>
+        <br>
+        <label>*Rol:</label>
+        <form:radiobuttons path="rol" items="${roles}" delimiter="<br>" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
+        <br>
+        <label>Peso:</label>
+        Peso: <form:input path="peso" size="3"></form:input>
+        <br>
+        <label>Altura:</label>
+        Altura: <form:input path="altura" size="3"></form:input>
+        <br>
+        <label>Telefono:</label>
+        Telefono: <form:input path="telefono" size="9"></form:input>
+        <br>
+        <form:button class="btn btn-success mt-3">Guardar usuario</form:button>
     </form:form>
 </div>
 </body>
