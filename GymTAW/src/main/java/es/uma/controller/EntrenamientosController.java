@@ -268,6 +268,25 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    @PostMapping("/borrarimplementacion")
+    public String doBorrarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
+                                         Model model,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/editardia?iddia=" + iddia;
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            //model.addAttribute("imp", imp);
+
+           implementacionEjercicioRutinaRepository.delete(imp);
+
+        }
+
+
+        return strTo;
+    }
+
     private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
         implementacion.setEjercicio(imp.getEjercicio());
         implementacion.setSets(imp.getSets());
