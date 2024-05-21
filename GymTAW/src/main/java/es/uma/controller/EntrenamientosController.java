@@ -321,7 +321,7 @@ public class EntrenamientosController extends BaseController{
         model.addAttribute("tipos",tipoEjercicios);
         model.addAttribute("ejercicioUI",ejercicioUI);
 
-        return "admin/crearEjercicio";
+        return "crearEjercicio";
     }
 
     @PostMapping("/guardar-ejercicio")

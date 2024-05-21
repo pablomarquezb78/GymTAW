@@ -19,11 +19,12 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
-<p>Cliente: <%=comidas.getFirst().getComida().getDiaDieta().getCliente().getNombre()%> Dietista: <%=comidas.getFirst().getComida().getDiaDieta().getDietista().getNombre()%> </p>
 <table border="1" cellpadding="10" cellspacing="10">
     <tr>
         <th>ID</th>
         <th>FECHA/DÍA</th>
+        <th>CLIENTE</th>
+        <th>DIETISTA</th>
         <th>FRANJA HORARIA</th>
         <th>CANTIDAD</th>
         <th>INGREDIENTES</th>
@@ -37,6 +38,8 @@
     <tr>
         <td><%=comida.getId()%></td>
         <td><%=comida.getComida().getDiaDieta().getFecha()%></td>
+        <td><%=comida.getComida().getDiaDieta().getCliente()%></td>
+        <td><%=comida.getComida().getDiaDieta().getDietista()%></td>
         <td><%=comida.getComida().getTipoComida().getComidaDelDia()%></td>
         <td><%=comida.getCantidad()%></td>
         <td>

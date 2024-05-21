@@ -1,8 +1,6 @@
 
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
 <%@ page import="es.uma.entity.Plato" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -64,7 +62,7 @@
         <td><%=plato.getReceta()%></td>
         <td><%=plato.getEnlaceReceta()%></td>
 
-        <td><a href="/admin/editar?id=<%=plato.getId()%>">Editar</a></td>
+        <td><a href="/admin/editarPlato?id=<%=plato.getId()%>">Editar</a></td>
         <td><a href="/admin/borrarPlato?id=<%=plato.getId()%>">Borrar</a></td>
         <td><a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>">Ver comidas asociadas</a></td>
     </tr>
@@ -72,5 +70,6 @@
         }
     %>
 </table>
+<td><a href="/admin/crearNuevoPlato">Crear nuevo plato</a></td>
 </body>
 </html>

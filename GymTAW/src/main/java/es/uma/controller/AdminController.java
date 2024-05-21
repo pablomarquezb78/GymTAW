@@ -3,6 +3,7 @@ package es.uma.controller;
 import es.uma.dao.*;
 import es.uma.entity.*;
 import es.uma.ui.EjercicioUI;
+import es.uma.ui.PlatoUI;
 import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -391,7 +392,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/crearEjercicio";
+            dir = "crearEjercicio";
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             model.addAttribute("tipos", tipos);
             model.addAttribute("ejercicioUI", ejercicioUI);
@@ -425,7 +426,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/crearEjercicio";
+            dir = "crearEjercicio";
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
             ejercicioUI.setNombre(ejercicio.getNombre());
@@ -501,6 +502,77 @@ public class AdminController extends BaseController {
         }
         return dir;
     }
+
+    @GetMapping("/crearNuevoPlato")
+    public String doCrearNuevoPlato(Model model, HttpSession session, PlatoUI platoUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "crearPlato";
+            model.addAttribute("platoUI", platoUI);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/anyadirPlato")
+    public String doAnyadirPlato(@ModelAttribute PlatoUI platoUI, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarPlatos";
+            Plato nuevoPlato = new Plato();
+            nuevoPlato.setNombre(platoUI.getNombre());
+            nuevoPlato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
+            nuevoPlato.setEnlaceReceta(platoUI.getEnlaceReceta());
+            nuevoPlato.setReceta(platoUI.getReceta());
+
+            platosRepository.save(nuevoPlato);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/editarPlato")
+    public String doEditarPlato(@RequestParam("id") Integer id, Model model, HttpSession session, PlatoUI platoUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "crearPlato";
+            Plato plato = platosRepository.findById(id).orElse(null);
+            platoUI.setNombre(plato.getNombre());
+            platoUI.setEnlaceReceta(plato.getEnlaceReceta());
+            platoUI.setReceta(plato.getReceta());
+            platoUI.setTiempoDePreparacion(plato.getTiempoDePreparacion());
+
+            model.addAttribute("platoUI", platoUI);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/modificarPlato")
+    public String doModificarPlato(HttpSession session, PlatoUI platoUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarPlatos";
+            Plato plato = platosRepository.findById(platoUI.getId()).orElse(null);
+            plato.setNombre(platoUI.getNombre());
+            plato.setEnlaceReceta(platoUI.getEnlaceReceta());
+            plato.setReceta(platoUI.getReceta());
+            plato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
+
+            platosRepository.save(plato);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
 
     @GetMapping("/verComidasAsociadas")
     public String doVerComidasAsociadas(@RequestParam("id") Integer id, Model model, HttpSession session) {

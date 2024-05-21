@@ -1,25 +1,12 @@
-package es.uma.entity;
+package es.uma.ui;
 
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "plato")
-public class Plato {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idplato", nullable = false)
+
+public class PlatoUI {
     private Integer id;
-
-    @Column(name = "nombre", length = 100)
     private String nombre;
-
-    @Column(name = "tiempo_de_preparacion", length = 30)
     private String tiempoDePreparacion;
-
-    @Column(name = "receta", length = 1500)
     private String receta;
-
-    @Column(name = "enlace_receta", length = 200)
     private String enlaceReceta;
 
     public Integer getId() {
@@ -61,5 +48,4 @@ public class Plato {
     public void setEnlaceReceta(String enlaceReceta) {
         this.enlaceReceta = enlaceReceta;
     }
-
 }
