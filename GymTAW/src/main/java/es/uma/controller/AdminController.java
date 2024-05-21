@@ -3,6 +3,7 @@ package es.uma.controller;
 import es.uma.dao.*;
 import es.uma.entity.*;
 import es.uma.ui.EjercicioUI;
+import es.uma.ui.Implementacion;
 import es.uma.ui.PlatoUI;
 import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
@@ -483,6 +484,36 @@ public class AdminController extends BaseController {
             Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
             List<ImplementacionEjercicioRutina> rutinas = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
             model.addAttribute("rutinas", rutinas);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/crearImplementacion")
+    public String doCrearImplementacion( HttpSession session, Model model, Implementacion implementacion){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "crearImplementacion";
+            model.addAttribute("ejercicios", ejercicioRepository.findAll());
+            model.addAttribute("implementacion", implementacion);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/editarImplementacion")
+    public String doEditarImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model, Implementacion implementacion){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "crearImplementacion";
+            ImplementacionEjercicioRutina i = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            implementacion.setPeso(i.getPeso());
+            model.addAttribute("ejercicios", ejercicioRepository.findAll());
+            model.addAttribute("implementacion", implementacion);
         } else {
             dir = "redirect:/";
         }

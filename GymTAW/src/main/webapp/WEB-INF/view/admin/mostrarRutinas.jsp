@@ -41,10 +41,12 @@
         <td><%=rutina.getPeso()%></td>
         <td><%=rutina.getMetros()%></td>
         <td><%=rutina.getTiempo()%></td>
+        <td><a href="/admin/editarImplementacion?id=<%=rutina.getId()%>">Editar</a></td>
     </tr>
     <%
         }
     %>
 </table>
+<a href="/admin/crearImplementacion">Crear nueva implementacion</a>
 </body>
 </html>

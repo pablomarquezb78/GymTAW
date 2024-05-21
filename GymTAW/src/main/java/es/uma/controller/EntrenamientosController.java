@@ -233,7 +233,7 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
                                          Model model,HttpSession sesion){
-        String strTo = "/crosstrainer/entrenador_implementacion";
+        String strTo = "crearImplementacion";
 
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
@@ -350,7 +350,7 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/crearimplementacion")
     public String doCrearImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
                                         Model model,HttpSession sesion){
-        String strTo = "/crosstrainer/entrenador_implementacion";
+        String strTo = "/crearImplementacion";
 
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
