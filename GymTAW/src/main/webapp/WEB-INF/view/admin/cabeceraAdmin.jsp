@@ -20,6 +20,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cerrarSesion">Cerrar sesion</a>
+            </li>
         </ul>
     </div>
 </nav>

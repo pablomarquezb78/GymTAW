@@ -103,4 +103,15 @@ public class LoginController extends  BaseController {
             return webRedirect;
         }
     }
+
+    @GetMapping("/cancelar")
+    public String doCancelar(){
+        return "redirect:/";
+    }
+
+    @GetMapping("/cerrarSesion")
+    public String doCerrarSesion(HttpSession session){
+        session.invalidate();
+        return "redirect:/";
+    }
 }
