@@ -43,7 +43,7 @@
             <td><%=ejercicio.getDescripcion()%></td>
             <td><a href="/admin/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
             <td><a href="/admin/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
-            <td><a href="/admin/verRutinasAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
+            <td><a href="/admin/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
         </tr>
 <%
     }

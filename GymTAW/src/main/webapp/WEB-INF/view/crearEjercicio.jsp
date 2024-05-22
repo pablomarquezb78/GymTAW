@@ -11,12 +11,9 @@
     UserRol userRol = (UserRol) session.getAttribute("rol");
     Boolean disabled = true;
     String actionRol = "/entrenamientos/guardar-ejercicio";
-    if(userRol.getId() == 1 && ejercicioUI.getId() == null) {
+    if(userRol.getId() == 1) {
         disabled = false;
-        actionRol = "/admin/anyadirEjercicio";
-    }else if(userRol.getId() == 1 && ejercicioUI.getId() != null){
-        disabled = false;
-        actionRol = "/admin/modificarEjercicio";
+        actionRol = "/admin/guardarEjercicio";
     }
 
 %>

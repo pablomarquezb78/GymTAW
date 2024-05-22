@@ -3,8 +3,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.ui.Implementacion" %>
 <%@ page import="es.uma.entity.UserRol" %>
+<%@ page import="es.uma.entity.Rutina" %>
 <%
     List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
+    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
     Boolean editable = (Boolean) request.getAttribute("editable");
 
     Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
@@ -13,11 +15,10 @@
 
     UserRol userRol = (UserRol) session.getAttribute("rol");
     String actionRol = "/entrenamientos/guardarimplementacion";
-
-    if(userRol.getId() == 1 && implementacion.getId() == null) {
-        actionRol = "/admin/anyadirImplementacion";
-    }else if(userRol.getId() == 1 && implementacion.getId() != null){
-        actionRol = "/admin/modificarImplmentacion";
+    Boolean disabled = false;
+    if(userRol.getId() == 1) {
+        actionRol = "/admin/guardarImplementacion";
+        disabled = true;
     }
 
     if (editable != null && editable) {
@@ -64,8 +65,11 @@
     Metros: <form:input path="metros" value="${metros}"/>
     <br>
     <label>Ejercicio: </label>
-    <form:select path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" >
-    </form:select>
+    <form:select path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" ></form:select>
+    <br>
+    <label>Rutina: </label>
+    <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" ></form:select>
+    <br>
     <form:hidden path="idDia"></form:hidden>
     <form:hidden path="id"></form:hidden>
     <form:button>GUARDAR</form:button>

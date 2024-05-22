@@ -5,7 +5,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<ImplementacionEjercicioRutina> rutinas = (List<ImplementacionEjercicioRutina>) request.getAttribute("rutinas");
+    List<ImplementacionEjercicioRutina> implementaciones = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
+    Ejercicio ejercicio = (Ejercicio) request.getAttribute("ejercicio");
 %>
 
 <html>
@@ -30,23 +31,23 @@
     </tr>
 
     <%
-        for(ImplementacionEjercicioRutina rutina : rutinas){
+        for(ImplementacionEjercicioRutina implementacion : implementaciones){
 
     %>
     <tr>
-        <td><%=rutina.getId()%></td>
-        <td><%=rutina.getRutina().getNombre()%></td>
-        <td><%=rutina.getSets()%></td>
-        <td><%=rutina.getRepeticiones()%></td>
-        <td><%=rutina.getPeso()%></td>
-        <td><%=rutina.getMetros()%></td>
-        <td><%=rutina.getTiempo()%></td>
-        <td><a href="/admin/editarImplementacion?id=<%=rutina.getId()%>">Editar</a></td>
+        <td><%=implementacion.getId()%></td>
+        <td><%=implementacion.getRutina().getNombre()%></td>
+        <td><%=implementacion.getSets()%></td>
+        <td><%=implementacion.getRepeticiones()%></td>
+        <td><%=implementacion.getPeso()%></td>
+        <td><%=implementacion.getMetros()%></td>
+        <td><%=implementacion.getTiempo()%></td>
+        <td><a href="/admin/editarImplementacion?id=<%=implementacion.getId()%>">Editar</a></td>
     </tr>
     <%
         }
     %>
 </table>
-<a href="/admin/crearImplementacion">Crear nueva implementacion</a>
+<a href="/admin/crearImplementacion?id=<%=ejercicio.getId()%>">Crear nueva implementacion</a>
 </body>
 </html>
