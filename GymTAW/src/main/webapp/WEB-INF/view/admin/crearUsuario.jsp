@@ -40,13 +40,13 @@
         <form:radiobuttons path="rol" items="${roles}" delimiter="<br>" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
         <br>
         <label>Peso:</label>
-        Peso: <form:input path="peso" size="3"></form:input>
+        <form:input path="peso" size="3"></form:input>
         <br>
         <label>Altura:</label>
-        Altura: <form:input path="altura" size="3"></form:input>
+        <form:input path="altura" size="3"></form:input>
         <br>
         <label>Telefono:</label>
-        Telefono: <form:input path="telefono" size="9"></form:input>
+        <form:input path="telefono" size="9"></form:input>
         <br>
         <form:button class="btn btn-success mt-3">Guardar usuario</form:button>
     </form:form>

@@ -5,13 +5,16 @@ import jakarta.persistence.Column;
 import java.time.LocalDate;
 
 public class Usuario {
-    private Integer id;
-    private String username;
-    private String password;
-    private String nombre;
-    private String apellidos;
-    private Integer telefono;
-    private Integer peso;
+    protected Integer id;
+    protected String username;
+    protected String password;
+    protected String nombre;
+    protected String apellidos;
+    protected Integer telefono;
+    protected Integer peso;
+    protected Integer altura;
+    protected LocalDate fechaNacimiento;
+    protected Integer rol;
 
     public Integer getId() {
         return id;
@@ -92,8 +95,9 @@ public class Usuario {
     public void setRol(Integer rol) {
         this.rol = rol;
     }
+    public boolean estaVacio(){
+        return (this.getNombre().isEmpty() && this.getApellidos().isEmpty()  && this.getRol() == null && this.getPeso() == null
+                && this.getAltura() == null && this.getTelefono() == null);
+    }
 
-    private Integer altura;
-    private LocalDate fechaNacimiento;
-    private Integer rol;
 }

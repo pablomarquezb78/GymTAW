@@ -11,26 +11,29 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where u.id = :id")
-    public User findById(@Param("id") int id);
+    User findById(@Param("id") int id);
 
     @Query("select u from User u where u.username = :username and u.password = :password")
-    public User findByUsernamePassword(@Param("username") String username, @Param("password") String password);
+    User findByUsernamePassword(@Param("username") String username, @Param("password") String password);
 
     @Query("select u from User u,AsignacionClienteEntrenador asig WHERE u.id = asig.cliente.id and asig.entrenador = :entrenador")
-    public List<User> clientesAsociadosConEntrenador(@Param("entrenador") User entrenador);
+    List<User> clientesAsociadosConEntrenador(@Param("entrenador") User entrenador);
 
     @Query("select u from User u WHERE u.rol.id = 2")
-    public List<User> listarClientes();
+    List<User> listarClientes();
 
     @Query("select u from User u WHERE u.rol.id = 3 or u.rol.id = 4")
-    public List<User> listarEntrenadores();
+    List<User> listarEntrenadores();
 
     @Query("select u from User u WHERE u.rol.id = 5")
-    public List<User> listarDietistas();
+    List<User> listarDietistas();
 
     @Query("select u from User u where (u.rol.id = 3 or u.rol.id = 4) and u not in (select ace.entrenador from AsignacionClienteEntrenador ace) and u not in :entrenadores")
-    public List<User> entrenadoresNoAsociadosAlCliente(@Param("entrenadores") List<User> entrenadores);
+    List<User> entrenadoresNoAsociadosAlCliente(@Param("entrenadores") List<User> entrenadores);
 
     @Query("select u from User u where u.rol.id = 5 and u not in (select acd.dietista from AsignacionClienteDietista acd) and u not in :dietistas")
-    public List<User> dietistasNoAsociadosAlCliente(@Param("dietistas") List<User> dietistas);
+    List<User> dietistasNoAsociadosAlCliente(@Param("dietistas") List<User> dietistas);
+
+    @Query("select u from User u where (u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.rol.id = :rol)")
+    List<User> filtrarUsuarios(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("rol") Integer rol);
 }

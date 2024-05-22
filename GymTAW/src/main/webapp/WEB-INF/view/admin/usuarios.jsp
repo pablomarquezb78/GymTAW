@@ -1,9 +1,13 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.uma.entity.User" %>
 <%@ page import="java.util.*" %>
+<%@ page import="es.uma.entity.UserRol" %>
+<%@ page import="es.uma.ui.Usuario" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<User> usuarios = (List<User>) request.getAttribute("usuarios");
+    List<UserRol> roles = (List<UserRol>) request.getAttribute("roles");
 %>
 
 <!DOCTYPE html>
@@ -17,6 +21,7 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
+
 <table border="1" cellpadding="10" cellspacing="10">
     <tr>
         <th>ID</th>
@@ -32,25 +37,48 @@
     </tr>
 
     <%
-        for(User usuario : usuarios){
+        for(User user : usuarios){
 
     %>
     <tr>
-        <td><%=usuario.getId()%></td>
-        <td><%=usuario.getNombre()%></td>
-        <td><%=usuario.getApellidos()%></td>
-        <td><%=usuario.getRol().getRolUsuario()%></td>
-        <td><%=usuario.getFechaNacimiento()%></td>
-        <td><%=usuario.getPeso()%></td>
-        <td><%=usuario.getAltura()%></td>
-        <td><%=usuario.getTelefono()%></td>
-        <td><a href="/admin/editarUsuario?id=<%=usuario.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
-        <td><a href="/admin/borrarUsuario?id=<%=usuario.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
+        <td><%=user.getId()%></td>
+        <td><%=user.getNombre()%></td>
+        <td><%=user.getApellidos()%></td>
+        <td><%=user.getRol().getRolUsuario()%></td>
+        <td><%=user.getFechaNacimiento()%></td>
+        <td><%=user.getPeso()%></td>
+        <td><%=user.getAltura()%></td>
+        <td><%=user.getTelefono()%></td>
+        <td><a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+        <td><a href="/admin/borrarUsuario?id=<%=user.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
     </tr>
     <%
         }
     %>
 </table>
 <a href="/admin/crearNuevoUsuario" class="btn btn-success mt-3">Crear nuevo usuario</a>
+<br>
+
+<form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario">
+    <label>*Nombre:</label>
+    <form:input path="nombre" size="15"></form:input>
+    <label>*Apellidos: </label>
+    <form:input path="apellidos" size="50"></form:input>
+    <br>
+    <label>*Fecha de nacimiento:</label>
+    <label>*Rol:</label>
+    <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
+    <br>
+    <label>Peso:</label>
+    <form:input path="peso" size="3"></form:input>
+    <label>Altura:</label>
+    <form:input path="altura" size="3"></form:input>
+    <label>Telefono:</label>
+    <form:input path="telefono" size="9"></form:input>
+    <br>
+    <form:button class="btn btn-success mt-3">Filtrar usuario</form:button>
+</form:form>
+
+
 </body>
 </html>

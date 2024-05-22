@@ -2,10 +2,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
-import es.uma.ui.EjercicioUI;
-import es.uma.ui.Implementacion;
-import es.uma.ui.PlatoUI;
-import es.uma.ui.Usuario;
+import es.uma.ui.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,34 +20,24 @@ public class AdminController extends BaseController {
 
     @Autowired
     protected UserRepository userRepository;
-
     @Autowired
     protected RutinaRepository rutinaRepository;
-
     @Autowired
     protected EjercicioRepository ejercicioRepository;
-
     @Autowired
     protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-
     @Autowired
     protected TipoEjercicioRepository tipoEjercicioRepository;
-
     @Autowired
     protected RegistroRepository registroRepository;
-
     @Autowired
     protected UserRolRepository rolRepository;
-
     @Autowired
     protected AsignacionClienteEntrenadorRepository asignacionClienteEntrenadorRepository;
-
     @Autowired
     protected AsignacionClienteDietistaRepository asignacionClienteDietistaRepository;
-
     @Autowired
     protected PlatosRepository platosRepository;
-
     @Autowired
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
 
@@ -128,8 +115,31 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
+            List<UserRol> roles = rolRepository.findAll();
+            model.addAttribute("usuario", new Usuario());
+            model.addAttribute("roles", roles);
             model.addAttribute("usuarios", this.userRepository.findAll());
             dir = "admin/usuarios";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/filtrarUsuarios")
+    public String doFiltrarUsuarios(Model model, HttpSession session, @ModelAttribute Usuario usuario) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            List<UserRol> roles = rolRepository.findAll();
+            model.addAttribute("roles", roles);
+            if(usuario.estaVacio()){
+                dir = "redirect:/admin/mostrarUsuarios";
+            }else{
+                model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos(), usuario.getRol()));
+                model.addAttribute("usuario", usuario);
+                dir = "admin/usuarios";
+            }
         } else {
             dir = "redirect:/";
         }
