@@ -60,21 +60,16 @@
 <br>
 
 <form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario">
+    <br>
     <label>*Nombre:</label>
     <form:input path="nombre" size="15"></form:input>
     <label>*Apellidos: </label>
     <form:input path="apellidos" size="50"></form:input>
     <br>
     <label>*Fecha de nacimiento:</label>
+    <form:input path="fechaNacimiento" size="10"></form:input>
     <label>*Rol:</label>
     <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
-    <br>
-    <label>Peso:</label>
-    <form:input path="peso" size="3"></form:input>
-    <label>Altura:</label>
-    <form:input path="altura" size="3"></form:input>
-    <label>Telefono:</label>
-    <form:input path="telefono" size="9"></form:input>
     <br>
     <form:button class="btn btn-success mt-3">Filtrar usuario</form:button>
 </form:form>

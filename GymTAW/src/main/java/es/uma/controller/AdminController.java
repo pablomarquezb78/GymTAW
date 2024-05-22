@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +138,11 @@ public class AdminController extends BaseController {
             if(usuario.estaVacio()){
                 dir = "redirect:/admin/mostrarUsuarios";
             }else{
-                model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos(), usuario.getRol()));
+                if(usuario.getRol() == null){
+                    model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
+                }else{
+                    model.addAttribute("usuarios", this.userRepository.filtrarUsuariosConRol(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
+                }
                 model.addAttribute("usuario", usuario);
                 dir = "admin/usuarios";
             }
@@ -151,7 +157,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRol> roles = rolRepository.buscarRolesNoAdmin();
+            List<UserRol> roles = rolRepository.findAll();
             model.addAttribute("roles", roles);
             model.addAttribute("usuario", usuario);
             dir = "admin/crearUsuario";
@@ -176,6 +182,7 @@ public class AdminController extends BaseController {
                 nuevoUsuario.setAltura(usuario.getAltura());
                 nuevoUsuario.setApellidos(usuario.getApellidos());
                 nuevoUsuario.setTelefono(usuario.getTelefono());
+                nuevoUsuario.setFechaNacimiento(convertirStringALocalDate(usuario.getFechaNacimiento()));
 
                 userRepository.save(nuevoUsuario);
             }else{
@@ -188,6 +195,7 @@ public class AdminController extends BaseController {
                 usuarioAModificar.setAltura(usuario.getAltura());
                 usuarioAModificar.setApellidos(usuario.getApellidos());
                 usuarioAModificar.setTelefono(usuario.getTelefono());
+                usuarioAModificar.setFechaNacimiento(convertirStringALocalDate(usuario.getFechaNacimiento()));
 
                 userRepository.save(usuarioAModificar);
             }
@@ -214,9 +222,9 @@ public class AdminController extends BaseController {
             usuario.setAltura(user.getAltura());
             usuario.setRol(user.getRol().getId());
             usuario.setTelefono(user.getTelefono());
-            usuario.setFechaNacimiento(user.getFechaNacimiento());
+            usuario.setFechaNacimiento(user.getFechaNacimiento().toString());
 
-            List<UserRol> roles = rolRepository.buscarRolesNoAdmin();
+            List<UserRol> roles = rolRepository.findAll();
             model.addAttribute("roles", roles);
             model.addAttribute("usuario", usuario);
 
@@ -684,4 +692,15 @@ public class AdminController extends BaseController {
         }
         return dir;
     }
+
+    private LocalDate convertirStringALocalDate(String fechaStr) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return LocalDate.parse(fechaStr, formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

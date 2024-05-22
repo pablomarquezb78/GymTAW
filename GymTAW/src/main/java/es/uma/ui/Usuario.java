@@ -13,7 +13,7 @@ public class Usuario {
     protected Integer telefono;
     protected Integer peso;
     protected Integer altura;
-    protected LocalDate fechaNacimiento;
+    protected String fechaNacimiento;
     protected Integer rol;
 
     public Integer getId() {
@@ -64,6 +64,14 @@ public class Usuario {
         this.telefono = telefono;
     }
 
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public Integer getPeso() {
         return peso;
     }
@@ -80,13 +88,6 @@ public class Usuario {
         this.altura = altura;
     }
 
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
 
     public Integer getRol() {
         return rol;
@@ -96,8 +97,8 @@ public class Usuario {
         this.rol = rol;
     }
     public boolean estaVacio(){
-        return (this.getNombre().isEmpty() && this.getApellidos().isEmpty()  && this.getRol() == null && this.getPeso() == null
-                && this.getAltura() == null && this.getTelefono() == null);
+        return (this.getNombre().isEmpty() && this.getApellidos().isEmpty()  && this.getRol() == null && this.getFechaNacimiento().isEmpty());
     }
+
 
 }

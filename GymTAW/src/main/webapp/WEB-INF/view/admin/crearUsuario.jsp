@@ -35,6 +35,7 @@
         <form:input path="apellidos" size="50"></form:input>
         <br>
         <label>*Fecha de nacimiento:</label>
+        <form:input path="fechaNacimiento" size="10"></form:input>
         <br>
         <label>*Rol:</label>
         <form:radiobuttons path="rol" items="${roles}" delimiter="<br>" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
