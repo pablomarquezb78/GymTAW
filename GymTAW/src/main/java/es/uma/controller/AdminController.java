@@ -477,14 +477,17 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping("/crearImplementacion")
-    public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model, Implementacion implementacion){
+    public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "crearImplementacion";
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
             ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            List<Rutina> rutinas = rutinaRepository.findAll();
+            Implementacion implementacion = new Implementacion();
             implementacion.setEjercicio(ier.getEjercicio());
+            model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", implementacion);
         } else {
             dir = "redirect:/";
@@ -493,7 +496,7 @@ public class AdminController extends BaseController {
     }
 
     @PostMapping("/guardarImplementacion")
-    public String doAnyadirImplementacion(@ModelAttribute Implementacion implementacion, HttpSession session){
+    public String doGuardarImplementacion(@ModelAttribute Implementacion implementacion, HttpSession session){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         String idEjercicio;
@@ -502,6 +505,7 @@ public class AdminController extends BaseController {
                 ImplementacionEjercicioRutina ier = new ImplementacionEjercicioRutina();
                 ier.setKilocalorias(implementacion.getKilocalorias());
                 ier.setEjercicio(implementacion.getEjercicio());
+                ier.setRutina(implementacion.getRutina());
                 ier.setPeso(implementacion.getPeso());
                 ier.setMetros(implementacion.getMetros());
                 ier.setTiempo(implementacion.getTiempo());
@@ -538,6 +542,8 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "crearImplementacion";
             ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            List<Rutina> rutinas = rutinaRepository.findAll();
+            implementacion.setId(ier.getId());
             implementacion.setEjercicio(ier.getEjercicio());
             implementacion.setKilocalorias(ier.getKilocalorias());
             implementacion.setPeso(ier.getPeso());
@@ -546,6 +552,7 @@ public class AdminController extends BaseController {
             implementacion.setSets(ier.getSets());
             implementacion.setRepeticiones(ier.getRepeticiones());
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
+            model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", implementacion);
         } else {
             dir = "redirect:/";

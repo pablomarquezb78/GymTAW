@@ -7,7 +7,7 @@ public class Implementacion {
 
 
     private Integer id;
-    private Ejercicio ejercicio;
+    private Ejercicio ejercicio; 
     private Rutina rutina;
     private String sets;
     private String repeticiones;
