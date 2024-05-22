@@ -151,23 +151,38 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @PostMapping("/anyadirUsuario")
-    public String doAnyadirUsuario(@ModelAttribute Usuario usuario, HttpSession session){
+    @PostMapping("/guardarUsuario")
+    public String doGuardarUsuario(@ModelAttribute Usuario usuario, HttpSession session){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarUsuarios";
-            User nuevoUsuario = new User();
-            nuevoUsuario.setUsername(usuario.getUsername());
-            nuevoUsuario.setPassword(usuario.getPassword());
-            nuevoUsuario.setRol(rolRepository.getById(usuario.getRol()));
-            nuevoUsuario.setNombre(usuario.getNombre());
-            nuevoUsuario.setPeso(usuario.getPeso());
-            nuevoUsuario.setAltura(usuario.getAltura());
-            nuevoUsuario.setApellidos(usuario.getApellidos());
-            nuevoUsuario.setTelefono(usuario.getTelefono());
+            if(usuario.getId() == null){
+                User nuevoUsuario = new User();
+                nuevoUsuario.setUsername(usuario.getUsername());
+                nuevoUsuario.setPassword(usuario.getPassword());
+                nuevoUsuario.setRol(rolRepository.getById(usuario.getRol()));
+                nuevoUsuario.setNombre(usuario.getNombre());
+                nuevoUsuario.setPeso(usuario.getPeso());
+                nuevoUsuario.setAltura(usuario.getAltura());
+                nuevoUsuario.setApellidos(usuario.getApellidos());
+                nuevoUsuario.setTelefono(usuario.getTelefono());
 
-            userRepository.save(nuevoUsuario);
+                userRepository.save(nuevoUsuario);
+            }else{
+                User usuarioAModificar = userRepository.findById(usuario.getId()).orElse(null);
+                usuarioAModificar.setUsername(usuario.getUsername());
+                usuarioAModificar.setPassword(usuario.getPassword());
+                usuarioAModificar.setRol(rolRepository.getById(usuario.getRol()));
+                usuarioAModificar.setNombre(usuario.getNombre());
+                usuarioAModificar.setPeso(usuario.getPeso());
+                usuarioAModificar.setAltura(usuario.getAltura());
+                usuarioAModificar.setApellidos(usuario.getApellidos());
+                usuarioAModificar.setTelefono(usuario.getTelefono());
+
+                userRepository.save(usuarioAModificar);
+            }
+            dir = "redirect:/admin/mostrarUsuarios";
+
         } else {
             dir = "redirect:/";
         }
@@ -201,28 +216,6 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @PostMapping("/modificarUsuario")
-    public String doModificarUsuario(@ModelAttribute Usuario usuario, HttpSession session){
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarUsuarios";
-            User usuarioAModificar = userRepository.findById(usuario.getId()).orElse(null);
-            usuarioAModificar.setUsername(usuario.getUsername());
-            usuarioAModificar.setPassword(usuario.getPassword());
-            usuarioAModificar.setRol(rolRepository.getById(usuario.getRol()));
-            usuarioAModificar.setNombre(usuario.getNombre());
-            usuarioAModificar.setPeso(usuario.getPeso());
-            usuarioAModificar.setAltura(usuario.getAltura());
-            usuarioAModificar.setApellidos(usuario.getApellidos());
-            usuarioAModificar.setTelefono(usuario.getTelefono());
-
-            userRepository.save(usuarioAModificar);
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
 
     @GetMapping("/borrarUsuario")
     public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){
@@ -403,19 +396,29 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @PostMapping("/anyadirEjercicio")
-    public String doAnyadirEjercicio(@ModelAttribute EjercicioUI ejercicioUI, HttpSession session){
+    @PostMapping("/guardarEjercicio")
+    public String doGuardarEjercicio(@ModelAttribute EjercicioUI ejercicioUI, HttpSession session){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarEjercicios";
-            Ejercicio nuevoEjercicio = new Ejercicio();
-            nuevoEjercicio.setNombre(ejercicioUI.getNombre());
-            nuevoEjercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
-            nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
-            nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
+            if(ejercicioUI.getId() == null){
+                Ejercicio nuevoEjercicio = new Ejercicio();
+                nuevoEjercicio.setNombre(ejercicioUI.getNombre());
+                nuevoEjercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
+                nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+                nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
 
-            ejercicioRepository.save(nuevoEjercicio);
+                ejercicioRepository.save(nuevoEjercicio);
+            }else{
+                Ejercicio ejercicio = ejercicioRepository.findById(ejercicioUI.getId()).orElse(null);
+                ejercicio.setNombre(ejercicioUI.getNombre());
+                ejercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
+                ejercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+                ejercicio.setDescripcion(ejercicioUI.getDescripcion());
+
+                ejercicioRepository.save(ejercicio);
+            }
+            dir = "redirect:/admin/mostrarEjercicios";
         } else {
             dir = "redirect:/";
         }
@@ -442,24 +445,6 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @PostMapping("/modificarEjercicio")
-    public String doModificarEjercicio(HttpSession session, EjercicioUI ejercicioUI) {
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarEjercicios";
-            Ejercicio ejercicio = ejercicioRepository.findById(ejercicioUI.getId()).orElse(null);
-            ejercicio.setNombre(ejercicioUI.getNombre());
-            ejercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
-            ejercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
-            ejercicio.setDescripcion(ejercicioUI.getDescripcion());
-
-            ejercicioRepository.save(ejercicio);
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
 
     @GetMapping("/borrarEjercicio")
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
@@ -475,15 +460,16 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @GetMapping("/verRutinasAsociadas")
-    public String doRutinasAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
+    @GetMapping("/verImplementacionesAsociadas")
+    public String doVerImplementacionesAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/mostrarRutinas";
+            dir = "admin/mostrarImplementaciones";
             Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
-            List<ImplementacionEjercicioRutina> rutinas = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
-            model.addAttribute("rutinas", rutinas);
+            List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
+            model.addAttribute("ejercicio", ejercicio);
+            model.addAttribute("implementaciones", implementaciones);
         } else {
             dir = "redirect:/";
         }
@@ -491,13 +477,54 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping("/crearImplementacion")
-    public String doCrearImplementacion( HttpSession session, Model model, Implementacion implementacion){
+    public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model, Implementacion implementacion){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "crearImplementacion";
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
+            ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            implementacion.setEjercicio(ier.getEjercicio());
             model.addAttribute("implementacion", implementacion);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/guardarImplementacion")
+    public String doAnyadirImplementacion(@ModelAttribute Implementacion implementacion, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        String idEjercicio;
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            if(implementacion.getId() == null){
+                ImplementacionEjercicioRutina ier = new ImplementacionEjercicioRutina();
+                ier.setKilocalorias(implementacion.getKilocalorias());
+                ier.setEjercicio(implementacion.getEjercicio());
+                ier.setPeso(implementacion.getPeso());
+                ier.setMetros(implementacion.getMetros());
+                ier.setTiempo(implementacion.getTiempo());
+                ier.setSets(implementacion.getSets());
+                ier.setRepeticiones(implementacion.getRepeticiones());
+
+                implementacionEjercicioRutinaRepository.save(ier);
+                idEjercicio = implementacion.getEjercicio().getId().toString();
+            }else{
+                ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+                ier.setKilocalorias(implementacion.getKilocalorias());
+                ier.setPeso(implementacion.getPeso());
+                ier.setMetros(implementacion.getMetros());
+                ier.setTiempo(implementacion.getTiempo());
+                ier.setSets(implementacion.getSets());
+                ier.setRepeticiones(implementacion.getRepeticiones());
+
+                implementacionEjercicioRutinaRepository.save(ier);
+                idEjercicio = ier.getEjercicio().getId().toString();
+            }
+
+            dir = "redirect:/admin/verImplementacionesAsociadas?id="+idEjercicio;
+
         } else {
             dir = "redirect:/";
         }
@@ -510,8 +537,14 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "crearImplementacion";
-            ImplementacionEjercicioRutina i = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-            implementacion.setPeso(i.getPeso());
+            ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            implementacion.setEjercicio(ier.getEjercicio());
+            implementacion.setKilocalorias(ier.getKilocalorias());
+            implementacion.setPeso(ier.getPeso());
+            implementacion.setMetros(ier.getMetros());
+            implementacion.setTiempo(ier.getTiempo());
+            implementacion.setSets(ier.getSets());
+            implementacion.setRepeticiones(ier.getRepeticiones());
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
             model.addAttribute("implementacion", implementacion);
         } else {

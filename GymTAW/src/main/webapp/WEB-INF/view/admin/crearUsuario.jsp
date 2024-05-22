@@ -7,10 +7,6 @@
 <%
     List<UserRol> roles = (List<UserRol>) request.getAttribute("roles");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
-    String action = "/admin/anyadirEjercicio";
-    if(usuario.getId() != null){
-        action = "/admin/modificarUsuario";
-    }
 %>
 <html>
 <head>
@@ -24,7 +20,7 @@
         <%=usuario.getId() == null ? "Crear usuario" : "Modificar usuario"%>
     </h3>
     <p><%=usuario.getId() == null ? "Introduzca los datos necesarios para añadir un nuevo usuario" : "Modifica los datos del usuario como desee"%></p>
-    <form:form action="<%=action%>" method="post" modelAttribute="usuario">
+    <form:form action="/admin/guardarUsuario" method="post" modelAttribute="usuario">
         <form:hidden path="id"></form:hidden>
         <label>*Usuario:</label>
         <form:input path="username" size="15"></form:input>
