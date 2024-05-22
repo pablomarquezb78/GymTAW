@@ -28,16 +28,18 @@
 <jsp:include page="cabecera_cliente.jsp"/>
 
 <form method="post" action="/cliente/filtrar">
-    <select name="filtroDia">
-        <option value="1" <%= "1".equals(filtroDia) ? "selected" : "" %>>Lunes</option>
-        <option value="2" <%= "2".equals(filtroDia) ? "selected" : "" %>>Martes</option>
-        <option value="3" <%= "3".equals(filtroDia) ? "selected" : "" %>>Miércoles</option>
-        <option value="4" <%= "4".equals(filtroDia) ? "selected" : "" %>>Jueves</option>
-        <option value="5" <%= "5".equals(filtroDia) ? "selected" : "" %>>Viernes</option>
-        <option value="6" <%= "6".equals(filtroDia) ? "selected" : "" %>>Sábado</option>
-        <option value="7" <%= "7".equals(filtroDia) ? "selected" : "" %>>Domingo</option>
-    </select>
-    <button>Filtrar</button>
+    <div class="d-flex w-25 m-3 gap-2">
+        <select name="filtroDia" class="form-select w-25">
+            <option value="1" <%= "1".equals(filtroDia) ? "selected" : "" %>>Lunes</option>
+            <option value="2" <%= "2".equals(filtroDia) ? "selected" : "" %>>Martes</option>
+            <option value="3" <%= "3".equals(filtroDia) ? "selected" : "" %>>Miércoles</option>
+            <option value="4" <%= "4".equals(filtroDia) ? "selected" : "" %>>Jueves</option>
+            <option value="5" <%= "5".equals(filtroDia) ? "selected" : "" %>>Viernes</option>
+            <option value="6" <%= "6".equals(filtroDia) ? "selected" : "" %>>Sábado</option>
+            <option value="7" <%= "7".equals(filtroDia) ? "selected" : "" %>>Domingo</option>
+        </select>
+        <button class="btn btn-primary">Filtrar</button>
+    </div>
 </form>
 
 <table class="table">
@@ -78,7 +80,7 @@
         <td><%=tiempo%></td>
         <td><%=l.get(i).getKilocalorias() != null ? l.get(i).getKilocalorias() : "-"%></td>
         <td><%=l.get(i).getMetros() != null ? l.get(i).getMetros() : "-"%></td>
-        <td><a href="ejercicio?id=<%=l.get(i).getId()%>">Seleccionar</a></td>
+        <td><a href="ejercicio?id=<%=l.get(i).getId()%>" class="btn btn-primary">Seleccionar</a></td>
     </tr>
 <%
     }

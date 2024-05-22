@@ -177,7 +177,7 @@ public class ClienteController {
     //ESTE POST GUARDA EL FEEDBACK COMÚN A LOS EJERCICIOS BODY Y CROSS, QUE ES EL BOOLEAN REALIZADO Y LAS SERIES REALIZADAS
     //TENEMOS EN CUENTA TAMBIÉN CASO DE CROSS QUE NO TIENE SERIES.
     @PostMapping("/guardarFeedbackEjercicio")
-    public String doGuardarFeedbackEjercicio(@RequestParam("realizado") Byte realizado,
+    public String doGuardarFeedbackEjercicio(@RequestParam(required = false, value = "realizado") Byte realizado,
                                              @RequestParam(required = false, value = "seriesRealizadas")Integer seriesRealizadas,
                                              @RequestParam("implementacion") Integer implementacionId,
                                              @RequestParam("feedbackEjercicio") Integer feedbackEjercicioId){
@@ -185,6 +185,7 @@ public class ClienteController {
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
 
         if (feedbackEjercicio!=null) {
+            if(realizado == null) realizado = 0;
             //ACTUALIZAMOS EL CAMPO REALIZADO
             feedbackEjercicio.setRealizado(realizado);
 

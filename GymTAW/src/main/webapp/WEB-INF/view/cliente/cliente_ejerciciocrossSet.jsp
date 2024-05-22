@@ -49,38 +49,42 @@
 <jsp:include page="cabecera_cliente.jsp"/>
 <jsp:include page="cliente_ejercicio.jsp"/>
 
-<h5>Feedback:</h5>
+<div class="bg-secondary w-25 m-3 p-3 rounded">
+    <h3>Feedback:</h3>
+    <form method="post" action="/cliente/guardarFeedbackEjercicio">
+        <div class="d-flex gap-2">
+            <span class="text-white">Realizado:</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="realizado-switch" name="realizado" value="1" <%= realizado == 1 ? "checked" : "" %>>
+            </div>
+            <span class="text-white">Series Realizadas:</span>
+            <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>" <%=realizado==0 ?  "disabled" : ""%> class="w-25">
+        </div>
 
-<form method="post" action="/cliente/guardarFeedbackEjercicio">
-    Realizado:
-    <select name="realizado">
-        <option value="1" <%= realizado == 1 ? "selected" : "" %>>Si</option>
-        <option value="0" <%= realizado == 0 ? "selected" : "" %>>No</option>
-    </select>
-    Series Realizadas:
-    <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>" <%=realizado==0 ?  "disabled" : ""%>>
-
-    <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
-    <input type="hidden" name="feedbackEjercicio" value="<%=feedbackEjercicio.getId()%>">
-    <button>Guardar</button>
-</form>
-
-<div style=" <%= (realizado == 0 || setsRealizadas == 0) ? "display:none" : "" %>">
-
-    <h5>Selección serie:</h5>
-    <form method="post" action="/cliente/seleccionarSerie">
-        Serie:
-        <select name="set">
-            <%
-                for (int i = 1; i<=setsRealizadas; i++){
-            %>
-            <option value="<%=i%>" <%= serieSeleccionada.equals(i)? "selected" : "" %>><%=i%></option>
-            <%
-                }
-            %>
-        </select>
         <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
-        <button>Seleccionar</button>
+        <input type="hidden" name="feedbackEjercicio" value="<%=feedbackEjercicio.getId()%>">
+        <button class="btn btn-success mt-3">Guardar</button>
+    </form>
+</div>
+
+<div style=" <%= (realizado == 0 || setsRealizadas == 0) ? "display:none" : "" %>" class="bg-secondary m-3 w-25 rounded my-5 p-3 position-absolute top-50 start-50 translate-middle">
+
+    <h3 class="text-center pb-2">Selección serie:</h3>
+    <form method="post" action="/cliente/seleccionarSerie">
+        <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
+        <div class="row">
+            <div class="col-md-6">
+                <span class="text-white">Selección serie:</span>
+                <select name="set" class="form-select w-50">
+                    <% for (int i = 1; i<=setsRealizadas; i++){ %>
+                    <option value="<%=i%>" <%= serieSeleccionada.equals(i)? "selected" : "" %>><%=i%></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-success mt-4">Seleccionar</button>
+            </div>
+        </div>
     </form>
     <%
     boolean hayRepeticiones = implementacion.getRepeticiones()!=null;
@@ -89,25 +93,31 @@
     boolean hayKilocalorias = implementacion.getKilocalorias()!=null;
     boolean hayMetros = implementacion.getMetros()!=null;
     %>
-    <h5>Feedback serie:</h5>
+    <h3 class="text-center py-2">Feedback serie:</h3>
     <form:form method="post" action="/cliente/guardarFeedbackSerieCross" modelAttribute="feedbackSerieForm">
-        Repeticiones Realizadas:
+        <span class="text-white">Repeticiones:</span><br/>
         <form:input type="number" disabled="<%=!hayRepeticiones%>" path="repeticionesRealizadas" size="5" required="<%=hayRepeticiones%>"></form:input><br/>
-        Peso Realizado(Kg):
+        <span class="text-white">Peso(Kg):</span><br/>
         <form:input type="number" step="0.01" disabled="<%=!hayPeso%>" path="pesoRealizado" size="5" required="<%=hayPeso%>"></form:input><br/>
-        Minutos Realizados:
-        <form:input type="number" disabled="<%=!hayTiempo%>" path="minutosRealizados" size="5" required="<%=hayTiempo%>"></form:input><br/>
-        Segundos Realizados:
-        <form:input type="number" disabled="<%=!hayTiempo%>" path="segundosRealizados" size="5" required="<%=hayTiempo%>"></form:input><br/>
-        Kilocalorias Realizadas:
+        <div class="d-flex align-items-center justify-content-center">
+            <div>
+                <span class="text-white">Minutos:</span><br/>
+                <form:input cssClass="w-50" type="number" disabled="<%=!hayTiempo%>" path="minutosRealizados" size="5" required="<%=hayTiempo%>"></form:input>
+            </div>
+            <div>
+                <span class="text-white">Segundos:</span><br/>
+                <form:input cssClass="w-50" type="number" disabled="<%=!hayTiempo%>" path="segundosRealizados" size="5" required="<%=hayTiempo%>"></form:input>
+            </div>
+        </div>
+        <span class="text-white">Kilocalorias:</span><br/>
         <form:input type="number" disabled="<%=!hayKilocalorias%>" path="kilocaloriasRealizado" size="5" required="<%=hayKilocalorias%>"></form:input><br/>
-        Metros Realizados:
+        <span class="text-white">Metros:</span><br/>
         <form:input type="number" disabled="<%=!hayMetros%>" path="metrosRealizado" size="5" required="<%=hayMetros%>"></form:input>
 
         <form:hidden path="implementacionId"></form:hidden>
         <form:hidden path="serieSeleccionada"></form:hidden>
         <form:hidden path="feedbackEjercicio"></form:hidden><br/>
-        <form:button>Guardar</form:button>
+        <form:button class="btn btn-success mt-3">Guardar</form:button>
     </form:form>
 
 </div>

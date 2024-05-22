@@ -66,10 +66,12 @@
     <tbody>
 </table>
 
-<h5>Tipo: <%=tipoEjercicio%></h5><br/>
-<h5>Descripción:</h5>
-<p><%=descripcion%></p><br/>
-<h5>URL: <%=enlaceVideo%></h5>
+<div class="bg-secondary w-25 m-3 p-3 rounded">
+    <h3>Descripción:</h3>
+    <p class="text-white"><%=descripcion%></p><br/>
+    <h3>URL:</h3>
+    <a class="text-white"><%=enlaceVideo%></a>
+</div>
 
 <br/>
 
