@@ -273,19 +273,20 @@ DROP TABLE IF EXISTS `feedback_ejercicio`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_ejercicio` (
   `idfeedback_ejercicio` int NOT NULL AUTO_INCREMENT,
+  `implementacion` int DEFAULT NULL,
+  `dia_entrenamiento` int DEFAULT NULL,
+  `realizado` tinyint DEFAULT NULL,
   `seguimiento_sets_done` varchar(45) DEFAULT NULL,
   `seguimiento_tiempo_done` varchar(45) DEFAULT NULL,
   `seguimiento_kilocalorias_done` varchar(45) DEFAULT NULL,
   `seguimiento_metros__done` varchar(45) DEFAULT NULL,
-  `realizado` tinyint DEFAULT NULL,
-  `implementacion` int DEFAULT NULL,
-  `dia_entrenamiento` int DEFAULT NULL,
+  `seguimiento_peso_done` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idfeedback_ejercicio`),
   KEY `implementacion_idx` (`implementacion`),
   KEY `diaEntrenamiento_idx` (`dia_entrenamiento`),
   CONSTRAINT `dia_entrenamiento` FOREIGN KEY (`dia_entrenamiento`) REFERENCES `dia_entrenamiento` (`iddia_entrenamiento`),
   CONSTRAINT `implementacion` FOREIGN KEY (`implementacion`) REFERENCES `implementacion_ejercicio-rutina` (`idimplementacion_ejercicio-rutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,7 +295,7 @@ CREATE TABLE `feedback_ejercicio` (
 
 LOCK TABLES `feedback_ejercicio` WRITE;
 /*!40000 ALTER TABLE `feedback_ejercicio` DISABLE KEYS */;
-INSERT INTO `feedback_ejercicio` VALUES (1,NULL,NULL,NULL,NULL,NULL,2,1);
+INSERT INTO `feedback_ejercicio` VALUES (1,2,1,1,'3',NULL,NULL,NULL,NULL),(2,4,1,NULL,NULL,NULL,NULL,NULL,NULL),(3,5,1,1,'5',NULL,NULL,NULL,NULL),(4,6,1,1,NULL,'900',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `feedback_ejercicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +318,7 @@ CREATE TABLE `feedback_ejercicioserie` (
   PRIMARY KEY (`idfeedback_ejercicioserie`),
   KEY `feedback_ejercicio_idx` (`feedback_ejercicio`),
   CONSTRAINT `feedback_ejercicio` FOREIGN KEY (`feedback_ejercicio`) REFERENCES `feedback_ejercicio` (`idfeedback_ejercicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +327,7 @@ CREATE TABLE `feedback_ejercicioserie` (
 
 LOCK TABLES `feedback_ejercicioserie` WRITE;
 /*!40000 ALTER TABLE `feedback_ejercicioserie` DISABLE KEYS */;
-INSERT INTO `feedback_ejercicioserie` VALUES (64,'1',NULL,NULL,NULL,NULL,NULL,NULL),(85,'1',NULL,NULL,NULL,NULL,NULL,NULL),(86,'2',NULL,NULL,NULL,NULL,NULL,NULL),(87,'3',NULL,NULL,NULL,NULL,NULL,NULL),(88,'4',NULL,NULL,NULL,NULL,NULL,NULL),(89,'1',NULL,NULL,NULL,NULL,NULL,NULL),(90,'2',NULL,NULL,NULL,NULL,NULL,NULL),(91,'3',NULL,NULL,NULL,NULL,NULL,NULL),(92,'4',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `feedback_ejercicioserie` VALUES (64,'1',NULL,NULL,NULL,NULL,NULL,NULL),(85,'1',NULL,NULL,NULL,NULL,NULL,NULL),(86,'2',NULL,NULL,NULL,NULL,NULL,NULL),(87,'3',NULL,NULL,NULL,NULL,NULL,NULL),(88,'4',NULL,NULL,NULL,NULL,NULL,NULL),(89,'1',NULL,NULL,NULL,NULL,NULL,NULL),(90,'2',NULL,NULL,NULL,NULL,NULL,NULL),(91,'3',NULL,NULL,NULL,NULL,NULL,NULL),(92,'4',NULL,NULL,NULL,NULL,NULL,NULL),(93,'1','8','45',NULL,NULL,NULL,1),(94,'2','8','40',NULL,NULL,NULL,1),(95,'3',NULL,NULL,NULL,NULL,NULL,1),(96,'1',NULL,NULL,'30',NULL,NULL,3),(97,'2',NULL,NULL,'25',NULL,NULL,3),(98,'3',NULL,NULL,NULL,NULL,NULL,3),(99,'4',NULL,NULL,NULL,NULL,NULL,3),(100,'5',NULL,NULL,NULL,NULL,NULL,3);
 /*!40000 ALTER TABLE `feedback_ejercicioserie` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -618,4 +619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-21 23:47:34
+-- Dump completed on 2024-05-22 11:07:27

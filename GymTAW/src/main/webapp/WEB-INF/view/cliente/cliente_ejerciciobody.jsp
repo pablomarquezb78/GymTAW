@@ -48,12 +48,14 @@
 
 <h5>Feedback:</h5>
 <form method="post" action="/cliente/guardarFeedbackEjercicio">
+    Realizado:
     <select name="realizado">
         <option value="1" <%= realizado == 1 ? "selected" : "" %>>Si</option>
         <option value="0" <%= realizado == 0 ? "selected" : "" %>>No</option>
     </select>
     Series Realizadas:
-    <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>">
+    <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>" <%=realizado==0 ?  "disabled" : ""%>>
+
     <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
     <input type="hidden" name="feedbackEjercicio" value="<%=feedbackEjercicio.getId()%>">
     <button>Guardar</button>
@@ -80,9 +82,9 @@
     <h5>Feedback serie:</h5>
     <form:form method="post" action="/cliente/guardarFeedbackSerieBody" modelAttribute="feedbackSerieForm">
         Repeticiones Realizadas:
-        <form:input path="repeticionesRealizadas" size="5"></form:input><br/>
-        Peso(Kg):
-        <form:input path="pesoRealizado" size="5"></form:input><br/>
+        <form:input type="number" path="repeticionesRealizadas" size="5" required="true"></form:input><br/>
+        Peso Realizado(Kg):
+        <form:input type="number" step="0.01" path="pesoRealizado" size="5" required="true"></form:input><br/>
 
         <form:hidden path="implementacionId"></form:hidden>
         <form:hidden path="serieSeleccionada"></form:hidden>

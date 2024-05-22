@@ -56,7 +56,7 @@
         <th scope="row">1</th>
         <td><%=implementacion.getEjercicio().getNombre()%></td>
         <td><%=implementacion.getEjercicio().getTipo().getTipoDeEjercicio()%></td>
-        <td><%=implementacion.getSets()%></td>
+        <td><%=implementacion.getSets() != null ? implementacion.getSets() : "-"%></td>
         <td><%=implementacion.getRepeticiones() != null ? implementacion.getRepeticiones() : "-"%></td>
         <td><%=implementacion.getPeso() != null ? implementacion.getPeso() : "-"%></td>
         <td><%=tiempo%></td>

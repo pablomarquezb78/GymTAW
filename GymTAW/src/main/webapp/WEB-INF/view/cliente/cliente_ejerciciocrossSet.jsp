@@ -52,12 +52,14 @@
 <h5>Feedback:</h5>
 
 <form method="post" action="/cliente/guardarFeedbackEjercicio">
+    Realizado:
     <select name="realizado">
         <option value="1" <%= realizado == 1 ? "selected" : "" %>>Si</option>
         <option value="0" <%= realizado == 0 ? "selected" : "" %>>No</option>
     </select>
     Series Realizadas:
-    <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>">
+    <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>" <%=realizado==0 ?  "disabled" : ""%>>
+
     <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
     <input type="hidden" name="feedbackEjercicio" value="<%=feedbackEjercicio.getId()%>">
     <button>Guardar</button>
@@ -80,21 +82,27 @@
         <input type="hidden" name="implementacion" value="<%=implementacion.getId()%>">
         <button>Seleccionar</button>
     </form>
-
+    <%
+    boolean hayRepeticiones = implementacion.getRepeticiones()!=null;
+    boolean hayPeso = implementacion.getPeso()!=null;
+    boolean hayTiempo = implementacion.getTiempo()!=null;
+    boolean hayKilocalorias = implementacion.getKilocalorias()!=null;
+    boolean hayMetros = implementacion.getMetros()!=null;
+    %>
     <h5>Feedback serie:</h5>
     <form:form method="post" action="/cliente/guardarFeedbackSerieCross" modelAttribute="feedbackSerieForm">
         Repeticiones Realizadas:
-        <form:input disabled="<%=implementacion.getRepeticiones()!= null ? false : true%>" path="repeticionesRealizadas" size="5"></form:input><br/>
-        Peso(Kg):
-        <form:input disabled="<%=implementacion.getPeso()!= null ? false : true%>" path="pesoRealizado" size="5"></form:input><br/>
+        <form:input type="number" disabled="<%=!hayRepeticiones%>" path="repeticionesRealizadas" size="5" required="<%=hayRepeticiones%>"></form:input><br/>
+        Peso Realizado(Kg):
+        <form:input type="number" step="0.01" disabled="<%=!hayPeso%>" path="pesoRealizado" size="5" required="<%=hayPeso%>"></form:input><br/>
         Minutos Realizados:
-        <form:input type="number" disabled="<%=implementacion.getTiempo()!= null ? false : true%>" path="minutosRealizados" size="5"></form:input><br/>
+        <form:input type="number" disabled="<%=!hayTiempo%>" path="minutosRealizados" size="5" required="<%=hayTiempo%>"></form:input><br/>
         Segundos Realizados:
-        <form:input type="number" disabled="<%=implementacion.getTiempo()!= null ? false : true%>" path="segundosRealizados" size="5"></form:input><br/>
+        <form:input type="number" disabled="<%=!hayTiempo%>" path="segundosRealizados" size="5" required="<%=hayTiempo%>"></form:input><br/>
         Kilocalorias Realizadas:
-        <form:input disabled="<%=implementacion.getKilocalorias()!= null ? false : true%>" path="kilocaloriasRealizado" size="5"></form:input><br/>
+        <form:input type="number" disabled="<%=!hayKilocalorias%>" path="kilocaloriasRealizado" size="5" required="<%=hayKilocalorias%>"></form:input><br/>
         Metros Realizados:
-        <form:input disabled="<%=implementacion.getMetros()!= null ? false : true%>" path="metrosRealizado" size="5"></form:input>
+        <form:input type="number" disabled="<%=!hayMetros%>" path="metrosRealizado" size="5" required="<%=hayMetros%>"></form:input>
 
         <form:hidden path="implementacionId"></form:hidden>
         <form:hidden path="serieSeleccionada"></form:hidden>

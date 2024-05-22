@@ -17,17 +17,18 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    protected RutinaRepository rutinaRepository;
-    @Autowired
     protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-    @Autowired
-    protected EjercicioRepository ejercicioRepository;
     @Autowired
     protected FeedbackejercicioRepository feedbackejercicioRepository;
     @Autowired
     protected FeedbackejercicioserieRepository feedbackejercicioserieRepository;
     @Autowired
     protected DiaEntrenamientoRepository diaEntrenamientoRepository;
+
+    //NOTA: LOS EJERCICIOS DE BODY SIEMPRE TENDRÁN SERIES, COMO MÍNIMO UNA, PERO LOS EJERCICIOS DE CROSSFIT PUEDEN TENER O NO TENER SERIES ESTIPULADAS.
+    //AUNQUE LA INTERPRETACIÓN DE NO TENER UNA SERIE SEA EQUIVALENTE A TENER UNA SERIE, HACERLO ASÍ LO HACE MÁS SIMPLE Y COHERENTE, YA QUE EN BODY
+    //EL USUARIO PUEDE OPTAR POR HACER MAS SERIES DE LAS ESTIPULADAS PERO CUANDO EN CROSS TE MANDAN HACER POR EJEMPLO UNOS MINUTOS DE UN EJERCICIO,
+    //SIMPLEMENTE DICES CUANTO HAS HECHO Y NO SI HAS HECHO UNA SERIE MAS DE ESOS MINUTOS (TIENE MÁS COHERENCIA)
 
     @GetMapping("/")
     public String doMostrarInicio(){
@@ -45,6 +46,7 @@ public class ClienteController {
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
         session.setAttribute("fechaSeleccionada",diaEntrenamiento);
 
+        //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
         List<ImplementacionEjercicioRutina> implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
 
         model.addAttribute("implementaciones",implementaciones);
@@ -54,13 +56,23 @@ public class ClienteController {
 
     @GetMapping("/ejercicio")
     public String doMostrarEjercicio(@RequestParam("id")String id, @RequestParam(value = "set", required = false) String set, Model model, HttpSession session){
+        //OBTENEMOS LA IMPLEMENTACION
         ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(Integer.parseInt(id)).orElse(null);
         model.addAttribute("implementacion",implementacion);
 
         String strTo = "/cliente/cliente_ejerciciobody";
 
+        //OBTENEMOS EL DIA SELECCIONADO Y EL FEEDBACK DE ESTE EJERCICIO Y AÑADIMOS AL MODELO ESTE ÚLTIMO
         DiaEntrenamiento dia = (DiaEntrenamiento) session.getAttribute("fechaSeleccionada");
+        //CREAMOS EL FEEDBACK DEL EJERCICIO
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion,dia);
+        if(feedbackEjercicio==null){
+            feedbackEjercicio = new FeedbackEjercicio();
+            feedbackEjercicio.setDiaEntrenamiento(dia);
+            feedbackEjercicio.setImplementacion(implementacion);
+            feedbackEjercicio.setRealizado((byte) 0);
+            feedbackejercicioRepository.save(feedbackEjercicio);
+        }
         model.addAttribute("feedback",feedbackEjercicio);
 
         //MANTENEMOS EL OBJETO UI ACTUALIZADO
@@ -68,20 +80,25 @@ public class ClienteController {
         feedbackSerieForm.setImplementacionId(Integer.parseInt(id));
         feedbackSerieForm.setFeedbackEjercicio(feedbackEjercicio);
 
+        //COMPROBAMOS SI EL EJERCICIO TIENE SERIES ESTIPULADAS
         boolean tieneSeries = implementacion.getSets()!=null;
 
-        //EL EJERCICIO TIENE SETS ESTIPULADOS
+        //EL EJERCICIO TIENE SERIES ESTIPULADAS
         if(tieneSeries){
-            //CONSIDERO QUE SIEMPRE HABRÁ UNA SERIE EN EL EJERCICIO PARA PONERLO POR DEFECTO EN CASO DE NO SELECCIONAR SERIE EL USUARIO
+            //CONSIDERO QUE AL HABER SERIES ESTIPULADAS SIEMPRE HABRÁ COMO MÍNIMO UNA SERIE ESTIPULADA, POR TANTO EN CASO DE QUE EL USUARIO NO HAYA SELECCIONADO
+            //SERIE TODAVÍA SE PONE LA SERIE SELECCIONADA A 1
             if(set == null) {
                 set = "1";
             }
 
+            //OBTENGO EL FEEDBACK DE ESE EJERCICIO EN ESA SERIE CONCRETA Y LO AÑADO AL MODELO
             FeedbackEjercicioserie feedbackEjercicioSerie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(feedbackEjercicio,set);
             model.addAttribute("feedbackSerie",feedbackEjercicioSerie);
 
+            //MANTENEMOS EL OBJETO UI ACTUALIZADO
             feedbackSerieForm.setSerieSeleccionada(set);
 
+            //OBTENGO LOS DATOS ALMACENADOS EN EL FEEDBACK DE LA SERIE Y METO EN EL OBJETO UI LOS QUE PROCEDAN
             if(feedbackEjercicioSerie!=null){
                 String pesoRealizado = feedbackEjercicioSerie.getPesoRealizado();
                 String repeticionesRealizadas = feedbackEjercicioSerie.getRepeticionesRealizadas();
@@ -96,14 +113,29 @@ public class ClienteController {
                 if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
                 if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
             }
-
+        //EL EJERCICIO NO TIENE SERIES ESTIPULADAS
         }else{
-           
+
+            //OBTENGO LOS DATOS ALMACENADOS EN EL FEEDBACK DEL EJERCICIO Y METO EN EL OBJETO UI LOS QUE PROCEDAN
+            if(feedbackEjercicio!=null){
+                String pesoRealizado = feedbackEjercicio.getSeguimientoPesoDone();
+                String tiempoRealizado = feedbackEjercicio.getSeguimientoTiempoDone();
+                String metrosRealizado = feedbackEjercicio.getSeguimientoMetrosDone();
+                String kilocaloriasRealizado = feedbackEjercicio.getSeguimientoKilocaloriasDone();
+
+                if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
+                if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
+                if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
+                if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
+                if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
+            }
+
         }
 
+        //AÑADO AL MODELO EL OBJETO UI
         model.addAttribute("feedbackSerieForm",feedbackSerieForm);
 
-        //CASO EJERCICIO CROSSTRAINING
+        //EN CASO DE SER DE CROSSTRAINING TENDRA DIFERENTES FORMULARIOS
         if(implementacion.getEjercicio().getTipo().getId()!=1){
             strTo = tieneSeries ? "/cliente/cliente_ejerciciocrossSet" : "/cliente/cliente_ejerciciocross";
         }
@@ -118,9 +150,11 @@ public class ClienteController {
 
         String strTo = "/cliente/cliente_entrenamientos";
 
+        //SI NO HAY FILTRO REDIRECCIONAR PARA MOSTRAR EL DIA DE HOY
         if(filtroDia.isEmpty()){
             strTo = "redirect:/cliente/";
         }else{
+            //ACTUALIZO CON EL DIA DEL FILTRO
             User userEntity = (User) session.getAttribute("user");
             int dia = Integer.parseInt(filtroDia);
 
@@ -140,25 +174,29 @@ public class ClienteController {
         return strTo;
     }
 
-
+    //ESTE POST GUARDA EL FEEDBACK COMÚN A LOS EJERCICIOS BODY Y CROSS, QUE ES EL BOOLEAN REALIZADO Y LAS SERIES REALIZADAS
+    //TENEMOS EN CUENTA TAMBIÉN CASO DE CROSS QUE NO TIENE SERIES.
     @PostMapping("/guardarFeedbackEjercicio")
     public String doGuardarFeedbackEjercicio(@RequestParam("realizado") Byte realizado,
                                              @RequestParam(required = false, value = "seriesRealizadas")Integer seriesRealizadas,
                                              @RequestParam("implementacion") Integer implementacionId,
                                              @RequestParam("feedbackEjercicio") Integer feedbackEjercicioId){
-        ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
+        //OBTENEMOS EL FEEDBACK DEL EJERCICIO
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
 
-        if (implementacion != null && feedbackEjercicio!=null) {
+        if (feedbackEjercicio!=null) {
+            //ACTUALIZAMOS EL CAMPO REALIZADO
             feedbackEjercicio.setRealizado(realizado);
 
+            //EN CASO DE TENER SERIES
             if(seriesRealizadas!=null){
+                //ESTABLECEMOS LAS SERIES REALIZADAS
                 feedbackEjercicio.setSeguimientoSetsDone("" + seriesRealizadas);
 
                 //POR SIMPLIFICAR, SI SE MODIFICA EL NUMERO DE SETS REALIZADAS EL CLIENTE DEBERÁ VOLVER A RELLENAR EL FEEDBACK DE ESTAS NUEVAS SERIES
                 List<FeedbackEjercicioserie> feedbackAnterior = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicio(feedbackEjercicio);
 
-                //SI HABIA FEEDBACK LO BORRAMOS
+                //SI HABIA FEEDBACK ANTERIOR LO BORRAMOS PARA DAR PASO AL NUEVO
                 if(feedbackAnterior!=null){
                     for(FeedbackEjercicioserie f : feedbackAnterior){
                         feedbackejercicioserieRepository.delete(f);
@@ -175,74 +213,101 @@ public class ClienteController {
                 }
             }
 
+            //GUARDAMOS LOS CAMBIOS REALIZADOS
             feedbackejercicioRepository.save(feedbackEjercicio);
         }
 
         return "redirect:/cliente/ejercicio?id=" + implementacionId;
     }
 
-
+    //LOS EJERCICIOS DE BODY TENDRÁN SIEMPRE SERIES (MINIMO UNA), REPETICIONES Y PESO (KG).
     @PostMapping("/guardarFeedbackSerieBody")
     public String doGuardarFeedbackSerieBody(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm){
-        ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(feedbackSerieForm.getImplementacionId()).orElse(null);
 
-        if (implementacion != null) {
-            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
-                    feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
+        //ACTUALIZAMOS EL FEEDBACK DEL EJERCICIO EN LA SERIE SELECCIONADA
+        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
+                feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
 
-            feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
-            feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
+        feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
+        feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
 
-            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
-        }
+        //GUARDAMOS LOS CAMBIOS EN EL FEEDBACK DE LA SERIE SELECCIONADA DEL EJERCICIO
+        feedbackejercicioserieRepository.save(feedbackEjercicioserie);
 
         return "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId() + "&set=" + feedbackSerieForm.getSerieSeleccionada();
     }
 
+    //LOS EJERCICIOS DE BODY CON SERIE PUEDEN TENER O NO TENER CUALQUIERA DE ATRIBUTOS -REALIZADO
     @PostMapping("/guardarFeedbackSerieCross")
     public String doGuardarFeedbackSerieCross(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm){
-        ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(feedbackSerieForm.getImplementacionId()).orElse(null);
 
-        if (implementacion != null) {
-            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
-                    feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
+        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
+                feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
 
-            feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
-            feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
+        //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
+        String pesoRealizado = feedbackSerieForm.getPesoRealizado();
+        String repeticionesRealizadas = feedbackSerieForm.getRepeticionesRealizadas();
+        Integer minutosRealizados = feedbackSerieForm.getMinutosRealizados();
+        Integer segundosRealizados = feedbackSerieForm.getSegundosRealizados();
+        String kilocaloriasRealizadas = feedbackSerieForm.getKilocaloriasRealizado();
+        String metrosRealizados = feedbackSerieForm.getMetrosRealizado();
 
-            String segundosTotal = "" + (feedbackSerieForm.getMinutosRealizados() * 60 + feedbackSerieForm.getSegundosRealizados());
+        //EN FUNCION DE LO QUE HAYAMOS RECIBIDO ACTUALIZAMOS LA BBDD EN CONSONANCIA.
+        if(pesoRealizado!=null) feedbackEjercicioserie.setPesoRealizado(pesoRealizado);
+        if(repeticionesRealizadas!=null) feedbackEjercicioserie.setRepeticionesRealizadas(repeticionesRealizadas);
+
+        if(!(minutosRealizados==null && segundosRealizados==null)){
+            if(minutosRealizados==null) minutosRealizados = 0;
+            if(segundosRealizados==null) segundosRealizados = 0;
+            String segundosTotal = "" + (minutosRealizados * 60 + segundosRealizados);
             feedbackEjercicioserie.setTiempoRealizado(segundosTotal);
-
-            feedbackEjercicioserie.setKilocaloriasRealizado(feedbackSerieForm.getKilocaloriasRealizado());
-            feedbackEjercicioserie.setMetrosRealizado(feedbackSerieForm.getMetrosRealizado());
-
-            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
         }
+
+        if(kilocaloriasRealizadas!=null)feedbackEjercicioserie.setKilocaloriasRealizado(kilocaloriasRealizadas);
+        if(metrosRealizados!=null) feedbackEjercicioserie.setMetrosRealizado(metrosRealizados);
+
+        //GUARDAMOS LOS CAMBIOS REALIZADOS EN EL FEEDBACK DE LA SERIE SELECCIONADA DEL EJERCICIO
+        feedbackejercicioserieRepository.save(feedbackEjercicioserie);
 
         return "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId() + "&set=" + feedbackSerieForm.getSerieSeleccionada();
     }
 
+    //CASO EJERCICIO CROSSFIT SIN SERIE, SU SEGUIMIENTO SE GUARDA EN EL PROPIO FEEDBACK DEL EJERCICIO (SIN SER EL FEEDBACK DE LA SERIE)
     @PostMapping("/guardarFeedbackCross")
-    public String doGuardarFeedbackCross(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm){
+    public String doGuardarFeedbackCross(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm, HttpSession session){
         ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(feedbackSerieForm.getImplementacionId()).orElse(null);
 
-        if (implementacion != null) {
-            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
-                    feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
+        DiaEntrenamiento dia = (DiaEntrenamiento) session.getAttribute("fechaSeleccionada");
 
-            feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
-            feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
+        if (implementacion != null && dia != null) {
+            //OBTENEMOS EL FEEDBACK DEL EJERCICIO
+            FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion,dia);
 
-            String segundosTotal = "" + (feedbackSerieForm.getMinutosRealizados() * 60 + feedbackSerieForm.getSegundosRealizados());
-            feedbackEjercicioserie.setTiempoRealizado(segundosTotal);
+            //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
+            String pesoRealizado = feedbackSerieForm.getPesoRealizado();
+            Integer minutosRealizados = feedbackSerieForm.getMinutosRealizados();
+            Integer segundosRealizados = feedbackSerieForm.getSegundosRealizados();
+            String kilocaloriasRealizadas = feedbackSerieForm.getKilocaloriasRealizado();
+            String metrosRealizados = feedbackSerieForm.getMetrosRealizado();
 
-            feedbackEjercicioserie.setKilocaloriasRealizado(feedbackSerieForm.getKilocaloriasRealizado());
-            feedbackEjercicioserie.setMetrosRealizado(feedbackSerieForm.getMetrosRealizado());
+            //EN FUNCION DE LO QUE HAYAMOS RECIBIDO ACTUALIZAMOS LA BBDD EN CONSONANCIA.
+            if(pesoRealizado!=null) feedbackEjercicio.setSeguimientoPesoDone(pesoRealizado);
 
-            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
+            if(!(minutosRealizados==null && segundosRealizados==null)){
+                if(minutosRealizados==null) minutosRealizados = 0;
+                if(segundosRealizados==null) segundosRealizados = 0;
+                String segundosTotal = "" + (minutosRealizados * 60 + segundosRealizados);
+                feedbackEjercicio.setSeguimientoTiempoDone(segundosTotal);
+            }
+
+            if(kilocaloriasRealizadas!=null)feedbackEjercicio.setSeguimientoKilocaloriasDone(kilocaloriasRealizadas);
+            if(metrosRealizados!=null) feedbackEjercicio.setSeguimientoMetrosDone(metrosRealizados);
+
+            //GUARDAMOS LOS CAMBIOS REALIZADOS EN EL FEEDBACK DEL EJERCICIO
+            feedbackejercicioRepository.save(feedbackEjercicio);
         }
 
-        return "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId() + "&set=" + feedbackSerieForm.getSerieSeleccionada();
+        return "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId();
     }
 
     @PostMapping("/seleccionarSerie")
