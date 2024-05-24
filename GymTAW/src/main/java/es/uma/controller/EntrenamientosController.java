@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -64,21 +66,127 @@ public class EntrenamientosController extends BaseController{
 
     @PostMapping("/nuevo-entrenamiento")
     public String doCreateEntrenamiento(@RequestParam("id") Integer id, Model model, HttpSession session){
+        String strTo =  "/crosstrainer/entrenador_crear_entrenamiento";
 
-        model.addAttribute("idcliente",id);
-        return "/crosstrainer/entrenador_crear_entrenamiento";
+        UserRol rol = (UserRol) session.getAttribute("rol");
 
+        if(estaAutenticado(session) == true && esEntrenador(rol) ) {
+            model.addAttribute("idcliente", id);
+        }else{
+            strTo= "redirect:/";
+        }
+
+        return strTo;
     }
 
+    @GetMapping("/crearrutina")
+    public String doCrearRutina(@RequestParam("idrutina") Integer idrutina,Model model){
+        String strTo = "/crosstrainer/entrenador_crear_rutina";
+
+        Rutina r = rutinaRepository.getById(idrutina);
+
+        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(r);
+        if(lista==null){
+            lista = new ArrayList<>();
+        }
+
+        model.addAttribute("idrutina",idrutina);
+        model.addAttribute("implementaciones",lista);
+
+        return strTo;
+    }
+
+    @PostMapping("/guardarimplementacionrutina")
+    public String doGuardarImplementacionRutina(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina().getId();
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp;
+            if(implementacion.getId()!=null){
+                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+                asignarImplementacionReal(imp,implementacion);
+            }else{
+                imp = new ImplementacionEjercicioRutina();
+                imp.setRutina(implementacion.getRutina());
+
+                asignarImplementacionReal(imp,implementacion);
+            }
+
+            this.implementacionEjercicioRutinaRepository.save(imp);
+        }
+
+
+        return strTo;
+    }
+
+    @PostMapping("/borrarimplementacionderutina")
+    public String doBorrarImplementacionRutina(@RequestParam("id") Integer id,@RequestParam("idrutina") Integer idrutina,
+                                         Model model,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + idrutina;
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            implementacionEjercicioRutinaRepository.delete(imp);
+        }
+
+
+        return strTo;
+    }
+
+    @GetMapping("/crearimplementacionrutina")
+    public String doCrearImplementacionRutina(@RequestParam("idrutina") Integer idrutina,HttpSession sesion,Model model){
+        String strTo = "/crosstrainer/entrenador_implementacion_rutina";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+
+            Implementacion implementacion = new Implementacion();
+
+            Rutina r = rutinaRepository.getById(idrutina);
+            implementacion.setRutina(r);
+
+            model.addAttribute("implementacion",implementacion);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.findAll();
+            model.addAttribute("ejercicios",ejercicios);
+
+            Boolean editable = false;
+            model.addAttribute("editable",editable);
+
+        }
+
+
+        return strTo;
+    }
 
     @PostMapping("/entrenador-rutina")
     public String doLoadFecha(@RequestParam("accion") String accion, @RequestParam("id") Integer idcliente, @RequestParam("fecha") String fecha,Model model, HttpSession session){
 
        String url = "redirect:/";
        User user = (User) session.getAttribute("user");
-       LocalDate fechaConvertida = convertirStringALocalDate(fecha);
+//       LocalDate fechaConvertida = convertirStringALocalDate(fecha);
 
        if(accion.equals("crear")){
+            Rutina rutina = new Rutina();
+            User entrenador = (User) session.getAttribute("user");
+            rutina.setEntrenador(entrenador);
+
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+           LocalDate fechanueva = LocalDate.parse(fecha, formatter);
+
+           // Convertimos LocalDate to Instant
+           Instant fechaCreacion = fechanueva.atStartOfDay(ZoneOffset.UTC).toInstant();
+
+            rutina.setFechaCreacion(Instant.from(fechaCreacion));
+            rutina.setNombre("Rutina de " + entrenador.getNombre() +"("+ fecha + ")");
+            rutinaRepository.save(rutina);
+
+            return "redirect:/entrenamientos/crearrutina?idrutina=" + rutina.getId();
 
        }
 
@@ -96,7 +204,7 @@ public class EntrenamientosController extends BaseController{
            return "/crosstrainer/entrenador_asociar_rutina";
        }
 
-       return "redirect:/";
+       return url;
 
     }
 

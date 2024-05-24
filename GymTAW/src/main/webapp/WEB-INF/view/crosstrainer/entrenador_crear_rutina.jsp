@@ -3,7 +3,7 @@
 <%@ page import="es.uma.dao.EjercicioRepository" %>
 <%
     List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    Integer iddia = (Integer) request.getAttribute("iddia");
+    Integer idrutina = (Integer) request.getAttribute("idrutina");
 %>
 
 
@@ -13,7 +13,7 @@
     <title>Rutina</title>
 </head>
 <body>
-<h1>RUTINA</h1>
+<h1>NUEVA RUTINA</h1>
 <table border="1">
     <tr>
         <th>Ejercicio</th>
@@ -35,11 +35,10 @@
         <td><%=imp.getPeso() != null ? imp.getPeso() : ""%>Kg</td>
         <td><%=imp.getMetros() != null ? imp.getMetros() : ""%>Mts</td>
         <td><%=imp.getTiempo() != null ? imp.getTiempo() : ""%></td>
-        <td><a href="/entrenamientos/editarimplementacion?id=<%=imp.getId()%>&iddia=<%=iddia%>">Editar</a></td>
         <td>
-            <form action="/entrenamientos/borrarimplementacion" method="post">
+            <form action="/entrenamientos/borrarimplementacionderutina" method="post">
                 <input type="hidden" name="id" value="<%=imp.getId()%>">
-                <input type="hidden" name="iddia" value="<%=iddia%>">
+                <input type="hidden" name="idrutina" value="<%=idrutina%>">
                 <button type="submit">Quitar</button>
             </form>
         </td>
@@ -50,10 +49,10 @@
 
 </table>
 
-<form action="/entrenamientos/crearimplementacion" method="get">
+<form action="/entrenamientos/crearimplementacionrutina" method="get">
     <input type="hidden" name="id" value="<%=-1%>">
-    <input type="hidden" name="iddia" value="<%=iddia%>">
-    <button type="submit">Crear Ejercicio</button>
+    <input type="hidden" name="idrutina" value="<%=idrutina%>">
+    <button type="submit">Anadir Ejercicio</button>
 </form>
 
 
