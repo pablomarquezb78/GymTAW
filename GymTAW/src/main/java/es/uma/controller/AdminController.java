@@ -561,10 +561,9 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "crearImplementacion";
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
-            ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
             List<Rutina> rutinas = rutinaRepository.findAll();
             Implementacion implementacion = new Implementacion();
-            implementacion.setEjercicio(ier.getEjercicio());
+            implementacion.setEjercicio(ejercicioRepository.findById(id).orElse(null));
             model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", implementacion);
         } else {

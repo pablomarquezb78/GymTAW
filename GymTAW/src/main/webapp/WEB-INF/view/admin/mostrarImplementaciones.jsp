@@ -56,7 +56,7 @@
         }
     %>
 </table>
-<a href="">Crear nueva implementacion</a>
+<a href="/admin/crearImplementacion?id=<%=ejercicio.getId()%>">Crear nueva implementacion</a>
 
 <form:form action="<%=dir%>" method="post" modelAttribute="implementacion">
     <br>
