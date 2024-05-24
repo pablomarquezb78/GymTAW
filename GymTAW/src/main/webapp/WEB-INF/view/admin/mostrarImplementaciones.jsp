@@ -33,6 +33,7 @@
         <th>TIEMPO</th>
         <th>KCAL</th>
         <th></th>
+        <th></th>
     </tr>
 
     <%
@@ -49,6 +50,7 @@
         <td><%=implementacion.getTiempo()%></td>
         <td><%=implementacion.getKilocalorias()%></td>
         <td><a href="/admin/editarImplementacion?id=<%=implementacion.getId()%>">Editar</a></td>
+        <td><a href="/admin/borrarImplementacion?idEjercicio=<%=ejercicio.getId()%>&idImplementacion=<%=implementacion.getId()%>">Borrar</a></td>
     </tr>
     <%
         }

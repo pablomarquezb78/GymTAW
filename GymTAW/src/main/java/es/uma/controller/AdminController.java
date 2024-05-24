@@ -42,6 +42,8 @@ public class AdminController extends BaseController {
     protected PlatosRepository platosRepository;
     @Autowired
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
+    @Autowired
+    protected TipoComidaRepository tipoComidaRepository;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -636,6 +638,20 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/borrarImplementacion")
+    public String doBorrarImplementacion(@RequestParam("idEjercicio") Integer idEjercicio, @RequestParam("idImplementacion") Integer idImplementacion, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/verImplementacionesAsociadas?id="+idEjercicio;
+            this.implementacionEjercicioRutinaRepository.deleteById(idImplementacion);
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
     @GetMapping("/mostrarPlatos")
     public String doPlatos(Model model, HttpSession session) {
         String dir;
@@ -739,6 +755,21 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+    @GetMapping("/borrarPlato")
+    public String doBorrarPlato(@RequestParam("id") Integer id, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/mostrarPlatos";
+            this.platosRepository.deleteById(id);
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+
 
     @GetMapping("/verComidasAsociadas")
     public String doVerComidasAsociadas(@RequestParam("id") Integer id, Model model, HttpSession session) {
@@ -749,6 +780,9 @@ public class AdminController extends BaseController {
             List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.buscarPorPlato(id);
             List<Ingrediente> ingredientes = cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id);
             model.addAttribute("comidas", comidas);
+            model.addAttribute("cantidadPlatoComida", new CantidadPlatoComida());
+            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+            model.addAttribute("plato", platosRepository.findById(id).orElse(null));
             model.addAttribute("ingredientes", ingredientes);
         } else {
             dir = "redirect:/";
@@ -756,13 +790,43 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @GetMapping("/borrarPlato")
-    public String doBorrarPlato(@RequestParam("id") Integer id, HttpSession session){
+    @PostMapping("/filtrarComidas")
+    public String doFiltrarComidas(@RequestParam("id") Integer id, Model model, HttpSession session, @ModelAttribute CantidadPlatoComida cantidadPlatoComida) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarPlatos";
-            this.platosRepository.deleteById(id);
+            if(cantidadPlatoComida.estaVacio()){
+                dir = "redirect:/admin/verComidasAsociadas?id="+id;
+            }else{
+                Plato plato = platosRepository.findById(id).orElse(null);
+                if(cantidadPlatoComida.getCantidad() == null){
+                    List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.filtrarPlatos(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida());
+                    model.addAttribute("comidas", comidas);
+                }else{
+                    List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.filtrarPlatosConCantidad(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida(), cantidadPlatoComida.getCantidad());
+                    model.addAttribute("comidas", comidas);
+
+                }
+                List<Ingrediente> ingredientes = cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id);
+                model.addAttribute("cantidadPlatoComida", cantidadPlatoComida);
+                model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+                model.addAttribute("ingredientes", ingredientes);
+                model.addAttribute("plato",plato);
+                dir = "admin/mostrarComidas";
+            }
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/borrarComida")
+    public String doBorrarComida(@RequestParam("idPlato") Integer idPlato, @RequestParam("idComida") Integer idComida, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "redirect:/admin/verComidasAsociadas?id="+idPlato;
+            this.cantidadIngredientePlatoComidaRepository.deleteById(idComida);
 
         } else {
             dir = "redirect:/";
