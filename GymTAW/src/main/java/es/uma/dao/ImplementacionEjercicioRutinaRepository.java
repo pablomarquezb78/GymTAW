@@ -17,4 +17,8 @@ public interface ImplementacionEjercicioRutinaRepository extends JpaRepository<I
     @Query("select i from ImplementacionEjercicioRutina i where i.ejercicio = :ejercicio")
     List<ImplementacionEjercicioRutina> buscarPorEjercicio(@Param("ejercicio") Ejercicio ejercicio);
 
+    @Query("select i from ImplementacionEjercicioRutina i where i.ejercicio = :ejercicio and i.rutina = :rutina and i.sets like concat('%', :series, '%') and i.repeticiones  like concat('%', :repeticiones, '%') and i.peso like concat('%', :peso, '%') and i.tiempo like concat('%', :tiempo, '%') and i.metros like concat('%', :metros, '%') and i.kilocalorias like concat('%', :kcal, '%')")
+    List<ImplementacionEjercicioRutina> filtrarImplementaciones(@Param("ejercicio") Ejercicio ejercicio, @Param("rutina") Rutina rutina, @Param("series") String series,
+    @Param("repeticiones") String repeticiones, @Param("peso") String peso, @Param("tiempo") String tiempo, @Param("metros") String metros, @Param("kcal") String kcal);
+
 }

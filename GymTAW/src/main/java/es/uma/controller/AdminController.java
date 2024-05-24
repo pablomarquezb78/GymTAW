@@ -138,14 +138,16 @@ public class AdminController extends BaseController {
             if(usuario.estaVacio()){
                 dir = "redirect:/admin/mostrarUsuarios";
             }else{
-                if(usuario.getRol() == null){
-                    model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
+                if(usuario.getRol() == null && usuario.getFechaNacimiento().isEmpty()){
+                    model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos()));
+                }else if (usuario.getRol() == null && !usuario.getFechaNacimiento().isEmpty()){
+                    model.addAttribute("usuarios", this.userRepository.filtrarUsuariosConFecha(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
                 }else{
                     model.addAttribute("usuarios", this.userRepository.filtrarUsuariosConRol(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
                 }
-                model.addAttribute("usuario", usuario);
                 dir = "admin/usuarios";
             }
+            model.addAttribute("usuario", usuario);
         } else {
             dir = "redirect:/";
         }
@@ -409,17 +411,18 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(ejercicioUI.estaVacio()){
-                dir = "redirect:/admin/mostrarUsuarios";
+                dir = "redirect:/admin/mostrarEjercicios";
             }else {
                 if (ejercicioUI.getIdTipo() == null) {
                     model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjercicios(ejercicioUI.getNombre(), ejercicioUI.getDescripcion()));
                 } else {
                     model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjerciciosConTipo(ejercicioUI.getNombre(), ejercicioUI.getDescripcion(), ejercicioUI.getIdTipo()));
                 }
+                dir = "admin/ejercicios";
             }
             model.addAttribute("ejercicio", ejercicioUI);
             model.addAttribute("tipos", this.tipoEjercicioRepository.findAll());
-            dir = "admin/ejercicios";
+
         } else {
             dir = "redirect:/";
         }
@@ -513,29 +516,35 @@ public class AdminController extends BaseController {
             dir = "admin/mostrarImplementaciones";
             Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
             List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
+            List<Rutina> rutinas = rutinaRepository.findAll();
             model.addAttribute("ejercicio", ejercicio);
             model.addAttribute("implementaciones", implementaciones);
+            model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", new Implementacion());
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
-    @GetMapping("/filtradoImplementaciones")
+    @PostMapping("/filtrarImplementaciones")
     public String doFiltradoImplementaciones(@RequestParam("id") Integer id, HttpSession session, Model model, @ModelAttribute Implementacion implementacion){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(implementacion.estaVacio()){
-                dir = "redirect:/admin/mostrarEjercicios";
+                dir = "redirect:/admin/verImplementacionesAsociadas?id="+id;
             }else{
-
+                Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
+                List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.filtrarImplementaciones(ejercicio, implementacion.getRutina(), implementacion.getSets(), implementacion.getRepeticiones(),
+                        implementacion.getPeso(), implementacion.getTiempo(), implementacion.getMetros(), implementacion.getKilocalorias());
+                List<Rutina> rutinas = rutinaRepository.findAll();
+                model.addAttribute("ejercicio", ejercicio);
+                model.addAttribute("rutinas", rutinas);
+                model.addAttribute("implementaciones", implementaciones);
+                model.addAttribute("implementacion", implementacion);
+                dir = "admin/mostrarImplementaciones";
             }
-            dir = "admin/mostrarImplementaciones";
-            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
-            List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
-            model.addAttribute("ejercicio", ejercicio);
-            model.addAttribute("implementaciones", implementaciones);
+
         } else {
             dir = "redirect:/";
         }
@@ -648,12 +657,12 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(platoUI.estaVacio()){
-                dir = "redirect:/admin/mostrarUsuarios";
+                dir = "redirect:/admin/mostrarPlatos";
             }else {
                 model.addAttribute("platos", this.platosRepository.filtrarPlatos(platoUI.getNombre(), platoUI.getTiempoDePreparacion(), platoUI.getReceta()));
+                dir = "admin/platos";
             }
             model.addAttribute("plato", platoUI);
-            dir = "admin/platos";
         } else {
             dir = "redirect:/";
         }
@@ -766,7 +775,6 @@ public class AdminController extends BaseController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return LocalDate.parse(fechaStr, formatter);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

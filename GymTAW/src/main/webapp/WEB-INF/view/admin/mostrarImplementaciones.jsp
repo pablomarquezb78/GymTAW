@@ -1,12 +1,16 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.Ejercicio" %>
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="es.uma.entity.Rutina" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<ImplementacionEjercicioRutina> implementaciones = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
     Ejercicio ejercicio = (Ejercicio) request.getAttribute("ejercicio");
+    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
+    String dir = "/admin/filtrarImplementaciones?id="+ejercicio.getId();
 %>
 
 <html>
@@ -50,19 +54,25 @@
         }
     %>
 </table>
-<a href="/admin/crearImplementacion?id=<%=ejercicio.getId()%>">Crear nueva implementacion</a>
+<a href="">Crear nueva implementacion</a>
 
-<form:form action="/admin/filtrarImplementaciones" method="post" modelAttribute="implementacion">
+<form:form action="<%=dir%>" method="post" modelAttribute="implementacion">
     <br>
-    <label>*Nombre:</label>
-    <form:input path="nombre" size="15"></form:input>
-    <label>*Apellidos: </label>
-    <form:input path="apellidos" size="50"></form:input>
+    <label>Rutina:</label>
+    <form:select path="rutina" items="${rutinas}" itemLabel="nombre" itemValue="id" ></form:select>
+    <label>Series: </label>
+    <form:input path="sets" size="50"></form:input>
+    <label>Repeticiones:</label>
+    <form:input path="repeticiones" size="10"></form:input>
     <br>
-    <label>*Fecha de nacimiento:</label>
-    <form:input path="fechaNacimiento" size="10"></form:input>
-    <label>*Rol:</label>
-    <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
+    <label>Peso:</label>
+    <form:input path="peso" size="10"></form:input>
+    <label>Tiempo:</label>
+    <form:input path="tiempo" size="10"></form:input>
+    <label>Metros:</label>
+    <form:input path="metros" size="10"></form:input>
+    <label>Kcal:</label>
+    <form:input path="kilocalorias" size="10"></form:input>
     <br>
     <form:button class="btn btn-success mt-3">Filtrar implementacion</form:button>
 </form:form>

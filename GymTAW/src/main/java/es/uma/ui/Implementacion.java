@@ -142,4 +142,9 @@ public class Implementacion {
     public void setRealizado(Byte realizado) {
         this.realizado = realizado;
     }
+
+    public boolean estaVacio(){
+        return this.getRutina().getNombre().isEmpty() && this.getSets().isEmpty() && this.getMetros().isEmpty() &&
+                this.getKilocalorias().isEmpty() && this.getRepeticiones().isEmpty() && this.getTiempo().isEmpty() && this.getPeso().isEmpty();
+    }
 }

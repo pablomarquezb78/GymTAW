@@ -61,14 +61,14 @@
 
 <form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario">
     <br>
-    <label>*Nombre:</label>
+    <label>Nombre:</label>
     <form:input path="nombre" size="15"></form:input>
-    <label>*Apellidos: </label>
+    <label>Apellidos: </label>
     <form:input path="apellidos" size="50"></form:input>
     <br>
-    <label>*Fecha de nacimiento:</label>
+    <label>Fecha de nacimiento:</label>
     <form:input path="fechaNacimiento" size="10"></form:input>
-    <label>*Rol:</label>
+    <label>Rol:</label>
     <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id"></form:radiobuttons>
     <br>
     <form:button class="btn btn-success mt-3">Filtrar usuario</form:button>

@@ -1,8 +1,6 @@
 package es.uma.dao;
 
-import es.uma.entity.Rutina;
 import es.uma.entity.User;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,8 +34,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.rol.id = 5 and u not in (select acd.dietista from AsignacionClienteDietista acd) and u not in :dietistas")
     List<User> dietistasNoAsociadosAlCliente(@Param("dietistas") List<User> dietistas);
 
+    @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%')")
+    List<User> filtrarUsuarios(@Param("nombre") String nombre, @Param("apellidos") String apellidos);
+
     @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.fechaNacimiento >= :fechaNacimiento")
-    List<User> filtrarUsuarios(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("fechaNacimiento")LocalDate fechaNacimiento);
+    List<User> filtrarUsuariosConFecha(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("fechaNacimiento") LocalDate localDate);
 
     @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.fechaNacimiento >= :fechaNacimiento and u.rol.id = :rol")
     List<User> filtrarUsuariosConRol(@Param("nombre") String nombre, @Param("apellidos") String apellidos,@Param("fechaNacimiento")LocalDate fechaNacimiento, @Param("rol") Integer rol);
