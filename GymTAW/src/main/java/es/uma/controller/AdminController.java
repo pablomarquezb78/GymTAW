@@ -207,6 +207,7 @@ public class AdminController extends BaseController {
         return dir;
     }
 
+
     @GetMapping("/editarUsuario")
     public String doEditarUsuario(@RequestParam("id") Integer id, HttpSession session, Usuario usuario, Model model){
         String dir;
@@ -392,7 +393,33 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/ejercicios";
             List<Ejercicio> ejercicios = this.ejercicioRepository.findAll();
+            List<TipoEjercicio> tipos = this.tipoEjercicioRepository.findAll();
             model.addAttribute("ejercicios", ejercicios);
+            model.addAttribute("tipos", tipos);
+            model.addAttribute("ejercicio", new EjercicioUI());
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/filtrarEjercicios")
+    public String doFiltrarEjercicios(Model model, HttpSession session, @ModelAttribute EjercicioUI ejercicioUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            if(ejercicioUI.estaVacio()){
+                dir = "redirect:/admin/mostrarUsuarios";
+            }else {
+                if (ejercicioUI.getIdTipo() == null) {
+                    model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjercicios(ejercicioUI.getNombre(), ejercicioUI.getDescripcion()));
+                } else {
+                    model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjerciciosConTipo(ejercicioUI.getNombre(), ejercicioUI.getDescripcion(), ejercicioUI.getIdTipo()));
+                }
+            }
+            model.addAttribute("ejercicio", ejercicioUI);
+            model.addAttribute("tipos", this.tipoEjercicioRepository.findAll());
+            dir = "admin/ejercicios";
         } else {
             dir = "redirect:/";
         }
@@ -488,11 +515,33 @@ public class AdminController extends BaseController {
             List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
             model.addAttribute("ejercicio", ejercicio);
             model.addAttribute("implementaciones", implementaciones);
+            model.addAttribute("implementacion", new Implementacion());
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
+    @GetMapping("/filtradoImplementaciones")
+    public String doFiltradoImplementaciones(@RequestParam("id") Integer id, HttpSession session, Model model, @ModelAttribute Implementacion implementacion){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            if(implementacion.estaVacio()){
+                dir = "redirect:/admin/mostrarEjercicios";
+            }else{
+
+            }
+            dir = "admin/mostrarImplementaciones";
+            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
+            List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
+            model.addAttribute("ejercicio", ejercicio);
+            model.addAttribute("implementaciones", implementaciones);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
 
     @GetMapping("/crearImplementacion")
     public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model){
@@ -585,7 +634,26 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/platos";
             List<Plato> platos = this.platosRepository.findAll();
+            model.addAttribute("plato", new PlatoUI());
             model.addAttribute("platos", platos);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/filtrarPlatos")
+    public String doFiltrarPlatos(Model model, HttpSession session, @ModelAttribute PlatoUI platoUI) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            if(platoUI.estaVacio()){
+                dir = "redirect:/admin/mostrarUsuarios";
+            }else {
+                model.addAttribute("platos", this.platosRepository.filtrarPlatos(platoUI.getNombre(), platoUI.getTiempoDePreparacion(), platoUI.getReceta()));
+            }
+            model.addAttribute("plato", platoUI);
+            dir = "admin/platos";
         } else {
             dir = "redirect:/";
         }

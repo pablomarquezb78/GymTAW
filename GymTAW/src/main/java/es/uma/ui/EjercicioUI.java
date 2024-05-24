@@ -58,4 +58,8 @@ public class EjercicioUI {
     public void setTrainerEjercicio(String trainerEjercicio) {
         this.trainerEjercicio = trainerEjercicio;
     }
+
+    public boolean estaVacio(){
+        return (this.getNombre().isEmpty() && this.getDescripcion().isEmpty()  && this.getIdTipo() == null);
+    }
 }

@@ -48,4 +48,8 @@ public class PlatoUI {
     public void setEnlaceReceta(String enlaceReceta) {
         this.enlaceReceta = enlaceReceta;
     }
+
+    public boolean estaVacio(){
+        return this.getNombre().isEmpty() && this.getTiempoDePreparacion().isEmpty() && this.getReceta().isEmpty();
+    }
 }

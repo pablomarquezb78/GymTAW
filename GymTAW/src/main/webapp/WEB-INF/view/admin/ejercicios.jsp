@@ -1,11 +1,13 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.Ejercicio" %>
-<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
+    List<TipoEjercicio> tipos = (List<TipoEjercicio>) request.getAttribute("tipos");
 %>
 
 <html>
@@ -50,5 +52,17 @@
 %>
     </table>
 <a href="/admin/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+
+<form:form action="/admin/filtrarEjercicios" method="post" modelAttribute="ejercicio">
+    <br>
+    <label>Nombre:</label>
+    <form:input path="nombre" size="15"></form:input>
+    <label>Descripcion:</label>
+    <form:input path="descripcion" size="10"></form:input>
+    <label>Tipo:</label>
+    <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
+    <br>
+    <form:button class="btn btn-success mt-3">Filtrar ejercicio</form:button>
+</form:form>
 </body>
 </html>

@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.Plato" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -49,5 +49,17 @@
     %>
 </table>
 <td><a href="/admin/crearNuevoPlato"  class="btn btn-success mt-3">Crear nuevo plato</a></td>
+
+<form:form action="/admin/filtrarPlatos" method="post" modelAttribute="plato">
+    <br>
+    <label>Nombre:</label>
+    <form:input path="nombre" size="15"></form:input>
+    <label>Tiempo:</label>
+    <form:input path="tiempoDePreparacion" size="10"></form:input>
+    <label>Receta:</label>
+    <form:input path="receta" size="30"></form:input>
+    <br>
+    <form:button class="btn btn-success mt-3">Filtrar plato</form:button>
+</form:form>
 </body>
 </html>
