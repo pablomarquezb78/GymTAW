@@ -51,9 +51,7 @@ public class LoginController extends  BaseController {
                     webRedirect = "redirect:/entrenamientos/";
                     break;
                 case dietista:
-                    model.addAttribute("panel", "main");
-                    model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
-                    webRedirect = "redirect:/mostrarPlato";
+                    webRedirect = "redirect:/dietista/platos";
                     break;
                 default:
                     webRedirect = "loginTest";
@@ -93,9 +91,7 @@ public class LoginController extends  BaseController {
                     webRedirect = "redirect:/entrenamientos/";
                     break;
                 case dietista:
-                    model.addAttribute("panel", "main");
-                    model.addAttribute("listaPlatos", platosRepository.getPlatosFromDietista(userEntity));
-                    webRedirect = "redirect:/dietista/mostrarPlato";
+                    webRedirect = "redirect:/dietista/platos";
                     break;
                 default:
                     webRedirect = "loginTest";

@@ -14,6 +14,7 @@ public class Usuario {
     protected Integer peso;
     protected Integer altura;
     protected String fechaNacimiento;
+    protected String descripcionPersonal;
     protected Integer rol;
 
     public Integer getId() {
@@ -98,6 +99,14 @@ public class Usuario {
     }
     public boolean estaVacio(){
         return (this.getNombre().isEmpty() && this.getApellidos().isEmpty()  && this.getRol() == null && this.getFechaNacimiento().isEmpty());
+    }
+
+    public String getDescripcionPersonal() {
+        return descripcionPersonal;
+    }
+
+    public void setDescripcionPersonal(String descripcionPersonal) {
+        this.descripcionPersonal = descripcionPersonal;
     }
 
 

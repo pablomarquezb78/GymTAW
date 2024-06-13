@@ -5,7 +5,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String panel = (String) request.getAttribute("panel");
     Plato plato = (Plato) request.getAttribute("selectedPlato");
     String nombrePlato;
     String recetaPlato;
@@ -38,95 +37,105 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav nav-fill w-100">
-            <li class="nav-item active">
-                <a class="nav-link">Platos</a>
+            <li class="nav-item active text-weight-bold">
+                <a class="nav-link" href="/dietista/">Platos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Perfil</a>
+                <a class="nav-link" href="/dietista/mostrarPerfil">Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cerrarSesion">Cerrar sesión</a>
             </li>
         </ul>
     </div>
 </nav>
 
-<%
-    switch (panel)
-    {
-        case "main":
-
-%>
-
-<div class="row">
-    <div class="col-sm-4">
+<div class="row justify-content-center">
+    <div class="col-sm-4 justify-content-center ">
         <h4>Platos:</h4>
-    </div>
-    <div class="col-sm-8">
-        <h4>Nombre: <%= nombrePlato %></h4>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-4">
-        <%-- Hueco en blanco --%>
-    </div>
-    <div class="col-sm-4">
-        <h6>Ingredientes:</h6>
-    </div>
-    <div class="col-sm-4">
-        <h6>Preparación:</h6>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-4">
-        <form action="mostrarPlato" method="get">
-        <select name="platosDisplay" size="<%= listaPlatos.size() %>">
+        <form action="/dietista/mostrarPlato" method="post">
+            <select name="platosDisplay" size="<%= listaPlatos.size() %>">
+                <%
+                    for(Plato p : listaPlatos) {
+                        String selected = "";
+                        if(p.equals(plato))
+                        {
+                            selected = "selected";
+                        }
+                %>
+                <option value="<%= p.getId() %>" <%=selected%>><%= p.getNombre() %></option>
+                <%
+                    }
+                %>
+            </select> <br/> <br/>
             <%
-                for(Plato p : listaPlatos) {
+                if (!listaPlatos.isEmpty())
+                {
             %>
-                <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
+            <button>Mostrar plato</button>
             <%
                 }
             %>
-        </select> <br>
+        </form>
+        <form action="/dietista/crearPlato" method="get">
+            <button>Crear plato</button>
+        </form>
         <%
-            if (!listaPlatos.isEmpty())
-            {
+            if(plato != null) {
         %>
-        <button>Mostrar</button>
+            <form action="/dietista/editarPlato" method="get">
+                <input type="hidden" name="platoId" value="<%=plato.getId()%>">
+                <button>Editar plato: <%=plato.getNombre()%></button>
+            </form>
+            <form action="/dietista/borrarPlato" method="post">
+                <input type="hidden" name="platoId" value="<%=plato.getId()%>">
+                <button>Borrar plato: <%=plato.getNombre()%></button>
+            </form>
         <%
             }
         %>
-        </form>
     </div>
-    <div class="col-sm-4">
-        <ul>
-            <%
-                for (Ingrediente i : listaIngredientes)
-                {
-            %>
-                <li>
-                    <%= i.getNombre() %>
-                </li>
-            <%
-                }
-            %>
-        </ul>
-        <h6>Tiempo de preparacion: <%= tiempoPlato %></h6>
-    </div>
-    <div class="col-sm-4">
-        <article>
-            <span class="border border-2 rounded-1">
-                <%= recetaPlato %>
-            </span>
-        </article>
+    <div class="col-sm-8 justify-content-center ">
+        <%
+            if(plato != null) {
+        %>
+        <h4>Nombre: <%= nombrePlato %></h4>
+        <div class="row justify-content-left">
+            <div class="col-sm-4 justify-content-center ">
+                <h5>Ingredientes:</h5>
+                <ul>
+                    <%
+                        for (Ingrediente i : listaIngredientes)
+                        {
+                    %>
+                    <li>
+                        <%= i.getNombre() %>
+                    </li>
+                    <%
+                        }
+                    %>
+                </ul>
+                <h5>Tiempo de preparacion: <%= tiempoPlato %></h5>
+            </div>
+            <div class="col-sm-4 justify-content-center ">
+                <h5>Preparación:</h5>
+                <article>
+                    <span class="border border-2 rounded-1">
+                        <%= recetaPlato %>
+                    </span>
+                </article>
+                <h5>Video Receta:</h5> <br/>
+                <iframe width="560" height="315" src="<%=plato.getEnlaceReceta()%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        <%
+            }
+        %>
+        </div>
     </div>
 </div>
-
-<%
-            break;
-    }
-%>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
