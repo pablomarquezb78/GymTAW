@@ -27,7 +27,7 @@
                 <a class="nav-link" href="/dietista/">Platos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Clientes</a>
+                <a class="nav-link" href="/dietista/mostrarClientes">Clientes</a>
             </li>
             <li class="nav-item active text-weight-bold">
                 <a class="nav-link" href="/dietista/mostrarPerfil">Perfil</a>

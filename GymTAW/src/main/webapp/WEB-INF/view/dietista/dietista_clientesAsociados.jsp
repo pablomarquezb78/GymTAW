@@ -5,15 +5,16 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="es.uma.ui.PlatoDietistaUI" %>
 <%@ page import="es.uma.entity.User" %>
+<%@ page import="java.time.Year" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User dietista = (User) request.getAttribute("dietista");
+    List<User> clientes = (List<User>) request.getAttribute("clientes");
 %>
 
 <html>
 <head>
-    <title>Dietista perfil</title>
+    <title>Dietista clientes asociados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
@@ -39,33 +40,31 @@
 
 <div class="row justify-content-center">
     <div class="col-sm-8 justify-content-center ">
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Nombre:</b> <%=dietista.getNombre()%>
-            </div>
-            <div class="col justify-content-center">
-                <b>Apellidos:</b> <%=dietista.getApellidos()%>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Altura:</b> <%=dietista.getAltura()%>
-            </div>
-            <div class="col justify-content-center">
-                <b>Fecha de Nacimiento:</b> <%=dietista.getFechaNacimiento()%>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Peso:</b> <%=dietista.getPeso()%>
-            </div>
-            <div class="col justify-content-center">
-                <b>Descripcion:</b> <%=dietista.getDescripcionPersonal()%>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <a href="/dietista/editarPerfil"> Editar perfil </a>
-        </div>
+        <h1>Clientes:</h1>
+        <table>
+            <tr>
+                <th>NOMBRE</th>
+                <th>EDAD</th>
+                <th>PESO</th>
+                <th>ALTURA</th>
+                <th></th>
+            </tr>
+            <%
+                for(User cliente : clientes)
+                {
+                    int anyoActual = Year.now().getValue();
+            %>
+                <tr>
+                    <td><%=cliente.getNombre()%></td>
+                    <td><%=anyoActual - cliente.getFechaNacimiento().getYear()%></td>
+                    <td><%=cliente.getPeso()%></td>
+                    <td><%=cliente.getAltura()%></td>
+                    <td><a href="/dietista/cliente?id=<%=cliente.getId()%>">Acceder al cliente</a></td>
+                </tr>
+            <%
+                }
+            %>
+        </table>
     </div>
 </div>
 

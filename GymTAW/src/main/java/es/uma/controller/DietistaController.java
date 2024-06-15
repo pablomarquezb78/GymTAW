@@ -1,26 +1,40 @@
 package es.uma.controller;
 
-import es.uma.dao.UserRepository;
-import es.uma.entity.User;
-import es.uma.entity.UserRol;
+import es.uma.dao.*;
+import es.uma.entity.*;
+import es.uma.ui.ComidaUI;
+import es.uma.ui.DiaComida;
 import es.uma.ui.Usuario;
+import org.antlr.v4.runtime.misc.Pair;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.time.*;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dietista")
 public class DietistaController extends BaseController{
 
     private final UserRepository userRepository;
+    private final TipoComidaRepository tipoComidaRepository;
+    private final DiaDietaRepository diaDietaRepository;
+    private final ComidaRepository comidaRepository;
+    private final CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
+    private final PlatosRepository platosRepository;
 
-    public DietistaController(UserRepository userRepository) {
+    public DietistaController(UserRepository userRepository, TipoComidaRepository tipoComidaRepository, DiaDietaRepository diaDietaRepository, ComidaRepository comidaRepository, CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository, PlatosRepository platosRepository) {
         super();
         this.userRepository = userRepository;
+        this.tipoComidaRepository = tipoComidaRepository;
+        this.diaDietaRepository = diaDietaRepository;
+        this.comidaRepository = comidaRepository;
+        this.cantidadIngredientePlatoComidaRepository = cantidadIngredientePlatoComidaRepository;
+        this.platosRepository = platosRepository;
     }
 
     @GetMapping("/mostrarPerfil")
@@ -30,6 +44,7 @@ public class DietistaController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
+            if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
             User dietista = (User) session.getAttribute("user");
             model.addAttribute("dietista", dietista);
             dir = "dietista/dietista_perfil";
@@ -84,5 +99,168 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+
+    @GetMapping("/mostrarClientes")
+    public String doLoadClientes(HttpSession session,
+                                Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
+            User dietista = (User) session.getAttribute("user");
+            List<User> clientes = userRepository.clientesAsociadosConDietista(dietista);
+            model.addAttribute("clientes", clientes);
+            dir = "dietista/dietista_clientesAsociados";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    //ToDo: Hacer el cargado de platos correspondiente a la fecha con un metodo.
+    //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato
+        private Pair<List<LocalDate>,Map<String, List<Plato>>> obtenerTablaComidas(User cliente, User dietista, DiaComida diaComida)
+    {
+
+        Map<String, List<Plato>> dataMap = new TreeMap<>();
+        List<LocalDate> listaFechas = new ArrayList<>();
+        List<TipoComida> tiposComida = tipoComidaRepository.findAll();
+
+        for (int i = 1; i<=7; ++i) //Sabemos que vamos a mostrar los dias de 1 a los 7 siguientes
+        {
+            LocalDate fecha;
+            boolean leapYear = Year.isLeap(diaComida.getYear());
+            if(diaComida.getDay() + i - 1 <= Month.of(diaComida.getMonth()).length(leapYear)) //Caso normal en el que sumar dias no supone cambiar de mes
+            {
+                fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay() + i - 1);
+            } else if (diaComida.getMonth() < 12) //Caso en el que sumar dias cambia de mes
+            {
+                int dayOfMonth = (diaComida.getDay() + i - 1) % Month.of(diaComida.getMonth()).length(leapYear);
+                fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth() + 1 , dayOfMonth);
+            } else //Caso en el que sumar dias implica cambiar de año
+            {
+                int dayOfMonth = (diaComida.getDay() + i - 1) % Month.of(diaComida.getMonth()).length(leapYear);
+                fecha = LocalDate.of(diaComida.getYear() + 1, 1, dayOfMonth);
+            }
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha); //Obtenemos el dia de la dieta (columna de la tabla)
+            listaFechas.add(fecha);
+            List<Comida> comidasDelDia = comidaRepository.findByDiaDieta(diaDieta);
+            int j = 1; //Sabemos que alojamos 5 tipos de comidas al dia
+            for(TipoComida tipoComida : tiposComida) //Recorremos cada fila de la columna
+            {
+                List<Plato> listaPlatosComida = new ArrayList<>();
+                Comida comida = null;
+                for(Comida c : comidasDelDia) //En caso de que haya alguna comida asignada a ese tramo de comida lo guardamos
+                {
+                    if(c.getTipoComida().equals(tipoComida)) comida = c;
+                }
+                if (comida != null)
+                {
+                    //Como sabemos que esa comida existe sacamos los platos a mostrar
+                    listaPlatosComida = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida);
+                }
+                String key = "Dia" + i + "Comida" + j;
+                //Si la lista de platos esta empty se muestra un mensaje en la tabla
+                //Si la lista tiene datos se muestran los datos
+                dataMap.put(key, listaPlatosComida);
+                ++j;
+            }
+        }
+        Pair<List<LocalDate>,Map<String, List<Plato>>> par = new Pair<>(listaFechas, dataMap);
+        return par;
+    }
+
+    @GetMapping("/cliente")
+    public String doShowCliente(@RequestParam("id") Integer clienteId, HttpSession session,
+                                 Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = userRepository.findById(clienteId).orElse(null);
+            session.setAttribute("clienteSeleccionado", cliente);
+            User dietista = (User) session.getAttribute("user");
+            List<TipoComida> tiposDeComida = tipoComidaRepository.findAll();
+            DiaComida diaComida = new DiaComida();
+            diaComida.setYear(Year.now().getValue());
+            diaComida.setMonth(YearMonth.now().getMonth().getValue());
+            diaComida.setDay(MonthDay.now().getDayOfMonth());
+            LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            session.setAttribute("diaDieta", diaDieta);
+            Pair<List<LocalDate>,Map<String, List<Plato>>> par = obtenerTablaComidas(cliente, dietista, diaComida);
+            List<LocalDate> listaFechas = par.a;
+            Map<String, List<Plato>> tablaComidas = par.b;
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("tiposDeComida", tiposDeComida);
+            model.addAttribute("diaComida", diaComida);
+            model.addAttribute("listaFechas", listaFechas);
+            model.addAttribute("tablaComidas", tablaComidas);
+            dir = "dietista/dietista_mostrarCliente";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/setFechaCliente")
+    public String doShowClienteAlterDate(@ModelAttribute("diaComida") DiaComida diaComida, HttpSession session,
+                                 Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = (User) session.getAttribute("clienteSeleccionado");
+            User dietista = (User) session.getAttribute("user");
+            LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            List<TipoComida> tiposDeComida = tipoComidaRepository.findAll();
+            Pair<List<LocalDate>,Map<String, List<Plato>>> par = obtenerTablaComidas(cliente, dietista, diaComida);
+            List<LocalDate> listaFechas = par.a;
+            Map<String, List<Plato>> tablaComidas = par.b;
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("tiposDeComida", tiposDeComida);
+            session.setAttribute("diaDieta", diaDieta);
+            model.addAttribute("listaFechas", listaFechas);
+            model.addAttribute("tablaComidas", tablaComidas);
+            dir = "dietista/dietista_mostrarCliente";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/selectComidaCliente")
+    public String doShowComidaCliente(@ModelAttribute("diaComida") DiaComida diaComida, HttpSession session,
+                                         Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = (User) session.getAttribute("clienteSeleccionado");
+            User dietista = (User) session.getAttribute("user");
+            LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            TipoComida selectedComida = diaComida.getTipoComida();
+            Comida comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida).getFirst();
+            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+
+            ComidaUI comidaUI = new ComidaUI();
+
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("fecha", fecha);
+            model.addAttribute("selectedComida", selectedComida);
+
+            model.addAttribute("platosDisponibles", platosDisponibles);
+            dir = "dietista/dietista_mostrarCliente";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+
+
 
 }
