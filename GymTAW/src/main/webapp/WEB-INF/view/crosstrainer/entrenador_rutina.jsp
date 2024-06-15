@@ -40,7 +40,7 @@
             <form action="/entrenamientos/borrarimplementacion" method="post">
                 <input type="hidden" name="id" value="<%=imp.getId()%>">
                 <input type="hidden" name="iddia" value="<%=iddia%>">
-                <button type="submit">Quitar</button>
+                <button type="submit">Borrar</button>
             </form>
         </td>
     </tr>

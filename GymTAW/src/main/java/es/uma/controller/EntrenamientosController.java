@@ -83,14 +83,14 @@ public class EntrenamientosController extends BaseController{
     public String doCrearRutina(@RequestParam("idrutina") Integer idrutina,Model model){
         String strTo = "/crosstrainer/entrenador_crear_rutina";
 
-        Rutina r = rutinaRepository.getById(idrutina);
+        Rutina rutina = rutinaRepository.getById(idrutina);
 
-        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(r);
+        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(rutina);
         if(lista==null){
             lista = new ArrayList<>();
         }
 
-        model.addAttribute("idrutina",idrutina);
+        model.addAttribute("rutina",rutina);
         model.addAttribute("implementaciones",lista);
 
         return strTo;
@@ -115,6 +115,25 @@ public class EntrenamientosController extends BaseController{
             }
 
             this.implementacionEjercicioRutinaRepository.save(imp);
+        }
+
+
+        return strTo;
+    }
+
+    @PostMapping("/cambiarnombrerutina")
+    public String doCambiarNombreRutina(@RequestParam("nombre") String nombre,@RequestParam("idrutina") Integer idrutina,
+                                               Model model,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + idrutina;
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            if(nombre!=""){
+                Rutina rutina = rutinaRepository.getById(idrutina);
+                rutina.setNombre(nombre);
+                rutinaRepository.save(rutina);
+            }
         }
 
 

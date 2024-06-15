@@ -1,9 +1,10 @@
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.dao.EjercicioRepository" %>
+<%@ page import="es.uma.entity.Rutina" %>
 <%
     List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    Integer idrutina = (Integer) request.getAttribute("idrutina");
+    Rutina rutina = (Rutina) request.getAttribute("rutina");
 %>
 
 
@@ -14,14 +15,24 @@
 </head>
 <body>
 <h1>NUEVA RUTINA</h1>
+
+
+<form action="/entrenamientos/cambiarnombrerutina" method="post">
+
+<input type="hidden" name="idrutina" value="<%=rutina.getId()%>">
+Nombre: <input type="text" name="nombre" value="<%=rutina.getNombre()%>" size="40">
+<button>Cambiar Nombre</button>
+
+</form>
+
 <table border="1">
     <tr>
-        <th>Ejercicio</th>
-        <th>Sets</th>
-        <th>Repeticiones</th>
-        <th>Peso</th>
-        <th>Metros</th>
-        <th>Tiempo</th>
+        <th> Ejercicio </th>
+        <th> Sets </th>
+        <th> Repeticiones </th>
+        <th> Peso </th>
+        <th> Metros </th>
+        <th> Tiempo </th>
         <th></th>
     </tr>
 
@@ -38,7 +49,7 @@
         <td>
             <form action="/entrenamientos/borrarimplementacionderutina" method="post">
                 <input type="hidden" name="id" value="<%=imp.getId()%>">
-                <input type="hidden" name="idrutina" value="<%=idrutina%>">
+                <input type="hidden" name="idrutina" value="<%=rutina.getId()%>">
                 <button type="submit">Quitar</button>
             </form>
         </td>
@@ -51,7 +62,7 @@
 
 <form action="/entrenamientos/crearimplementacionrutina" method="get">
     <input type="hidden" name="id" value="<%=-1%>">
-    <input type="hidden" name="idrutina" value="<%=idrutina%>">
+    <input type="hidden" name="idrutina" value="<%=rutina.getId()%>">
     <button type="submit">Anadir Ejercicio</button>
 </form>
 
