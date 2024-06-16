@@ -6,6 +6,7 @@ import es.uma.entity.*;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
+import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -357,6 +358,43 @@ public class EntrenamientosController extends BaseController{
         implementacion.setMetros(imp.getMetros());
     }
 
+    private void setUser(Usuario usuario,User user){
+
+        usuario.setId(user.getId());
+        usuario.setUsername(user.getUsername());
+        usuario.setNombre(user.getNombre());
+        usuario.setApellidos(user.getApellidos());
+        usuario.setTelefono(user.getTelefono());
+        usuario.setPeso(user.getPeso());
+        usuario.setAltura(user.getAltura());
+        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
+        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
+
+    }
+
+    @GetMapping("/verperfil")
+    public String doVerPerfil(HttpSession session,Model model){
+
+        String strTo = "/crosstrainer/perfil";
+
+        if(!estaAutenticado(session)) {
+            strTo = "redirect:/";
+        }else {
+
+            User user = (User) session.getAttribute("user");
+            Usuario usuario = new Usuario();
+
+            setUser(usuario,user);
+
+            model.addAttribute("usuario",usuario);
+
+        }
+
+
+
+        return strTo;
+    }
+
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
                                          Model model,HttpSession sesion){
@@ -402,7 +440,6 @@ public class EntrenamientosController extends BaseController{
             //model.addAttribute("imp", imp);
 
            implementacionEjercicioRutinaRepository.delete(imp);
-
         }
 
 
