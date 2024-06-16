@@ -18,8 +18,8 @@
     TipoComida selectedComida = (TipoComida) request.getAttribute("selectedComida");
     List<Plato> platosDisponibles = (List<Plato>) request.getAttribute("platosDisponibles");
     ComidaUI comidaUI = (ComidaUI) request.getAttribute("comidaUI");
-    List<Plato> listaPlatosComida = comidaUI.getListaPlatosComida();
-
+    List<Plato> listaPlatosComidaOut = new ArrayList<>();
+    listaPlatosComidaOut.addAll(comidaUI.getListaPlatosComida());
 %>
 
 <html>
@@ -52,34 +52,44 @@
     <div class="col-sm-10 justify-content-center ">
         <div class="row justify-content-center">
             <div class="col justify-content-center">
-                <h1>Fecha: <%=fecha.getDayOfMonth()%> - <%=fecha.getMonthValue()%> - <%=fecha.getYear()%></h1>
+                <h2>Fecha: <%=fecha.getDayOfMonth()%> - <%=fecha.getMonthValue()%> - <%=fecha.getYear()%></h2>
             </div>
             <div class="col justify-content-center">
-                <h1>Comida: <%=selectedComida.getComidaDelDia()%></h1>
+                <h2>Comida: <%=selectedComida.getComidaDelDia()%></h2>
             </div>
             <div class="col justify-content-center">
-                <a href="/dietista/accederFeedbackComida?comidaID=<%=selectedComida.getId()%>">Comentarios del cliente</a>
+                <h2><a href="/dietista/accederFeedbackComida?comidaID=<%=selectedComida.getId()%>">Comentarios del cliente</a></h2>
             </div>
         </div>
+        <br/>
         <div class="row justify-content-center">
             <div class="col justify-content-center">
-                <h1>Cliente: <%=cliente.getNombre()%> <%=cliente.getApellidos()%></h1> <br/>
+                <h4>Cliente: <%=cliente.getNombre()%> <%=cliente.getApellidos()%></h4>
                 Edad: <%=Year.now().getValue() - cliente.getFechaNacimiento().getYear()%> <br/>
                 Peso: <%=cliente.getPeso()%> <br/>
                 Altura: <%=cliente.getAltura()%> <br/>
             </div>
             <div class="col justify-content-center">
-                <h1>Platos Establecidos:</h1> <br/>
-                <form:form method="post" action="/dietista/mostrarPlatoComida" modelAttribute="ComidaUI">
+                <h4>Platos Establecidos:</h4>
+                <form:form method="post" action="/dietista/mostrarPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
-                    <form:select path="selectedPlato" items="${listaPlatosComida}" itemValue="id" itemLabel="nombre" size="5"/>
+                    <form:select path="selectedPlato" size="5">
+                        <%
+                            for(Plato p : listaPlatosComidaOut)
+                            {
+                        %>
+                        <form:option value="<%=p.getId()%>" label="<%=p.getNombre()%>"></form:option>
+                        <%
+                            }
+                        %>
+                    </form:select> <br/>
                     <form:button>Mostrar plato</form:button>
                 </form:form>
                 <%
                     if(comidaUI.getSelectedPlato() != null)
                     {
                 %>
-                <form:form method="post" action="/dietista/eliminarPlatoComida" modelAttribute="ComidaUI">
+                <form:form method="post" action="/dietista/eliminarPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
                     <form:hidden path="selectedPlato"/>
                     <form:button>Eliminar de la comida: <%=comidaUI.getSelectedPlato().getNombre()%></form:button>
@@ -88,16 +98,17 @@
                     }
                 %>
             </div>
+            <%--
             <div class="col justify-content-center">
                 <%
                     if(comidaUI.getSelectedPlato() == null)
                     {
                 %>
-                    <h1>Cantidades (selecciona un plato):</h1> <br/>
+                    <h4>Cantidades (selecciona un plato):</h4> <br/>
                 <%
                     } else {
                 %>
-                <h1>Cantidades (<%=comidaUI.getSelectedPlato().getNombre()%>):</h1> <br/>
+                <h4>Cantidades (<%=comidaUI.getSelectedPlato().getNombre()%>):</h4> <br/>
                 <table>
                     <tr>
                         <th>Ingrediente</th>
@@ -120,7 +131,7 @@
                     }
                 %>
                 </table>
-                <form:form method="post" action="/dietista/addIngredientePlatoComida" modelAttribute="ComidaUI">
+                <form:form method="post" action="/dietista/addIngredientePlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
                     <form:hidden path="selectedPlato"/>
                     <%
@@ -131,14 +142,16 @@
                     <%
                         }
                     %>
+                    <br/>
                     <form:button>Añadir ingrediente</form:button>
                 </form:form>
             </div>
+            --%>
             <div class="col justify-content-center">
-                <h1>Platos disponibles a añadir:</h1> <br/>
-                <form:form method="post" action="/dietista/addPlatoToPlatoComida" modelAttribute="ComidaUI">
+                <h4>Platos disponibles a añadir:</h4>
+                <form:form method="post" action="/dietista/addPlatoToPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
-                    <form:select path="addingPlato" items="${platosDisponibles}" itemValue="id" itemLabel="nombre" size="5"></form:select>
+                    <form:select path="addingPlato" items="${platosDisponibles}" itemValue="id" itemLabel="nombre" size="5"></form:select> <br/>
                     <form:button>Añadir plato seleccionado</form:button>
                 </form:form>
             </div>

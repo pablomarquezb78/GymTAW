@@ -11,7 +11,7 @@ public class ComidaUI {
     protected List<Plato> listaPlatosComida;
     protected List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado;
     protected Plato selectedPlato;
-    protected CantidadIngredientePlatoComida editingIngrediente;
+    protected CantidadIngredientePlatoComida editingCantidadIngrediente;
     protected Plato addingPlato;
 
     public List<Plato> getListaPlatosComida() {
@@ -38,12 +38,12 @@ public class ComidaUI {
         this.selectedPlato = selectedPlato;
     }
 
-    public CantidadIngredientePlatoComida getEditingIngrediente() {
-        return editingIngrediente;
+    public CantidadIngredientePlatoComida getEditingCantidadIngrediente() {
+        return editingCantidadIngrediente;
     }
 
-    public void setEditingIngrediente(CantidadIngredientePlatoComida editingIngrediente) {
-        this.editingIngrediente = editingIngrediente;
+    public void setEditingCantidadIngrediente(CantidadIngredientePlatoComida editingCantidadIngrediente) {
+        this.editingCantidadIngrediente = editingCantidadIngrediente;
     }
 
     public Plato getAddingPlato() {

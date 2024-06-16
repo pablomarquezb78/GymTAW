@@ -26,8 +26,10 @@ public class DietistaController extends BaseController{
     private final ComidaRepository comidaRepository;
     private final CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
     private final PlatosRepository platosRepository;
+    private final TipoCantidadRepository tipoCantidadRepository;
+    private final AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
 
-    public DietistaController(UserRepository userRepository, TipoComidaRepository tipoComidaRepository, DiaDietaRepository diaDietaRepository, ComidaRepository comidaRepository, CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository, PlatosRepository platosRepository) {
+    public DietistaController(UserRepository userRepository, TipoComidaRepository tipoComidaRepository, DiaDietaRepository diaDietaRepository, ComidaRepository comidaRepository, CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository, PlatosRepository platosRepository, TipoCantidadRepository tipoCantidadRepository, AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy) {
         super();
         this.userRepository = userRepository;
         this.tipoComidaRepository = tipoComidaRepository;
@@ -35,6 +37,8 @@ public class DietistaController extends BaseController{
         this.comidaRepository = comidaRepository;
         this.cantidadIngredientePlatoComidaRepository = cantidadIngredientePlatoComidaRepository;
         this.platosRepository = platosRepository;
+        this.tipoCantidadRepository = tipoCantidadRepository;
+        this.asignacionPlatoIngredienteDietistacreadorRepositoy = asignacionPlatoIngredienteDietistacreadorRepositoy;
     }
 
     @GetMapping("/mostrarPerfil")
@@ -242,25 +246,172 @@ public class DietistaController extends BaseController{
             User dietista = (User) session.getAttribute("user");
             LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
             DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            if(diaDieta == null)
+            {
+                diaDieta = new DiaDieta();
+                diaDieta.setCliente(cliente);
+                diaDieta.setDietista(dietista);
+                diaDieta.setFecha(fecha);
+                diaDietaRepository.save(diaDieta);
+            }
             TipoComida selectedComida = diaComida.getTipoComida();
-            Comida comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida).getFirst();
             List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
 
+            session.setAttribute("fecha", fecha);
+            session.setAttribute("selectedComida", selectedComida);
+
             ComidaUI comidaUI = new ComidaUI();
+            ArrayList<Plato> platosComida = new ArrayList<>();
+            List<Comida> comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
+            if(!comida.isEmpty()) {
+                platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst()));
+            } else {
+                Comida comidaAdd = new Comida();
+                comidaAdd.setTipoComida(selectedComida);
+                comidaAdd.setDiaDieta(diaDieta);
+                comidaRepository.save(comidaAdd);
+            }
+            comidaUI.setListaPlatosComida(platosComida);
+            ArrayList<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = new ArrayList<>();
+            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+            comidaUI.setSelectedPlato(null);
 
             model.addAttribute("cliente", cliente);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
-
             model.addAttribute("platosDisponibles", platosDisponibles);
-            dir = "dietista/dietista_mostrarCliente";
+            model.addAttribute("comidaUI", comidaUI);
+
+            dir = "dietista/dietista_comida";
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
 
+    @PostMapping("/mostrarPlatoComida")
+    public String doShowPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
+                                      Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = (User) session.getAttribute("clienteSeleccionado");
+            User dietista = (User) session.getAttribute("user");
+            LocalDate fecha = (LocalDate) session.getAttribute("fecha");
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
+            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+
+            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.buscarPorPlato(comidaUI.getSelectedPlato().getId());
+            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("fecha", fecha);
+            model.addAttribute("selectedComida", selectedComida);
+            model.addAttribute("platosDisponibles", platosDisponibles);
+            model.addAttribute("comidaUI", comidaUI);
+
+            dir = "dietista/dietista_comida";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/addPlatoToPlatoComida")
+    public String doAddPlatoToPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
+                                           Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = (User) session.getAttribute("clienteSeleccionado");
+            User dietista = (User) session.getAttribute("user");
+            LocalDate fecha = (LocalDate) session.getAttribute("fecha");
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
+            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+
+            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
+            Plato addingPlato = comidaUI.getAddingPlato();
+            List<Plato> platosComida = comidaUI.getListaPlatosComida();
+            platosComida.add(addingPlato);
+            comidaUI.setListaPlatosComida(platosComida);
+
+            List<Ingrediente> ingredientesPlato = platosRepository.getIngredientesLinkedToPlato(addingPlato);
+            for (Ingrediente i : ingredientesPlato)
+            {
+                CantidadIngredientePlatoComida cantidadIngredientePlatoComida = new CantidadIngredientePlatoComida();
+                cantidadIngredientePlatoComida.setPlato(addingPlato);
+                cantidadIngredientePlatoComida.setComida(comidaActual.getFirst());
+                cantidadIngredientePlatoComida.setIngrediente(i);
+                cantidadIngredientePlatoComida.setCantidad(0);
+                List<TipoCantidad> tipoCantidadList = tipoCantidadRepository.findAll();
+                cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadList.getFirst());
+                cantidadIngredientePlatoComidaRepository.save(cantidadIngredientePlatoComida);
+            }
 
 
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("fecha", fecha);
+            model.addAttribute("selectedComida", selectedComida);
+            model.addAttribute("platosDisponibles", platosDisponibles);
+            model.addAttribute("comidaUI", comidaUI);
+
+            dir = "dietista/dietista_comida";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/eliminarPlatoComida")
+    public String doDeletePlatoFromPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
+                                                 Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(rol))
+        {
+            User cliente = (User) session.getAttribute("clienteSeleccionado");
+            User dietista = (User) session.getAttribute("user");
+            LocalDate fecha = (LocalDate) session.getAttribute("fecha");
+            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
+            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+
+            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
+            Plato selectedPlato = comidaUI.getSelectedPlato();
+            List<Plato> platosComida = comidaUI.getListaPlatosComida();
+            List<Plato> platosRemove = new ArrayList<>();
+            for(Plato p : platosComida)
+            {
+                if(p.equals(selectedPlato))
+                {
+                    platosRemove.add(p);
+                }
+            }
+            platosComida.removeAll(platosRemove);
+            comidaUI.setListaPlatosComida(platosComida);
+
+            List<CantidadIngredientePlatoComida> cantidadesIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(selectedPlato, comidaActual.getFirst());
+            for (CantidadIngredientePlatoComida c : cantidadesIngredientePlatoComida)
+            {
+                cantidadIngredientePlatoComidaRepository.delete(c);
+            }
+
+
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("fecha", fecha);
+            model.addAttribute("selectedComida", selectedComida);
+            model.addAttribute("platosDisponibles", platosDisponibles);
+            model.addAttribute("comidaUI", comidaUI);
+
+            dir = "dietista/dietista_comida";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
 
 }
