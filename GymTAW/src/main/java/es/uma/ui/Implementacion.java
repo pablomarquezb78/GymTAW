@@ -2,6 +2,7 @@ package es.uma.ui;
 
 import es.uma.entity.Ejercicio;
 import es.uma.entity.Rutina;
+import es.uma.entity.TipoEjercicio;
 
 public class Implementacion {
 
@@ -21,6 +22,20 @@ public class Implementacion {
     private String seguimientoMetrosDone;
     private Byte realizado;
     private Integer iddia;
+
+    public Integer getIddia() {
+        return iddia;
+    }
+
+    public void setIddia(Integer iddia) {
+        this.iddia = iddia;
+    }
+
+    public TipoEjercicio getTipofiltrado() {return tipofiltrado;}
+
+    public void setTipofiltrado(TipoEjercicio tipofiltrado) {this.tipofiltrado = tipofiltrado;}
+
+    private TipoEjercicio tipofiltrado;
 
     public Integer getIdDia() {
         return iddia;

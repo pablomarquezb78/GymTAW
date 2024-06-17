@@ -395,6 +395,40 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+
+    @PostMapping("/filtrartipo")
+    public String doFiltrarImplementacion(@RequestParam("iddia") Integer iddia,
+                                          Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
+
+        String strTo = "crearImplementacion";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            //model.addAttribute("imp", imp);
+
+
+            implementacion.setIdDia(iddia);
+
+            model.addAttribute("implementacion",implementacion);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
+            model.addAttribute("ejercicios",ejercicios);
+
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
+
+
+        }
+
+
+        return strTo;
+
+    }
+
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
                                          Model model,HttpSession sesion){
@@ -412,8 +446,11 @@ public class EntrenamientosController extends BaseController{
             implementacion.setId(id);
             implementacion.setIdDia(iddia);
 
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
 
             model.addAttribute("implementacion",implementacion);
+
 
             List<Ejercicio> ejercicios = ejercicioRepository.findAll();
             model.addAttribute("ejercicios",ejercicios);
@@ -532,7 +569,8 @@ public class EntrenamientosController extends BaseController{
             Boolean editable = false;
             model.addAttribute("editable",editable);
 
-
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
         }
 
 
