@@ -76,34 +76,35 @@ INSERT INTO `asignacion_cliente_entrenador` VALUES (1,1,3),(2,1,4);
 UNLOCK TABLES;
 
 --
--- Table structure for table `asignacion_plato_ingrediente_dietistacreador`
+-- Table structure for table `asignacion_plato_ingrediente_dietista_creador`
 --
 
-DROP TABLE IF EXISTS `asignacion_plato_ingrediente_dietistacreador`;
+DROP TABLE IF EXISTS `asignacion_plato_ingrediente_dietista_creador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `asignacion_plato_ingrediente_dietistacreador` (
-  `idasignacion_plato_ingrediente_dietistaCreador` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `asignacion_plato_ingrediente_dietista_creador` (
+  `idasignacion_plato_ingrediente_dietista_creador` int NOT NULL AUTO_INCREMENT,
   `plato` int DEFAULT NULL,
   `ingrediente` int DEFAULT NULL,
   `dietista` int DEFAULT NULL,
-  PRIMARY KEY (`idasignacion_plato_ingrediente_dietistaCreador`),
+  PRIMARY KEY (`idasignacion_plato_ingrediente_dietista_creador`),
   KEY `asignacion_plato_con_plato_idx` (`plato`),
   KEY `asignacion_con_ingrediente_idx` (`ingrediente`),
   KEY `asignacion_con_dietista_idx` (`dietista`),
   CONSTRAINT `asignacion_con_dietista` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`),
   CONSTRAINT `asignacion_con_ingrediente` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `asignacion_plato_con_plato` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `asignacion_plato_ingrediente_dietistacreador`
+-- Dumping data for table `asignacion_plato_ingrediente_dietista_creador`
 --
 
-LOCK TABLES `asignacion_plato_ingrediente_dietistacreador` WRITE;
-/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` DISABLE KEYS */;
-/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietistacreador` ENABLE KEYS */;
+LOCK TABLES `asignacion_plato_ingrediente_dietista_creador` WRITE;
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietista_creador` DISABLE KEYS */;
+INSERT INTO `asignacion_plato_ingrediente_dietista_creador` VALUES (7,9,1,5),(8,9,2,5),(9,9,2,5),(13,11,1,5),(14,11,3,5),(15,11,9,5);
+/*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietista_creador` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -130,7 +131,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
   CONSTRAINT `cantidad-ingrediente_fk` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `cantidad-plato_fk` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`),
   CONSTRAINT `cantidad-tipo_cantidad_fk` FOREIGN KEY (`tipo_cantidad`) REFERENCES `tipo_cantidad` (`idtipo_cantidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +140,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
 
 LOCK TABLES `cantidad_ingrediente-plato-comida` WRITE;
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` DISABLE KEYS */;
-INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (13,100,1,0,1,1,1),(14,20,1,0,2,1,1),(15,20,1,0,3,2,1),(16,100,1,0,1,2,1);
+INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (25,0,1,NULL,1,11,2),(26,0,1,NULL,3,11,2),(27,0,1,NULL,9,11,2),(53,200,2,NULL,1,9,3),(54,100,2,NULL,2,9,3);
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +161,7 @@ CREATE TABLE `comida` (
   KEY `comida-dia_dieta_fk_idx` (`dia_dieta`),
   CONSTRAINT `comida-dia_dieta_fk` FOREIGN KEY (`dia_dieta`) REFERENCES `dia_dieta` (`iddia_dieta`),
   CONSTRAINT `comida-tipo_comida_fk` FOREIGN KEY (`tipo_comida`) REFERENCES `tipo_comida` (`idtipo_comida`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +170,7 @@ CREATE TABLE `comida` (
 
 LOCK TABLES `comida` WRITE;
 /*!40000 ALTER TABLE `comida` DISABLE KEYS */;
-INSERT INTO `comida` VALUES (1,1,1,1);
+INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2);
 /*!40000 ALTER TABLE `comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +192,7 @@ CREATE TABLE `dia_dieta` (
   KEY `dia_dieta-dietista_fk_idx` (`dietista`),
   CONSTRAINT `dia_dieta-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_dieta-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +201,7 @@ CREATE TABLE `dia_dieta` (
 
 LOCK TABLES `dia_dieta` WRITE;
 /*!40000 ALTER TABLE `dia_dieta` DISABLE KEYS */;
-INSERT INTO `dia_dieta` VALUES (1,'2000-01-01 00:00:00','Este dia de dieta esta hecho para testear',1,5);
+INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5);
 /*!40000 ALTER TABLE `dia_dieta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +383,7 @@ CREATE TABLE `ingrediente` (
   `azucares` varchar(30) DEFAULT NULL,
   `hidratos_de_carbono` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idingrediente`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -391,7 +392,7 @@ CREATE TABLE `ingrediente` (
 
 LOCK TABLES `ingrediente` WRITE;
 /*!40000 ALTER TABLE `ingrediente` DISABLE KEYS */;
-INSERT INTO `ingrediente` VALUES (1,'Pasta','5','5','5','5','5'),(2,'Tomate','1','1','1','1','1'),(3,'Nata','2','2','2','2','2');
+INSERT INTO `ingrediente` VALUES (1,'Pasta','5','5','5','5','5'),(2,'Tomate','1','1','1','1','1'),(3,'Nata','2','2','2','2','2'),(8,'Pan','30','5','5','5','50'),(9,'Bacon','50','30','30','1','5');
 /*!40000 ALTER TABLE `ingrediente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,7 +410,7 @@ CREATE TABLE `plato` (
   `receta` varchar(1500) DEFAULT NULL,
   `enlace_receta` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idplato`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -418,7 +419,7 @@ CREATE TABLE `plato` (
 
 LOCK TABLES `plato` WRITE;
 /*!40000 ALTER TABLE `plato` DISABLE KEYS */;
-INSERT INTO `plato` VALUES (1,'Pasta con tomate','15 minutos','Esto es un test de receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ'),(2,'Pasta con nata','20 minutos','Esto es otra receta','https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+INSERT INTO `plato` VALUES (9,'Pasta tomate','10','Cocer pasta y añadir tomate','https://www.youtube.com/watch?v=jNQXAC9IVRw'),(11,'Pasta con nata y bacon','10','Pasta y nata y bacon','https://www.youtube.com/watch?v=jNQXAC9IVRw');
 /*!40000 ALTER TABLE `plato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -490,7 +491,7 @@ CREATE TABLE `tipo_cantidad` (
   `idtipo_cantidad` int NOT NULL AUTO_INCREMENT,
   `tipo_cantidad_medida` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idtipo_cantidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -499,7 +500,7 @@ CREATE TABLE `tipo_cantidad` (
 
 LOCK TABLES `tipo_cantidad` WRITE;
 /*!40000 ALTER TABLE `tipo_cantidad` DISABLE KEYS */;
-INSERT INTO `tipo_cantidad` VALUES (1,'cantidad_implementacion');
+INSERT INTO `tipo_cantidad` VALUES (1,'Cantidad sin asignar'),(2,'gramos'),(3,'mililitros'),(4,'cucharada(s)');
 /*!40000 ALTER TABLE `tipo_cantidad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,7 +515,7 @@ CREATE TABLE `tipo_comida` (
   `idtipo_comida` int NOT NULL AUTO_INCREMENT,
   `comida_del_dia` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idtipo_comida`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +524,7 @@ CREATE TABLE `tipo_comida` (
 
 LOCK TABLES `tipo_comida` WRITE;
 /*!40000 ALTER TABLE `tipo_comida` DISABLE KEYS */;
-INSERT INTO `tipo_comida` VALUES (1,'tipo_implementacion');
+INSERT INTO `tipo_comida` VALUES (1,'Desayuno'),(2,'Medio dia'),(3,'Almuerzo'),(4,'Merienda'),(5,'Cena');
 /*!40000 ALTER TABLE `tipo_comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -582,7 +583,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'cliente_test','cliente','cliente','clientado',999,80,180,'2000-04-20 00:00:00','soy una cuenta de testeo de cliente',2),(2,'admin_test','admin','admin','administrador',111,100,200,'2000-01-01 00:00:00','soy una cuenta de testeo de administrador',1),(3,'bodybuilder_test','bodybuilder','bodybuilder','bodybuilding',222,120,150,'2003-03-02 00:00:00','soy una cuenta de testeo',3),(4,'crosstrainer_test','crosstrainer','crosstrainer','crosstraining',333,72,185,'1990-05-27 00:00:00','soy una cuenta de testeo',4),(5,'dietista_test','dietista','dietista','dieta',444,92,175,'1995-10-10 00:00:00','soy una cuenta de testeo',5);
+INSERT INTO `user` VALUES (1,'cliente_test','cliente','cliente','clientado',999,80,180,'2000-04-20 00:00:00','soy una cuenta de testeo de cliente',2),(2,'admin_test','admin','admin','administrador',111,100,200,'2000-01-01 00:00:00','soy una cuenta de testeo de administrador',1),(3,'bodybuilder_test','bodybuilder','bodybuilder','bodybuilding',222,120,150,'2003-03-02 00:00:00','soy una cuenta de testeo',3),(4,'crosstrainer_test','crosstrainer','crosstrainer','crosstraining',333,72,185,'1990-05-27 00:00:00','soy una cuenta de testeo',4),(5,'dietista_test','dietista','dietista','dieta dietada',444,96,175,'1995-10-10 00:00:00','soy una cuenta de testeo',5);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -619,4 +620,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-22 11:07:27
+-- Dump completed on 2024-06-17 12:52:57
