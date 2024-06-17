@@ -6,16 +6,13 @@ import es.uma.entity.*;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
-<<<<<<< HEAD
 import es.uma.ui.Usuario;
 import es.uma.ui.TipoEjercicioUI;
-=======
 
 import es.uma.ui.Usuario;
 
 import es.uma.ui.TipoEjercicioUI;
 
->>>>>>> f31743949d36523724e654310c2d75bdc9c49030
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

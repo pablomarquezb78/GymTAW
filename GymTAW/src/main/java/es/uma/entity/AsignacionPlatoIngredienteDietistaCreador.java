@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(name = "asignacion_plato_ingrediente_dietista_creador")
 public class AsignacionPlatoIngredienteDietistaCreador {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idasignacion_plato_ingrediente_dietista_creador", nullable = false)
     private Integer id;
 
