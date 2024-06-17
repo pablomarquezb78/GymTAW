@@ -25,4 +25,6 @@ public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer> {
     @Query("select e from Ejercicio e where  e.tipo = :tipo")
     public List<Ejercicio> filtrarEjercicioSoloDeTipo(@Param("tipo")TipoEjercicio tipo);
 
+    @Query("select e from Ejercicio e where e.nombre like %:nombre%")
+    public List<Ejercicio> filtrarEjercicioPorNombre(@Param("nombre") String nombre);
 }

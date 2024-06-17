@@ -175,6 +175,35 @@ public class EntrenamientosController extends BaseController{
             List<Ejercicio> ejercicios = ejercicioRepository.findAll();
             model.addAttribute("ejercicios",ejercicios);
 
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+
+            Boolean editable = false;
+            model.addAttribute("editable",editable);
+
+        }
+
+
+        return strTo;
+    }
+
+    @PostMapping("/filtrarejerciciopornombre")
+    public String doFiltrarEjercicioPorNombre(@ModelAttribute("implementacion") Implementacion implementacion
+            ,HttpSession sesion,Model model){
+        String strTo = "/crosstrainer/entrenador_implementacion_rutina";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+
+            model.addAttribute("implementacion",implementacion);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorNombre(implementacion.getNombrefiltrado());
+            model.addAttribute("ejercicios",ejercicios);
+
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+
             Boolean editable = false;
             model.addAttribute("editable",editable);
 

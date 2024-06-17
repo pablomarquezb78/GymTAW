@@ -22,6 +22,16 @@ public class Implementacion {
     private String seguimientoMetrosDone;
     private Byte realizado;
     private Integer iddia;
+    private TipoEjercicio tipofiltrado;
+    private String nombrefiltrado;
+
+    public String getNombrefiltrado() {
+        return nombrefiltrado;
+    }
+
+    public void setNombrefiltrado(String nombrefiltrado) {
+        this.nombrefiltrado = nombrefiltrado;
+    }
 
     public Integer getIddia() {
         return iddia;
@@ -35,7 +45,6 @@ public class Implementacion {
 
     public void setTipofiltrado(TipoEjercicio tipofiltrado) {this.tipofiltrado = tipofiltrado;}
 
-    private TipoEjercicio tipofiltrado;
 
     public Integer getIdDia() {
         return iddia;

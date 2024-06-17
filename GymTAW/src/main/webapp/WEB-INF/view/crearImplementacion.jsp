@@ -62,14 +62,20 @@
     </style>
 </head>
 <body class="bg-light">
+<%
+    if(isAdmin){
+%>
 <jsp:include page="admin/cabeceraAdmin.jsp"></jsp:include>
+<%
+    }
+%>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="form-container">
                 <div class="form-header">
                     <h3><%= implementacion.getId() == null ? "Crear implementacion" : "Modificar implementacion" %></h3>
-                    <p><%= implementacion.getId() == null ? "Introduzca los datos necesarios para añadir una nueva implementacion" : "Modifica los datos de la implementacion como desee" %></p>
+                    <p><%= implementacion.getId() == null ? "Introduzca los datos necesarios para agregar una nueva implementacion" : "Modifica los datos de la implementacion como desee" %></p>
                 </div>
 
                 <form:form action="<%= actionRol %>" method="post" modelAttribute="implementacion">
