@@ -49,6 +49,12 @@ public class DietistaController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
+            if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
+            if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             User dietista = (User) session.getAttribute("user");
             model.addAttribute("dietista", dietista);
             dir = "dietista/dietista_perfil";
@@ -112,6 +118,12 @@ public class DietistaController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
+            if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
+            if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             User dietista = (User) session.getAttribute("user");
             List<User> clientes = userRepository.clientesAsociadosConDietista(dietista);
             model.addAttribute("clientes", clientes);
@@ -182,6 +194,12 @@ public class DietistaController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
+            if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
+            if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             User cliente = userRepository.findById(clienteId).orElse(null);
             session.setAttribute("clienteSeleccionado", cliente);
             User dietista = (User) session.getAttribute("user");
@@ -242,6 +260,10 @@ public class DietistaController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             DiaComida diaComida = (DiaComida) session.getAttribute("diaComida");
             User cliente = (User) session.getAttribute("clienteSeleccionado");
             User dietista = (User) session.getAttribute("user");
@@ -272,6 +294,9 @@ public class DietistaController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             session.setAttribute("diaComida", diaComida);
             User cliente = (User) session.getAttribute("clienteSeleccionado");
             User dietista = (User) session.getAttribute("user");
