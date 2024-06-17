@@ -1,6 +1,7 @@
 package es.uma.dao;
 
 import es.uma.entity.*;
+import es.uma.ui.IngredienteImplementandoUI;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,10 @@ public interface CantidadIngredientePlatoComidaRepository extends JpaRepository<
 
     @Query("select c from CantidadIngredientePlatoComida c where c.comida = :comida and c.plato = :plato")
     List<CantidadIngredientePlatoComida> findCantidadByPlatoComida(@Param("plato") Plato plato, @Param("comida") Comida comida);
+
+    @Query("select c from CantidadIngredientePlatoComida c where c.comida = :comida and c.plato = :plato and c.ingrediente = :ingrediente")
+    List<CantidadIngredientePlatoComida> findCantidadByPlatoComidaIngrediente(@Param("plato") Plato plato, @Param("comida") Comida comida, @Param("ingrediente")Ingrediente ingrediente);
+
+    @Query("select distinct c from CantidadIngredientePlatoComida c order by c.id desc limit 1")
+    CantidadIngredientePlatoComida getUltimaCantidadAdded();
 }

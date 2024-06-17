@@ -13,6 +13,15 @@ public class ComidaUI {
     protected Plato selectedPlato;
     protected CantidadIngredientePlatoComida editingCantidadIngrediente;
     protected Plato addingPlato;
+    protected boolean platoExistente = false;
+
+    public boolean isPlatoExistente() {
+        return platoExistente;
+    }
+
+    public void setPlatoExistente(boolean platoExistente) {
+        this.platoExistente = platoExistente;
+    }
 
     public List<Plato> getListaPlatosComida() {
         return listaPlatosComida;
