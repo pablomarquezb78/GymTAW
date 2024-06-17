@@ -143,7 +143,7 @@ public class PlatosController extends BaseController{
             for(Ingrediente ingrediente : ingredientes)
             {
                 User dietista = (User) session.getAttribute("user");
-                AsignacionPlatoIngredienteDietistacreador asignacion =
+                AsignacionPlatoIngredienteDietistaCreador asignacion =
                         asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
                 asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
             }
@@ -259,7 +259,7 @@ public class PlatosController extends BaseController{
                 {
                     for(Ingrediente ingrediente : platoDietista.getIngredientes())
                     {
-                        AsignacionPlatoIngredienteDietistacreador asignacion = new AsignacionPlatoIngredienteDietistacreador();
+                        AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
                         asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
                         asignacion.setDietista((User) session.getAttribute("user"));
                         asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
@@ -282,13 +282,13 @@ public class PlatosController extends BaseController{
                         for(Ingrediente ingrediente : ingredientesPrevios)
                         {
                             User dietista = (User) session.getAttribute("user");
-                            AsignacionPlatoIngredienteDietistacreador asignacion =
+                            AsignacionPlatoIngredienteDietistaCreador asignacion =
                                     asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
                             asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
                         }
                         for(Ingrediente ingrediente : platoDietista.getIngredientes())
                         {
-                            AsignacionPlatoIngredienteDietistacreador asignacion = new AsignacionPlatoIngredienteDietistacreador();
+                            AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
                             asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
                             asignacion.setDietista((User) session.getAttribute("user"));
                             asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));

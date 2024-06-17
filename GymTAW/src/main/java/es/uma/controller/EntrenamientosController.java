@@ -6,11 +6,11 @@ import es.uma.entity.*;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
-<<<<<<< Updated upstream
+
 import es.uma.ui.Usuario;
-=======
+
 import es.uma.ui.TipoEjercicioUI;
->>>>>>> Stashed changes
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
