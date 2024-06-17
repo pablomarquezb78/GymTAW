@@ -26,5 +26,4 @@ public class AsignacionPlatoIngredienteDietistaCreador {
     @JoinColumn(name = "dietista")
     private User dietista;
 
-    
 }
