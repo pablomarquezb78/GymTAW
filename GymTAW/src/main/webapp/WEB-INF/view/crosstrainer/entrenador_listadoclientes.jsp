@@ -18,6 +18,8 @@
 <body>
 <jsp:include page="cabecera_entrenador.jsp"/>
 
+    <h1> CLIENTES ASOCIADOS :</h1>
+
     <table border="1">
         <tr>
             <th>ID</th>
@@ -34,7 +36,7 @@
         <td><%=usuario.getId()%></td>
         <td><%=usuario.getNombre()%></td>
         <td><%=usuario.getApellidos()%></td>
-        <td><a href="/entrenamientos/verperfil">Ver Perfil</a></td>
+        <td><a href="/entrenamientos/verperfilcliente?idcliente=<%=usuario.getId()%>">Ver Perfil</a></td>
         <td><a href="/entrenamientos/versemana?id=<%=usuario.getId()%>">Ver Entrenamientos</a></td>
         <%
             }
