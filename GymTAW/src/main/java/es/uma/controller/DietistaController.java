@@ -5,7 +5,6 @@ import es.uma.entity.*;
 import es.uma.ui.*;
 import org.antlr.v4.runtime.misc.Pair;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -260,7 +259,6 @@ public class DietistaController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
