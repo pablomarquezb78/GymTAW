@@ -15,7 +15,7 @@
                 <a class="nav-link" href="/admin/asignarCliente">Asignar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin/mostrarEjercicios">Ejercicios</a>
+                <a class="nav-link" href="/comun/mostrarEjercicios">Ejercicios</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/admin/mostrarPlatos">Platos</a>

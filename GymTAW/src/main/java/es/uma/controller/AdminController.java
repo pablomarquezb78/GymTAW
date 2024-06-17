@@ -389,24 +389,6 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-
-    @GetMapping("/mostrarEjercicios")
-    public String doEjercicios(Model model, HttpSession session) {
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "admin/ejercicios";
-            List<Ejercicio> ejercicios = this.ejercicioRepository.findAll();
-            List<TipoEjercicio> tipos = this.tipoEjercicioRepository.findAll();
-            model.addAttribute("ejercicios", ejercicios);
-            model.addAttribute("tipos", tipos);
-            model.addAttribute("ejercicio", new EjercicioUI());
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
-
     @PostMapping("/filtrarEjercicios")
     public String doFiltrarEjercicios(Model model, HttpSession session, @ModelAttribute EjercicioUI ejercicioUI) {
         String dir;

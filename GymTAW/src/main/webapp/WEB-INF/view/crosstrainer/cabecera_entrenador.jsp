@@ -9,16 +9,16 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav nav-fill w-100">
             <li class="nav-item active">
-                <a class="nav-link" href="irInicio">Inicio</a>
+                <a class="nav-link" href="/entrenamientos/">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="mostrarEntrenamientos">Entrenamientos</a>
+                <a class="nav-link" href="/comun/mostrarEjercicios">Entrenamientos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Dietas</a>
+                <a class="nav-link">Tipos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Desempeño</a>
+                <a class="nav-link">Rutinas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link">Perfil</a>
