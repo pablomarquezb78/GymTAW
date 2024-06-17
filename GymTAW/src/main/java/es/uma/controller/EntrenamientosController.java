@@ -6,7 +6,11 @@ import es.uma.entity.*;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
+<<<<<<< Updated upstream
 import es.uma.ui.Usuario;
+=======
+import es.uma.ui.TipoEjercicioUI;
+>>>>>>> Stashed changes
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -587,6 +591,35 @@ public class EntrenamientosController extends BaseController{
         ejercicioRepository.save(nuevoEjercicio);
         return "redirect:/";
     }
+
+    @GetMapping("/crear-tipo")
+    public String doCrearTipo(HttpSession sesion, Model model){
+
+        TipoEjercicioUI tipoEjercicioUI = new TipoEjercicioUI();
+
+        tipoEjercicioUI.setIdTipoEjercicio(-1);
+        model.addAttribute("tipoEjercicio",tipoEjercicioUI);
+
+        return "admin/crearTipo";
+    }
+
+    @PostMapping("/guardar-tipo-ejercicio")
+    public String doGuardarTipoEjercicio(@ModelAttribute("tipoEjercicio") TipoEjercicioUI tipoEjercicioUI, Model model, HttpSession session){
+
+        TipoEjercicio nuevoTipoEjercicio;
+
+        if(tipoEjercicioUI.getIdTipoEjercicio() == -1){
+            nuevoTipoEjercicio = new TipoEjercicio();
+        }else{
+            nuevoTipoEjercicio = tipoEjercicioRepository.getById(tipoEjercicioUI.getIdTipoEjercicio());
+        }
+        nuevoTipoEjercicio.setTipoDeEjercicio(tipoEjercicioUI.getNombreTipoEjercicio());
+
+        tipoEjercicioRepository.save(nuevoTipoEjercicio);
+
+        return "redirect:/";
+    }
+
 
     @GetMapping("/crearimplementacion")
     public String doCrearImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
