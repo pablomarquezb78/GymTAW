@@ -397,7 +397,7 @@ public class EntrenamientosController extends BaseController{
 
 
     @PostMapping("/filtrartipo")
-    public String doFiltrarImplementacion(@RequestParam("iddia") Integer iddia,
+    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam("iddia") Integer iddia,
                                           Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
 
         String strTo = "crearImplementacion";
@@ -405,7 +405,18 @@ public class EntrenamientosController extends BaseController{
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
-            //model.addAttribute("imp", imp);
+
+            if(id!=null){
+                ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+
+
+                if(imp!=null){
+                    asignarImplementacionUI(implementacion,imp);
+                    implementacion.setId(id);
+
+                }
+            }
+
 
 
             implementacion.setIdDia(iddia);
