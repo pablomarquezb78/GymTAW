@@ -73,6 +73,7 @@
                 <h4>Platos Establecidos:</h4>
                 <form:form method="post" action="/dietista/mostrarPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
+                    <form:hidden path="platoExistente"/>
                     <form:select path="selectedPlato" size="5">
                         <%
                             for(Plato p : listaPlatosComidaOut)
@@ -92,13 +93,13 @@
                 <form:form method="post" action="/dietista/eliminarPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
                     <form:hidden path="selectedPlato"/>
+                    <form:hidden path="platoExistente"/>
                     <form:button>Eliminar de la comida: <%=comidaUI.getSelectedPlato().getNombre()%></form:button>
                 </form:form>
                 <%
                     }
                 %>
             </div>
-            <%--
             <div class="col justify-content-center">
                 <%
                     if(comidaUI.getSelectedPlato() == null)
@@ -124,7 +125,7 @@
                         <td><%=c.getIngrediente().getNombre()%></td>
                         <td><%=c.getCantidad()%> <%=c.getTipoCantidad().getTipoCantidadMedida()%></td>
                         <td><a href="/dietista/editarCantidadIngrediente?cantidadId=<%=c.getId()%>">Editar cantidad</a></td>
-                        <td><a href="/dietista/editarCantidadIngrediente?cantidadId=<%=c.getId()%>">Eliminar ingrediente</a></td></td>
+                        <td><a href="/dietista/deleteIngrediente?cantidadId=<%=c.getId()%>">Eliminar ingrediente</a></td></td>
                     </tr>
                 <%
                         }
@@ -134,6 +135,7 @@
                 <form:form method="post" action="/dietista/addIngredientePlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
                     <form:hidden path="selectedPlato"/>
+                    <form:hidden path="platoExistente"/>
                     <%
                         if(!comidaUI.getListaCantidadIngredientesPlatoSeleccionado().isEmpty())
                         {
@@ -146,15 +148,30 @@
                     <form:button>Añadir ingrediente</form:button>
                 </form:form>
             </div>
-            --%>
             <div class="col justify-content-center">
                 <h4>Platos disponibles a añadir:</h4>
                 <form:form method="post" action="/dietista/addPlatoToPlatoComida" modelAttribute="comidaUI">
                     <form:hidden path="listaPlatosComida"/>
+                    <form:hidden path="platoExistente"/>
                     <form:select path="addingPlato" items="${platosDisponibles}" itemValue="id" itemLabel="nombre" size="5"></form:select> <br/>
                     <form:button>Añadir plato seleccionado</form:button>
                 </form:form>
             </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col justify-content-center">
+                <h5><a href="/dietista/showFechaCliente">Volver</a></h5>
+            </div>
+            <%
+                if(comidaUI.isPlatoExistente())
+                {
+            %>
+            <div class="col justify-content-center">
+                <h3>El plato que has intentado añadir ya existe!!!</h3>
+            </div>
+            <%
+                }
+            %>
         </div>
     </div>
 </div>

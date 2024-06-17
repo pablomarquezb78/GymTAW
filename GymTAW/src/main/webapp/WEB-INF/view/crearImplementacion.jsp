@@ -17,9 +17,11 @@
 
     UserRol userRol = (UserRol) session.getAttribute("rol");
     String actionRol = "/entrenamientos/guardarimplementacion";
+    String filtrar = "/entrenamientos/filtrartipo";
     Boolean disabled = false;
     if(userRol.getId() == 1) {
         actionRol = "/admin/guardarImplementacion";
+        filtrar = "/admin/filtrarTipo";
         disabled = true;
     }
     Boolean isAdmin = userRol.getId() == 1;
@@ -123,7 +125,7 @@
 
                             <div class="mt-4">
                                 <h4>Filtrar ejercicios:</h4>
-                                <form:form action="/entrenamientos/filtrartipo" method="post" modelAttribute="implementacion">
+                                <form:form action="<%=filtrar%>" method="post" modelAttribute="implementacion">
                                     <form:radiobuttons path="tipofiltrado" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
                                     <form:hidden path="iddia"/>
                                     <form:hidden path="id"/>

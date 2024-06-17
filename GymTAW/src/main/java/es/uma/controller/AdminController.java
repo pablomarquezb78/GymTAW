@@ -545,7 +545,9 @@ public class AdminController extends BaseController {
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
             List<Rutina> rutinas = rutinaRepository.findAll();
             Implementacion implementacion = new Implementacion();
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             implementacion.setEjercicio(ejercicioRepository.findById(id).orElse(null));
+            model.addAttribute("tipos",tipos);
             model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", implementacion);
         } else {
@@ -602,6 +604,8 @@ public class AdminController extends BaseController {
             dir = "crearImplementacion";
             ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
             List<Rutina> rutinas = rutinaRepository.findAll();
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+
             implementacion.setId(ier.getId());
             implementacion.setEjercicio(ier.getEjercicio());
             implementacion.setKilocalorias(ier.getKilocalorias());
@@ -612,9 +616,43 @@ public class AdminController extends BaseController {
             implementacion.setRepeticiones(ier.getRepeticiones());
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
             model.addAttribute("rutinas", rutinas);
-            model.addAttribute("implementacion", implementacion);
+            model.addAttribute("tipos",tipos);
         } else {
             dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/filtrarTipo")
+    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id, Model model,HttpSession sesion, Implementacion implementacion){
+
+        String dir = "crearImplementacion";
+
+        if(!estaAutenticado(sesion)){
+            dir = "redirect:/";
+        }else{
+
+            if(id!=null){
+                ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+
+                if(ier!=null){
+                    implementacion.setId(ier.getId());
+                    implementacion.setEjercicio(ier.getEjercicio());
+                    implementacion.setKilocalorias(ier.getKilocalorias());
+                    implementacion.setPeso(ier.getPeso());
+                    implementacion.setMetros(ier.getMetros());
+                    implementacion.setTiempo(ier.getTiempo());
+                    implementacion.setSets(ier.getSets());
+                    implementacion.setRepeticiones(ier.getRepeticiones());
+                }
+            }
+            model.addAttribute("implementacion",implementacion);
+            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
+            model.addAttribute("ejercicios",ejercicios);
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
         }
         return dir;
     }
