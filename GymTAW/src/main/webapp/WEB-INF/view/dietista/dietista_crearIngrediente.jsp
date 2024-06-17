@@ -1,18 +1,23 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.Plato" %>
-<%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<%
-
-%>
 
 <html>
 <head>
     <title>Dietista Ingrediente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            color: black;
+            border: 1px solid grey;
+        }
+        .form-label {
+            font-weight: bold;
+            color: black;
+        }
+    </style>
 </head>
 <body>
 
@@ -35,32 +40,42 @@
     </div>
 </nav>
 
-<div class="row justify-content-center">
-    <div class="col-sm-4 justify-content-center ">
-        <form:form method="post" action="guardarNuevoIngrediente" modelAttribute="nuevoIngrediente">
-            <div className="border">
-                Nombre: <form:input type="text" path="nombre" size="50" maxlength="50"/> <br/>
-            </div>
-            <div className="border">
-                Kilocalorias: <form:input type="text" path="kilocalorias" size="30" maxlength="30"/> <br/>
-            </div>
-            <div className="border">
-                Proteinas: <form:input type="text" path="proteinas" size="30" maxlength="30"/> <br/>
-            </div>
-            <div className="border">
-                Grasas: <form:input type="text" path="grasas" size="30" maxlength="30"/> <br/>
-            </div>
-            <div className="border">
-                Azucares: <form:input type="text" path="azucares" size="30" maxlength="30"/> <br/>
-            </div>
-            <div className="border">
-                Hidratos de carbono: <form:input type="text" path="hidratosDeCarbono" size="30" maxlength="30"/> <br/>
-            </div>
-            <button>Guardar</button> <a href="/dietista/crearPlato">Cancelar</a>
-        </form:form>
+<div class="container">
+    <div class="row justify-content-center" style="height: 75vh;">
+        <div class="col-sm-6 form-container">
+            <form:form method="post" action="guardarNuevoIngrediente" modelAttribute="nuevoIngrediente">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <form:input type="text" path="nombre" id="nombre" size="50" maxlength="50" class="form-control"/> <br/>
+                </div>
+                <div class="mb-3">
+                    <label for="kilocalorias" class="form-label">Kilocalorias:</label>
+                    <form:input type="text" path="kilocalorias" id="kilocalorias" size="30" maxlength="30" class="form-control"/> <br/>
+                </div>
+                <div class="mb-3">
+                    <label for="proteinas" class="form-label">Proteinas:</label>
+                    <form:input type="text" path="proteinas" id="proteinas" size="30" maxlength="30" class="form-control"/> <br/>
+                </div>
+                <div class="mb-3">
+                    <label for="grasas" class="form-label">Grasas:</label>
+                    <form:input type="text" path="grasas" id="grasas" size="30" maxlength="30" class="form-control"/> <br/>
+                </div>
+                <div class="mb-3">
+                    <label for="azucares" class="form-label">Azucares:</label>
+                    <form:input type="text" path="azucares" id="azucares" size="30" maxlength="30" class="form-control"/> <br/>
+                </div>
+                <div class="mb-3">
+                    <label for="hidratosDeCarbono" class="form-label">Hidratos de carbono:</label>
+                    <form:input type="text" path="hidratosDeCarbono" id="hidratosDeCarbono" size="30" maxlength="30" class="form-control"/> <br/>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="/dietista/crearPlato" class="btn btn-secondary">Cancelar</a>
+            </form:form>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlXtW8VDtnrROZqPLFpuUWI4a2sA8pD5A4cJZHPUOks+EmW1E6Lxk3VFtDM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGktK0gYf94IYNd2tKpREIHMR5cQm75J5pbWuyj6cvF2DkSPEj3h4dHGsR9" crossorigin="anonymous"></script>
 </body>
 </html>
