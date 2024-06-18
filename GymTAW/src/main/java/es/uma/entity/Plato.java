@@ -2,6 +2,8 @@ package es.uma.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "plato")
 public class Plato {
@@ -21,6 +23,12 @@ public class Plato {
 
     @Column(name = "enlace_receta", length = 200)
     private String enlaceReceta;
+
+    @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AsignacionPlatoIngredienteDietistaCreador> asignaciones;
+
+    @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CantidadIngredientePlatoComida> cantidades;
 
     public Integer getId() {
         return id;

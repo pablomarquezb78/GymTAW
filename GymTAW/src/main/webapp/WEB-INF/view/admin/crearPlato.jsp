@@ -6,13 +6,6 @@
 
 <%
     PlatoUI platoUI = (PlatoUI) request.getAttribute("platoUI");
-    UserRol userRol = (UserRol) session.getAttribute("rol");
-    String actionRol = "";
-    if(userRol.getId() == 1 && platoUI.getId() == null) {
-        actionRol = "/admin/anyadirPlato";
-    }else if(userRol.getId() == 1 && platoUI.getId() != null){
-        actionRol = "/admin/modificarPlato";
-    }
 
 %>
 <html>
@@ -21,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<jsp:include page="admin/cabeceraAdmin.jsp"></jsp:include>
+<jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 <div>
     <h3>
         <%=platoUI.getId() == null ? "Crear plato" : "Modificar plato"%>
@@ -29,7 +22,7 @@
     <p>
         <%=platoUI.getId() == null ? "Introduzca los datos necesarios para añadir un nuevo plato" : "Modifica los datos del plato como desee"%>
     </p>
-    <form:form action="<%=actionRol%>" method="post" modelAttribute="platoUI">
+    <form:form action="/admin/anyadirPlato" method="post" modelAttribute="platoUI">
         <form:hidden path="id"></form:hidden>
         <label>Nombre: </label>
         <form:input path="nombre"></form:input>
