@@ -27,7 +27,12 @@
 <body>
 <jsp:include page="<%=cabecera%>"></jsp:include>
 <br/>
-<table border="1" cellpadding="10" cellspacing="10">
+
+    <%
+        if(ejercicios.size() > 0){
+
+    %>
+    <table border="1" cellpadding="10" cellspacing="10">
     <tr>
         <th>ID</th>
         <th>NOMBRE DEL EJERCICIO</th>
@@ -38,7 +43,6 @@
         <th></th>
         <th></th>
     </tr>
-
     <%
         for(Ejercicio ejercicio : ejercicios){
     %>
@@ -54,20 +58,32 @@
     </tr>
     <%
         }
-    %>
-</table>
-<a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
 
-<form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio">
-    <br>
-    <label>Nombre:</label>
-    <form:input path="nombre" size="15"></form:input>
-    <label>Descripcion:</label>
-    <form:input path="descripcion" size="10"></form:input>
-    <label>Tipo:</label>
-    <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
-    <br>
-    <form:button class="btn btn-success mt-3">Filtrar ejercicio</form:button>
-</form:form>
+    %>
+    </table>
+    <a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+
+    <form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio">
+        <br>
+        <label>Nombre:</label>
+        <form:input path="nombre" size="15"></form:input>
+        <label>Descripcion:</label>
+        <form:input path="descripcion" size="10"></form:input>
+        <label>Tipo:</label>
+        <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
+        <br>
+        <form:button class="btn btn-success mt-3">Filtrar ejercicio</form:button>
+    </form:form>
+
+    <%
+        }else{
+    %>
+            <h2>No hay ningún ejercicio :(</h2>
+            <br>
+            <a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+    <%
+        }
+    %>
+
 </body>
 </html>

@@ -4,6 +4,7 @@ import es.uma.dao.*;
 import es.uma.entity.*;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
+import es.uma.ui.TipoEjercicioUI;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -311,26 +312,5 @@ public class ComunController extends BaseController{
         }
         return dir;
     }
-
-    @GetMapping("/mostrarTiposEjercicio")
-    public String mostrarTiposEjercicio(HttpSession session, Model model){
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-
-            List<TipoEjercicio> tiposEjercicio = tipoEjercicioRepository.findAll();
-
-                model.addAttribute("tiposEjercicio", tiposEjercicio);
-                model.addAttribute("rol", rol);
-                dir = "tipos_ejercicio";
-
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-
-    }
-
-
 
 }

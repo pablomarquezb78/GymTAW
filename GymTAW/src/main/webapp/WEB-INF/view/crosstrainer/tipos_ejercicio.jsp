@@ -8,10 +8,8 @@
 
     UserRol userRol = (UserRol) request.getAttribute("rol");
     List<TipoEjercicio> tiposEjercicio = (List<TipoEjercicio>) request.getAttribute("tiposEjercicio");
-    String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
-    if(userRol.getId() == 1) {
-        cabecera = "./admin/cabeceraAdmin.jsp";
-    }
+    String cabecera = "cabecera_entrenador.jsp";
+
 %>
 <html>
 <head>
@@ -37,9 +35,9 @@
 <tr>
     <td><%=tipo.getId()%></td>
     <td><%=tipo.getTipoDeEjercicio()%></td>
-    <td><a href="/comun/editarEjercicio?id=<%=tipo.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
-    <td><a href="/comun/borrarEjercicio?id=<%=tipo.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
-    <td><a href="/comun/verImplementacionesAsociadas?id=<%=tipo.getId()%>">Ver ejercicios asociados</a></td>
+    <td><a href="/entrenamientos/editarTipo?id=<%=tipo.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+    <td><a href="/entrenamientos/borrarTipo?id=<%=tipo.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
+    <td><a href="/entrenamientos/verImplementacionesAsociadasTipo?id=<%=tipo.getId()%>">Ver ejercicios asociados</a></td>
 </tr>
 <%
         }
@@ -50,6 +48,8 @@
     }
 %>
 </table>
+
+<a href="/entrenamientos/crear-tipo" class="btn btn-success mt-3">Crear nuevo tipo de ejercicio</a>
 
 </body>
 </html>

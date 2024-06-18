@@ -7,9 +7,8 @@
     TipoEjercicioUI tipoEjercicioUI = (TipoEjercicioUI) request.getAttribute("tipoEjercicio");
     UserRol userRol = (UserRol) session.getAttribute("rol");
     String actionRol = "/entrenamientos/guardar-tipo-ejercicio";
-    if(userRol.getId() == 1) {
-        actionRol = "/admin/anyadirEjercicio";
-    }
+    String cabecera = "cabecera_entrenador.jsp";
+
 %>
 <html>
 
@@ -20,6 +19,7 @@
 
 </head>
 <body>
+<jsp:include page="<%=cabecera%>"></jsp:include>
 
     <h3>
         <%=tipoEjercicioUI.getIdTipoEjercicio() == -1 ? "Crear tipo de ejercicio" : "Modificar tipo de ejercicio"%>

@@ -617,6 +617,26 @@ public class EntrenamientosController extends BaseController{
         return "redirect:/";
     }
 
+    @GetMapping("/mostrarTiposEjercicio")
+    public String mostrarTiposEjercicio(HttpSession session, Model model){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            List<TipoEjercicio> tiposEjercicio = tipoEjercicioRepository.findAll();
+
+            model.addAttribute("tiposEjercicio", tiposEjercicio);
+            model.addAttribute("rol", rol);
+            dir = "crosstrainer/tipos_ejercicio";
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+
+    }
+
+
     @GetMapping("/crear-tipo")
     public String doCrearTipo(HttpSession sesion, Model model){
 
@@ -625,7 +645,43 @@ public class EntrenamientosController extends BaseController{
         tipoEjercicioUI.setIdTipoEjercicio(-1);
         model.addAttribute("tipoEjercicio",tipoEjercicioUI);
 
-        return "admin/crearTipo";
+        return "crosstrainer/crearTipo";
+    }
+
+    @GetMapping("/editarTipo")
+    public String editarTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            dir = "crosstrainer/crearTipo";
+            TipoEjercicio tipo = tipoEjercicioRepository.findById(id).orElse(null);
+            TipoEjercicioUI tipoEjercicio = new TipoEjercicioUI();
+            tipoEjercicio.setIdTipoEjercicio(tipo.getId());
+            tipoEjercicio.setNombreTipoEjercicio(tipo.getTipoDeEjercicio());
+            model.addAttribute("rol", rol);
+            model.addAttribute("tipoEjercicio", tipoEjercicio);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/borrarTipo")
+    public String borrarTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+           tipoEjercicioRepository.deleteById(id);
+           dir = "redirect:/entrenamientos/mostrarTiposEjercicio";
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @PostMapping("/guardar-tipo-ejercicio")
@@ -642,7 +698,7 @@ public class EntrenamientosController extends BaseController{
 
         tipoEjercicioRepository.save(nuevoTipoEjercicio);
 
-        return "redirect:/";
+        return "redirect:/entrenamientos/mostrarTiposEjercicio";
     }
 
 
@@ -670,10 +726,30 @@ public class EntrenamientosController extends BaseController{
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             model.addAttribute("tipos",tipos);
         }
-
-
         return strTo;
     }
 
+    @GetMapping("/verImplementacionesAsociadasTipo")
+    public String verImplementacionesAsociadasTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            TipoEjercicio tipoEjercicio = tipoEjercicioRepository.findById(id).orElse(null);
+            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorTipo(id);
+            model.addAttribute("ejercicios",ejercicios);
+            //model.addAttribute("tipoEjercicio", tipoEjercicio);
+            model.addAttribute("tipos", tipoEjercicioRepository.findAll());
+            model.addAttribute("rol",rol);
+            model.addAttribute("ejercicio", new EjercicioUI());
+
+            return "admin/ejercicios";
+
+        }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
 
 }
