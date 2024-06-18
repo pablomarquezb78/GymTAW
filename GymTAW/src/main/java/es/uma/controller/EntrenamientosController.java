@@ -407,10 +407,33 @@ public class EntrenamientosController extends BaseController{
 
     }
 
-    @GetMapping("/verperfil")
-    public String doVerPerfil(HttpSession session,Model model){
+    @GetMapping("/verperfilcliente")
+    public String doVerPerfilCliente(@RequestParam("idcliente") Integer id,HttpSession session,Model model){
 
-        String strTo = "/crosstrainer/perfil";
+        String strTo = "/perfil";
+
+        if(!estaAutenticado(session)) {
+            strTo = "redirect:/";
+        }else {
+
+            User user = userRepository.getById(id);
+            Usuario usuario = new Usuario();
+
+            setUser(usuario,user);
+
+            model.addAttribute("usuario",usuario);
+
+        }
+
+
+
+        return strTo;
+    }
+
+    @GetMapping("/verperfil")
+    public String doVerPerfilPropio(HttpSession session,Model model){
+
+        String strTo = "/perfil";
 
         if(!estaAutenticado(session)) {
             strTo = "redirect:/";

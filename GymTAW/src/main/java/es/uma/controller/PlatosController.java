@@ -37,6 +37,13 @@ public class PlatosController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
+            //Remove resto de session attributes
+            if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
+            if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             dir = "redirect:/dietista/platos";
         } else {
             dir = "redirect:/";
@@ -52,6 +59,13 @@ public class PlatosController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
+            //Remove resto de session attributes
+            if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
+            if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
+            if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
+            if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
+            if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
+            if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             model.addAttribute("listaPlatos", platosRepository.getPlatosLinkedToDietista((User) session.getAttribute("user")));
             dir = "dietista/dietista_platos";
         } else {
@@ -266,7 +280,6 @@ public class PlatosController extends BaseController{
                         asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
                     }
                 }
-                session.removeAttribute("platoCreando");
             } else { //Editar plato
                 Plato plato = platosRepository.findById(platoDietista.getId()).orElse(null);
                 plato.setNombre(platoDietista.getNombre());
@@ -296,8 +309,8 @@ public class PlatosController extends BaseController{
                         }
                     }
                 }
-                session.removeAttribute("platoCreando");
             }
+            session.removeAttribute("platoCreando");
             dir = "redirect:/dietista/platos";
         } else {
             dir = "redirect:/";

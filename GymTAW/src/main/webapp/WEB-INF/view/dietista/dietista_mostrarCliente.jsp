@@ -1,14 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="es.uma.ui.PlatoDietistaUI" %>
 <%@ page import="java.time.Year" %>
 <%@ page import="es.uma.entity.*" %>
-<%@ page import="ch.qos.logback.core.joran.sanity.Pair" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="es.uma.ui.DiaComida" %>
 <%@ page import="java.time.LocalDate" %>
-<%@ page import="org.springframework.cglib.core.Local" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -20,8 +15,35 @@
 
 <html>
 <head>
-    <title>Dietista clientes asociados</title>
+    <title>Dietista cliente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid grey;
+            margin-top: 20px;
+        }
+        .navbar-nav .nav-item .nav-link.active {
+            font-weight: bold;
+            color: black;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f8f9fa;
+        }
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 
@@ -34,7 +56,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/dietista/mostrarClientes">Clientes</a>
             </li>
-            <li class="nav-item active text-weight-bold">
+            <li class="nav-item active">
                 <a class="nav-link" href="/dietista/mostrarPerfil">Perfil</a>
             </li>
             <li class="nav-item">
@@ -44,115 +66,110 @@
     </div>
 </nav>
 
-<div class="row justify-content-center">
-    <div class="col-sm-10 justify-content-center ">
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <h1>Cliente: <%=cliente.getNombre()%> <%=cliente.getApellidos()%></h1> <br/>
-                Edad: <%=Year.now().getValue() - cliente.getFechaNacimiento().getYear()%> <br/>
-                Peso: <%=cliente.getPeso()%> <br/>
-                Altura: <%=cliente.getAltura()%> <br/>
+<div class="container">
+    <div class="row justify-content-center table-container">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <h1>Cliente: <%=cliente.getNombre()%> <%=cliente.getApellidos()%></h1>
+                    <p>Edad: <%=Year.now().getValue() - cliente.getFechaNacimiento().getYear()%></p>
+                    <p>Peso: <%=cliente.getPeso()%></p>
+                    <p>Altura: <%=cliente.getAltura()%></p>
+                </div>
+                <div class="col-md-4">
+                    <h1>Fecha:</h1>
+                    <form:form method="post" action="/dietista/setFechaCliente" modelAttribute="diaComida">
+                        <div class="mb-3">
+                            <label for="day" class="form-label">Dia</label>
+                            <form:input path="day" id="day" class="form-control" size="10" maxlength="10"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="month" class="form-label">Mes</label>
+                            <form:input path="month" id="month" class="form-control" size="10" maxlength="10"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Año</label>
+                            <form:input path="year" id="year" class="form-control" size="10" maxlength="10"/>
+                        </div>
+                        <form:button class="btn btn-primary">Seleccionar fecha</form:button>
+                    </form:form>
+                </div>
+                <div class="col-md-4">
+                    <h1>Comida:</h1>
+                    <form:form method="post" action="/dietista/selectComidaCliente" modelAttribute="diaComida">
+                        <form:hidden path="day"/>
+                        <form:hidden path="month"/>
+                        <form:hidden path="year"/>
+                        <div class="mb-3">
+                            <label for="tipoComida" class="form-label">Tipo de Comida</label>
+                            <form:select path="tipoComida" id="tipoComida" items="${tiposDeComida}" itemValue="id" itemLabel="comidaDelDia" class="form-control"/>
+                        </div>
+                        <form:button class="btn btn-primary">Acceder comida</form:button>
+                    </form:form>
+                </div>
             </div>
-            <div class="col justify-content-center">
-                <h1>Fecha:</h1> <br/>
-                <form:form method="post" action="/dietista/setFechaCliente" modelAttribute="diaComida">
-                    Dia: <form:input path="day" size="10" maxlength="10"/> <br/>
-                    Mes: <form:input path="month" size="10" maxlength="10"/> <br/>
-                    Año: <form:input path="year" size="10" maxlength="10"/> <br/>
-                    <form:button>Seleccionar fecha</form:button>
-                </form:form>
-            </div>
-            <div class="col justify-content-center">
-                <h1>Comida:</h1> <br/>
-                <form:form method="post" action="/dietista/selectComidaCliente" modelAttribute="diaComida">
-                    <form:hidden path="day"/>
-                    <form:hidden path="month"/>
-                    <form:hidden path="year"/>
-                    <form:select path="tipoComida" items="${tiposDeComida}" itemValue="id" itemLabel="comidaDelDia"/>
-                    <form:button>Acceder comida</form:button>
-                </form:form>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <table>
-                <tr>
-                    <th></th>
-                    <th><%=listaFechas.get(0).getDayOfMonth()%> - <%=listaFechas.get(0).getMonthValue()%> - <%=listaFechas.get(0).getYear()%></th>
-                    <th><%=listaFechas.get(1).getDayOfMonth()%> - <%=listaFechas.get(1).getMonthValue()%> - <%=listaFechas.get(1).getYear()%></th>
-                    <th><%=listaFechas.get(2).getDayOfMonth()%> - <%=listaFechas.get(2).getMonthValue()%> - <%=listaFechas.get(2).getYear()%></th>
-                    <th><%=listaFechas.get(3).getDayOfMonth()%> - <%=listaFechas.get(3).getMonthValue()%> - <%=listaFechas.get(3).getYear()%></th>
-                    <th><%=listaFechas.get(4).getDayOfMonth()%> - <%=listaFechas.get(4).getMonthValue()%> - <%=listaFechas.get(4).getYear()%></th>
-                    <th><%=listaFechas.get(5).getDayOfMonth()%> - <%=listaFechas.get(5).getMonthValue()%> - <%=listaFechas.get(5).getYear()%></th>
-                    <th><%=listaFechas.get(6).getDayOfMonth()%> - <%=listaFechas.get(6).getMonthValue()%> - <%=listaFechas.get(6).getYear()%></th>
-                </tr>
-                <%
-                    for(int j = 1; j<=5; ++j)
-                    {
-                %>
+            <div class="row mt-4">
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
+                        <th></th>
                         <%
-                            String comida;
-                            switch(j)
-                            {
-                                case 1:
-                                    comida = "Desayuno";
-                                    break;
-                                case 2:
-                                    comida = "Medio dia";
-                                    break;
-                                case 3:
-                                    comida = "Almuerzo";
-                                    break;
-                                case 4:
-                                    comida = "Merienda";
-                                    break;
-                                default:
-                                    comida = "Cena";
-                                    break;
-                            }
+                            for(LocalDate fecha : listaFechas) {
                         %>
-                        <td><%=comida%></td>
-                        <%
-                            for(int i = 1; i<=7; ++i)
-                            {
-                        %>
-                            <td>
-                                <%
-                                    String diaComida = "Dia" + i + "Comida" + j;
-                                    if(tablaComidas.get(diaComida).isEmpty())
-                                    {
-
-                                %>
-                                (Platos no establecidos)
-                                <%
-                                    } else {
-                                %>
-                                <ul>
-                                <%
-                                        for(Plato p : tablaComidas.get(diaComida))
-                                        {
-                                %>
-                                <li><%=p.getNombre()%></li>
-                                <%
-                                        }
-                                %>
-                                </ul>
-                                <%
-                                    }
-                                %>
-                            </td>
+                        <th><%= fecha.getDayOfMonth() %> - <%= fecha.getMonthValue() %> - <%= fecha.getYear() %></th>
                         <%
                             }
                         %>
                     </tr>
-                <%
-                    }
-                %>
-            </table>
+                    </thead>
+                    <tbody>
+                    <%
+                        String[] comidas = {"Desayuno", "Medio dia", "Almuerzo", "Merienda", "Cena"};
+                        for(int j = 0; j < comidas.length; ++j) {
+                    %>
+                    <tr>
+                        <td><%= comidas[j] %></td>
+                        <%
+                            for(int i = 1; i <= 7; ++i) {
+                                String diaComida = "Dia" + i + "Comida" + (j + 1);
+                        %>
+                        <td>
+                            <%
+                                List<Plato> platos = tablaComidas.get(diaComida);
+                                if(platos == null || platos.isEmpty()) {
+                            %>
+                            (Platos no establecidos)
+                            <%
+                            } else {
+                            %>
+                            <ul>
+                                <%
+                                    for(Plato p : platos) {
+                                %>
+                                <li><%= p.getNombre() %></li>
+                                <%
+                                    }
+                                %>
+                            </ul>
+                            <%
+                                }
+                            %>
+                        </td>
+                        <%
+                            }
+                        %>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlXtW8VDtnrROZqPLFpuUWI4a2sA8pD5A4cJZHPUOks+EmW1E6Lxk3VFtDM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGktK0gYf94IYNd2tKpREIHMR5cQm75J5pbWuyj6cvF2DkSPEj3h4dHGsR9" crossorigin="anonymous"></script>
 </body>
 </html>

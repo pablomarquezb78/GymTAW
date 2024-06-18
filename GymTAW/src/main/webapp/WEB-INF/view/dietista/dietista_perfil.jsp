@@ -1,9 +1,4 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.Plato" %>
-<%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="es.uma.ui.PlatoDietistaUI" %>
 <%@ page import="es.uma.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -11,10 +6,27 @@
     User dietista = (User) request.getAttribute("dietista");
 %>
 
+<!DOCTYPE html>
 <html>
 <head>
     <title>Dietista perfil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .profile-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+        }
+        .profile-label {
+            font-weight: bold;
+            color: white;
+        }
+        .profile-link a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
@@ -37,38 +49,39 @@
     </div>
 </nav>
 
-<div class="row justify-content-center">
-    <div class="col-sm-8 justify-content-center ">
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Nombre:</b> <%=dietista.getNombre()%>
+<div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <div class="profile-container">
+        <div class="row mb-3">
+            <div class="col">
+                <span class="profile-label">Nombre:</span> <%=dietista.getNombre()%>
             </div>
-            <div class="col justify-content-center">
-                <b>Apellidos:</b> <%=dietista.getApellidos()%>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Altura:</b> <%=dietista.getAltura()%>
-            </div>
-            <div class="col justify-content-center">
-                <b>Fecha de Nacimiento:</b> <%=dietista.getFechaNacimiento()%>
+            <div class="col">
+                <span class="profile-label">Apellidos:</span> <%=dietista.getApellidos()%>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
-                <b>Peso:</b> <%=dietista.getPeso()%>
+        <div class="row mb-3">
+            <div class="col">
+                <span class="profile-label">Altura:</span> <%=dietista.getAltura()%>
             </div>
-            <div class="col justify-content-center">
-                <b>Descripcion:</b> <%=dietista.getDescripcionPersonal()%>
+            <div class="col">
+                <span class="profile-label">Fecha de Nacimiento:</span> <%=dietista.getFechaNacimiento()%>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <a href="/dietista/editarPerfil"> Editar perfil </a>
+        <div class="row mb-3">
+            <div class="col">
+                <span class="profile-label">Peso:</span> <%=dietista.getPeso()%>
+            </div>
+            <div class="col">
+                <span class="profile-label">Descripción:</span> <%=dietista.getDescripcionPersonal()%>
+            </div>
+        </div>
+        <div class="row justify-content-center profile-link">
+            <a href="/dietista/editarPerfil">Editar perfil</a>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlXtW8VDtnrROZqPLFpuUWI4a2sA8pD5A4cJZHPUOks+EmW1E6Lxk3VFtDM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGktK0gYf94IYNd2tKpREIHMR5cQm75J5pbWuyj6cvF2DkSPEj3h4dHGsR9" crossorigin="anonymous"></script>
 </body>
 </html>
