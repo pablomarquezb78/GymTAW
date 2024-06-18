@@ -48,6 +48,8 @@ public class AdminController extends BaseController {
     private ComidaRepository comidaRepository;
     @Autowired
     private DiaDietaRepository diaDietaRepository;
+    @Autowired
+    private IngredienteRepository ingredienteRepository;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -601,6 +603,7 @@ public class AdminController extends BaseController {
             List<User> clientes = userRepository.listarClientes();
             List<User> dietistas = userRepository.listarDietistas();
             model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
+            model.addAttribute("ingredientes",  ingredienteRepository.findAll());
             model.addAttribute("clientes", userRepository.listarClientes());
             model.addAttribute("dietistas", userRepository.listarDietistas());
             model.addAttribute("tiposComida", tipoComidaRepository.findAll());
@@ -626,12 +629,17 @@ public class AdminController extends BaseController {
             asignacionPlatoComida.setIdPlato(apidc.getPlato().getId());
             asignacionPlatoComida.setFecha(apidc.getComida().getDiaDieta().getFecha().toString());
             asignacionPlatoComida.setIdComida(apidc.getId());
-
+            List<Ingrediente> ingredientes = new ArrayList<>();
+            for(Ingrediente ingrediente : cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(idPlato)){
+                ingredientes.add(ingrediente);
+            }
+            asignacionPlatoComida.setIngredientes(ingredientes);
 
             model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
             model.addAttribute("clientes", userRepository.listarClientes());
             model.addAttribute("dietistas", userRepository.listarDietistas());
             model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+            model.addAttribute("ingredientes",  ingredienteRepository.findAll());
         } else {
             dir = "redirect:/";
         }
@@ -659,10 +667,14 @@ public class AdminController extends BaseController {
                 comida.setDiaDieta(diaDieta);
                 comidaRepository.save(comida);
 
-                cipc.setPlato(plato);
-                cipc.setCantidad(asignacionPlatoComida.getCantidad());
-                cipc.setComida(comida);
-                cantidadIngredientePlatoComidaRepository.save(cipc);
+
+                for(Ingrediente ingrediente : cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(asignacionPlatoComida.getIdPlato())){
+                    cipc.setPlato(plato);
+                    cipc.setCantidad(asignacionPlatoComida.getCantidad());
+                    cipc.setComida(comida);
+                    cipc.setIngrediente(ingrediente);
+                    cantidadIngredientePlatoComidaRepository.save(cipc);
+                }
 
             }else{
                 dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
@@ -683,7 +695,6 @@ public class AdminController extends BaseController {
                 cipc.setComida(comida);
                 cantidadIngredientePlatoComidaRepository.save(cipc);
             }
-
         } else {
             dir = "redirect:/";
         }
