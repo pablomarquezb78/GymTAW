@@ -667,14 +667,10 @@ public class AdminController extends BaseController {
                 comida.setDiaDieta(diaDieta);
                 comidaRepository.save(comida);
 
-
-                for(Ingrediente ingrediente : cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(asignacionPlatoComida.getIdPlato())){
-                    cipc.setPlato(plato);
-                    cipc.setCantidad(asignacionPlatoComida.getCantidad());
-                    cipc.setComida(comida);
-                    cipc.setIngrediente(ingrediente);
-                    cantidadIngredientePlatoComidaRepository.save(cipc);
-                }
+                cipc.setPlato(plato);
+                cipc.setCantidad(asignacionPlatoComida.getCantidad());
+                cipc.setComida(comida);
+                cantidadIngredientePlatoComidaRepository.save(cipc);
 
             }else{
                 dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
