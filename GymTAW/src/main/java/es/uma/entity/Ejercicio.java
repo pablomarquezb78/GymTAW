@@ -1,6 +1,7 @@
 package es.uma.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "ejercicio")
@@ -23,6 +24,10 @@ public class Ejercicio {
     @Column(name = "enlace_video", length = 250)
     private String enlaceVideo;
 
+    @OneToMany(mappedBy = "ejercicio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImplementacionEjercicioRutina> implementaciones;
+
+    // Getters y setters
     public Integer getId() {
         return id;
     }
@@ -63,4 +68,11 @@ public class Ejercicio {
         this.enlaceVideo = enlaceVideo;
     }
 
+    public List<ImplementacionEjercicioRutina> getImplementaciones() {
+        return implementaciones;
+    }
+
+    public void setImplementaciones(List<ImplementacionEjercicioRutina> implementaciones) {
+        this.implementaciones = implementaciones;
+    }
 }

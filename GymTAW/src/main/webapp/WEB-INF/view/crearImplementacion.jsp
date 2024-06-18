@@ -15,13 +15,14 @@
 
     String sets = "", repeticiones = "", peso = "", tiempo = "", cal = "", metros = "";
 
+    String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
+
     UserRol userRol = (UserRol) session.getAttribute("rol");
-    String actionRol = "/entrenamientos/guardarimplementacion";
-    String filtrar = "/entrenamientos/filtrartipo";
+    String actionRol = "/comun/guardarImplementacion";
+    String filtrar = "/comun/filtrartipo";
     Boolean disabled = false;
     if(userRol.getId() == 1) {
-        actionRol = "/admin/guardarImplementacion";
-        filtrar = "/admin/filtrarTipo";
+        cabecera = "./admin/cabeceraAdmin.jsp";
         disabled = true;
     }
     Boolean isAdmin = userRol.getId() == 1;
@@ -64,13 +65,9 @@
     </style>
 </head>
 <body class="bg-light">
-<%
-    if(isAdmin){
-%>
-<jsp:include page="admin/cabeceraAdmin.jsp"></jsp:include>
-<%
-    }
-%>
+
+<jsp:include page="<%=cabecera%>"></jsp:include>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -107,7 +104,7 @@
                             <label class="form-label">Metros:</label>
                             <form:input path="metros" value="${metros}" class="form-control"/>
                         </div>
-                        <div class="form-group form-select <%= isAdmin ? "" : "hidden" %>">
+                        <div class="form-group form-select">
                             <label class="form-label">Rutina:</label>
                             <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
                         </div>

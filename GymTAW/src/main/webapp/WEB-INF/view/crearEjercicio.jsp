@@ -10,10 +10,14 @@
     EjercicioUI ejercicioUI = (EjercicioUI) request.getAttribute("ejercicioUI");
     UserRol userRol = (UserRol) session.getAttribute("rol");
     Boolean disabled = true;
-    String actionRol = "/entrenamientos/guardar-ejercicio";
+    String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
+    String clase = "Crossfit";
     if(userRol.getId() == 1) {
         disabled = false;
-        actionRol = "/admin/guardarEjercicio";
+        cabecera = "./admin/cabeceraAdmin.jsp";
+        clase = "";
+    }else if(userRol.getId() == 3) {
+        clase = "bodybuilding";
     }
 
 %>
@@ -23,7 +27,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<jsp:include page="admin/cabeceraAdmin.jsp"></jsp:include>
+<jsp:include page="<%=cabecera%>"></jsp:include>
 <div>
     <h3>
         <%=ejercicioUI.getId() == null ? "Crear ejercicio" : "Modificar ejercicio"%>
@@ -31,13 +35,13 @@
     <p>
         <%=ejercicioUI.getId() == null ? "Introduzca los datos necesarios para añadir un nuevo ejercicio" : "Modifica los datos del ejercicio como desee"%>
     </p>
-    <form:form action="<%=actionRol%>" method="post" modelAttribute="ejercicioUI">
+    <form:form action="/comun/guardarEjercicio" method="post" modelAttribute="ejercicioUI">
         <form:hidden path="id"></form:hidden>
         <label>Nombre: </label>
         <form:input path="nombre" size="15"></form:input>
         <br>
         <label>Clase:</label>
-        <form:input path="trainerEjercicio" size="10" disabled="<%=disabled%>"></form:input>
+        <form:input path="trainerEjercicio" size="10" disabled="<%=disabled%>" value="<%=clase%>"></form:input>
         <br>
         <label>Tipo:</label>
         <br>

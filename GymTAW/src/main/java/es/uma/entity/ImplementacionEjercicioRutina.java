@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -11,16 +13,19 @@ import lombok.Setter;
 public class ImplementacionEjercicioRutina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "`idimplementacion_ejercicio-rutina`", nullable = false)
+    @Column(name = "idimplementacion_ejercicio-rutina", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ejercicio")
+    @JoinColumn(name = "ejercicio", nullable = false)
     private Ejercicio ejercicio;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rutina")
+    @JoinColumn(name = "rutina", nullable = false)
     private Rutina rutina;
+
+    @OneToMany(mappedBy = "implementacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedbackEjercicio> feedbacks;
 
     @Column(name = "sets", length = 45)
     private String sets;

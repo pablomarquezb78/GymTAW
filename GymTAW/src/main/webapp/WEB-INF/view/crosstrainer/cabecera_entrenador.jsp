@@ -15,7 +15,7 @@
                 <a class="nav-link" href="/comun/mostrarEjercicios">Entrenamientos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Tipos</a>
+                <a class="nav-link" href="/comun/mostrarTiposEjercicio">Tipos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link">Rutinas</a>

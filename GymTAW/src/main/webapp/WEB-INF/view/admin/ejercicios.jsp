@@ -16,7 +16,6 @@
         title = "Admin";
         cabecera = "cabeceraAdmin.jsp";
     }
-    request.setAttribute("cabecera", cabecera);
 %>
 
 <html>
@@ -49,17 +48,17 @@
         <td><%=ejercicio.getTipo().getTipoDeEjercicio()%></td>
         <td><%=ejercicio.getEnlaceVideo()%></td>
         <td><%=ejercicio.getDescripcion()%></td>
-        <td><a href="/admin/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
-        <td><a href="/admin/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
-        <td><a href="/admin/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
+        <td><a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+        <td><a href="/comun/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
+        <td><a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
     </tr>
     <%
         }
     %>
 </table>
-<a href="/admin/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+<a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
 
-<form:form action="/admin/filtrarEjercicios" method="post" modelAttribute="ejercicio">
+<form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio">
     <br>
     <label>Nombre:</label>
     <form:input path="nombre" size="15"></form:input>
