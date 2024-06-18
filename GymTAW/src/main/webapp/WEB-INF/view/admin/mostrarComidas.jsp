@@ -57,14 +57,14 @@
             %>
         </td>
 
-        <td><a href="/admin/editar?id=<%=comida.getId()%>">Editar</a></td>
+        <td><a href="/admin/editarComida?idPlato=<%=plato.getId()%>&idComida=<%=comida.getId()%>">Editar</a></td>
         <td><a href="/admin/borrarComida?idPlato=<%=plato.getId()%>&idComida=<%=comida.getId()%>">Borrar</a></td>
     </tr>
     <%
         }
     %>
 </table>
-<a href="/admin/crearNuevaComida" class="btn btn-success mt-3">Crear nueva comida</a>
+<a href="/admin/crearNuevaComida?idPlato=<%=plato.getId()%>" class="btn btn-success mt-3">Crear nueva comida</a>
 
 <br>
 <form:form action="<%=dir%>" method="post" modelAttribute="cantidadPlatoComida">

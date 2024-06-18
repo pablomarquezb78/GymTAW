@@ -44,6 +44,10 @@ public class AdminController extends BaseController {
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
     @Autowired
     protected TipoComidaRepository tipoComidaRepository;
+    @Autowired
+    private ComidaRepository comidaRepository;
+    @Autowired
+    private DiaDietaRepository diaDietaRepository;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -462,7 +466,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "crearPlato";
+            dir = "admin/crearPlato";
             model.addAttribute("platoUI", platoUI);
         } else {
             dir = "redirect:/";
@@ -475,14 +479,26 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarPlatos";
-            Plato nuevoPlato = new Plato();
-            nuevoPlato.setNombre(platoUI.getNombre());
-            nuevoPlato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
-            nuevoPlato.setEnlaceReceta(platoUI.getEnlaceReceta());
-            nuevoPlato.setReceta(platoUI.getReceta());
+            if(platoUI.getId() == null){
+                dir = "redirect:/admin/mostrarPlatos";
+                Plato nuevoPlato = new Plato();
+                nuevoPlato.setNombre(platoUI.getNombre());
+                nuevoPlato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
+                nuevoPlato.setEnlaceReceta(platoUI.getEnlaceReceta());
+                nuevoPlato.setReceta(platoUI.getReceta());
 
-            platosRepository.save(nuevoPlato);
+                platosRepository.save(nuevoPlato);
+            }else{
+                dir = "redirect:/admin/mostrarPlatos";
+                Plato plato = platosRepository.findById(platoUI.getId()).orElse(null);
+                plato.setNombre(platoUI.getNombre());
+                plato.setEnlaceReceta(platoUI.getEnlaceReceta());
+                plato.setReceta(platoUI.getReceta());
+                plato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
+
+                platosRepository.save(plato);
+            }
+
         } else {
             dir = "redirect:/";
         }
@@ -494,7 +510,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "crearPlato";
+            dir = "admin/crearPlato";
             Plato plato = platosRepository.findById(id).orElse(null);
             platoUI.setNombre(plato.getNombre());
             platoUI.setEnlaceReceta(plato.getEnlaceReceta());
@@ -508,24 +524,6 @@ public class AdminController extends BaseController {
         return dir;
     }
 
-    @PostMapping("/modificarPlato")
-    public String doModificarPlato(HttpSession session, PlatoUI platoUI) {
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/mostrarPlatos";
-            Plato plato = platosRepository.findById(platoUI.getId()).orElse(null);
-            plato.setNombre(platoUI.getNombre());
-            plato.setEnlaceReceta(platoUI.getEnlaceReceta());
-            plato.setReceta(platoUI.getReceta());
-            plato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
-
-            platosRepository.save(plato);
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
 
     @GetMapping("/borrarPlato")
     public String doBorrarPlato(@RequestParam("id") Integer id, HttpSession session){
@@ -586,6 +584,106 @@ public class AdminController extends BaseController {
                 model.addAttribute("plato",plato);
                 dir = "admin/mostrarComidas";
             }
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/crearNuevaComida")
+    public String doCrearNuevaComida(@RequestParam("idPlato") Integer idPlato, Model model, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/crearComida";
+            AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
+            asignacionPlatoComida.setIdPlato(idPlato);
+            List<User> clientes = userRepository.listarClientes();
+            List<User> dietistas = userRepository.listarDietistas();
+            model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
+            model.addAttribute("clientes", userRepository.listarClientes());
+            model.addAttribute("dietistas", userRepository.listarDietistas());
+            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/editarComida")
+    public String doCrearNuevaComida(@RequestParam("idPlato") Integer idPlato, @RequestParam("idComida") Integer idComida, Model model, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            dir = "admin/crearComida";
+            AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
+            CantidadIngredientePlatoComida apidc = cantidadIngredientePlatoComidaRepository.findById(idComida).orElse(null);
+            asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getCliente().getId());
+            asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getDietista().getId());
+            asignacionPlatoComida.setCantidad(apidc.getCantidad());
+            asignacionPlatoComida.setTipoComida(apidc.getComida().getTipoComida());
+            asignacionPlatoComida.setIdComida(apidc.getId());
+            asignacionPlatoComida.setIdPlato(apidc.getPlato().getId());
+            asignacionPlatoComida.setFecha(apidc.getComida().getDiaDieta().getFecha().toString());
+            asignacionPlatoComida.setIdComida(apidc.getId());
+
+
+            model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
+            model.addAttribute("clientes", userRepository.listarClientes());
+            model.addAttribute("dietistas", userRepository.listarDietistas());
+            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/guardarComida")
+    public String doGuardarComida(@ModelAttribute AsignacionPlatoComida asignacionPlatoComida, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol)) {
+            if(asignacionPlatoComida.getIdComida() == null){
+                dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
+                CantidadIngredientePlatoComida cipc = new CantidadIngredientePlatoComida();
+                Plato plato = platosRepository.findById(asignacionPlatoComida.getIdPlato()).orElse(null);
+                Comida comida = new Comida();
+                DiaDieta diaDieta = new DiaDieta();
+
+                diaDieta.setCliente(userRepository.findById(asignacionPlatoComida.getIdCliente()).orElse(null));
+                diaDieta.setDietista(userRepository.findById(asignacionPlatoComida.getIdDietista()).orElse(null));
+                diaDieta.setFecha( LocalDate.parse(asignacionPlatoComida.getFecha()));
+                diaDietaRepository.save(diaDieta);
+
+                comida.setTipoComida(asignacionPlatoComida.getTipoComida());
+                comida.setDiaDieta(diaDieta);
+                comidaRepository.save(comida);
+
+                cipc.setPlato(plato);
+                cipc.setCantidad(asignacionPlatoComida.getCantidad());
+                cipc.setComida(comida);
+                cantidadIngredientePlatoComidaRepository.save(cipc);
+
+            }else{
+                dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
+                CantidadIngredientePlatoComida cipc = cantidadIngredientePlatoComidaRepository.getById(asignacionPlatoComida.getIdComida());
+                Comida comida = cipc.getComida();
+                DiaDieta diaDieta = comida.getDiaDieta();
+
+                diaDieta.setCliente(userRepository.findById(asignacionPlatoComida.getIdCliente()).orElse(null));
+                diaDieta.setDietista(userRepository.findById(asignacionPlatoComida.getIdDietista()).orElse(null));
+                diaDieta.setFecha( LocalDate.parse(asignacionPlatoComida.getFecha()));
+                diaDietaRepository.save(diaDieta);
+
+                comida.setTipoComida(asignacionPlatoComida.getTipoComida());
+                comida.setDiaDieta(diaDieta);
+                comidaRepository.save(comida);
+
+                cipc.setCantidad(asignacionPlatoComida.getCantidad());
+                cipc.setComida(comida);
+                cantidadIngredientePlatoComidaRepository.save(cipc);
+            }
+
         } else {
             dir = "redirect:/";
         }
