@@ -1,12 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="es.uma.ui.EjercicioUI" %>
 <%@ page import="es.uma.ui.CantidadPlatoComida" %>
-<%@ page import="es.uma.entity.User" %>
-<%@ page import="es.uma.entity.TipoComida" %>
 <%@ page import="es.uma.ui.AsignacionPlatoComida" %>
+<%@ page import="es.uma.entity.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -14,6 +11,7 @@
     List<User> clientes = (List<User>) request.getAttribute("clientes");
     List<User> dietistas = (List<User>) request.getAttribute("dietistas");
     List<TipoComida> tiposComida = (List<TipoComida>) request.getAttribute("tipos");
+    List<Ingrediente> ingredientes = (List<Ingrediente>) request.getAttribute("ingredientes");
 %>
 <html>
 <head>
@@ -46,8 +44,6 @@
         <br>
         <label>Cantidad:</label>
         <form:input path="cantidad" size="5"></form:input>
-        <br>
-        <label>Ingredientes:</label>
         <br>
         <form:button>Guardar comida</form:button>
     </form:form>

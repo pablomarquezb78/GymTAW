@@ -1,6 +1,9 @@
 package es.uma.ui;
 
+import es.uma.entity.Ingrediente;
 import es.uma.entity.TipoComida;
+
+import java.util.List;
 
 public class AsignacionPlatoComida {
 
@@ -11,6 +14,7 @@ public class AsignacionPlatoComida {
     private Integer idDietista;
     private Integer cantidad;
     private TipoComida tipoComida;
+    private List<Ingrediente> ingredientes;
 
     public Integer getIdPlato() {
         return idPlato;
@@ -67,6 +71,15 @@ public class AsignacionPlatoComida {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
+    public List<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<Ingrediente> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
 
     public boolean estaVacio(){
         return this.getIdCliente() == null && this.getIdDietista() == null && this.getTipoComida() == null && this.getCantidad() == null && this.getFecha().isEmpty();
