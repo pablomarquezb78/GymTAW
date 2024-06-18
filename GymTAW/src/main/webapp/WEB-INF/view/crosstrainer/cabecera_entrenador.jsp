@@ -15,10 +15,10 @@
                 <a class="nav-link" href="/comun/mostrarEjercicios">Entrenamientos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/entrenamientos/mostrarTiposEjercicio">Tipos</a>
+                <a class="nav-link" href="/entrenamientos/mostrarTiposEjercicio">Tipos de Ejercicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Rutinas</a>
+                <a class="nav-link" href="/entrenamientos/mostrarRutinas">Rutinas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/entrenamientos/verperfil">Perfil</a>

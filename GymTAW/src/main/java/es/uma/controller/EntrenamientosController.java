@@ -263,6 +263,29 @@ public class EntrenamientosController extends BaseController{
 
     }
 
+  /*  @GetMapping("/creador-rutina")
+    public String creadorRutina(Model model, HttpSession session){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            dir = "crosstrainer/crearTipo";
+            TipoEjercicio tipo = tipoEjercicioRepository.findById(id).orElse(null);
+            TipoEjercicioUI tipoEjercicio = new TipoEjercicioUI();
+            tipoEjercicio.setIdTipoEjercicio(tipo.getId());
+            tipoEjercicio.setNombreTipoEjercicio(tipo.getTipoDeEjercicio());
+            model.addAttribute("rol", rol);
+            model.addAttribute("tipoEjercicio", tipoEjercicio);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+
+    }*/
+
+
+
     @PostMapping("/asociar-rutina")
     public String doAsociarRutina(AsociacionRutina asociacionRutina, Model model, HttpSession session){
 
@@ -745,6 +768,23 @@ public class EntrenamientosController extends BaseController{
             model.addAttribute("ejercicio", new EjercicioUI());
 
             return "admin/ejercicios";
+
+        }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/mostrarRutinas")
+    public String verRutinasCompletas(HttpSession session, Model model){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            List<Rutina> rutinas = rutinaRepository.findAll();
+            model.addAttribute("rutinas",rutinas);
+            return "crosstrainer/rutinas";
 
         }else{
             dir = "redirect:/";

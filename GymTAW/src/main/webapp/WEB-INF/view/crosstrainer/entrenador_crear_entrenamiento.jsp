@@ -25,6 +25,12 @@
 
     </form>
 
+<%--
+    <a href="/entrenamientos/creador-rutina" class="btn btn-success">Crear Rutina</a>
+    <a href="/entrenamientos/asociar-rutina" class="btn btn-primary">Asociar rutina</a>
+--%>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </body>
