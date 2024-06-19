@@ -19,7 +19,6 @@
 
     <form method="post" action="/entrenamientos/entrenador-rutina">
 
-        <input type="date" value="2000-01-01" name="fecha">
         <input hidden="hidden" name="id" value="<%=id%>">
         <button type="submit" name="accion" value="crear">Crear Rutina</button>
         <button type="submit" name="accion" value="asociar">Asociar Rutina</button>

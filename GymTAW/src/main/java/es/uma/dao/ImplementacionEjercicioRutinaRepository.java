@@ -14,6 +14,9 @@ public interface ImplementacionEjercicioRutinaRepository extends JpaRepository<I
     @Query("SELECT i from ImplementacionEjercicioRutina  i where i.rutina = :rutina")
     List<ImplementacionEjercicioRutina> encontrarImplementacionesPorRutinas(@Param("rutina") Rutina rutina);
 
+    @Query("SELECT i from ImplementacionEjercicioRutina  i where i.rutina.id = :idrutina")
+    List<ImplementacionEjercicioRutina> encontrarImplementacionesPorRutinaID(@Param("idrutina") Integer idrutina);
+
     @Query("select i from ImplementacionEjercicioRutina i where i.ejercicio = :ejercicio")
     List<ImplementacionEjercicioRutina> buscarPorEjercicio(@Param("ejercicio") Ejercicio ejercicio);
 

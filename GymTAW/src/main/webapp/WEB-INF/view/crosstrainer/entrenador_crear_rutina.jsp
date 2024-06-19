@@ -2,9 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.dao.EjercicioRepository" %>
 <%@ page import="es.uma.entity.Rutina" %>
+<%@ page import="es.uma.dto.RutinaDTO" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%
-    List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    Rutina rutina = (Rutina) request.getAttribute("rutina");
+    List<ImplementacionEjercicioRutinaDTO> lista = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
+    RutinaDTO rutina = (RutinaDTO) request.getAttribute("rutina");
 %>
 
 <!DOCTYPE html>
@@ -42,7 +44,7 @@
         </thead>
         <tbody>
         <%
-            for (ImplementacionEjercicioRutina imp : lista) {
+            for (ImplementacionEjercicioRutinaDTO imp : lista) {
         %>
         <tr>
             <td><%= imp.getEjercicio().getNombre() %></td>

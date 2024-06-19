@@ -15,10 +15,5 @@ public class RegistroDTO {
     private Integer telefono;
     private LocalDate fechaNacimiento;
     private Integer rol;
-
-    private List<PlatoDTO> platos;
-    private List<EjercicioDTO> ejercicios;
-    private List<FeedbackEjercicioDTO> feedbackEjercicios;
-    private List<FeedbackEjercicioserieDTO> feedbackEjercicioserie;
-    private List<ImplementacionEjercicioRutinaDTO> implementaciones;
+    
 }

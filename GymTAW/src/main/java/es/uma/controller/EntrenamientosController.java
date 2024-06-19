@@ -3,9 +3,13 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.dto.DiaEntrenamientoDTO;
+import es.uma.dto.ImplementacionEjercicioRutinaDTO;
+import es.uma.dto.RutinaDTO;
 import es.uma.dto.UserDTO;
 import es.uma.entity.*;
 import es.uma.service.DiaEntrenamientoService;
+import es.uma.service.ImplementacionEjercicioRutinaService;
+import es.uma.service.RutinaService;
 import es.uma.service.UserService;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
@@ -23,6 +27,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -45,6 +50,10 @@ public class EntrenamientosController extends BaseController{
     private UserService userService;
     @Autowired
     private DiaEntrenamientoService diaEntrenamientoService;
+    @Autowired
+    private RutinaService rutinaService;
+    @Autowired
+    private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
 
 
     //DONE
@@ -87,7 +96,7 @@ public class EntrenamientosController extends BaseController{
 
         UserRol rol = (UserRol) session.getAttribute("rol");
 
-        if(estaAutenticado(session) == true && esEntrenador(rol) ) {
+        if(estaAutenticado(session) && esEntrenador(rol) ) {
             model.addAttribute("idcliente", id);
         }else{
             strTo= "redirect:/";
@@ -96,13 +105,15 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+
     @GetMapping("/crearrutina")
     public String doCrearRutina(@RequestParam("idrutina") Integer idrutina,Model model){
         String strTo = "/crosstrainer/entrenador_crear_rutina";
 
-        Rutina rutina = rutinaRepository.getById(idrutina);
+        RutinaDTO rutina = rutinaService.getRutinaByID(idrutina);
 
-        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinas(rutina);
+        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(rutina.getId());
+
         if(lista==null){
             lista = new ArrayList<>();
         }
@@ -230,7 +241,7 @@ public class EntrenamientosController extends BaseController{
     }
 
     @PostMapping("/entrenador-rutina")
-    public String doLoadFecha(@RequestParam("accion") String accion, @RequestParam("id") Integer idcliente, @RequestParam("fecha") String fecha,Model model, HttpSession session){
+    public String doLoadFecha(@RequestParam("accion") String accion, @RequestParam("id") Integer idcliente,Model model, HttpSession session){
 
        String url = "redirect:/";
        User user = (User) session.getAttribute("user");
@@ -241,14 +252,12 @@ public class EntrenamientosController extends BaseController{
             User entrenador = (User) session.getAttribute("user");
             rutina.setEntrenador(entrenador);
 
-           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-           LocalDate fechanueva = LocalDate.parse(fecha, formatter);
+
 
            // Convertimos LocalDate to Instant
-           Instant fechaCreacion = fechanueva.atStartOfDay(ZoneOffset.UTC).toInstant();
 
-            rutina.setFechaCreacion(Instant.from(fechaCreacion));
-            rutina.setNombre("Rutina de " + entrenador.getNombre() +"("+ fecha + ")");
+            rutina.setFechaCreacion(Instant.from(Instant.now()));
+            rutina.setNombre("Rutina de " + entrenador.getNombre());
             rutinaRepository.save(rutina);
 
             return "redirect:/entrenamientos/crearrutina?idrutina=" + rutina.getId();
@@ -261,7 +270,7 @@ public class EntrenamientosController extends BaseController{
            AsociacionRutina asociacionRutina = new AsociacionRutina();
            asociacionRutina.setIdCliente(idcliente);
            asociacionRutina.setIdTrainer(user.getId());
-           asociacionRutina.setFecha(fecha);
+           asociacionRutina.setFecha(String.valueOf(Date.from(Instant.now())));
 
            model.addAttribute("rutinas",rutinas);
            model.addAttribute("asociacionRutina",asociacionRutina);
