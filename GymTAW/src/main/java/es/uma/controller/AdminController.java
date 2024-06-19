@@ -2,6 +2,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.service.UserService;
 import es.uma.ui.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -50,15 +51,17 @@ public class AdminController extends BaseController {
     private DiaDietaRepository diaDietaRepository;
     @Autowired
     private IngredienteRepository ingredienteRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            model.addAttribute("clientes", this.userRepository.listarClientes().size());
-            model.addAttribute("entrenadores", this.userRepository.listarEntrenadores().size());
-            model.addAttribute("dietistas", this.userRepository.listarDietistas().size());
+            model.addAttribute("clientes", userService.getAllUsers().size());
+            model.addAttribute("entrenadores", userService.getAllTrainers().size());
+            model.addAttribute("dietistas", userService.getAllDietistas().size());
             model.addAttribute("ejercicios", this.ejercicioRepository.findAll().size());
             model.addAttribute("platos", this.platosRepository.findAll().size());
             dir = "admin/inicioAdmin";

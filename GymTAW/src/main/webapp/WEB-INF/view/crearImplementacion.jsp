@@ -108,10 +108,16 @@
                             <label class="form-label">Metros:</label>
                             <form:input path="metros" value="${metros}" class="form-control"/>
                         </div>
-                        <div class="form-group form-select">
-                            <label class="form-label">Rutina:</label>
-                            <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
-                        </div>
+                        <%
+                            if(isAdmin){
+                        %>
+                            <div class="form-group form-select">
+                                <label class="form-label">Rutina:</label>
+                                <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                            </div>
+                        <%
+                            }
+                        %>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group form-select">
