@@ -13,8 +13,9 @@
 
 </head>
 <body>
+<jsp:include page="cabecera_entrenador.jsp"/>
 
-    <h1>CREADOR EJERCICIO</h1>
+<h1>CREADOR EJERCICIO</h1>
 
     <form method="post" action="/entrenamientos/entrenador-rutina">
 

@@ -20,6 +20,7 @@
 
 </head>
 <body>
+<jsp:include page="cabecera_entrenador.jsp"/>
 
     <h1>Listado de Rutinas ya creadas:</h1>
 
