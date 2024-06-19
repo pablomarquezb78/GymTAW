@@ -1,10 +1,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.Plato" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Plato> platos = (List<Plato>) request.getAttribute("platos");
+    List<PlatoDTO> platos = (List<PlatoDTO>) request.getAttribute("platos");
 %>
 
 <html>
@@ -30,7 +31,7 @@
     </tr>
 
     <%
-        for(Plato plato : platos){
+        for(PlatoDTO plato : platos){
 
     %>
     <tr>
