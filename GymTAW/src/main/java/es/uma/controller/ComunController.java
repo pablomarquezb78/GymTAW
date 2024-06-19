@@ -41,7 +41,8 @@ public class ComunController extends BaseController{
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
     @Autowired
     protected TipoComidaRepository tipoComidaRepository;
-
+    @Autowired
+    protected DiaEntrenamientoRepository diaEntrenamientoRepository;
 
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
@@ -264,6 +265,44 @@ public class ComunController extends BaseController{
         return dir;
     }
 
+    private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
+        implementacion.setEjercicio(imp.getEjercicio());
+        implementacion.setSets(imp.getSets());
+        implementacion.setRepeticiones(imp.getRepeticiones());
+        implementacion.setPeso(imp.getPeso());
+        implementacion.setTiempo(imp.getTiempo());
+        implementacion.setKilocalorias(imp.getKilocalorias());
+        implementacion.setMetros(imp.getMetros());
+    }
+
+    //Este guardar es para entrenador
+    @PostMapping("/guardarimplementacion")
+    public String doGuardarImplementacionEntrenador(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
+        String strTo = "redirect:/entrenamientos/editardia?iddia=" + implementacion.getIdDia();
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp;
+            if(implementacion.getId()!=null){
+                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+                asignarImplementacionReal(imp,implementacion);
+            }else{
+                imp = new ImplementacionEjercicioRutina();
+                DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacion.getIdDia());
+                imp.setRutina(dia.getRutina());
+
+                asignarImplementacionReal(imp,implementacion);
+            }
+
+            this.implementacionEjercicioRutinaRepository.save(imp);
+        }
+
+
+        return strTo;
+    }
+
+    //Este guardar es para admin
     @PostMapping("/guardarImplementacion")
     public String doGuardarImplementacion(@ModelAttribute Implementacion implementacion, HttpSession session){
         String dir;
