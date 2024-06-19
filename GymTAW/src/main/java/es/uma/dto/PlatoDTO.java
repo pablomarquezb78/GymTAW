@@ -11,6 +11,6 @@ public class PlatoDTO {
     private String tiempoDePreparacion;
     private String receta;
     private String enlaceReceta;
-    //private List<AsignacionPlatoIngredienteDietistaCreadorDTO> asignaciones;
-    //private List<CantidadIngredientePlatoComidaDTO> cantidades;
+    private List<AsignacionPlatoIngredienteDietistaCreadorDTO> asignaciones;
+    private List<CantidadIngredientePlatoComidaDTO> cantidades;
 }

@@ -12,5 +12,5 @@ public class FeedbackEjercicioserieDTO {
     private String tiempoRealizado;
     private String kilocaloriasRealizado;
     private String metrosRealizado;
-    private FeedbackEjercicio feedbackEjercicio;
+    private FeedbackEjercicioDTO feedbackEjercicio;
 }

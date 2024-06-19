@@ -15,8 +15,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserRolService userRolService;
+
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getAllCustomers() {
+        return userRepository.listarClientes()
                 .stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
@@ -48,7 +58,7 @@ public class UserService {
         userDTO.setAltura(user.getAltura());
         userDTO.setFechaNacimiento(user.getFechaNacimiento());
         userDTO.setDescripcionPersonal(user.getDescripcionPersonal());
-        userDTO.setRol(user.getRol());
+        userDTO.setRol(userRolService.convertEntityToDto(user.getRol()));
         return userDTO;
     }
 

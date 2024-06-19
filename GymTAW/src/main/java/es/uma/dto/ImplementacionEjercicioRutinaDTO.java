@@ -12,7 +12,7 @@ public class ImplementacionEjercicioRutinaDTO {
     private Integer id;
     private Ejercicio ejercicio;
     private Rutina rutina;
-    private List<FeedbackEjercicio> feedbacks;
+    private List<FeedbackEjercicioDTO> feedbacks;
     private String sets;
     private String repeticiones;
     private String peso;

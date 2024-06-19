@@ -13,5 +13,5 @@ public class EjercicioDTO {
     private TipoEjercicio tipo;
     private String descripcion;
     private String enlaceVideo;
-    private List<ImplementacionEjercicioRutina> implementaciones;
+    private List<ImplementacionEjercicioRutinaDTO> implementaciones;
 }

@@ -1,7 +1,5 @@
 package es.uma.dto;
 
-import es.uma.entity.ImplementacionEjercicioRutina;
-import es.uma.entity.User;
 import lombok.Data;
 
 import java.time.Instant;
@@ -12,6 +10,6 @@ public class RutinaDTO {
     private Integer id;
     private Instant fechaCreacion;
     private String nombre;
-    private User entrenador;
-    private List<ImplementacionEjercicioRutina> implementacionesEjercicioRutina;
+    private UserDTO entrenador;
+    private List<ImplementacionEjercicioRutinaDTO> implementacionesEjercicioRutina;
 }

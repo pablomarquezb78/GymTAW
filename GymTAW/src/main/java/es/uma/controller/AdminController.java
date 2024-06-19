@@ -59,7 +59,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            model.addAttribute("clientes", userService.getAllUsers().size());
+            model.addAttribute("clientes", userService.getAllCustomers().size());
             model.addAttribute("entrenadores", userService.getAllTrainers().size());
             model.addAttribute("dietistas", userService.getAllDietistas().size());
             model.addAttribute("ejercicios", this.ejercicioRepository.findAll().size());
@@ -131,7 +131,7 @@ public class AdminController extends BaseController {
             List<UserRol> roles = rolRepository.findAll();
             model.addAttribute("usuario", new Usuario());
             model.addAttribute("roles", roles);
-            model.addAttribute("usuarios", this.userRepository.findAll());
+            model.addAttribute("usuarios", userService.getAllUsers());
             dir = "admin/usuarios";
         } else {
             dir = "redirect:/";

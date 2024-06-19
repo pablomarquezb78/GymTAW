@@ -18,5 +18,5 @@ public class UserDTO {
     private Integer altura;
     private LocalDate fechaNacimiento;
     private String descripcionPersonal;
-    private UserRol rol;
+    private UserRolDTO rol;
 }

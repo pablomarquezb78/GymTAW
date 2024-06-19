@@ -3,10 +3,11 @@
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.ui.Usuario" %>
+<%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<User> usuarios = (List<User>) request.getAttribute("usuarios");
+    List<UserDTO> usuarios = (List<UserDTO>) request.getAttribute("usuarios");
     List<UserRol> roles = (List<UserRol>) request.getAttribute("roles");
 %>
 
@@ -37,7 +38,7 @@
     </tr>
 
     <%
-        for(User user : usuarios){
+        for(UserDTO user : usuarios){
 
     %>
     <tr>

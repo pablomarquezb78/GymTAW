@@ -10,13 +10,13 @@ import java.util.List;
 @Data
 public class FeedbackEjercicioDTO {
     private Integer id;
-    private ImplementacionEjercicioRutina implementacion;
-    private DiaEntrenamiento diaEntrenamiento;
+    private ImplementacionEjercicioRutinaDTO implementacion;
+    private DiaEntrenamientoDTO diaEntrenamiento;
     private Byte realizado;
     private String seguimientoSetsDone;
     private String seguimientoTiempoDone;
     private String seguimientoKilocaloriasDone;
     private String seguimientoMetrosDone;
     private String seguimientoPesoDone;
-    private List<FeedbackEjercicioserie> feedbacks;
+    private List<FeedbackEjercicioserieDTO> feedbacks;
 }
