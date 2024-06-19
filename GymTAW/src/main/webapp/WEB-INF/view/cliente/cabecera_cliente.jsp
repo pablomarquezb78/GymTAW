@@ -22,13 +22,16 @@
                 <a class="nav-link" href="mostrarEntrenamientos">Entrenamientos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Dietas</a>
+                <a class="nav-link" href="mostrarDietas">Dietas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Desempeño</a>
+                <a class="nav-link" href="mostrarDesempeño">Desempeño</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">Perfil</a>
+                <a class="nav-link" href="irAPerfil">Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cerrarSesion">Cerrar sesión</a>
             </li>
         </ul>
     </div>

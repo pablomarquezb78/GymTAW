@@ -36,8 +36,9 @@
     <title>Title</title>
 </head>
 <body>
+<h1>Detalles del entrenamiento:</h1>
 
-<table class="table">
+<table class="table w-75">
     <thead>
     <tr>
         <th scope="col">#</th>

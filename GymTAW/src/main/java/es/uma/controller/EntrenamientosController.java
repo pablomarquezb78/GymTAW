@@ -8,11 +8,6 @@ import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import es.uma.ui.Usuario;
 import es.uma.ui.TipoEjercicioUI;
-
-import es.uma.ui.Usuario;
-
-import es.uma.ui.TipoEjercicioUI;
-
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -432,7 +427,7 @@ public class EntrenamientosController extends BaseController{
 
     @GetMapping("/verperfilcliente")
     public String doVerPerfilCliente(@RequestParam("idcliente") Integer id,HttpSession session,Model model){
-
+        
         String strTo = "/perfil";
 
         if(!estaAutenticado(session)) {
@@ -477,9 +472,6 @@ public class EntrenamientosController extends BaseController{
 
         return strTo;
     }
-
-
-
 
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,

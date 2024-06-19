@@ -13,4 +13,8 @@ public interface DiaDietaRepository extends JpaRepository<DiaDieta, Integer> {
     @Query("select distinct d from DiaDieta d where d.dietista = :dietista and d.cliente = :cliente and year(d.fecha) = year(:fecha) and month(d.fecha) = month(:fecha) and day(d.fecha) = day(:fecha)")
     DiaDieta findByFecha(@Param("dietista") User dietista, @Param("cliente") User cliente, @Param("fecha") LocalDate fecha);
 
+    //@Author Pablo Márquez Benítez
+    @Query("select distinct d from DiaDieta d where d.cliente = :cliente and d.fecha = :fecha")
+    DiaDieta diaDietaConcretoCliente(@Param("cliente") User cliente, @Param("fecha") LocalDate fecha);
+
 }

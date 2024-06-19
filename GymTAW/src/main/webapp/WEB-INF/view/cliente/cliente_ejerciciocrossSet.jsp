@@ -55,7 +55,7 @@
         <div class="d-flex gap-2">
             <span class="text-white">Realizado:</span>
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="realizado-switch" name="realizado" value="1" <%= realizado == 1 ? "checked" : "" %>>
+                <input class="form-check-input" type="checkbox" name="realizado" value="1" <%= realizado == 1 ? "checked" : "" %>>
             </div>
             <span class="text-white">Series Realizadas:</span>
             <input type="number" name="seriesRealizadas" value="<%=setsRealizadas%>" <%=realizado==0 ?  "disabled" : ""%> class="w-25">
