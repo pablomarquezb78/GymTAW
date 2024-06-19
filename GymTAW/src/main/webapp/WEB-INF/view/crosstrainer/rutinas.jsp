@@ -44,8 +44,7 @@
             <td><%=rutina.getNombre()%></td>
             <td><%=rutina.getFechaCreacion().toString()%></td>
             <td><%=rutina.getEntrenador().getNombre()%></td>
-            <td><a class="btn btn-success">Ver más</a></td>
-            <td><a class="btn btn-warning">Editar</a></td>
+            <td><a href="/entrenamientos/crearrutina?idrutina=<%=rutina.getId()%>" class="btn btn-success">Editar</a></td>
             <td><a class="btn btn-danger">Borrar</a></td>
         </tr>
         <%

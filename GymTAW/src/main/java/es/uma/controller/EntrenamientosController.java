@@ -72,13 +72,12 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //DONE
     @GetMapping("/versemana")
     public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
         String strTo = "/crosstrainer/entrenador_semana";
 
         if(estaAutenticado(session)){
-            List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.getDiasDeClienteID(idcliente);
+            List<DiaEntrenamiento> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
 
             model.addAttribute("idcliente",idcliente);
             model.addAttribute("diasEntrenamientos", dias);
@@ -89,7 +88,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //DONE
+
     @PostMapping("/nuevo-entrenamiento")
     public String doCreateEntrenamiento(@RequestParam("id") Integer id, Model model, HttpSession session){
         String strTo =  "/crosstrainer/entrenador_crear_entrenamiento";
@@ -110,10 +109,9 @@ public class EntrenamientosController extends BaseController{
     public String doCrearRutina(@RequestParam("idrutina") Integer idrutina,Model model){
         String strTo = "/crosstrainer/entrenador_crear_rutina";
 
-        RutinaDTO rutina = rutinaService.getRutinaByID(idrutina);
+        Rutina rutina = rutinaRepository.getById(idrutina);
 
-        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(rutina.getId());
-
+        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinaID(rutina.getId());
         if(lista==null){
             lista = new ArrayList<>();
         }
@@ -472,6 +470,40 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    @GetMapping("/editarimplementaciondefinitiva")
+    public String doEditarImplementacionDefinitiva(@RequestParam("id") Integer id,
+                                         Model model,HttpSession sesion){
+        String strTo = "crearImplementacion";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+            //model.addAttribute("imp", imp);
+
+            Implementacion implementacion = new Implementacion();
+            asignarImplementacionUI(implementacion,imp);
+
+            implementacion.setId(id);
+
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+
+            model.addAttribute("implementacion",implementacion);
+
+
+            List<Ejercicio> ejercicios = ejercicioRepository.findAll();
+            model.addAttribute("ejercicios",ejercicios);
+
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
+
+
+        }
+
+
+        return strTo;
+    }
 
 
     @GetMapping("/editarimplementacion")
@@ -563,6 +595,7 @@ public class EntrenamientosController extends BaseController{
 
         return strTo;
     }
+
 
     @GetMapping("/crear-ejercicio")
     public String doCrearEjercicio(HttpSession sesion, Model model){

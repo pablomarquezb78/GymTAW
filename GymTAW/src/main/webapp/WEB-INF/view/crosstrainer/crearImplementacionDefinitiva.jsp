@@ -18,7 +18,7 @@
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
 
     UserRol userRol = (UserRol) session.getAttribute("rol");
-    String actionRol = "/entrenamientos/guardarimplementacion"; /// Esto<<<<<
+    String actionRol = "/comun/guardarImplementacion";
     cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String filtrar = "/comun/filtrartipo";
 
@@ -111,10 +111,10 @@
                         <%
                             if(isAdmin){
                         %>
-                            <div class="form-group form-select">
-                                <label class="form-label">Rutina:</label>
-                                <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
-                            </div>
+                        <div class="form-group form-select">
+                            <label class="form-label">Rutina:</label>
+                            <form:select path="rutina" items="${rutinas}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                        </div>
                         <%
                             }
                         %>
@@ -134,7 +134,7 @@
                                 <h4>Filtrar ejercicios:</h4>
                                 <form:form action="<%=filtrar%>" method="post" modelAttribute="implementacion">
                                     <form:radiobuttons path="tipofiltrado" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
-                                    <form:hidden path="iddia"/>
+                                    <form:hidden path="idrutina"/>
                                     <form:hidden path="id"/>
                                     <br>
                                     <button class="btn btn-secondary mt-3">Filtrar</button>

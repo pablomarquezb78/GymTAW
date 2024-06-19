@@ -5,8 +5,10 @@
 <%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%
-    List<ImplementacionEjercicioRutinaDTO> lista = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
-    RutinaDTO rutina = (RutinaDTO) request.getAttribute("rutina");
+    List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
+    Rutina rutina = (Rutina) request.getAttribute("rutina");
+
+    Boolean editar = true;
 %>
 
 <!DOCTYPE html>
@@ -39,20 +41,35 @@
             <th>Peso</th>
             <th>Metros</th>
             <th>Tiempo</th>
+            <%
+                if(editar) {
+            %>
+            <th>Editar</th>
             <th>Borrar</th>
+            <%
+                }
+            %>
         </tr>
         </thead>
         <tbody>
         <%
-            for (ImplementacionEjercicioRutinaDTO imp : lista) {
+
+            if(lista.size()>0 && editar){
+                for (ImplementacionEjercicioRutina imp : lista) {
         %>
         <tr>
             <td><%= imp.getEjercicio().getNombre() %></td>
-            <td><%= imp.getSets() != null ? imp.getSets() : "" %></td>
-            <td><%= imp.getRepeticiones() != null ? imp.getRepeticiones() : "" %></td>
-            <td><%= imp.getPeso() != null ? imp.getPeso() : "" %> Kg</td>
-            <td><%= imp.getMetros() != null ? imp.getMetros() : "" %> Mts</td>
-            <td><%= imp.getTiempo() != null ? imp.getTiempo() : "" %></td>
+            <td><%= imp.getSets()%></td>
+            <td><%= imp.getRepeticiones()%></td>
+            <td><%= imp.getPeso()%> Kg</td>
+            <td><%= imp.getMetros()%> Mts</td>
+            <td><%= imp.getTiempo()%></td>
+            <td>
+                <form action="/entrenamientos/editarimplementaciondefinitiva" method="get" class="d-inline">
+                    <input type="hidden" name="id" value="<%= imp.getId() %>">
+                    <button type="submit" class="btn btn-primary btn-sm">Editar</button>
+                </form>
+            </td>
             <td>
                 <form action="/entrenamientos/borrarimplementacionderutina" method="post" class="d-inline">
                     <input type="hidden" name="id" value="<%= imp.getId() %>">
@@ -62,7 +79,21 @@
             </td>
         </tr>
         <%
+                }
             }
+            else if(lista.size()>0 && !editar) {
+                for (ImplementacionEjercicioRutina imp : lista) {
+        %>
+        <tr>
+            <td><%= imp.getEjercicio().getNombre() %></td>
+            <td><%= imp.getSets()%></td>
+            <td><%= imp.getRepeticiones()%></td>
+            <td><%= imp.getPeso()%> Kg</td>
+            <td><%= imp.getMetros()%> Mts</td>
+            <td><%= imp.getTiempo()%></td>
+        </tr>
+        <%
+            }}
         %>
         </tbody>
     </table>
