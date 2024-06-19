@@ -263,6 +263,29 @@ public class EntrenamientosController extends BaseController{
 
     }
 
+  /*  @GetMapping("/creador-rutina")
+    public String creadorRutina(Model model, HttpSession session){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            dir = "crosstrainer/crearTipo";
+            TipoEjercicio tipo = tipoEjercicioRepository.findById(id).orElse(null);
+            TipoEjercicioUI tipoEjercicio = new TipoEjercicioUI();
+            tipoEjercicio.setIdTipoEjercicio(tipo.getId());
+            tipoEjercicio.setNombreTipoEjercicio(tipo.getTipoDeEjercicio());
+            model.addAttribute("rol", rol);
+            model.addAttribute("tipoEjercicio", tipoEjercicio);
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+
+    }*/
+
+
+
     @PostMapping("/asociar-rutina")
     public String doAsociarRutina(AsociacionRutina asociacionRutina, Model model, HttpSession session){
 
@@ -394,7 +417,7 @@ public class EntrenamientosController extends BaseController{
     }
 
     private void setUser(Usuario usuario,User user){
-
+        usuario.setRol(user.getRol().getId());
         usuario.setId(user.getId());
         usuario.setUsername(user.getUsername());
         usuario.setNombre(user.getNombre());
@@ -422,7 +445,8 @@ public class EntrenamientosController extends BaseController{
             setUser(usuario,user);
 
             model.addAttribute("usuario",usuario);
-
+            UserRol rol = (UserRol) session.getAttribute("rol");
+            model.addAttribute("rolid",rol.getId());
         }
 
 
@@ -445,7 +469,8 @@ public class EntrenamientosController extends BaseController{
             setUser(usuario,user);
 
             model.addAttribute("usuario",usuario);
-
+            UserRol rol = (UserRol) session.getAttribute("rol");
+            model.addAttribute("rolid",rol.getId());
         }
 
 
@@ -454,49 +479,7 @@ public class EntrenamientosController extends BaseController{
     }
 
 
-    @PostMapping("/filtrartipo")
-    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam("iddia") Integer iddia,
-                                          Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
 
-        String strTo = "crearImplementacion";
-
-        if(!estaAutenticado(sesion)){
-            strTo = "redirect:/";
-        }else{
-
-            if(id!=null){
-                ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-
-
-                if(imp!=null){
-                    asignarImplementacionUI(implementacion,imp);
-                    implementacion.setId(id);
-
-                }
-            }
-
-
-
-            implementacion.setIdDia(iddia);
-
-            model.addAttribute("implementacion",implementacion);
-
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
-            model.addAttribute("ejercicios",ejercicios);
-
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            model.addAttribute("tipos",tipos);
-
-            Boolean editable = true;
-            model.addAttribute("editable",editable);
-
-
-        }
-
-
-        return strTo;
-
-    }
 
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
@@ -745,6 +728,23 @@ public class EntrenamientosController extends BaseController{
             model.addAttribute("ejercicio", new EjercicioUI());
 
             return "admin/ejercicios";
+
+        }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/mostrarRutinas")
+    public String verRutinasCompletas(HttpSession session, Model model){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            List<Rutina> rutinas = rutinaRepository.findAll();
+            model.addAttribute("rutinas",rutinas);
+            return "crosstrainer/rutinas";
 
         }else{
             dir = "redirect:/";

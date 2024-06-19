@@ -18,14 +18,18 @@
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
 
     UserRol userRol = (UserRol) session.getAttribute("rol");
-    String actionRol = "/comun/guardarImplementacion";
+    String actionRol = "/comun/guardarimplementacion";
+    cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String filtrar = "/comun/filtrartipo";
+
+    Boolean isAdmin = userRol.getId() == 1;
+
     Boolean disabled = false;
-    if(userRol.getId() == 1) {
+    if(isAdmin) {
+        actionRol = "/comun/guardarImplementacion";
         cabecera = "./admin/cabeceraAdmin.jsp";
         disabled = true;
     }
-    Boolean isAdmin = userRol.getId() == 1;
     if (editable != null && editable) {
         sets = implementacion.getSets();
         repeticiones = implementacion.getRepeticiones();
