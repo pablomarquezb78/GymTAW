@@ -23,6 +23,10 @@ public class Rutina {
     @JoinColumn(name = "entrenador")
     private User entrenador;
 
+    @OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiaEntrenamiento> diasEntrenamiento;
+
+
     @OneToMany(mappedBy = "rutina")
     private List<ImplementacionEjercicioRutina> implementacionesEjercicioRutina;
 

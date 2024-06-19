@@ -572,8 +572,7 @@ public class EntrenamientosController extends BaseController{
 
     @PostMapping("/guardarimplementacion")
     public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
-        String strTo = "redirect:/entrenamientos/editardia?iddia=" + implementacion.getIdDia();
-
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina().getId();
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
@@ -777,5 +776,26 @@ public class EntrenamientosController extends BaseController{
         }
         return dir;
     }
+
+    @GetMapping("/borrarRutina")
+    public String borrarRutina(HttpSession session, Model model, @RequestParam("idrutina") Integer idRutina){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+
+            Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
+            rutinaRepository.delete(rutina);
+            rutinaRepository.flush();
+            return "redirect:/entrenamientos/mostrarRutinas";
+
+        }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+
+
 
 }

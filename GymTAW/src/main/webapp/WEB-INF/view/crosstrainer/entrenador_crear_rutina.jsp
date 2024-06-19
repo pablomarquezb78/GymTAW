@@ -20,6 +20,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<jsp:include page="cabecera_entrenador.jsp"></jsp:include>
 <div class="container mt-5">
     <h1 class="text-center mb-4">Nueva Rutina</h1>
 

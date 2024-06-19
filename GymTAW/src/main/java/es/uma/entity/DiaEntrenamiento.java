@@ -1,6 +1,9 @@
 package es.uma.entity;
 
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Instant;
 import java.time.LocalDate;

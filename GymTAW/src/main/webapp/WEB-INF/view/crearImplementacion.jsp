@@ -124,6 +124,7 @@
                             <label class="form-label">Ejercicio:</label>
                             <form:select size="10" path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
                         </div>
+                        <form:hidden path="rutina"></form:hidden>
                         <form:hidden path="idDia"/>
                         <form:hidden path="id"/>
                         <div class="form-group">
