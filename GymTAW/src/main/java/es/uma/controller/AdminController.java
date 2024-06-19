@@ -1,14 +1,15 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
+import es.uma.dto.UserDTO;
+import es.uma.dto.UserRolDTO;
 import es.uma.entity.*;
-import es.uma.service.EjercicioService;
-import es.uma.service.UserService;
+import es.uma.service.*;
 import es.uma.ui.*;
-import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -33,8 +34,6 @@ public class AdminController extends BaseController {
     @Autowired
     protected TipoEjercicioRepository tipoEjercicioRepository;
     @Autowired
-    protected RegistroRepository registroRepository;
-    @Autowired
     protected UserRolRepository rolRepository;
     @Autowired
     protected AsignacionClienteEntrenadorRepository asignacionClienteEntrenadorRepository;
@@ -57,6 +56,12 @@ public class AdminController extends BaseController {
     private UserService userService;
     @Autowired
     private EjercicioService ejercicioService;
+    @Autowired
+    private PlatoService platoService;
+    @Autowired
+    private RegistroService registroService;
+    @Autowired
+    private UserRolService userRolService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -67,7 +72,7 @@ public class AdminController extends BaseController {
             model.addAttribute("entrenadores", userService.getAllTrainers().size());
             model.addAttribute("dietistas", userService.getAllDietistas().size());
             model.addAttribute("ejercicios", ejercicioService.getAllExercises().size());
-            model.addAttribute("platos", this.platosRepository.findAll().size());
+            model.addAttribute("platos", platoService.getAllDishes().size());
             dir = "admin/inicioAdmin";
         } else {
             dir = "redirect:/";
@@ -80,7 +85,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            model.addAttribute("peticiones", this.registroRepository.findAll());
+            model.addAttribute("peticiones", registroService.getAllRegisters());
             dir = "admin/registro";
         } else {
             dir = "redirect:/";
@@ -93,19 +98,8 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            User newUser = new User();
-            Registro registro = this.registroRepository.getById(id);
-            UserRol newRol = this.rolRepository.getById(registro.getRol());
-
-            newUser.setUsername(registro.getUsername());
-            newUser.setNombre(registro.getNombre());
-            newUser.setPassword(registro.getPassword());
-            newUser.setRol(newRol);
-            newUser.setFechaNacimiento(registro.getFechaNacimiento());
-            newUser.setTelefono(registro.getTelefono());
-
-            this.userRepository.save(newUser);
-            this.registroRepository.deleteById(id);
+            userService.createNewUser(id);
+            registroService.deleteRegisterById(id);
             dir = "redirect:/admin/autenticarUsuarios";
         } else {
             dir = "redirect:/";
@@ -119,7 +113,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/autenticarUsuarios";
-            this.registroRepository.deleteById(id);
+            registroService.deleteRegisterById(id);
 
         } else {
             dir = "redirect:/";
@@ -132,9 +126,8 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRol> roles = rolRepository.findAll();
             model.addAttribute("usuario", new Usuario());
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", userRolService.getAllRoles());
             model.addAttribute("usuarios", userService.getAllUsers());
             dir = "admin/usuarios";
         } else {
@@ -148,17 +141,17 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRol> roles = rolRepository.findAll();
+            List<UserRolDTO> roles = userRolService.getAllRoles();
             model.addAttribute("roles", roles);
             if(usuario.estaVacio()){
                 dir = "redirect:/admin/mostrarUsuarios";
             }else{
                 if(usuario.getRol() == null && usuario.getFechaNacimiento().isEmpty()){
-                    model.addAttribute("usuarios", this.userRepository.filtrarUsuarios(usuario.getNombre(), usuario.getApellidos()));
+                    model.addAttribute("usuarios", userService.filterUsers(usuario.getNombre(), usuario.getApellidos()));
                 }else if (usuario.getRol() == null && !usuario.getFechaNacimiento().isEmpty()){
-                    model.addAttribute("usuarios", this.userRepository.filtrarUsuariosConFecha(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
+                    model.addAttribute("usuarios", userService.filterUsersWithDate(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
                 }else{
-                    model.addAttribute("usuarios", this.userRepository.filtrarUsuariosConRol(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
+                    model.addAttribute("usuarios", userService.filterUsersWithRol(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
                 }
                 dir = "admin/usuarios";
             }
@@ -174,7 +167,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRol> roles = rolRepository.findAll();
+            List<UserRolDTO> roles = userRolService.getAllRoles();
             model.addAttribute("roles", roles);
             model.addAttribute("usuario", usuario);
             dir = "admin/crearUsuario";
@@ -190,31 +183,9 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(usuario.getId() == null){
-                User nuevoUsuario = new User();
-                nuevoUsuario.setUsername(usuario.getUsername());
-                nuevoUsuario.setPassword(usuario.getPassword());
-                nuevoUsuario.setRol(rolRepository.getById(usuario.getRol()));
-                nuevoUsuario.setNombre(usuario.getNombre());
-                nuevoUsuario.setPeso(usuario.getPeso());
-                nuevoUsuario.setAltura(usuario.getAltura());
-                nuevoUsuario.setApellidos(usuario.getApellidos());
-                nuevoUsuario.setTelefono(usuario.getTelefono());
-                nuevoUsuario.setFechaNacimiento(convertirStringALocalDate(usuario.getFechaNacimiento()));
-
-                userRepository.save(nuevoUsuario);
+                userService.saveUser(usuario);
             }else{
-                User usuarioAModificar = userRepository.findById(usuario.getId()).orElse(null);
-                usuarioAModificar.setUsername(usuario.getUsername());
-                usuarioAModificar.setPassword(usuario.getPassword());
-                usuarioAModificar.setRol(rolRepository.getById(usuario.getRol()));
-                usuarioAModificar.setNombre(usuario.getNombre());
-                usuarioAModificar.setPeso(usuario.getPeso());
-                usuarioAModificar.setAltura(usuario.getAltura());
-                usuarioAModificar.setApellidos(usuario.getApellidos());
-                usuarioAModificar.setTelefono(usuario.getTelefono());
-                usuarioAModificar.setFechaNacimiento(convertirStringALocalDate(usuario.getFechaNacimiento()));
-
-                userRepository.save(usuarioAModificar);
+                userService.editUser(usuario);
             }
             dir = "redirect:/admin/mostrarUsuarios";
 
@@ -231,18 +202,11 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "/admin/crearUsuario";
-            User user = userRepository.findById(id).orElse(null);
-            usuario.setUsername(user.getUsername());
-            usuario.setPassword(user.getPassword());
-            usuario.setNombre(user.getNombre());
-            usuario.setApellidos(user.getApellidos());
-            usuario.setPeso(user.getPeso());
-            usuario.setAltura(user.getAltura());
-            usuario.setRol(user.getRol().getId());
-            usuario.setTelefono(user.getTelefono());
-            usuario.setFechaNacimiento(user.getFechaNacimiento().toString());
+            UserDTO user = userService.getById(id);
+            usuario =  userService.setUsuario(usuario, user);
 
-            List<UserRol> roles = rolRepository.findAll();
+            List<UserRolDTO> roles = userRolService.getAllRoles();
+
             model.addAttribute("roles", roles);
             model.addAttribute("usuario", usuario);
 
@@ -259,7 +223,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/mostrarUsuarios";
-            this.userRepository.deleteById(id);
+            userService.deleteById(id);
 
         } else {
             dir = "redirect:/";
@@ -273,7 +237,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignar";
-            List<User> clientes = this.userRepository.listarClientes();
+            List<UserDTO> clientes = userService.getAllCustomers();
             model.addAttribute("clientes", clientes);
         } else {
             dir = "redirect:/";
@@ -398,40 +362,6 @@ public class AdminController extends BaseController {
             dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
         } else {
             dir = "redirect:/";
-        }
-        return dir;
-    }
-
-    @PostMapping("/filtrarTipo")
-    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id, Model model,HttpSession sesion, Implementacion implementacion){
-
-        String dir = "crearImplementacion";
-
-        if(!estaAutenticado(sesion)){
-            dir = "redirect:/";
-        }else{
-
-            if(id!=null){
-                ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-
-                if(ier!=null){
-                    implementacion.setId(ier.getId());
-                    implementacion.setEjercicio(ier.getEjercicio());
-                    implementacion.setKilocalorias(ier.getKilocalorias());
-                    implementacion.setPeso(ier.getPeso());
-                    implementacion.setMetros(ier.getMetros());
-                    implementacion.setTiempo(ier.getTiempo());
-                    implementacion.setSets(ier.getSets());
-                    implementacion.setRepeticiones(ier.getRepeticiones());
-                }
-            }
-            model.addAttribute("implementacion",implementacion);
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
-            model.addAttribute("ejercicios",ejercicios);
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            model.addAttribute("tipos",tipos);
-            Boolean editable = true;
-            model.addAttribute("editable",editable);
         }
         return dir;
     }

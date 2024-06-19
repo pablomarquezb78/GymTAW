@@ -1,9 +1,10 @@
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.Registro" %>
+<%@ page import="es.uma.dto.RegistroDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Registro> peticiones = (List<Registro>) request.getAttribute("peticiones");
+    List<RegistroDTO> peticiones = (List<RegistroDTO>) request.getAttribute("peticiones");
 %>
 
 <html>
@@ -31,7 +32,7 @@
 
     <%
         String rol = "";
-        for(Registro usuario : peticiones){
+        for(RegistroDTO usuario : peticiones){
             if(usuario.getRol() == 2){
                 rol = "cliente";
             }else if(usuario.getRol() == 3){

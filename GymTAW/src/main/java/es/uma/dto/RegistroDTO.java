@@ -15,5 +15,4 @@ public class RegistroDTO {
     private Integer telefono;
     private LocalDate fechaNacimiento;
     private Integer rol;
-    
 }

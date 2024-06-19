@@ -2,10 +2,11 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.ui.Usuario" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<UserRol> roles = (List<UserRol>) request.getAttribute("roles");
+    List<UserRolDTO> roles = (List<UserRolDTO>) request.getAttribute("roles");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
 %>
 <html>

@@ -1,11 +1,18 @@
 package es.uma.service;
 
 import es.uma.dao.UserRepository;
+import es.uma.dao.UserRolRepository;
+import es.uma.dto.RegistroDTO;
 import es.uma.dto.UserDTO;
+import es.uma.dto.UserRolDTO;
 import es.uma.entity.User;
+import es.uma.ui.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +24,11 @@ public class UserService {
 
     @Autowired
     private UserRolService userRolService;
+
+    @Autowired
+    private RegistroService registroService;
+    @Autowired
+    private UserRolRepository userRolRepository;
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
@@ -53,6 +65,120 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public UserDTO createNewUser(Integer registerId){
+        UserDTO userDTO = new UserDTO();
+        RegistroDTO registroDTO = registroService.getRegisterById(registerId);
+        UserRolDTO userRolDTO = userRolService.getUserRolById(registroDTO.getRol());
+
+        userDTO.setUsername(registroDTO.getUsername());
+        userDTO.setNombre(registroDTO.getNombre());
+        userDTO.setPassword(registroDTO.getPassword());
+        userDTO.setRol(userRolDTO);
+        userDTO.setFechaNacimiento(registroDTO.getFechaNacimiento());
+        userDTO.setApellidos(registroDTO.getApellidos());
+        userDTO.setTelefono(registroDTO.getTelefono());
+
+        this.saveNewUser(userDTO);
+
+        return userDTO;
+    }
+
+    public void saveNewUser(UserDTO userDTO){
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setNombre(userDTO.getNombre());
+        user.setApellidos(userDTO.getApellidos());
+        user.setTelefono(userDTO.getTelefono());
+        user.setFechaNacimiento(userDTO.getFechaNacimiento());
+        user.setRol(userRolService.convertDtoToEntity(userDTO.getRol()));
+
+        userRepository.save(user);
+    }
+
+    public void saveUser(Usuario usuario){
+        User user = new User();
+        user.setUsername(usuario.getUsername());
+        user.setPassword(usuario.getPassword());
+        user.setNombre(usuario.getNombre());
+        user.setApellidos(usuario.getApellidos());
+        user.setTelefono(usuario.getTelefono());
+        user.setPeso(usuario.getPeso());
+        user.setAltura(usuario.getAltura());
+        user.setFechaNacimiento(this.convertirStringALocalDate(usuario.getFechaNacimiento()));
+        user.setDescripcionPersonal(usuario.getDescripcionPersonal());
+        user.setRol(userRolRepository.getById(usuario.getRol()));
+
+        userRepository.save(user);
+    }
+
+    public void editUser(Usuario usuario){
+        User user = userRepository.findById(usuario.getId()).orElse(null);
+        user.setUsername(usuario.getUsername());
+        user.setPassword(usuario.getPassword());
+        user.setNombre(usuario.getNombre());
+        user.setApellidos(usuario.getApellidos());
+        user.setTelefono(usuario.getTelefono());
+        user.setPeso(usuario.getPeso());
+        user.setAltura(usuario.getAltura());
+        user.setFechaNacimiento(this.convertirStringALocalDate(usuario.getFechaNacimiento()));
+        user.setDescripcionPersonal(usuario.getDescripcionPersonal());
+        user.setRol(userRolRepository.getById(usuario.getRol()));
+
+        userRepository.save(user);
+    }
+
+    public List<UserDTO> filterUsers(String nombre, String apellidos){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuarios(nombre, apellidos));
+    }
+
+    public List<UserDTO> filterUsersWithDate(String nombre, String apellidos, LocalDate fecha){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConFecha(nombre, apellidos, fecha));
+    }
+
+    public List<UserDTO> filterUsersWithRol(String nombre, String apellidos, LocalDate fecha, Integer rol){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRol(nombre, apellidos, fecha, rol));
+    }
+
+    public UserDTO getById(Integer id){
+        return this.convertEntityToDto(userRepository.findById(id).orElse(null));
+    }
+
+    public Usuario setUsuario(Usuario usuario, UserDTO user){
+        usuario.setUsername(user.getUsername());
+        usuario.setPassword(user.getPassword());
+        usuario.setNombre(user.getNombre());
+        usuario.setApellidos(user.getApellidos());
+        usuario.setPeso(user.getPeso());
+        usuario.setAltura(user.getAltura());
+        usuario.setRol(user.getRol().getId());
+        usuario.setTelefono(user.getTelefono());
+        usuario.setFechaNacimiento(user.getFechaNacimiento().toString());
+
+        return usuario;
+    }
+
+    public void deleteById(Integer id){
+        userRepository.deleteById(id);
+    }
+
+    public User convertDtoToEntity(UserDTO userDTO){
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setNombre(userDTO.getNombre());
+        user.setApellidos(userDTO.getApellidos());
+        user.setTelefono(userDTO.getTelefono());
+        user.setPeso(userDTO.getPeso());
+        user.setAltura(userDTO.getAltura());
+        user.setFechaNacimiento(userDTO.getFechaNacimiento());
+        user.setDescripcionPersonal(userDTO.getDescripcionPersonal());
+        user.setRol(userRolService.convertDtoToEntity(userDTO.getRol()));
+
+        return user;
+    }
+
     public UserDTO convertEntityToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
@@ -67,6 +193,23 @@ public class UserService {
         userDTO.setDescripcionPersonal(user.getDescripcionPersonal());
         userDTO.setRol(userRolService.convertEntityToDto(user.getRol()));
         return userDTO;
+    }
+
+    public List<UserDTO> convertlistEntityToDto(List<User> userList){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(User user : userList){
+            userDTOList.add(this.convertEntityToDto(user));
+        }
+        return userDTOList;
+    }
+
+    private LocalDate convertirStringALocalDate(String fechaStr) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return LocalDate.parse(fechaStr, formatter);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
