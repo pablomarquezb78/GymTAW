@@ -19,6 +19,7 @@
 
     UserRol userRol = (UserRol) session.getAttribute("rol");
     String actionRol = "/comun/guardarimplementacion";
+    cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String filtrar = "/comun/filtrartipo";
 
     Boolean isAdmin = userRol.getId() == 1;

@@ -417,7 +417,7 @@ public class EntrenamientosController extends BaseController{
     }
 
     private void setUser(Usuario usuario,User user){
-
+        usuario.setRol(user.getRol().getId());
         usuario.setId(user.getId());
         usuario.setUsername(user.getUsername());
         usuario.setNombre(user.getNombre());
@@ -445,7 +445,8 @@ public class EntrenamientosController extends BaseController{
             setUser(usuario,user);
 
             model.addAttribute("usuario",usuario);
-
+            UserRol rol = (UserRol) session.getAttribute("rol");
+            model.addAttribute("rolid",rol.getId());
         }
 
 
@@ -468,7 +469,8 @@ public class EntrenamientosController extends BaseController{
             setUser(usuario,user);
 
             model.addAttribute("usuario",usuario);
-
+            UserRol rol = (UserRol) session.getAttribute("rol");
+            model.addAttribute("rolid",rol.getId());
         }
 
 

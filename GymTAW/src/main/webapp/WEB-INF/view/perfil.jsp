@@ -2,6 +2,19 @@
 
 <%
     Usuario usuario = (Usuario) request.getAttribute("usuario");
+    Integer rolid = (Integer) request.getAttribute("rolid");
+
+    //Zona de baile
+    String cabecera = "";
+    if(rolid==1) cabecera = "./admin/cabeceraAdmin.jsp"; //admin
+    if(rolid==2) cabecera = "./cliente/cabecera_cliente.jsp"; //cliente
+    if(rolid==3) cabecera = "./crosstrainer/cabecera_entrenador.jsp"; //trainer
+    if(rolid==4) cabecera = "./crosstrainer/cabecera_entrenador.jsp"; //trainer
+    if(rolid==5) cabecera = "./crosstrainer/cabecera_entrenador.jsp"; // dietista (cambiar: No fue encontrada la cabecera de dietista)
+
+
+
+
 %>
 <!DOCTYPE html>
 <html>
@@ -40,6 +53,8 @@
     </style>
 </head>
 <body class="bg-light">
+<jsp:include page="<%=cabecera%>"></jsp:include>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
