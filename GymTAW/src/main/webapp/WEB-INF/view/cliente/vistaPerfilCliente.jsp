@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<jsp:include page="cabecera_cliente.jsp"/>
 <jsp:include page="../perfil.jsp"/>
 
 </body>

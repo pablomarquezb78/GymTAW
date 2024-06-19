@@ -616,7 +616,7 @@ public class ClienteController extends BaseController{
 
     @GetMapping("/mostrarDesempeño")
     public String doMostrarDesempelo(){
-        return "";//
+        return "";
     }
 
     @GetMapping("/irInicio")
@@ -641,6 +641,7 @@ public class ClienteController extends BaseController{
             setUser(usuario,userEntity);
 
             model.addAttribute("usuario",usuario);
+            model.addAttribute("rolid",rol.getId());
 
             dir ="/cliente/vistaPerfilCliente";
         } else {
