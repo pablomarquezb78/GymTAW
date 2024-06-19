@@ -22,5 +22,3 @@ public class BaseController {
     protected boolean esCliente(UserRol rol) { return  rol.getRolUsuario().equals("cliente");}
 
 }
-
-}

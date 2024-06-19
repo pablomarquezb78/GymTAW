@@ -427,7 +427,7 @@ public class EntrenamientosController extends BaseController{
 
     @GetMapping("/verperfilcliente")
     public String doVerPerfilCliente(@RequestParam("idcliente") Integer id,HttpSession session,Model model){
-        
+
         String strTo = "/perfil";
 
         if(!estaAutenticado(session)) {
