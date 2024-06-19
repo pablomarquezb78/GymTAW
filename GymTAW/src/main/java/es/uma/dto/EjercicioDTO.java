@@ -10,7 +10,7 @@ import java.util.List;
 public class EjercicioDTO {
     private Integer id;
     private String nombre;
-    private TipoEjercicio tipo;
+    private TipoEjercicioDTO tipo;
     private String descripcion;
     private String enlaceVideo;
     private List<ImplementacionEjercicioRutinaDTO> implementaciones;

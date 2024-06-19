@@ -2,6 +2,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.entity.*;
+import es.uma.service.EjercicioService;
 import es.uma.service.UserService;
 import es.uma.ui.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +52,11 @@ public class AdminController extends BaseController {
     private DiaDietaRepository diaDietaRepository;
     @Autowired
     private IngredienteRepository ingredienteRepository;
+
     @Autowired
     private UserService userService;
+    @Autowired
+    private EjercicioService ejercicioService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -62,7 +66,7 @@ public class AdminController extends BaseController {
             model.addAttribute("clientes", userService.getAllCustomers().size());
             model.addAttribute("entrenadores", userService.getAllTrainers().size());
             model.addAttribute("dietistas", userService.getAllDietistas().size());
-            model.addAttribute("ejercicios", this.ejercicioRepository.findAll().size());
+            model.addAttribute("ejercicios", ejercicioService.getAllExercises().size());
             model.addAttribute("platos", this.platosRepository.findAll().size());
             dir = "admin/inicioAdmin";
         } else {

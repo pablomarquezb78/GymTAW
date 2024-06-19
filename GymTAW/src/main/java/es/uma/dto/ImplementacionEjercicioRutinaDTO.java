@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 public class ImplementacionEjercicioRutinaDTO {
     private Integer id;
-    private Ejercicio ejercicio;
-    private Rutina rutina;
+    private EjercicioDTO ejercicio;
+    private RutinaDTO rutina;
     private List<FeedbackEjercicioDTO> feedbacks;
     private String sets;
     private String repeticiones;

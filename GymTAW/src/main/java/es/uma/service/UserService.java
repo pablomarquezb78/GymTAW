@@ -46,7 +46,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private UserDTO convertEntityToDto(User user) {
+    public UserDTO convertEntityToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
