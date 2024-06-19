@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Integer id = (Integer) request.getAttribute("idcliente");
-    List<DiaEntrenamientoDTO> diaEntrenamientos = (List<DiaEntrenamientoDTO>) request.getAttribute("diasEntrenamientos");
+    List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) request.getAttribute("diasEntrenamientos");
 %>
 <html>
 
@@ -30,13 +30,13 @@
         <%
             if(!diaEntrenamientos.isEmpty()){
 
-                for(DiaEntrenamientoDTO diaEntrenamiento : diaEntrenamientos){
+                for(DiaEntrenamiento diaEntrenamiento : diaEntrenamientos){
 
         %>
 
         <tr>
             <td><%=diaEntrenamiento.getFecha()%></td>
-            <td><a href="/entrenamientos/editardia?iddia=<%=diaEntrenamiento.getId()%>">Editar</a></td>
+            <td><a href="/entrenamientos/crearrutina?idrutina=<%=diaEntrenamiento.getRutina().getId()%>">Editar</a></td>
             <td>
                 <form method="post" action="/entrenamientos/borrardia">
                     <input type="hidden"  name="id" value="<%=diaEntrenamiento.getId()%>">
