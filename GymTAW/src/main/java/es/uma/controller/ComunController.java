@@ -179,7 +179,7 @@ public class ComunController extends BaseController{
     }
 
     @PostMapping("/filtrartipo")
-    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam("iddia") Integer iddia,
+    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam(value = "iddia", required = false) Integer iddia,
                                           Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
 
         String strTo = "crearImplementacion";
@@ -200,8 +200,9 @@ public class ComunController extends BaseController{
             }
 
 
-
-            implementacion.setIdDia(iddia);
+            if(iddia!=null){
+                implementacion.setIdDia(iddia);
+            }
 
             model.addAttribute("implementacion",implementacion);
 
