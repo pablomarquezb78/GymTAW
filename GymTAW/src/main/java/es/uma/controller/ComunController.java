@@ -165,6 +165,63 @@ public class ComunController extends BaseController{
         return dir;
     }
 
+    private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
+        implementacion.setId(imp.getId());
+        implementacion.setEjercicio(imp.getEjercicio());
+        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina());
+        implementacion.setSets(imp.getSets());
+        implementacion.setRepeticiones(imp.getRepeticiones());
+        implementacion.setPeso(imp.getPeso());
+        implementacion.setTiempo(imp.getTiempo());
+        implementacion.setKilocalorias(imp.getKilocalorias());
+        implementacion.setMetros(imp.getMetros());
+    }
+
+    @PostMapping("/filtrartipo")
+    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam("iddia") Integer iddia,
+                                          Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
+
+        String strTo = "crearImplementacion";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+
+            if(id!=null){
+                ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+
+
+                if(imp!=null){
+                    asignarImplementacionUI(implementacion,imp);
+                    implementacion.setId(id);
+
+                }
+            }
+
+
+
+            implementacion.setIdDia(iddia);
+
+            model.addAttribute("implementacion",implementacion);
+
+            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
+            model.addAttribute("ejercicios",ejercicios);
+
+            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            model.addAttribute("tipos",tipos);
+
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
+
+
+        }
+
+
+        return strTo;
+
+    }
+
+
     @GetMapping("/verImplementacionesAsociadas")
     public String doVerImplementacionesAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;

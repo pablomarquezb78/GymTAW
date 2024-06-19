@@ -477,49 +477,7 @@ public class EntrenamientosController extends BaseController{
     }
 
 
-    @PostMapping("/filtrartipo")
-    public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam("iddia") Integer iddia,
-                                          Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
 
-        String strTo = "crearImplementacion";
-
-        if(!estaAutenticado(sesion)){
-            strTo = "redirect:/";
-        }else{
-
-            if(id!=null){
-                ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-
-
-                if(imp!=null){
-                    asignarImplementacionUI(implementacion,imp);
-                    implementacion.setId(id);
-
-                }
-            }
-
-
-
-            implementacion.setIdDia(iddia);
-
-            model.addAttribute("implementacion",implementacion);
-
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
-            model.addAttribute("ejercicios",ejercicios);
-
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            model.addAttribute("tipos",tipos);
-
-            Boolean editable = true;
-            model.addAttribute("editable",editable);
-
-
-        }
-
-
-        return strTo;
-
-    }
 
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,
