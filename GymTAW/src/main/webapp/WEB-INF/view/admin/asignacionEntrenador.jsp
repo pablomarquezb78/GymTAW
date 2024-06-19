@@ -1,10 +1,11 @@
 <%@ page import="es.uma.entity.User" %>
 <%@ page import="java.util.*" %>
+<%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<User> entrenadores = (List<User>) request.getAttribute("entrenadores");
-    User cliente = (User) request.getAttribute("cliente");
+    List<UserDTO> entrenadores = (List<UserDTO>) request.getAttribute("entrenadores");
+    UserDTO cliente = (UserDTO) request.getAttribute("cliente");
 %>
 
 <html>
@@ -27,7 +28,7 @@
     </tr>
 
     <%
-        for(User entrenador : entrenadores){
+        for(UserDTO entrenador : entrenadores){
 
     %>
     <tr>

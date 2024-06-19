@@ -25,6 +25,10 @@ public class PlatoService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteById(Integer id){
+        platosRepository.deleteById(id);
+    }
+
     public PlatoDTO convertEntityToDto(Plato plato){
         PlatoDTO platoDTO = new PlatoDTO();
         platoDTO.setId(plato.getId());

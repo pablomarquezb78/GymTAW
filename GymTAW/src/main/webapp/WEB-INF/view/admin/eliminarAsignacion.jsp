@@ -2,11 +2,13 @@
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.AsignacionClienteEntrenador" %>
 <%@ page import="es.uma.entity.AsignacionClienteDietista" %>
+<%@ page import="es.uma.dto.AsignacionClienteEntrenadorDTO" %>
+<%@ page import="es.uma.dto.AsignacionClienteDietistaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<AsignacionClienteEntrenador> asignacionesEntrenador = (List<AsignacionClienteEntrenador>) request.getAttribute("asignacionesEntrenador");
-    List<AsignacionClienteDietista> asignacionesDietista = (List<AsignacionClienteDietista>) request.getAttribute("asignacionesDietista");
+    List<AsignacionClienteEntrenadorDTO> asignacionesEntrenador = (List<AsignacionClienteEntrenadorDTO>) request.getAttribute("asignacionesEntrenador");
+    List<AsignacionClienteDietistaDTO> asignacionesDietista = (List<AsignacionClienteDietistaDTO>) request.getAttribute("asignacionesDietista");
 %>
 
 <html>
@@ -29,7 +31,7 @@
         </tr>
 
 <%
-    for(AsignacionClienteEntrenador entrenador : asignacionesEntrenador){
+    for(AsignacionClienteEntrenadorDTO entrenador : asignacionesEntrenador){
 
 %>
         <tr>
@@ -54,7 +56,7 @@
         </tr>
 
         <%
-            for(AsignacionClienteDietista dietista : asignacionesDietista){
+            for(AsignacionClienteDietistaDTO dietista : asignacionesDietista){
 
         %>
         <tr>

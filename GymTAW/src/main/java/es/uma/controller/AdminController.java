@@ -1,8 +1,7 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
-import es.uma.dto.UserDTO;
-import es.uma.dto.UserRolDTO;
+import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.service.*;
 import es.uma.ui.*;
@@ -62,6 +61,10 @@ public class AdminController extends BaseController {
     private RegistroService registroService;
     @Autowired
     private UserRolService userRolService;
+    @Autowired
+    private AsignacionClienteEntrenadorService asignacionClienteEntrenadorService;
+    @Autowired
+    private AsignacionClienteDietistaService asignacionClienteDietistaService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -141,8 +144,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRolDTO> roles = userRolService.getAllRoles();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", userRolService.getAllRoles());
             if(usuario.estaVacio()){
                 dir = "redirect:/admin/mostrarUsuarios";
             }else{
@@ -167,8 +169,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            List<UserRolDTO> roles = userRolService.getAllRoles();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", userRolService.getAllRoles());
             model.addAttribute("usuario", usuario);
             dir = "admin/crearUsuario";
         } else {
@@ -202,6 +203,8 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "/admin/crearUsuario";
+
+            //REFACTORIZAR
             UserDTO user = userService.getById(id);
             usuario =  userService.setUsuario(usuario, user);
 
@@ -237,8 +240,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignar";
-            List<UserDTO> clientes = userService.getAllCustomers();
-            model.addAttribute("clientes", clientes);
+            model.addAttribute("clientes", userService.getAllCustomers());
         } else {
             dir = "redirect:/";
         }
@@ -252,14 +254,14 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionEntrenador";
-            List<AsignacionClienteEntrenador> ace = asignacionClienteEntrenadorRepository.buscarPorCliente(id);
-            List<User> entrenadoresAsociados = new ArrayList<>();
-            for(AsignacionClienteEntrenador asignacion : ace){
-                entrenadoresAsociados.add(asignacion.getEntrenador());
-            }
-            List<User> entrenadores = userRepository.entrenadoresNoAsociadosAlCliente(entrenadoresAsociados);
+
+            //REFACTORIZAR
+            List<AsignacionClienteEntrenadorDTO> ace = asignacionClienteEntrenadorService.findByCustomer(id);
+            List<UserDTO> entrenadoresAsociados = userService.asociatedTrainers(ace);
+            List<UserDTO> entrenadores = userService.noAsociatedTrainers(entrenadoresAsociados);
+
             model.addAttribute("entrenadores", entrenadores);
-            model.addAttribute("cliente", userRepository.findById(id).orElse(null));
+            model.addAttribute("cliente", userService.getById(id));
         } else {
             dir = "redirect:/";
         }
@@ -272,11 +274,8 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/asignarEntrenador?id="+id+"&idCliente="+idCliente;
-            AsignacionClienteEntrenador ace = new AsignacionClienteEntrenador();
-            ace.setEntrenador(userRepository.findById(id).orElse(null));
-            ace.setCliente(userRepository.findById(idCliente).orElse(null));
+            asignacionClienteEntrenadorService.addTrainer(id, idCliente);
 
-            asignacionClienteEntrenadorRepository.save(ace);
         } else {
             dir = "redirect:/";
         }
@@ -289,14 +288,14 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionDietista";
-            List<AsignacionClienteDietista> acd = asignacionClienteDietistaRepository.buscarPorCliente(id);
-            List<User> dietistasAsociados = new ArrayList<>();
-            for(AsignacionClienteDietista asignacion : acd){
-                dietistasAsociados.add(asignacion.getDietista());
-            }
-            List<User> dietistas = userRepository.dietistasNoAsociadosAlCliente(dietistasAsociados);
+
+            //REFACTORIZAR
+            List<AsignacionClienteDietistaDTO> acd = asignacionClienteDietistaService.findByCustomer(id);
+            List<UserDTO> dietistasAsociados = userService.asociatedDietist(acd);
+            List<UserDTO> dietistas = userService.noAsociatedDietist(dietistasAsociados);
+
             model.addAttribute("dietistas", dietistas);
-            model.addAttribute("cliente", userRepository.findById(id).orElse(null));
+            model.addAttribute("cliente",userService.getById(id));
         } else {
             dir = "redirect:/";
         }
@@ -309,11 +308,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/asignarDietista?id="+id+"&idCliente="+idCliente;
-            AsignacionClienteDietista acd = new AsignacionClienteDietista();
-            acd.setDietista(userRepository.findById(id).orElse(null));
-            acd.setCliente(userRepository.findById(idCliente).orElse(null));
-
-            asignacionClienteDietistaRepository.save(acd);
+            asignacionClienteDietistaService.addDietist(id, idCliente);
         } else {
             dir = "redirect:/";
         }
@@ -326,8 +321,8 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/eliminarAsignacion";
-            List<AsignacionClienteDietista> asignacionesDietista = asignacionClienteDietistaRepository.buscarPorCliente(id);
-            List<AsignacionClienteEntrenador> asignacionesEntrenador = asignacionClienteEntrenadorRepository.buscarPorCliente(id);
+            List<AsignacionClienteDietistaDTO> asignacionesDietista = asignacionClienteDietistaService.findByCustomer(id);
+            List<AsignacionClienteEntrenadorDTO> asignacionesEntrenador = asignacionClienteEntrenadorService.findByCustomer(id);
             model.addAttribute("asignacionesEntrenador", asignacionesEntrenador);
             model.addAttribute("asignacionesDietista", asignacionesDietista);
         } else {
@@ -341,9 +336,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            AsignacionClienteEntrenador ace = asignacionClienteEntrenadorRepository.findById(id).orElse(null);
-            Integer clienteID = ace.getCliente().getId();
-            asignacionClienteEntrenadorRepository.delete(ace);
+            Integer clienteID = asignacionClienteEntrenadorService.deleteAsociation(id);
             dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
         } else {
             dir = "redirect:/";
@@ -356,9 +349,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            AsignacionClienteDietista acd = asignacionClienteDietistaRepository.findById(id).orElse(null);
-            Integer clienteID = acd.getCliente().getId();
-            asignacionClienteDietistaRepository.delete(acd);
+            Integer clienteID = asignacionClienteDietistaService.deleteAsociation(id);
             dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
         } else {
             dir = "redirect:/";
@@ -373,7 +364,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/platos";
-            List<Plato> platos = this.platosRepository.findAll();
+            List<PlatoDTO> platos = platoService.getAllDishes();
             model.addAttribute("plato", new PlatoUI());
             model.addAttribute("platos", platos);
         } else {
@@ -470,7 +461,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/mostrarPlatos";
-            this.platosRepository.deleteById(id);
+            platoService.deleteById(id);
 
         } else {
             dir = "redirect:/";

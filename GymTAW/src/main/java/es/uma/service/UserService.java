@@ -2,9 +2,9 @@ package es.uma.service;
 
 import es.uma.dao.UserRepository;
 import es.uma.dao.UserRolRepository;
-import es.uma.dto.RegistroDTO;
-import es.uma.dto.UserDTO;
-import es.uma.dto.UserRolDTO;
+import es.uma.dto.*;
+import es.uma.entity.AsignacionClienteDietista;
+import es.uma.entity.AsignacionClienteEntrenador;
 import es.uma.entity.User;
 import es.uma.ui.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +162,31 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public List<UserDTO> asociatedTrainers(List<AsignacionClienteEntrenadorDTO> asignacionClienteEntrenadorDTO){
+        List<UserDTO> entrenadoresAsociados = new ArrayList<>();
+        for(AsignacionClienteEntrenadorDTO asignacion : asignacionClienteEntrenadorDTO){
+            entrenadoresAsociados.add(asignacion.getEntrenador());
+        }
+        return  entrenadoresAsociados;
+    }
+
+    public List<UserDTO> noAsociatedTrainers(List<UserDTO> noTrainers){
+        return this.convertlistEntityToDto(userRepository.entrenadoresNoAsociadosAlCliente(this.convertlistDtoToEntity(noTrainers)));
+    }
+
+    public List<UserDTO> asociatedDietist(List<AsignacionClienteDietistaDTO> asignacionClienteDietistaDTO){
+        List<UserDTO> dietistasAsociados = new ArrayList<>();
+        for(AsignacionClienteDietistaDTO asignacion : asignacionClienteDietistaDTO){
+            dietistasAsociados.add(asignacion.getDietista());
+        }
+        return  dietistasAsociados;
+    }
+
+    public List<UserDTO> noAsociatedDietist(List<UserDTO> noDietist){
+        return this.convertlistEntityToDto(userRepository.dietistasNoAsociadosAlCliente(this.convertlistDtoToEntity(noDietist)));
+    }
+
+
     public User convertDtoToEntity(UserDTO userDTO){
         User user = new User();
         user.setId(userDTO.getId());
@@ -201,6 +226,14 @@ public class UserService {
             userDTOList.add(this.convertEntityToDto(user));
         }
         return userDTOList;
+    }
+
+    public List<User> convertlistDtoToEntity(List<UserDTO> userDtoList){
+        List<User> userList = new ArrayList<>();
+        for(UserDTO user : userDtoList){
+            userList.add(this.convertDtoToEntity(user));
+        }
+        return userList;
     }
 
     private LocalDate convertirStringALocalDate(String fechaStr) {
