@@ -2,7 +2,11 @@ package es.uma.controller;
 
 
 import es.uma.dao.*;
+import es.uma.dto.DiaEntrenamientoDTO;
+import es.uma.dto.UserDTO;
 import es.uma.entity.*;
+import es.uma.service.DiaEntrenamientoService;
+import es.uma.service.UserService;
 import es.uma.ui.AsociacionRutina;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
@@ -37,14 +41,20 @@ public class EntrenamientosController extends BaseController{
     private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
     @Autowired
     private TipoEjercicioRepository tipoEjercicioRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private DiaEntrenamientoService diaEntrenamientoService;
 
 
+    //DONE
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
         UserRol rol = (UserRol) sesion.getAttribute("rol");
-        if(estaAutenticado(sesion) == true && esEntrenador(rol) ){
-            List<User> lista = userRepository.clientesAsociadosConEntrenador((User) sesion.getAttribute("user"));
+
+        if(estaAutenticado(sesion) && esEntrenador(rol) ){
+            List<UserDTO> lista = userService.getClientesDeEntrenador((User) sesion.getAttribute("user"));
             model.addAttribute("lista",lista);
         }else {
             strTo= "redirect:/";
@@ -57,7 +67,7 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/versemana")
     public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
 
-
+        //List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.
         List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
 
         model.addAttribute("idcliente",idcliente);
@@ -422,7 +432,6 @@ public class EntrenamientosController extends BaseController{
         usuario.setAltura(user.getAltura());
         usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
         usuario.setDescripcionPersonal(user.getDescripcionPersonal());
-
     }
 
     @GetMapping("/verperfilcliente")
@@ -449,29 +458,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    @GetMapping("/verperfil")
-    public String doVerPerfilPropio(HttpSession session,Model model){
 
-        String strTo = "/perfil";
-
-        if(!estaAutenticado(session)) {
-            strTo = "redirect:/";
-        }else {
-
-            User user = (User) session.getAttribute("user");
-            Usuario usuario = new Usuario();
-
-            setUser(usuario,user);
-
-            model.addAttribute("usuario",usuario);
-            UserRol rol = (UserRol) session.getAttribute("rol");
-            model.addAttribute("rolid",rol.getId());
-        }
-
-
-
-        return strTo;
-    }
 
     @GetMapping("/editarimplementacion")
     public String doEditarImplementacion(@RequestParam("id") Integer id,@RequestParam("iddia") Integer iddia,

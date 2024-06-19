@@ -46,6 +46,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<UserDTO> getClientesDeEntrenador(User user) {
+        return userRepository.clientesAsociadosConEntrenador(user)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
     public UserDTO convertEntityToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());

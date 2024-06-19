@@ -21,7 +21,7 @@
                 <a class="nav-link" href="/entrenamientos/mostrarRutinas">Rutinas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/entrenamientos/verperfil">Perfil</a>
+                <a class="nav-link" href="/comun/verperfil">Perfil</a>
             </li>
         </ul>
     </div>

@@ -5,6 +5,7 @@ import es.uma.entity.*;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import es.uma.ui.TipoEjercicioUI;
+import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,6 +83,42 @@ public class ComunController extends BaseController{
         return dir;
     }
 
+    private void setUser(Usuario usuario,User user){
+        usuario.setRol(user.getRol().getId());
+        usuario.setId(user.getId());
+        usuario.setUsername(user.getUsername());
+        usuario.setNombre(user.getNombre());
+        usuario.setApellidos(user.getApellidos());
+        usuario.setTelefono(user.getTelefono());
+        usuario.setPeso(user.getPeso());
+        usuario.setAltura(user.getAltura());
+        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
+        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
+    }
+
+    @GetMapping("/verperfil")
+    public String doVerPerfilPropio(HttpSession session,Model model){
+
+        String strTo = "/perfil";
+
+        if(!estaAutenticado(session)) {
+            strTo = "redirect:/";
+        }else {
+
+            User user = (User) session.getAttribute("user");
+            Usuario usuario = new Usuario();
+
+            setUser(usuario,user);
+
+            model.addAttribute("usuario",usuario);
+            UserRol rol = (UserRol) session.getAttribute("rol");
+            model.addAttribute("rolid",rol.getId());
+        }
+
+
+
+        return strTo;
+    }
 
     @GetMapping("/borrarEjercicio")
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
