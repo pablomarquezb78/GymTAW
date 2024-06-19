@@ -63,19 +63,24 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-
+    //DONE
     @GetMapping("/versemana")
     public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
+        String strTo = "/crosstrainer/entrenador_semana";
 
-        //List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.
-        List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
+        if(estaAutenticado(session)){
+            List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.getDiasDeClienteID(idcliente);
 
-        model.addAttribute("idcliente",idcliente);
-        model.addAttribute("diasEntrenamientos", diaEntrenamientos);
+            model.addAttribute("idcliente",idcliente);
+            model.addAttribute("diasEntrenamientos", dias);
+        }else{
+            strTo= "redirect:/";
+        }
 
-        return "/crosstrainer/entrenador_semana";
+        return strTo;
     }
 
+    //DONE
     @PostMapping("/nuevo-entrenamiento")
     public String doCreateEntrenamiento(@RequestParam("id") Integer id, Model model, HttpSession session){
         String strTo =  "/crosstrainer/entrenador_crear_entrenamiento";

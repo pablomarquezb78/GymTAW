@@ -1,10 +1,11 @@
 <%@ page import="es.uma.entity.DiaEntrenamiento" %>
 <%@ page import="java.util.List" %>
+<%@ page import="es.uma.dto.DiaEntrenamientoDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Integer id = (Integer) request.getAttribute("idcliente");
-    List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) request.getAttribute("diasEntrenamientos");
+    List<DiaEntrenamientoDTO> diaEntrenamientos = (List<DiaEntrenamientoDTO>) request.getAttribute("diasEntrenamientos");
 %>
 <html>
 
@@ -29,7 +30,7 @@
         <%
             if(!diaEntrenamientos.isEmpty()){
 
-                for(DiaEntrenamiento diaEntrenamiento : diaEntrenamientos){
+                for(DiaEntrenamientoDTO diaEntrenamiento : diaEntrenamientos){
 
         %>
 
