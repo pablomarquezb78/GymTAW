@@ -5,6 +5,7 @@ import es.uma.entity.*;
 import es.uma.ui.FeedbackSerieForm;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cliente")
@@ -41,8 +41,26 @@ public class ClienteController extends BaseController{
     //SIMPLEMENTE DICES CUANTO HAS HECHO Y NO SI HAS HECHO UNA SERIE MAS DE ESOS MINUTOS (TIENE MÁS COHERENCIA)
 
     @GetMapping("/")
-    public String doMostrarInicio(){
-        return "/cliente/cliente_inicio";
+    public String doMostrarInicio(HttpSession session, Model model){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            User userEntity = (User) session.getAttribute("user");
+
+            //Semana 1 dia 1
+            LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
+            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
+            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+
+            model.addAttribute("nombreUsuario", userEntity.getNombre() + " " + userEntity.getApellidos());
+            model.addAttribute("diaDieta",diaDieta);
+            model.addAttribute("diaEntrenamiento",diaEntrenamiento);
+
+            dir = "/cliente/cliente_inicio";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @GetMapping("/mostrarEntrenamientos")
@@ -615,91 +633,126 @@ public class ClienteController extends BaseController{
     }
 
     @GetMapping("/mostrarDesempenyo")
-    public String doMostrarDesempelo(){
-        return "cliente/cliente_desempenyo";
+    public String doMostrarDesempelo(HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            dir = "cliente/cliente_desempenyo";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @GetMapping("/verDesempenyoDietas")
     public String doVerDesempenyoDietas(@RequestParam(required = false, value = "fechaDesempenyoDieta") String fechaDesempenyoDieta, HttpSession session,Model model){
-        DiaDieta diaDieta;
-        User userEntity = (User) session.getAttribute("user");
-        if(fechaDesempenyoDieta==null){
-            LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-            diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
-        }else{
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
-            diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechanueva);
-        }
-
-        Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = new HashMap<>();
-
-        List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
-
-        for (Comida c : comidas) {
-            Map<Plato, List<CantidadIngredientePlatoComida>> platosIngredientes = new HashMap<>();
-            List<Plato> platos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(c);
-
-            for (Plato p : platos) {
-                List<CantidadIngredientePlatoComida> cantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(p, c);
-                platosIngredientes.put(p, cantidades);
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            DiaDieta diaDieta;
+            User userEntity = (User) session.getAttribute("user");
+            if(fechaDesempenyoDieta==null){
+                LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
+                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+            }else{
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
+                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechanueva);
             }
 
-            comidaPlatosCantidades.put(c, platosIngredientes);
-        }
-        model.addAttribute("comidaPlatosCantidades",comidaPlatosCantidades);
+            Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = new HashMap<>();
 
-        return "cliente/cliente_desempenyoDietas";
+            List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
+
+            for (Comida c : comidas) {
+                Map<Plato, List<CantidadIngredientePlatoComida>> platosIngredientes = new HashMap<>();
+                List<Plato> platos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(c);
+
+                for (Plato p : platos) {
+                    List<CantidadIngredientePlatoComida> cantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(p, c);
+                    platosIngredientes.put(p, cantidades);
+                }
+
+                comidaPlatosCantidades.put(c, platosIngredientes);
+            }
+            model.addAttribute("comidaPlatosCantidades",comidaPlatosCantidades);
+
+            dir = "cliente/cliente_desempenyoDietas";
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @GetMapping("/verDesempenyoEntrenamientos")
     public String doVerDesmepenyoEntrenamientos(HttpSession session,Model model,@RequestParam(required = false, value = "fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento){
-        User userEntity = (User) session.getAttribute("user");
-        DiaEntrenamiento diaEntrenamiento;
-        if(fechaDesempenyoEntrenamiento==null){
-            LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
-        }else{
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
-            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
-        }
-
-        List<ImplementacionEjercicioRutina> implementaciones;
-        Map<ImplementacionEjercicioRutina,List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
-
-        if(diaEntrenamiento!=null){
-            implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
-
-            for(ImplementacionEjercicioRutina implementacion : implementaciones){
-                List<FeedbackEjercicioserie> fserie = new ArrayList<>();
-                if(implementacion.getSets()!=null){
-                    for(int serie = 0; serie<=Integer.parseInt(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone());serie++){
-                        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst(),"" + (serie + 1));
-                        fserie.add(feedbackEjercicioserie);
-                    }
-                }
-                implementacionEjercicioRutinaListMap.put(implementacion,fserie);
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            User userEntity = (User) session.getAttribute("user");
+            DiaEntrenamiento diaEntrenamiento;
+            if(fechaDesempenyoEntrenamiento==null){
+                LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
+                diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
+            }else{
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
+                diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
             }
 
-        }else{
-            implementaciones = new ArrayList<>();
+            List<ImplementacionEjercicioRutina> implementaciones;
+            Map<ImplementacionEjercicioRutina,List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
+
+            if(diaEntrenamiento!=null){
+                implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+
+                for(ImplementacionEjercicioRutina implementacion : implementaciones){
+                    List<FeedbackEjercicioserie> fserie = new ArrayList<>();
+                    if(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone()!=null){
+                        for(int serie = 0; serie<Integer.parseInt(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone());serie++){
+                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst(),"" + (serie + 1));
+                            fserie.add(feedbackEjercicioserie);
+                        }
+                    }
+                    implementacionEjercicioRutinaListMap.put(implementacion,fserie);
+                }
+
+            }else{
+                implementaciones = new ArrayList<>();
+            }
+
+            model.addAttribute("implementaciones",implementaciones);
+            model.addAttribute("implementacionEjercicioRutinaListMap",implementacionEjercicioRutinaListMap);
+
+            dir = "cliente/cliente_desempenyoEntrenamientos";
+        } else {
+            dir = "redirect:/";
         }
-
-        model.addAttribute("implementaciones",implementaciones);
-        model.addAttribute("implementacionEjercicioRutinaListMap",implementacionEjercicioRutinaListMap);
-
-        return "cliente/cliente_desempenyoEntrenamientos";
+        return dir;
     }
 
     @PostMapping("/filtrarDesempenyoDieta")
-    public String doFiltrarDesempenyoDieta(@RequestParam("fechaDesempenyoDieta") String fechaDesempenyoDieta){
-        return "redirect:/cliente/verDesempenyoDietas?fechaDesempenyoDieta=" + fechaDesempenyoDieta;
+    public String doFiltrarDesempenyoDieta(@RequestParam("fechaDesempenyoDieta") String fechaDesempenyoDieta, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            dir = "redirect:/cliente/verDesempenyoDietas?fechaDesempenyoDieta=" + fechaDesempenyoDieta;
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @PostMapping("/filtrarDesempenyoEntrenamiento")
-    public String doFiltrarDesmpenyoEntrenamiento(@RequestParam("fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento){
-        return "redirect:/cliente/verDesempenyoEntrenamientos?fechaDesempenyoEntrenamiento=" + fechaDesempenyoEntrenamiento;
+    public String doFiltrarDesmpenyoEntrenamiento(@RequestParam("fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento, HttpSession session){
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esCliente(rol)) {
+            dir = "redirect:/cliente/verDesempenyoEntrenamientos?fechaDesempenyoEntrenamiento=" + fechaDesempenyoEntrenamiento;
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
     }
 
     @GetMapping("/irInicio")

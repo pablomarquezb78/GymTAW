@@ -36,9 +36,9 @@
     <title>Ejercicio</title>
 </head>
 <body>
-<h1>Detalles del entrenamiento:</h1>
+<h1 class="text-center">Detalles del entrenamiento:</h1>
 
-<table class="table w-75">
+<table class="table w-75 mx-auto">
     <thead>
     <tr>
         <th scope="col">#</th>
@@ -67,7 +67,7 @@
     <tbody>
 </table>
 
-<div class="bg-secondary w-25 m-3 p-3 rounded">
+<div class="bg-secondary w-25 m-3 p-3 rounded mx-auto">
     <h3>Descripción:</h3>
     <p class="text-white"><%=descripcion%></p><br/>
     <h3>URL:</h3>

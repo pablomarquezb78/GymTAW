@@ -15,7 +15,7 @@
 
 <jsp:include page="cabecera_cliente.jsp"/>
 
-<div class="d-flex flex-column align-items-center my-3">
+<div class="d-flex flex-column align-items-center my-3 position-absolute top-50 start-50 translate-middle">
     <h1>Elige que desempeño observar:</h1>
     <div class="d-flex gap-3 my-3">
         <a class="btn btn-primary" href="verDesempenyoDietas">Desempeño Dietas</a>

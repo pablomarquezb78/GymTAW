@@ -95,7 +95,7 @@
             <td><%=l.get(i).getEjercicio().getTipo().getTipoDeEjercicio()%></td>
             <td><%=l.get(i).getSets() != null ? l.get(i).getSets() : "-"%></td>
             <td><%=l.get(i).getRepeticiones() != null ? l.get(i).getRepeticiones() : "-"%></td>
-            <td><%=l.get(i).getPeso() != null ? l.get(i).getPeso() : "-"%></td>
+            <td><%=l.get(i).getPeso() != null ? l.get(i).getPeso() + "kg" : "-"%></td>
             <td><%=tiempo%></td>
             <td><%=l.get(i).getKilocalorias() != null ? l.get(i).getKilocalorias() : "-"%></td>
             <td><%=l.get(i).getMetros() != null ? l.get(i).getMetros() : "-"%></td>

@@ -1,10 +1,17 @@
-<%--
+<%@ page import="es.uma.entity.DiaEntrenamiento" %>
+<%@ page import="es.uma.entity.DiaDieta" %><%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
   Date: 29/04/2024
   Time: 11:18
   To change this template use File | Settings | File Templates.
 --%>
+<%
+    //OBTENEMOS PARAMETROS
+    DiaEntrenamiento diaEntrenamiento = (DiaEntrenamiento) request.getAttribute("diaEntrenamiento");
+    DiaDieta diaDieta = (DiaDieta) request.getAttribute("diaDieta");
+    String nombreUsuario = (String) request.getAttribute("nombreUsuario");
+%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,8 +22,24 @@
 
 <jsp:include page="cabecera_cliente.jsp"/>
 
-<h1>Entrenamiento de hoy:</h1>
-<button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary">Ver detalles</button>
+<h1 class="text-center position-absolute top-50 start-50 translate-middle" style="padding-bottom: 10%">¡Bienvenido <%=nombreUsuario%>!</h1>
+
+<div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-bottom: 5%">
+    <div>
+        <%if(diaEntrenamiento!=null){%>
+        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary">Ver entrenamiento de hoy</button>
+        <%}else{%>
+        <h2>No hay entrenamiento hoy</h2>
+        <%}%>
+    </div>
+    <div>
+        <%if(diaDieta!=null){%>
+        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary">Ver dieta de hoy</button>
+        <%}else{%>
+        <h2>No hay Dieta hoy</h2>
+        <%}%>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
