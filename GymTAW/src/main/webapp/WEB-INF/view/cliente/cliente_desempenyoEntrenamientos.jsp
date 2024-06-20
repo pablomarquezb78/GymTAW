@@ -14,7 +14,7 @@
     String disabled = "disabled";
     String hidden = "hidden";
 
-    if(userRol.getId() == 5) {
+    if(userRol.getId() == 2) {
         cabecera = "cabecera_cliente.jsp";
         disabled = "";
         hidden = "";

@@ -692,14 +692,14 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
             DiaEntrenamiento diaEntrenamiento;
+            LocalDate fechanueva;
             if(fechaDesempenyoEntrenamiento==null){
-                LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-                diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
+                fechanueva = LocalDate.of(2000, 1, 1);
             }else{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
-                diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
+                fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
             }
+            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
 
             List<ImplementacionEjercicioRutina> implementaciones;
             Map<ImplementacionEjercicioRutina,List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
@@ -725,6 +725,7 @@ public class ClienteController extends BaseController{
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("implementacionEjercicioRutinaListMap",implementacionEjercicioRutinaListMap);
             model.addAttribute("rol", rol);
+            model.addAttribute("fecha", fechanueva);
 
             dir = "cliente/cliente_desempenyoEntrenamientos";
         } else {
