@@ -1,6 +1,9 @@
 package es.uma.service;
 
+import es.uma.dao.DiaDietaRepository;
+import es.uma.dao.DiaEntrenamientoRepository;
 import es.uma.dao.FeedbackejercicioRepository;
+import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dto.DiaEntrenamientoDTO;
 import es.uma.dto.FeedbackEjercicioDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
@@ -9,9 +12,6 @@ import es.uma.entity.FeedbackEjercicio;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class FeedbackEjercicioService {
@@ -24,21 +24,29 @@ public class FeedbackEjercicioService {
     private EjercicioService ejercicioService;
     @Autowired
     private DiaEntrenamientoService diaEntrenamientoService;
+    @Autowired
+    private DiaDietaRepository diaDietaRepository;
+    @Autowired
+    private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
+    @Autowired
+    private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
     //Feedbackserie e implementacion
 
     public FeedbackEjercicioDTO getFeedbackEjercicioPorImplementacionYDia(ImplementacionEjercicioRutinaDTO implementacion, DiaEntrenamientoDTO diaEntrenamiento){
-        ImplementacionEjercicioRutina implementacionEntity = implementacionEjercicioRutinaService.convertDtoToEntity(implementacion);
-        DiaEntrenamiento diaEntrenamientoEntity = diaEntrenamientoService.convertDtoToEntity(diaEntrenamiento);
-        return convertEntityToDto(feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacionEntity,diaEntrenamientoEntity));
+        return convertEntityToDto(feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion.getId(),diaEntrenamiento.getId()));
     }
 
-    public void createFeedbackEjercicio(DiaEntrenamientoDTO diaEntrenamiento, ImplementacionEjercicioRutinaDTO implementacion){
+    public FeedbackEjercicioDTO getFeedbackEjercicioById(Integer id){
+        return convertEntityToDto(feedbackejercicioRepository.findById(id).orElse(null));
+    }
+
+    public void createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId){
+        DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.findById(diaEntrenamientoId).orElse(null);
+        ImplementacionEjercicioRutina implementacionEjercicioRutina = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
         FeedbackEjercicio feedbackEjercicio = new FeedbackEjercicio();
-        DiaEntrenamiento diaEntrenamientoEntity = diaEntrenamientoService.convertDtoToEntity(diaEntrenamiento);
-        feedbackEjercicio.setDiaEntrenamiento(diaEntrenamientoEntity);
-        ImplementacionEjercicioRutina implementacionEjercicioRutinaEntity = implementacionEjercicioRutinaService.convertDtoToEntity(implementacion);
-        feedbackEjercicio.setImplementacion(implementacionEjercicioRutinaEntity);
+        feedbackEjercicio.setDiaEntrenamiento(diaEntrenamiento);
+        feedbackEjercicio.setImplementacion(implementacionEjercicioRutina);
         feedbackEjercicio.setRealizado((byte) 0);
         feedbackejercicioRepository.save(feedbackEjercicio);
     }
@@ -67,12 +75,9 @@ public class FeedbackEjercicioService {
         return feedbackEjercicio;
     }
 
-    public List<FeedbackEjercicioDTO> convertListEntityToDto(List<FeedbackEjercicio> feedbackEjercicioList){
-        List<FeedbackEjercicioDTO> feedbackEjercicioDTOList = new ArrayList<>();
-        for (FeedbackEjercicio feedbackEjercicio : feedbackEjercicioList){
-            feedbackEjercicioDTOList.add(this.convertEntityToDto(feedbackEjercicio));
-        }
-        return feedbackEjercicioDTOList;
+    public void guardarFeedbackEjercicio(FeedbackEjercicioDTO feedbackEjercicioDTO){
+        FeedbackEjercicio feedbackEjercicio = convertDtoToEntity(feedbackEjercicioDTO);
+        feedbackejercicioRepository.save(feedbackEjercicio);
     }
 
 }

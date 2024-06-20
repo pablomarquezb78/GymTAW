@@ -7,7 +7,6 @@ import es.uma.service.*;
 import es.uma.ui.FeedbackSerieForm;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class ClienteController extends BaseController{
             //Semana 1 dia 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fechaInicio);
-            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity,fechaInicio);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fechaInicio);
 
             model.addAttribute("nombreUsuario", userEntity.getNombre() + " " + userEntity.getApellidos());
             model.addAttribute("diaDieta",diaDieta);
@@ -120,7 +119,7 @@ public class ClienteController extends BaseController{
             //CREAMOS EL FEEDBACK DEL EJERCICIO
             FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
             if(feedbackEjercicio==null){
-                feedbackEjercicioService.createFeedbackEjercicio(diaEntrenamiento,implementacion);
+                feedbackEjercicioService.createFeedbackEjercicio(diaEntrenamiento.getId(),implementacion.getId());
             }
             model.addAttribute("feedback",feedbackEjercicio);
 
@@ -141,7 +140,7 @@ public class ClienteController extends BaseController{
                 }
 
                 //OBTENGO EL FEEDBACK DE ESE EJERCICIO EN ESA SERIE CONCRETA Y LO AÑADO AL MODELO
-                FeedbackEjercicioserieDTO feedbackEjercicioSerie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio,set);
+                FeedbackEjercicioserieDTO feedbackEjercicioSerie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(),set);
                 model.addAttribute("feedbackSerie",feedbackEjercicioSerie);
 
                 //MANTENEMOS EL OBJETO UI ACTUALIZADO
@@ -218,8 +217,8 @@ public class ClienteController extends BaseController{
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
-                DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
-                List<ImplementacionEjercicioRutina> implementaciones;
+                DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fechaInicio);
+                List<ImplementacionEjercicioRutinaDTO> implementaciones;
                 if(diaEntrenamiento != null){
                     //Obtengo la especifiacion de los ejercicios de las rutinas
                     implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
@@ -263,7 +262,7 @@ public class ClienteController extends BaseController{
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
-                DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+                DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
                 List<Comida> comidas;
                 if(diaDieta != null){
                     //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
@@ -293,7 +292,7 @@ public class ClienteController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
             //OBTENEMOS EL FEEDBACK DEL EJERCICIO
-            FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
+            FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioById(feedbackEjercicioId);
 
             if (feedbackEjercicio!=null) {
                 if(realizado == null) realizado = 0;
@@ -306,27 +305,23 @@ public class ClienteController extends BaseController{
                     feedbackEjercicio.setSeguimientoSetsDone("" + seriesRealizadas);
 
                     //POR SIMPLIFICAR, SI SE MODIFICA EL NUMERO DE SETS REALIZADAS EL CLIENTE DEBERÁ VOLVER A RELLENAR EL FEEDBACK DE ESTAS NUEVAS SERIES
-                    List<FeedbackEjercicioserie> feedbackAnterior = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicio(feedbackEjercicio);
+                    List<FeedbackEjercicioserieDTO> feedbackAnterior = feedbackEjercicioSerieService.getFeedbackSeriePorFeedbackEjercicio(feedbackEjercicio.getId());
 
                     //SI HABIA FEEDBACK ANTERIOR LO BORRAMOS PARA DAR PASO AL NUEVO
                     if(feedbackAnterior!=null){
-                        for(FeedbackEjercicioserie f : feedbackAnterior){
-                            feedbackejercicioserieRepository.delete(f);
+                        for(FeedbackEjercicioserieDTO f : feedbackAnterior){
+                            feedbackEjercicioSerieService.borrarFeedbackEjercicioSerie(f.getId());
                         }
                     }
 
                     //PREMARAMOS EL FEEBACK DE LAS NUEVAS SERIES REALIZADAS PARA QUE POSTERIORMENTE EL CLIENTE LAS RELLENE
                     for(int i = 1; i<= seriesRealizadas; i++){
-                        FeedbackEjercicioserie feedbackEjercicioSerie = new FeedbackEjercicioserie();
-                        feedbackEjercicioSerie.setSerie("" + i);
-                        feedbackEjercicioSerie.setFeedbackEjercicio(feedbackEjercicio);
-
-                        feedbackejercicioserieRepository.save(feedbackEjercicioSerie);
+                        feedbackEjercicioSerieService.prerararFeedbackEjercicioSeries(i,feedbackEjercicio.getId());
                     }
                 }
 
                 //GUARDAMOS LOS CAMBIOS REALIZADOS
-                feedbackejercicioRepository.save(feedbackEjercicio);
+                feedbackEjercicioService.guardarFeedbackEjercicio(feedbackEjercicio);
             }
 
             dir = "redirect:/cliente/ejercicio?id=" + implementacionId;
@@ -343,14 +338,12 @@ public class ClienteController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
             //ACTUALIZAMOS EL FEEDBACK DEL EJERCICIO EN LA SERIE SELECCIONADA
-            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
-                    feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
-
+            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicio().getId(), feedbackSerieForm.getSerieSeleccionada());
             feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
             feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
 
             //GUARDAMOS LOS CAMBIOS EN EL FEEDBACK DE LA SERIE SELECCIONADA DEL EJERCICIO
-            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
+            feedbackEjercicioSerieService.guardarFeedbackEjercicioSerie(feedbackEjercicioserie);
 
             dir = "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId() + "&set=" + feedbackSerieForm.getSerieSeleccionada();
         } else {
@@ -365,8 +358,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(
-                    feedbackSerieForm.getFeedbackEjercicio(),feedbackSerieForm.getSerieSeleccionada());
+            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicio().getId(),feedbackSerieForm.getSerieSeleccionada());
 
             //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
             String pesoRealizado = feedbackSerieForm.getPesoRealizado();
@@ -391,7 +383,7 @@ public class ClienteController extends BaseController{
             if(metrosRealizados!=null) feedbackEjercicioserie.setMetrosRealizado(metrosRealizados);
 
             //GUARDAMOS LOS CAMBIOS REALIZADOS EN EL FEEDBACK DE LA SERIE SELECCIONADA DEL EJERCICIO
-            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
+            feedbackEjercicioSerieService.guardarFeedbackEjercicioSerie(feedbackEjercicioserie);
 
             dir = "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId() + "&set=" + feedbackSerieForm.getSerieSeleccionada();
         } else {
@@ -406,15 +398,16 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(feedbackSerieForm.getImplementacionId()).orElse(null);
+            ImplementacionEjercicioRutinaDTO implementacion = implementacionEjercicioRutinaService.getImplementacionPorId(feedbackSerieForm.getImplementacionId());
 
             User userEntity = (User) session.getAttribute("user");
             LocalDate dia = (LocalDate) session.getAttribute("fechaSeleccionada");
-            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),dia);
+            DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),dia);
 
             if (implementacion != null && dia != null) {
                 //OBTENEMOS EL FEEDBACK DEL EJERCICIO
-                FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
+                FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
+                        //feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
 
                 //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
                 String pesoRealizado = feedbackSerieForm.getPesoRealizado();
@@ -437,7 +430,7 @@ public class ClienteController extends BaseController{
                 if(metrosRealizados!=null) feedbackEjercicio.setSeguimientoMetrosDone(metrosRealizados);
 
                 //GUARDAMOS LOS CAMBIOS REALIZADOS EN EL FEEDBACK DEL EJERCICIO
-                feedbackejercicioRepository.save(feedbackEjercicio);
+                feedbackEjercicioService.guardarFeedbackEjercicio(feedbackEjercicio);
             }
 
             dir = "redirect:/cliente/ejercicio?id=" + feedbackSerieForm.getImplementacionId();
@@ -472,7 +465,7 @@ public class ClienteController extends BaseController{
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAEDIETA
-            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
             session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
 
             //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
@@ -593,7 +586,7 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
-            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fecha);
+            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fecha);
 
             if(diaDieta!=null){
                 diaDieta.setSeguimiento(seguimientoDieta);
@@ -661,11 +654,11 @@ public class ClienteController extends BaseController{
             User userEntity = (User) session.getAttribute("user");
             if(fechaDesempenyoDieta==null){
                 LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
             }else{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
-                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechanueva);
+                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechanueva);
             }
 
             Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = new HashMap<>();
@@ -718,7 +711,7 @@ public class ClienteController extends BaseController{
                     List<FeedbackEjercicioserie> fserie = new ArrayList<>();
                     if(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone()!=null){
                         for(int serie = 0; serie<Integer.parseInt(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone());serie++){
-                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst(),"" + (serie + 1));
+                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst().getId(),"" + (serie + 1));
                             fserie.add(feedbackEjercicioserie);
                         }
                     }

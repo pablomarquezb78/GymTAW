@@ -80,4 +80,8 @@ public class ImplementacionEjercicioRutinaService {
         return lista;
     }
 
+    public ImplementacionEjercicioRutinaDTO getImplementacionPorId(Integer id){
+        return convertEntityToDto(implementacionEjercicioRutinaRepository.findById(id).orElse(null));
+    }
+
 }

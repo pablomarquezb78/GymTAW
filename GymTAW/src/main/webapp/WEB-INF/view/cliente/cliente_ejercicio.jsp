@@ -1,5 +1,6 @@
 
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
@@ -9,7 +10,7 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    ImplementacionEjercicioRutina implementacion = (ImplementacionEjercicioRutina) request.getAttribute("implementacion");
+    ImplementacionEjercicioRutinaDTO implementacion = (ImplementacionEjercicioRutinaDTO) request.getAttribute("implementacion");
     String descripcion = implementacion.getEjercicio().getDescripcion();
     String enlaceVideo = implementacion.getEjercicio().getEnlaceVideo();
     String tipoEjercicio = implementacion.getEjercicio().getTipo().getTipoDeEjercicio();

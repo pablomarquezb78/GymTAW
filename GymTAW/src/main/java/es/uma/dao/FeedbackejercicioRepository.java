@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FeedbackejercicioRepository extends JpaRepository<FeedbackEjercicio,Integer> {
 
-    @Query("select f from FeedbackEjercicio f where f.implementacion=:implementacion and f.diaEntrenamiento=:dia")
-    public FeedbackEjercicio encontrarFeedbackEjercicioPorImplementacionYDia(@Param("implementacion") ImplementacionEjercicioRutina implementacion, @Param("dia") DiaEntrenamiento dia);
+    @Query("select f from FeedbackEjercicio f where f.implementacion.id=:implementacionId and f.diaEntrenamiento.id=:diaId")
+    public FeedbackEjercicio encontrarFeedbackEjercicioPorImplementacionYDia(@Param("implementacionId") Integer implementacionId, @Param("diaId") Integer diaId);
 
 }

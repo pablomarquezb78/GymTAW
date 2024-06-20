@@ -65,16 +65,6 @@ public class RutinaService {
         return rutinas;
     }
 
-    public Rutina convertDtoToEntity(RutinaDTO rutinaDTO) {
-        Rutina rutina = new Rutina();
-        rutina.setId(rutinaDTO.getId());
-        rutina.setNombre(rutinaDTO.getNombre());
-        rutina.setEntrenador(userService.convertDtoToEntity(rutinaDTO.getEntrenador()));
-        rutina.setFechaCreacion(rutinaDTO.getFechaCreacion());
-        rutina.setImplementacionesEjercicioRutina(ImplementacionEjercicioRutinaService.convertListDtoToEntity(rutinaDTO.getImplementacionesEjercicioRutina()));
-        return rutina;
-    }
-
     public RutinaDTO getRutinaByID(Integer idrutina) {
         return convertEntityToDto(rutinaRepository.getById(idrutina));
     }

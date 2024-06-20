@@ -20,8 +20,8 @@ public class DiaDietaService {
     @Autowired
     private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
-    public DiaDietaDTO getDiaDietaDeClienteFecha(User user, LocalDate fecha){
-        return convertEntityToDto(diaDietaRepository.diaDietaConcretoCliente(user,fecha));
+    public DiaDietaDTO getDiaDietaDeClienteFecha(Integer userId, LocalDate fecha){
+        return convertEntityToDto(diaDietaRepository.diaDietaConcretoCliente(userId,fecha));
     }
 
     public void save(DiaDieta diaDieta){
