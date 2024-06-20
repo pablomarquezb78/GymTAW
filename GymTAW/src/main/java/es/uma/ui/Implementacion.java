@@ -9,7 +9,7 @@ public class Implementacion {
 
     private Integer id;
     private Ejercicio ejercicio; 
-    private Rutina rutina;
+    private Integer rutina;
     private String sets;
     private String repeticiones;
     private String peso;
@@ -79,11 +79,11 @@ public class Implementacion {
         this.sets = sets;
     }
 
-    public Rutina getRutina() {
+    public Integer getRutina() {
         return rutina;
     }
 
-    public void setRutina(Rutina rutina) {
+    public void setRutina(Integer rutina) {
         this.rutina = rutina;
     }
 
@@ -168,7 +168,7 @@ public class Implementacion {
     }
 
     public boolean estaVacio(){
-        return this.getRutina().getNombre().isEmpty() && this.getSets().isEmpty() && this.getMetros().isEmpty() &&
+        return rutina == null && this.getSets().isEmpty() && this.getMetros().isEmpty() &&
                 this.getKilocalorias().isEmpty() && this.getRepeticiones().isEmpty() && this.getTiempo().isEmpty() && this.getPeso().isEmpty();
     }
 }

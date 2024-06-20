@@ -18,8 +18,6 @@ public class RutinaService {
     @Autowired
     public UserService userService;
     @Autowired
-    public ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
-    @Autowired
     private RutinaRepository rutinaRepository;
 
     public List<RutinaDTO> getAllRutinas(){
@@ -28,13 +26,21 @@ public class RutinaService {
                 .collect(Collectors.toList());
     }
 
+    public Rutina convertDtoToEntity(RutinaDTO rutinaDTO) {
+        Rutina rutina = new Rutina();
+        rutina.setId(rutinaDTO.getId());
+        rutina.setNombre(rutinaDTO.getNombre());
+        rutina.setEntrenador(userService.convertDtoToEntity(rutinaDTO.getEntrenador()));
+        rutina.setFechaCreacion(rutinaDTO.getFechaCreacion());
+        return rutina;
+    }
+
     public RutinaDTO convertEntityToDto(Rutina rutina) {
         RutinaDTO rutinaDTO = new RutinaDTO();
         rutinaDTO.setId(rutina.getId());
         rutinaDTO.setNombre(rutina.getNombre());
         rutinaDTO.setEntrenador(userService.convertEntityToDto(rutina.getEntrenador()));
         rutinaDTO.setFechaCreacion(rutina.getFechaCreacion());
-        rutinaDTO.setImplementacionesEjercicioRutina(implementacionEjercicioRutinaService.convertListEntityToDto(rutina.getImplementacionesEjercicioRutina()));
         return rutinaDTO;
     }
 

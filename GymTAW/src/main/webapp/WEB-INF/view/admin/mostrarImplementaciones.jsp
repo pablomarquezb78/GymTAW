@@ -5,12 +5,15 @@
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
 <%@ page import="es.uma.entity.Rutina" %>
 <%@ page import="es.uma.entity.UserRol" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
+<%@ page import="es.uma.dto.EjercicioDTO" %>
+<%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<ImplementacionEjercicioRutina> implementaciones = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    Ejercicio ejercicio = (Ejercicio) request.getAttribute("ejercicio");
-    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
+    List<ImplementacionEjercicioRutinaDTO> implementaciones = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
+    EjercicioDTO ejercicio = (EjercicioDTO) request.getAttribute("ejercicio");
+    List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
 
     String dir = "/comun/filtrarImplementaciones?id="+ejercicio.getId();
 
@@ -49,7 +52,7 @@
     <%
         if(implementaciones.size() > 0){
 
-            for(ImplementacionEjercicioRutina implementacion : implementaciones){
+            for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
     %>
     <tr>
         <td><%=implementacion.getId()%></td>

@@ -143,7 +143,7 @@ public class EntrenamientosController extends BaseController{
 
     @PostMapping("/guardarimplementacionrutina")
     public String doGuardarImplementacionRutina(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
-        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina().getId();
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina();
 
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
@@ -154,7 +154,7 @@ public class EntrenamientosController extends BaseController{
                 asignarImplementacionReal(imp,implementacion);
             }else{
                 imp = new ImplementacionEjercicioRutina();
-                imp.setRutina(implementacion.getRutina());
+                imp.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
 
                 asignarImplementacionReal(imp,implementacion);
             }
@@ -212,7 +212,7 @@ public class EntrenamientosController extends BaseController{
             Implementacion implementacion = new Implementacion();
 
             Rutina r = rutinaRepository.getById(idrutina);
-            implementacion.setRutina(r);
+            implementacion.setRutina(r.getId());
 
             model.addAttribute("implementacion",implementacion);
 
@@ -439,7 +439,7 @@ public class EntrenamientosController extends BaseController{
     private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
         implementacion.setId(imp.getId());
         implementacion.setEjercicio(imp.getEjercicio());
-        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina());
+        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina().getId());
         implementacion.setSets(imp.getSets());
         implementacion.setRepeticiones(imp.getRepeticiones());
         implementacion.setPeso(imp.getPeso());
@@ -587,7 +587,7 @@ public class EntrenamientosController extends BaseController{
 
     @PostMapping("/guardarimplementacion")
     public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
-        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina().getId();
+        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina();
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{

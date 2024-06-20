@@ -3,10 +3,8 @@ package es.uma.service;
 import es.uma.dao.EjercicioRepository;
 import es.uma.dto.EjercicioDTO;
 import es.uma.entity.Ejercicio;
-import es.uma.entity.TipoEjercicio;
 import es.uma.ui.EjercicioUI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +26,10 @@ public class EjercicioService {
                 .stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public EjercicioDTO getById(Integer id){
+        return ejercicioRepository.findById(id).map(this::convertEntityToDto).orElse(null);
     }
 
     public List<EjercicioDTO> filterExercises(String nombre, String descripcion){
@@ -91,5 +93,15 @@ public class EjercicioService {
         ejercicioDTO.setDescripcion(ejercicio.getDescripcion());
         ejercicioDTO.setTipo(tipoEjercicioService.convertEntityToDto(ejercicio.getTipo()));
        return ejercicioDTO;
+    }
+
+    public Ejercicio convertDtoToEntity(EjercicioDTO ejercicioDTO){
+        Ejercicio ejercicio = new Ejercicio();
+        ejercicio.setId(ejercicioDTO.getId());
+        ejercicio.setNombre(ejercicioDTO.getNombre());
+        ejercicio.setEnlaceVideo(ejercicioDTO.getEnlaceVideo());
+        ejercicio.setDescripcion(ejercicioDTO.getDescripcion());
+        ejercicio.setTipo(tipoEjercicioService.convertDtoToEntity(ejercicioDTO.getTipo()));
+        return ejercicio;
     }
 }

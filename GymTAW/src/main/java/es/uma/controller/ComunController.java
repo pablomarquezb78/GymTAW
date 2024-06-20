@@ -5,6 +5,8 @@ import es.uma.dto.EjercicioDTO;
 import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.*;
 import es.uma.service.EjercicioService;
+import es.uma.service.ImplementacionEjercicioRutinaService;
+import es.uma.service.RutinaService;
 import es.uma.service.TipoEjercicioService;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
@@ -53,6 +55,10 @@ public class ComunController extends BaseController{
     private EjercicioService ejercicioService;
     @Autowired
     private TipoEjercicioService tipoEjercicioService;
+    @Autowired
+    private RutinaService rutinaService;
+    @Autowired
+    private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
 
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
@@ -197,7 +203,7 @@ public class ComunController extends BaseController{
     private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
         implementacion.setId(imp.getId());
         implementacion.setEjercicio(imp.getEjercicio());
-        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina());
+        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina().getId());
         implementacion.setSets(imp.getSets());
         implementacion.setRepeticiones(imp.getRepeticiones());
         implementacion.setPeso(imp.getPeso());
@@ -258,12 +264,10 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)  || esEntrenador(rol)) {
             dir = "admin/mostrarImplementaciones";
-            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
-            List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio);
-            List<Rutina> rutinas = rutinaRepository.findAll();
+            EjercicioDTO ejercicio = ejercicioService.getById(id);
             model.addAttribute("ejercicio", ejercicio);
-            model.addAttribute("implementaciones", implementaciones);
-            model.addAttribute("rutinas", rutinas);
+            model.addAttribute("implementaciones", implementacionEjercicioRutinaService.findByExercise(ejercicio));
+            model.addAttribute("rutinas", rutinaService.getAllRutinas());
             model.addAttribute("implementacion", new Implementacion());
             model.addAttribute("rol", rol);
 
@@ -342,7 +346,7 @@ public class ComunController extends BaseController{
                 ImplementacionEjercicioRutina ier = new ImplementacionEjercicioRutina();
                 ier.setKilocalorias(implementacion.getKilocalorias());
                 ier.setEjercicio(implementacion.getEjercicio());
-                ier.setRutina(implementacion.getRutina());
+                ier.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
                 ier.setPeso(implementacion.getPeso());
                 ier.setMetros(implementacion.getMetros());
                 ier.setTiempo(implementacion.getTiempo());
@@ -405,7 +409,7 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)  || esEntrenador(rol)) {
             dir = "redirect:/comun/verImplementacionesAsociadas?id="+idEjercicio;
-            this.implementacionEjercicioRutinaRepository.deleteById(idImplementacion);
+            implementacionEjercicioRutinaService.deleteById(idImplementacion);
 
         } else {
             dir = "redirect:/";
@@ -421,13 +425,12 @@ public class ComunController extends BaseController{
             if(implementacion.estaVacio()){
                 dir = "redirect:/comun/verImplementacionesAsociadas?id="+id;
             }else{
-                Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
-                List<ImplementacionEjercicioRutina> implementaciones = implementacionEjercicioRutinaRepository.filtrarImplementaciones(ejercicio, implementacion.getRutina(), implementacion.getSets(), implementacion.getRepeticiones(),
-                        implementacion.getPeso(), implementacion.getTiempo(), implementacion.getMetros(), implementacion.getKilocalorias());
-                List<Rutina> rutinas = rutinaRepository.findAll();
+                EjercicioDTO ejercicio = ejercicioService.getById(id);
+
                 model.addAttribute("ejercicio", ejercicio);
-                model.addAttribute("rutinas", rutinas);
-                model.addAttribute("implementaciones", implementaciones);
+                model.addAttribute("rutinas", rutinaService.getAllRutinas());
+                model.addAttribute("implementaciones", implementacionEjercicioRutinaService.filterImplementations(ejercicio, implementacion.getRutina(), implementacion.getSets(), implementacion.getRepeticiones(),
+                        implementacion.getPeso(), implementacion.getTiempo(), implementacion.getMetros(), implementacion.getKilocalorias()));
                 model.addAttribute("implementacion", implementacion);
                 model.addAttribute("rol", rol);
                 dir = "admin/mostrarImplementaciones";
