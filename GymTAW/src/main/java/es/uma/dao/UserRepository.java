@@ -44,8 +44,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> filtrarUsuarios(@Param("nombre") String nombre, @Param("apellidos") String apellidos);
 
     @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.fechaNacimiento >= :fechaNacimiento")
-    List<User> filtrarUsuariosConFecha(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("fechaNacimiento") LocalDate localDate);
+    List<User> filtrarUsuariosConFecha(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("fechaNacimiento") LocalDate fechaNacimiento);
+
+    @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.rol.id = :rol")
+    List<User> filtrarUsuariosConRol(@Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("rol") Integer rol);
 
     @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.fechaNacimiento >= :fechaNacimiento and u.rol.id = :rol")
-    List<User> filtrarUsuariosConRol(@Param("nombre") String nombre, @Param("apellidos") String apellidos,@Param("fechaNacimiento")LocalDate fechaNacimiento, @Param("rol") Integer rol);
+    List<User> filtrarUsuariosConRolYFecha(@Param("nombre") String nombre, @Param("apellidos") String apellidos,@Param("fechaNacimiento")LocalDate fechaNacimiento, @Param("rol") Integer rol);
+    
 }

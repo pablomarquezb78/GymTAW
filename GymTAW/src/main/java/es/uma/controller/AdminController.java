@@ -65,6 +65,10 @@ public class AdminController extends BaseController {
     private AsignacionClienteEntrenadorService asignacionClienteEntrenadorService;
     @Autowired
     private AsignacionClienteDietistaService asignacionClienteDietistaService;
+    @Autowired
+    private CantidadIngredientePlatoComidaService cantidadIngredientePlatoComidaService;
+    @Autowired
+    private TipoComidaService tipoComidaService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -152,8 +156,10 @@ public class AdminController extends BaseController {
                     model.addAttribute("usuarios", userService.filterUsers(usuario.getNombre(), usuario.getApellidos()));
                 }else if (usuario.getRol() == null && !usuario.getFechaNacimiento().isEmpty()){
                     model.addAttribute("usuarios", userService.filterUsersWithDate(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento())));
+                }else if (usuario.getRol() != null && usuario.getFechaNacimiento().isEmpty()){
+                    model.addAttribute("usuarios", userService.filterUsersWithRol(usuario.getNombre(), usuario.getApellidos(), usuario.getRol()));
                 }else{
-                    model.addAttribute("usuarios", userService.filterUsersWithRol(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
+                    model.addAttribute("usuarios", userService.filterUsersWithRolAndDate(usuario.getNombre(), usuario.getApellidos(), convertirStringALocalDate(usuario.getFechaNacimiento()), usuario.getRol()));
                 }
                 dir = "admin/usuarios";
             }
@@ -381,7 +387,7 @@ public class AdminController extends BaseController {
             if(platoUI.estaVacio()){
                 dir = "redirect:/admin/mostrarPlatos";
             }else {
-                model.addAttribute("platos", this.platosRepository.filtrarPlatos(platoUI.getNombre(), platoUI.getTiempoDePreparacion(), platoUI.getReceta()));
+                model.addAttribute("platos", platoService.dishesFilter(platoUI.getNombre(), platoUI.getTiempoDePreparacion(), platoUI.getReceta()));
                 dir = "admin/platos";
             }
             model.addAttribute("plato", platoUI);
@@ -411,24 +417,12 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(platoUI.getId() == null){
                 dir = "redirect:/admin/mostrarPlatos";
-                Plato nuevoPlato = new Plato();
-                nuevoPlato.setNombre(platoUI.getNombre());
-                nuevoPlato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
-                nuevoPlato.setEnlaceReceta(platoUI.getEnlaceReceta());
-                nuevoPlato.setReceta(platoUI.getReceta());
+                platoService.addDish(platoUI);
 
-                platosRepository.save(nuevoPlato);
             }else{
                 dir = "redirect:/admin/mostrarPlatos";
-                Plato plato = platosRepository.findById(platoUI.getId()).orElse(null);
-                plato.setNombre(platoUI.getNombre());
-                plato.setEnlaceReceta(platoUI.getEnlaceReceta());
-                plato.setReceta(platoUI.getReceta());
-                plato.setTiempoDePreparacion(platoUI.getTiempoDePreparacion());
-
-                platosRepository.save(plato);
+                platoService.editDish(platoUI);
             }
-
         } else {
             dir = "redirect:/";
         }
@@ -441,13 +435,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/crearPlato";
-            Plato plato = platosRepository.findById(id).orElse(null);
-            platoUI.setNombre(plato.getNombre());
-            platoUI.setEnlaceReceta(plato.getEnlaceReceta());
-            platoUI.setReceta(plato.getReceta());
-            platoUI.setTiempoDePreparacion(plato.getTiempoDePreparacion());
-
-            model.addAttribute("platoUI", platoUI);
+            model.addAttribute("platoUI", platoService.setPlatoUI(id, platoUI));
         } else {
             dir = "redirect:/";
         }
@@ -477,13 +465,12 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/mostrarComidas";
-            List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.buscarPorPlato(id);
-            List<Ingrediente> ingredientes = cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id);
-            model.addAttribute("comidas", comidas);
+
+            model.addAttribute("comidas", cantidadIngredientePlatoComidaService.getByDish(id));
             model.addAttribute("cantidadPlatoComida", new CantidadPlatoComida());
-            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
-            model.addAttribute("plato", platosRepository.findById(id).orElse(null));
-            model.addAttribute("ingredientes", ingredientes);
+            model.addAttribute("tiposComida", tipoComidaService.getAll());
+            model.addAttribute("plato", platoService.getById(id));
+            model.addAttribute("ingredientes", cantidadIngredientePlatoComidaService.getIngredientsByDish(id));
         } else {
             dir = "redirect:/";
         }
@@ -498,20 +485,16 @@ public class AdminController extends BaseController {
             if(cantidadPlatoComida.estaVacio()){
                 dir = "redirect:/admin/verComidasAsociadas?id="+id;
             }else{
-                Plato plato = platosRepository.findById(id).orElse(null);
+                PlatoDTO plato = platoService.getById(id);
                 if(cantidadPlatoComida.getCantidad() == null){
-                    List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.filtrarPlatos(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida());
-                    model.addAttribute("comidas", comidas);
+                    model.addAttribute("comidas", cantidadIngredientePlatoComidaService.dishFilter(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida()));
                 }else{
-                    List<CantidadIngredientePlatoComida> comidas = cantidadIngredientePlatoComidaRepository.filtrarPlatosConCantidad(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida(), cantidadPlatoComida.getCantidad());
-                    model.addAttribute("comidas", comidas);
-
+                    model.addAttribute("comidas", cantidadIngredientePlatoComidaService.dishFilterWithCuantity(plato, cantidadPlatoComida.getNombreCliente(), cantidadPlatoComida.getNombreDietista(), cantidadPlatoComida.getTipoComida(), cantidadPlatoComida.getCantidad()));
                 }
-                List<Ingrediente> ingredientes = cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id);
                 model.addAttribute("cantidadPlatoComida", cantidadPlatoComida);
-                model.addAttribute("tiposComida", tipoComidaRepository.findAll());
-                model.addAttribute("ingredientes", ingredientes);
-                model.addAttribute("plato",plato);
+                model.addAttribute("tiposComida", tipoComidaService.getAll());
+                model.addAttribute("ingredientes", cantidadIngredientePlatoComidaService.getIngredientsByDish(id));
+                model.addAttribute("plato", plato);
                 dir = "admin/mostrarComidas";
             }
         } else {
@@ -528,13 +511,11 @@ public class AdminController extends BaseController {
             dir = "admin/crearComida";
             AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
             asignacionPlatoComida.setIdPlato(idPlato);
-            List<User> clientes = userRepository.listarClientes();
-            List<User> dietistas = userRepository.listarDietistas();
+
             model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
-            model.addAttribute("ingredientes",  ingredienteRepository.findAll());
-            model.addAttribute("clientes", userRepository.listarClientes());
-            model.addAttribute("dietistas", userRepository.listarDietistas());
-            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
+            model.addAttribute("clientes", userService.getAllCustomers());
+            model.addAttribute("dietistas", userService.getAllDietistas());
+            model.addAttribute("tiposComida", tipoComidaService.getAll());
         } else {
             dir = "redirect:/";
         }
@@ -548,26 +529,10 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/crearComida";
             AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
-            CantidadIngredientePlatoComida apidc = cantidadIngredientePlatoComidaRepository.findById(idComida).orElse(null);
-            asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getCliente().getId());
-            asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getDietista().getId());
-            asignacionPlatoComida.setCantidad(apidc.getCantidad());
-            asignacionPlatoComida.setTipoComida(apidc.getComida().getTipoComida());
-            asignacionPlatoComida.setIdComida(apidc.getId());
-            asignacionPlatoComida.setIdPlato(apidc.getPlato().getId());
-            asignacionPlatoComida.setFecha(apidc.getComida().getDiaDieta().getFecha().toString());
-            asignacionPlatoComida.setIdComida(apidc.getId());
-            List<Ingrediente> ingredientes = new ArrayList<>();
-            for(Ingrediente ingrediente : cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(idPlato)){
-                ingredientes.add(ingrediente);
-            }
-            asignacionPlatoComida.setIngredientes(ingredientes);
-
-            model.addAttribute("asignacionPlatoComida",asignacionPlatoComida);
+            model.addAttribute("asignacionPlatoComida", cantidadIngredientePlatoComidaService.setAsignacionPlatoComida( asignacionPlatoComida, idComida, idPlato));
             model.addAttribute("clientes", userRepository.listarClientes());
             model.addAttribute("dietistas", userRepository.listarDietistas());
-            model.addAttribute("tiposComida", tipoComidaRepository.findAll());
-            model.addAttribute("ingredientes",  ingredienteRepository.findAll());
+            model.addAttribute("tiposComida", tipoComidaService.getAll());
         } else {
             dir = "redirect:/";
         }
@@ -581,43 +546,11 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             if(asignacionPlatoComida.getIdComida() == null){
                 dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
-                CantidadIngredientePlatoComida cipc = new CantidadIngredientePlatoComida();
-                Plato plato = platosRepository.findById(asignacionPlatoComida.getIdPlato()).orElse(null);
-                Comida comida = new Comida();
-                DiaDieta diaDieta = new DiaDieta();
-
-                diaDieta.setCliente(userRepository.findById(asignacionPlatoComida.getIdCliente()).orElse(null));
-                diaDieta.setDietista(userRepository.findById(asignacionPlatoComida.getIdDietista()).orElse(null));
-                diaDieta.setFecha( LocalDate.parse(asignacionPlatoComida.getFecha()));
-                diaDietaRepository.save(diaDieta);
-
-                comida.setTipoComida(asignacionPlatoComida.getTipoComida());
-                comida.setDiaDieta(diaDieta);
-                comidaRepository.save(comida);
-
-                cipc.setPlato(plato);
-                cipc.setCantidad(asignacionPlatoComida.getCantidad());
-                cipc.setComida(comida);
-                cantidadIngredientePlatoComidaRepository.save(cipc);
+                cantidadIngredientePlatoComidaService.saveFood(asignacionPlatoComida);
 
             }else{
                 dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
-                CantidadIngredientePlatoComida cipc = cantidadIngredientePlatoComidaRepository.getById(asignacionPlatoComida.getIdComida());
-                Comida comida = cipc.getComida();
-                DiaDieta diaDieta = comida.getDiaDieta();
-
-                diaDieta.setCliente(userRepository.findById(asignacionPlatoComida.getIdCliente()).orElse(null));
-                diaDieta.setDietista(userRepository.findById(asignacionPlatoComida.getIdDietista()).orElse(null));
-                diaDieta.setFecha( LocalDate.parse(asignacionPlatoComida.getFecha()));
-                diaDietaRepository.save(diaDieta);
-
-                comida.setTipoComida(asignacionPlatoComida.getTipoComida());
-                comida.setDiaDieta(diaDieta);
-                comidaRepository.save(comida);
-
-                cipc.setCantidad(asignacionPlatoComida.getCantidad());
-                cipc.setComida(comida);
-                cantidadIngredientePlatoComidaRepository.save(cipc);
+                cantidadIngredientePlatoComidaService.editFood(asignacionPlatoComida);
             }
         } else {
             dir = "redirect:/";

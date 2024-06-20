@@ -5,13 +5,17 @@
 <%@ page import="es.uma.entity.Plato" %>
 <%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page import="es.uma.entity.TipoComida" %>
+<%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
+<%@ page import="es.uma.dto.IngredienteDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.dto.TipoComidaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<CantidadIngredientePlatoComida> comidas = (List<CantidadIngredientePlatoComida>) request.getAttribute("comidas");
-    List<Ingrediente> ingredientes = (List<Ingrediente>) request.getAttribute("ingredientes");
-    List<TipoComida> tiposComida = (List<TipoComida>) request.getAttribute("tiposComida");
-    Plato plato = (Plato) request.getAttribute("plato");
+    List<CantidadIngredientePlatoComidaDTO> comidas = (List<CantidadIngredientePlatoComidaDTO>) request.getAttribute("comidas");
+    List<IngredienteDTO> ingredientes = (List<IngredienteDTO>) request.getAttribute("ingredientes");
+    List<TipoComidaDTO> tiposComida = (List<TipoComidaDTO>) request.getAttribute("tiposComida");
+    PlatoDTO plato = (PlatoDTO) request.getAttribute("plato");
     String dir = "/admin/filtrarComidas?id="+plato.getId();
 %>
 
@@ -38,7 +42,7 @@
     </tr>
 
     <%
-        for(CantidadIngredientePlatoComida comida : comidas){
+        for(CantidadIngredientePlatoComidaDTO comida : comidas){
 
     %>
     <tr>
@@ -49,7 +53,7 @@
         <td><%=comida.getComida().getTipoComida().getComidaDelDia()%></td>
         <td><%=comida.getCantidad()%></td>
         <td>
-            <% for(Ingrediente ingrediente : ingredientes){
+            <% for(IngredienteDTO ingrediente : ingredientes){
             %>
                 <%=ingrediente.getNombre() +", "%>
             <%

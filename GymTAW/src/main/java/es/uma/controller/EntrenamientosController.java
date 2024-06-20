@@ -54,6 +54,8 @@ public class EntrenamientosController extends BaseController{
     private RutinaService rutinaService;
     @Autowired
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
+    @Autowired
+    private UserRolRepository userRolRepository;
 
 
     @GetMapping("/")
@@ -774,11 +776,35 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/mostrarRutinas")
     public String verRutinasCompletas(HttpSession session, Model model){
 
+
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
+
             List<Rutina> rutinas = rutinaRepository.findAll();
+            model.addAttribute("rutinas",rutinas);
+            return "crosstrainer/rutinas";
+
+        }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @PostMapping("/filtrarRutinas")
+    public String filtrarRutinas(HttpSession session,@RequestParam("nombrerutina") String nombre,@RequestParam("pormi") Integer self, Model model){
+
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+            User selftrain = (User) session.getAttribute("user");
+            List<Rutina> rutinas;
+            if(self==0){
+                rutinas = rutinaRepository.buscarPorNombre(nombre);
+            }else{
+                rutinas = rutinaRepository.buscarPorNombreyEntrenador(nombre,selftrain.getId());
+            }
             model.addAttribute("rutinas",rutinas);
             return "crosstrainer/rutinas";
 
