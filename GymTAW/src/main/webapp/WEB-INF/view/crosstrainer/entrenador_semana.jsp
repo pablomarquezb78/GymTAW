@@ -24,6 +24,7 @@
                 <th scope="col">Fecha</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -43,6 +44,7 @@
                     <button type="submit"> Borrar </button>
                 </form>
             </td>
+            <td><a href="/entrenamientos/verDesempenyoEntrenamientosEntrenador?idUsuario=<%=diaEntrenamiento.getCliente().getId()%>&fecha=<%=diaEntrenamiento.getFecha()%>">Ver feedback</a></td>
         </tr>
 
         <%

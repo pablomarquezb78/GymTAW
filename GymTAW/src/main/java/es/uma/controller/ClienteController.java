@@ -724,6 +724,7 @@ public class ClienteController extends BaseController{
 
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("implementacionEjercicioRutinaListMap",implementacionEjercicioRutinaListMap);
+            model.addAttribute("rol", rol);
 
             dir = "cliente/cliente_desempenyoEntrenamientos";
         } else {

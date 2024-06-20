@@ -26,9 +26,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/entrenamientos")
@@ -56,6 +54,10 @@ public class EntrenamientosController extends BaseController{
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
     @Autowired
     private UserRolRepository userRolRepository;
+    @Autowired
+    private FeedbackejercicioRepository feedbackejercicioRepository;
+    @Autowired
+    private FeedbackejercicioserieRepository feedbackejercicioserieRepository;
 
     //DONE
     @GetMapping("/")
@@ -827,6 +829,50 @@ public class EntrenamientosController extends BaseController{
             return "redirect:/entrenamientos/mostrarRutinas";
 
         }else{
+            dir = "redirect:/";
+        }
+        return dir;
+    }
+
+    @GetMapping("/verDesempenyoEntrenamientosEntrenador")
+    public String doVerDesmepenyoEntrenamientos(@RequestParam("fecha") LocalDate fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
+        String dir;
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        if (estaAutenticado(session) && esEntrenador(rol)) {
+            User userEntity = userRepository.findById(idUsuario).orElse(null);
+            DiaEntrenamiento diaEntrenamiento;
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fechanueva = fecha;
+            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(), fechanueva);
+
+            List<ImplementacionEjercicioRutina> implementaciones;
+            Map<ImplementacionEjercicioRutina, List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
+
+            if (diaEntrenamiento != null) {
+                implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+
+                for (ImplementacionEjercicioRutina implementacion : implementaciones) {
+                    List<FeedbackEjercicioserie> fserie = new ArrayList<>();
+                    if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() != null) {
+                        for (int serie = 0; serie < Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoSetsDone()); serie++) {
+                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().get(0).getId(), "" + (serie + 1));
+                            fserie.add(feedbackEjercicioserie);
+                        }
+                    }
+                    implementacionEjercicioRutinaListMap.put(implementacion, fserie);
+                }
+            } else {
+                implementaciones = new ArrayList<>();
+            }
+
+            model.addAttribute("implementaciones", implementaciones);
+            model.addAttribute("implementacionEjercicioRutinaListMap", implementacionEjercicioRutinaListMap);
+            model.addAttribute("fecha", fecha);
+            model.addAttribute("rol", rol);
+
+            dir = "cliente/cliente_desempenyoEntrenamientos";
+        } else {
             dir = "redirect:/";
         }
         return dir;
