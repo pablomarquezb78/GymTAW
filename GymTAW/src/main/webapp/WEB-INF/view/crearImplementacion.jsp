@@ -5,11 +5,14 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.entity.Rutina" %>
 <%@ page import="es.uma.entity.TipoEjercicio" %>
+<%@ page import="es.uma.dto.EjercicioDTO" %>
+<%@ page import="es.uma.dto.RutinaDTO" %>
+<%@ page import="es.uma.dto.TipoEjercicioDTO" %>
 <%
-    List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
-    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
+    List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
+    List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
     Boolean editable = (Boolean) request.getAttribute("editable");
-    List<TipoEjercicio> tipos = (List<TipoEjercicio>) request.getAttribute("tipos");
+    List<TipoEjercicioDTO> tipos = (List<TipoEjercicioDTO>) request.getAttribute("tipos");
 
     Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
 
@@ -123,18 +126,18 @@
                         <div class="form-group form-select">
                             <label class="form-label">Ejercicio:</label>
                             <form:select size="10" path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
-                        </div>
-                        <form:hidden path="rutina"></form:hidden>
-                        <form:hidden path="idDia"/>
-                        <form:hidden path="id"/>
-                        <div class="form-group">
+                                </div>
+                                <form:hidden path="rutina"></form:hidden>
+                                <form:hidden path="idDia"/>
+                                <form:hidden path="id"/>
+                                <div class="form-group">
                             <form:button class="btn btn-primary mt-3">GUARDAR</form:button>
                             </form:form>
 
                             <div class="mt-4">
                                 <h4>Filtrar ejercicios:</h4>
                                 <form:form action="<%=filtrar%>" method="post" modelAttribute="implementacion">
-                                    <form:radiobuttons path="tipofiltrado" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
+                                    <form:radiobuttons path="idfiltrado" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
                                     <form:hidden path="iddia"/>
                                     <form:hidden path="id"/>
                                     <br>

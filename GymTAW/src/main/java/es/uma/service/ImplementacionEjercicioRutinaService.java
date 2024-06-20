@@ -7,6 +7,7 @@ import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.entity.Ejercicio;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
+import es.uma.ui.Implementacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,51 @@ public class ImplementacionEjercicioRutinaService {
     private EjercicioService ejercicioService;
     @Autowired
     private RutinaService rutinaService;
+
+
+    public void guardarImplementacion(ImplementacionEjercicioRutinaDTO implmentacionDTO){
+        this.implementacionEjercicioRutinaRepository.save(convertDtoToEntity(implmentacionDTO));
+    }
+
+    public ImplementacionEjercicioRutinaDTO getByID(Integer idImplementacion){
+        return convertEntityToDto(implementacionEjercicioRutinaRepository.getById(idImplementacion));
+    }
+
+    public ImplementacionEjercicioRutina convertDtoToEntity(ImplementacionEjercicioRutinaDTO implementacionEjercicioRutinaDTO) {
+        ImplementacionEjercicioRutina implementacionEjercicioRutina = new ImplementacionEjercicioRutina();
+        implementacionEjercicioRutina.setId(implementacionEjercicioRutinaDTO.getId());
+        implementacionEjercicioRutina.setMetros(implementacionEjercicioRutinaDTO.getMetros());
+        implementacionEjercicioRutina.setPeso(implementacionEjercicioRutinaDTO.getPeso());
+        implementacionEjercicioRutina.setSets(implementacionEjercicioRutinaDTO.getSets());
+        implementacionEjercicioRutina.setRepeticiones(implementacionEjercicioRutinaDTO.getRepeticiones());
+        implementacionEjercicioRutina.setRutina(rutinaService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getRutina()));
+        implementacionEjercicioRutina.setEjercicio(ejercicioService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getEjercicio()));
+
+        return implementacionEjercicioRutina;
+    }
+
+
+    public void asignarImplementacionUIaImplementacionDTO(ImplementacionEjercicioRutinaDTO implementacionDTO,Implementacion implementacionUI){
+        //implementacion.setEjercicio(imp.getEjercicio());
+        implementacionDTO.setSets(implementacionUI.getSets());
+        implementacionDTO.setRepeticiones(implementacionUI.getRepeticiones());
+        implementacionDTO.setPeso(implementacionUI.getPeso());
+        implementacionDTO.setTiempo(implementacionUI.getTiempo());
+        implementacionDTO.setKilocalorias(implementacionUI.getKilocalorias());
+        implementacionDTO.setMetros(implementacionUI.getMetros());
+    }
+
+    public void asignarImplementacionDTOaImplementacionUI(Implementacion implementacionUI,ImplementacionEjercicioRutinaDTO implementacionDTO){
+        implementacionUI.setId(implementacionDTO.getId());
+        implementacionUI.setEjercicio(implementacionDTO.getEjercicio());
+        if(implementacionDTO.getRutina()!=null) implementacionUI.setRutina(implementacionDTO.getRutina().getId());
+        implementacionUI.setSets(implementacionDTO.getSets());
+        implementacionUI.setRepeticiones(implementacionDTO.getRepeticiones());
+        implementacionUI.setPeso(implementacionDTO.getPeso());
+        implementacionUI.setTiempo(implementacionDTO.getTiempo());
+        implementacionUI.setKilocalorias(implementacionDTO.getKilocalorias());
+        implementacionUI.setMetros(implementacionDTO.getMetros());
+    }
 
     public List<ImplementacionEjercicioRutinaDTO> findByExercise(EjercicioDTO ejercicioDTO){
         Ejercicio ejercicio = ejercicioService.convertDtoToEntity(ejercicioDTO);

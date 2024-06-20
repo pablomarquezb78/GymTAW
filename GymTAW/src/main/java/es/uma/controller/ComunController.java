@@ -2,6 +2,7 @@ package es.uma.controller;
 
 import es.uma.dao.*;
 import es.uma.dto.EjercicioDTO;
+import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.*;
 import es.uma.service.EjercicioService;
@@ -202,7 +203,7 @@ public class ComunController extends BaseController{
 
     private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
         implementacion.setId(imp.getId());
-        implementacion.setEjercicio(imp.getEjercicio());
+        //implementacion.setEjercicio(imp.getEjercicio());
         if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina().getId());
         implementacion.setSets(imp.getSets());
         implementacion.setRepeticiones(imp.getRepeticiones());
@@ -212,6 +213,7 @@ public class ComunController extends BaseController{
         implementacion.setMetros(imp.getMetros());
     }
 
+    //todo
     @PostMapping("/filtrartipo")
     public String doFiltrarImplementacion(@RequestParam(value = "id", required = false) Integer id,@RequestParam(value = "iddia", required = false) Integer iddia,
                                           Model model,HttpSession sesion,@ModelAttribute("implementacion") Implementacion implementacion){
@@ -223,33 +225,37 @@ public class ComunController extends BaseController{
         }else{
 
             if(id!=null){
-                ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
-
+                //ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
+                ImplementacionEjercicioRutinaDTO imp = implementacionEjercicioRutinaService.getByID(id);
 
                 if(imp!=null){
-                    asignarImplementacionUI(implementacion,imp);
+                    //asignarImplementacionUI(implementacion,imp);
+                    implementacionEjercicioRutinaService.asignarImplementacionDTOaImplementacionUI(implementacion,imp);
                     implementacion.setId(id);
-
                 }
             }
 
 
-            if(iddia!=null){
-                implementacion.setIdDia(iddia);
-            }
+            if(iddia!=null) implementacion.setIdDia(iddia);
+
 
             model.addAttribute("implementacion",implementacion);
 
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
+            //Descomentar:
+            //List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
+            //model.addAttribute("ejercicios",ejercicios);
+
+            List<EjercicioDTO> ejercicios = ejercicioService.getEjerciciosDeTipoDeEjercicio(implementacion.getIdfiltrado());
             model.addAttribute("ejercicios",ejercicios);
 
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            //model.addAttribute("tipos",tipos);
+
+            List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("tipos",tipos);
 
             Boolean editable = true;
             model.addAttribute("editable",editable);
-
-
         }
 
 
@@ -287,7 +293,7 @@ public class ComunController extends BaseController{
             List<Rutina> rutinas = rutinaRepository.findAll();
             Implementacion implementacion = new Implementacion();
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            implementacion.setEjercicio(ejercicioRepository.findById(id).orElse(null));
+            //implementacion.setEjercicio(ejercicioRepository.findById(id).orElse(null));
             model.addAttribute("tipos",tipos);
             model.addAttribute("rutinas", rutinas);
             model.addAttribute("implementacion", implementacion);
@@ -299,7 +305,7 @@ public class ComunController extends BaseController{
     }
 
     private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
-        implementacion.setEjercicio(imp.getEjercicio());
+        //implementacion.setEjercicio(imp.getEjercicio());
         implementacion.setSets(imp.getSets());
         implementacion.setRepeticiones(imp.getRepeticiones());
         implementacion.setPeso(imp.getPeso());
@@ -345,7 +351,7 @@ public class ComunController extends BaseController{
             if(implementacion.getId() == null){
                 ImplementacionEjercicioRutina ier = new ImplementacionEjercicioRutina();
                 ier.setKilocalorias(implementacion.getKilocalorias());
-                ier.setEjercicio(implementacion.getEjercicio());
+                //ier.setEjercicio(implementacion.getEjercicio());
                 ier.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
                 ier.setPeso(implementacion.getPeso());
                 ier.setMetros(implementacion.getMetros());
@@ -387,7 +393,7 @@ public class ComunController extends BaseController{
             List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
 
             implementacion.setId(ier.getId());
-            implementacion.setEjercicio(ier.getEjercicio());
+            //implementacion.setEjercicio(ier.getEjercicio());
             implementacion.setKilocalorias(ier.getKilocalorias());
             implementacion.setPeso(ier.getPeso());
             implementacion.setMetros(ier.getMetros());

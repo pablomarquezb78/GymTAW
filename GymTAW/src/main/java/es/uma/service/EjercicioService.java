@@ -2,6 +2,7 @@ package es.uma.service;
 
 import es.uma.dao.EjercicioRepository;
 import es.uma.dto.EjercicioDTO;
+import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.Ejercicio;
 import es.uma.ui.EjercicioUI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class EjercicioService {
     @Autowired
     public TipoEjercicioService tipoEjercicioService;
 
+    public List<EjercicioDTO> getEjerciciosDeTipoDeEjercicio(Integer idtipo){
+        return  ejercicioRepository.filtrarEjercicioSoloDeTipoID(idtipo)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
 
     public List<EjercicioDTO> getAllExercises(){
         return ejercicioRepository.findAll()

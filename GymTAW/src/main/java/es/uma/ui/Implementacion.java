@@ -1,5 +1,7 @@
 package es.uma.ui;
 
+import es.uma.dto.EjercicioDTO;
+import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.Ejercicio;
 import es.uma.entity.Rutina;
 import es.uma.entity.TipoEjercicio;
@@ -8,7 +10,6 @@ public class Implementacion {
 
 
     private Integer id;
-    private Ejercicio ejercicio; 
     private Integer rutina;
     private String sets;
     private String repeticiones;
@@ -22,8 +23,43 @@ public class Implementacion {
     private String seguimientoMetrosDone;
     private Byte realizado;
     private Integer iddia;
-    private TipoEjercicio tipofiltrado;
+    private EjercicioDTO ejercicio;
+    private TipoEjercicioDTO tipofiltrado;
     private String nombrefiltrado;
+    private Integer idfiltrado;
+    private Integer idejercicio;
+
+    public Integer getIdejercicio() {
+        return idejercicio;
+    }
+
+    public void setIdejercicio(Integer idejercicio) {
+        this.idejercicio = idejercicio;
+    }
+
+    public Integer getIdfiltrado() {
+        return idfiltrado;
+    }
+
+    public void setIdfiltrado(Integer idfiltrado) {
+        this.idfiltrado = idfiltrado;
+    }
+
+    public EjercicioDTO getEjercicio() {
+        return ejercicio;
+    }
+
+    public void setEjercicio(EjercicioDTO ejercicio) {
+        this.ejercicio = ejercicio;
+    }
+
+    public TipoEjercicioDTO getTipofiltrado() {
+        return tipofiltrado;
+    }
+
+    public void setTipofiltrado(TipoEjercicioDTO tipofiltrado) {
+        this.tipofiltrado = tipofiltrado;
+    }
 
     public String getNombrefiltrado() {
         return nombrefiltrado;
@@ -41,9 +77,7 @@ public class Implementacion {
         this.iddia = iddia;
     }
 
-    public TipoEjercicio getTipofiltrado() {return tipofiltrado;}
 
-    public void setTipofiltrado(TipoEjercicio tipofiltrado) {this.tipofiltrado = tipofiltrado;}
 
 
     public Integer getIdDia() {
@@ -63,13 +97,7 @@ public class Implementacion {
         this.id = id;
     }
 
-    public Ejercicio getEjercicio() {
-        return ejercicio;
-    }
 
-    public void setEjercicio(Ejercicio ejercicio) {
-        this.ejercicio = ejercicio;
-    }
 
     public String getSets() {
         return sets;

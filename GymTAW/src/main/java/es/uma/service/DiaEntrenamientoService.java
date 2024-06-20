@@ -21,6 +21,10 @@ public class DiaEntrenamientoService {
     @Autowired
     private RutinaService rutinaService;
 
+    public DiaEntrenamientoDTO getbyID(Integer id){
+        return convertEntityToDto(diaEntrenamientoRepository.getById(id));
+    }
+
     public List<DiaEntrenamientoDTO> getDiasDeClienteID(Integer idclient){
         List<DiaEntrenamientoDTO> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idclient)
                 .stream()
