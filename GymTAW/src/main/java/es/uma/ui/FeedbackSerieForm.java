@@ -1,6 +1,6 @@
 package es.uma.ui;
 
-import es.uma.entity.FeedbackEjercicio;
+import es.uma.dto.FeedbackEjercicioDTO;
 
 public class FeedbackSerieForm {
 
@@ -12,13 +12,13 @@ public class FeedbackSerieForm {
     protected Integer minutosRealizados;
     protected String kilocaloriasRealizado;
     protected String metrosRealizado;
-    protected FeedbackEjercicio feedbackEjercicio;
+    protected FeedbackEjercicioDTO feedbackEjercicio;
 
-    public FeedbackEjercicio getFeedbackEjercicio() {
+    public FeedbackEjercicioDTO getFeedbackEjercicio() {
         return feedbackEjercicio;
     }
 
-    public void setFeedbackEjercicio(FeedbackEjercicio feedbackEjercicio) {
+    public void setFeedbackEjercicio(FeedbackEjercicioDTO feedbackEjercicio) {
         this.feedbackEjercicio = feedbackEjercicio;
     }
 

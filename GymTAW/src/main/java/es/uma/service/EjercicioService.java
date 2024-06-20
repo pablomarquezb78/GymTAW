@@ -27,7 +27,7 @@ public class EjercicioService {
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
-
+    
     public EjercicioDTO getById(Integer id){
         return ejercicioRepository.findById(id).map(this::convertEntityToDto).orElse(null);
     }
@@ -104,4 +104,5 @@ public class EjercicioService {
         ejercicio.setTipo(tipoEjercicioService.convertDtoToEntity(ejercicioDTO.getTipo()));
         return ejercicio;
     }
+    
 }

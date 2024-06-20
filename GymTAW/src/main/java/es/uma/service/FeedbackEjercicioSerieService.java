@@ -1,5 +1,6 @@
 package es.uma.service;
 
+import es.uma.dao.FeedbackejercicioserieRepository;
 import es.uma.dto.FeedbackEjercicioDTO;
 import es.uma.dto.FeedbackEjercicioserieDTO;
 import es.uma.entity.FeedbackEjercicio;
@@ -14,7 +15,17 @@ import java.util.List;
 @Service
 public class FeedbackEjercicioSerieService {
 
+    @Autowired
+    protected FeedbackejercicioserieRepository feedbackejercicioserieRepository;
+    @Autowired
+    private FeedbackEjercicioService feedbackEjercicioService;
+
     //Feedback ejercicio
+
+    public FeedbackEjercicioserieDTO getFeedbackPorEjecicioYSerie(FeedbackEjercicioDTO feedbackEjercicioDTO, String set){
+        FeedbackEjercicio feedbackEjercicioEntity = feedbackEjercicioService.convertDtoToEntity(feedbackEjercicioDTO);
+        return convertEntityToDto(feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(feedbackEjercicioEntity,set));
+    }
 
     public FeedbackEjercicioserieDTO convertEntityToDto(FeedbackEjercicioserie feedbackEjercicioserie) {
         FeedbackEjercicioserieDTO feedbackEjercicioserieDTO = new FeedbackEjercicioserieDTO();

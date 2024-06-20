@@ -1,5 +1,7 @@
 <%@ page import="es.uma.entity.DiaEntrenamiento" %>
-<%@ page import="es.uma.entity.DiaDieta" %><%--
+<%@ page import="es.uma.entity.DiaDieta" %>
+<%@ page import="es.uma.dto.DiaDietaDTO" %>
+<%@ page import="es.uma.dto.DiaEntrenamientoDTO" %><%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
   Date: 29/04/2024
@@ -8,8 +10,8 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    DiaEntrenamiento diaEntrenamiento = (DiaEntrenamiento) request.getAttribute("diaEntrenamiento");
-    DiaDieta diaDieta = (DiaDieta) request.getAttribute("diaDieta");
+    DiaEntrenamientoDTO diaEntrenamiento = (DiaEntrenamientoDTO) request.getAttribute("diaEntrenamiento");
+    DiaDietaDTO diaDieta = (DiaDietaDTO) request.getAttribute("diaDieta");
     String nombreUsuario = (String) request.getAttribute("nombreUsuario");
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

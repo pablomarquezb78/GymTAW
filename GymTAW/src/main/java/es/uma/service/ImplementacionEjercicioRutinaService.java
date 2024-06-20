@@ -3,13 +3,11 @@ package es.uma.service;
 
 import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dto.EjercicioDTO;
-import es.uma.dto.FeedbackEjercicioDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.entity.Ejercicio;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ImplementacionEjercicioRutinaService {
-    
+
     //Ejercicio y rutina y feedback
     @Autowired
     private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;

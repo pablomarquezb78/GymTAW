@@ -1,7 +1,9 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
+import es.uma.dto.*;
 import es.uma.entity.*;
+import es.uma.service.*;
 import es.uma.ui.FeedbackSerieForm;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,16 @@ public class ClienteController extends BaseController{
     protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
     @Autowired
     protected PlatosRepository platosRepository;
+    @Autowired
+    private DiaEntrenamientoService diaEntrenamientoService;
+    @Autowired
+    private DiaDietaService diaDietaService;
+    @Autowired
+    private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
+    @Autowired
+    private FeedbackEjercicioService feedbackEjercicioService;
+    @Autowired
+    private FeedbackEjercicioSerieService feedbackEjercicioSerieService;
 
     //NOTA: LOS EJERCICIOS DE BODY SIEMPRE TENDRÁN SERIES, COMO MÍNIMO UNA, PERO LOS EJERCICIOS DE CROSSFIT PUEDEN TENER O NO TENER SERIES ESTIPULADAS.
     //AUNQUE LA INTERPRETACIÓN DE NO TENER UNA SERIE SEA EQUIVALENTE A TENER UNA SERIE, HACERLO ASÍ LO HACE MÁS SIMPLE Y COHERENTE, YA QUE EN BODY
@@ -49,8 +61,8 @@ public class ClienteController extends BaseController{
 
             //Semana 1 dia 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
-            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+            DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fechaInicio);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity,fechaInicio);
 
             model.addAttribute("nombreUsuario", userEntity.getNombre() + " " + userEntity.getApellidos());
             model.addAttribute("diaDieta",diaDieta);
@@ -74,11 +86,11 @@ public class ClienteController extends BaseController{
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAENTRENAMIENTO
-            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
+            DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fechaInicio);
             session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
 
             //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
-            List<ImplementacionEjercicioRutina> implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+            List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(diaEntrenamiento.getRutina().getId());
 
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("diaEntrenamiento",diaEntrenamiento);
@@ -96,7 +108,7 @@ public class ClienteController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
             //OBTENEMOS LA IMPLEMENTACION
-            ImplementacionEjercicioRutina implementacion = implementacionEjercicioRutinaRepository.findById(Integer.parseInt(id)).orElse(null);
+            ImplementacionEjercicioRutinaDTO implementacion = implementacionEjercicioRutinaService.getImplementacionPorId(Integer.parseInt(id));
             model.addAttribute("implementacion",implementacion);
 
             String strTo = "/cliente/cliente_ejerciciobody";
@@ -104,15 +116,11 @@ public class ClienteController extends BaseController{
             //OBTENEMOS EL DIA SELECCIONADO Y EL FEEDBACK DE ESTE EJERCICIO Y AÑADIMOS AL MODELO ESTE ÚLTIMO
             User userEntity = (User) session.getAttribute("user");
             LocalDate dia = (LocalDate) session.getAttribute("fechaSeleccionada");
-            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),dia);
+            DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),dia);
             //CREAMOS EL FEEDBACK DEL EJERCICIO
-            FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
+            FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
             if(feedbackEjercicio==null){
-                feedbackEjercicio = new FeedbackEjercicio();
-                feedbackEjercicio.setDiaEntrenamiento(diaEntrenamiento);
-                feedbackEjercicio.setImplementacion(implementacion);
-                feedbackEjercicio.setRealizado((byte) 0);
-                feedbackejercicioRepository.save(feedbackEjercicio);
+                feedbackEjercicioService.createFeedbackEjercicio(diaEntrenamiento,implementacion);
             }
             model.addAttribute("feedback",feedbackEjercicio);
 
@@ -133,7 +141,7 @@ public class ClienteController extends BaseController{
                 }
 
                 //OBTENGO EL FEEDBACK DE ESE EJERCICIO EN ESA SERIE CONCRETA Y LO AÑADO AL MODELO
-                FeedbackEjercicioserie feedbackEjercicioSerie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(feedbackEjercicio,set);
+                FeedbackEjercicioserieDTO feedbackEjercicioSerie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio,set);
                 model.addAttribute("feedbackSerie",feedbackEjercicioSerie);
 
                 //MANTENEMOS EL OBJETO UI ACTUALIZADO

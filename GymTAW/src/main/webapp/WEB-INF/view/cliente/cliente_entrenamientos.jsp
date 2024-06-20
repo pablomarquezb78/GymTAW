@@ -1,6 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
 <%@ page import="es.uma.entity.DiaEntrenamiento" %>
+<%@ page import="es.uma.dto.DiaEntrenamientoDTO" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
@@ -10,8 +12,8 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    List<ImplementacionEjercicioRutina> l = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    DiaEntrenamiento diaEntrenamiento = (DiaEntrenamiento) request.getAttribute("diaEntrenamiento");
+    List<ImplementacionEjercicioRutinaDTO> l = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
+    DiaEntrenamientoDTO diaEntrenamiento = (DiaEntrenamientoDTO) request.getAttribute("diaEntrenamiento");
 
     String filtroDia = request.getParameter("filtroDia");
 

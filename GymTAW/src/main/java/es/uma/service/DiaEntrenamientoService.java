@@ -7,6 +7,7 @@ import es.uma.entity.DiaEntrenamiento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,8 @@ public class DiaEntrenamientoService {
     protected DiaEntrenamientoRepository diaEntrenamientoRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RutinaService rutinaService;
 
     public List<DiaEntrenamientoDTO> getDiasDeClienteID(Integer idclient){
         List<DiaEntrenamientoDTO> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idclient)
@@ -28,14 +31,29 @@ public class DiaEntrenamientoService {
         return dias;
     }
 
-    private DiaEntrenamientoDTO convertEntityToDto(DiaEntrenamiento diaEntrenamiento) {
+    public DiaEntrenamientoDTO getDiaEntrenamientoDeClienteFecha(Integer idClient, LocalDate fecha){
+        return convertEntityToDto(diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(idClient,fecha));
+    }
+
+    public DiaEntrenamientoDTO convertEntityToDto(DiaEntrenamiento diaEntrenamiento) {
         DiaEntrenamientoDTO diaEntrenamientoDTO = new DiaEntrenamientoDTO();
         diaEntrenamientoDTO.setId(diaEntrenamiento.getId());
         diaEntrenamientoDTO.setFecha(diaEntrenamiento.getFecha());
         diaEntrenamientoDTO.setSeguimiento(diaEntrenamiento.getSeguimiento());
         diaEntrenamientoDTO.setCliente(userService.convertEntityToDto(diaEntrenamiento.getCliente()));
-        //diaEntrenamientoDTO.setRutina(convertRutinaEntityToDto(diaEntrenamiento.getRutina()));
+        diaEntrenamientoDTO.setRutina(rutinaService.convertEntityToDto(diaEntrenamiento.getRutina()));
         return diaEntrenamientoDTO;
     }
+
+    public DiaEntrenamiento convertDtoToEntity(DiaEntrenamientoDTO diaEntrenamientoDTO) {
+        DiaEntrenamiento diaEntrenamiento = new DiaEntrenamiento();
+        diaEntrenamiento.setId(diaEntrenamientoDTO.getId());
+        diaEntrenamiento.setFecha(diaEntrenamientoDTO.getFecha());
+        diaEntrenamiento.setSeguimiento(diaEntrenamientoDTO.getSeguimiento());
+        diaEntrenamiento.setCliente(userService.convertDtoToEntity(diaEntrenamientoDTO.getCliente()));
+        diaEntrenamiento.setRutina(rutinaService.convertDtoToEntity(diaEntrenamientoDTO.getRutina()));
+        return diaEntrenamiento;
+    }
+
 
 }

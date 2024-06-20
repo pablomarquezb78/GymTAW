@@ -41,4 +41,5 @@ public class TipoEjercicioService {
         tipoEjercicio.setTipoDeEjercicio(tipoEjercicioDTO.getTipoDeEjercicio());
         return tipoEjercicio;
     }
+    
 }
