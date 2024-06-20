@@ -35,6 +35,12 @@ public class RutinaService {
         return rutina;
     }
 
+    public void setNombreRutina(Integer idrutina,String nombre){
+        Rutina rutina = rutinaRepository.getById(idrutina);
+        rutina.setNombre(nombre);
+        rutinaRepository.save(rutina);
+    }
+
     public RutinaDTO convertEntityToDto(Rutina rutina) {
         RutinaDTO rutinaDTO = new RutinaDTO();
         rutinaDTO.setId(rutina.getId());

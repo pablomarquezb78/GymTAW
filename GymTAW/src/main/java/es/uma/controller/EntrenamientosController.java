@@ -132,7 +132,7 @@ public class EntrenamientosController extends BaseController{
         RutinaDTO rutina = rutinaService.getRutinaByID(idrutina);
 
         List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(rutina.getId());
-        
+
         if(lista==null) lista = new ArrayList<>();
 
         model.addAttribute("rutina",rutina);
@@ -166,6 +166,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    //DONE
     @PostMapping("/cambiarnombrerutina")
     public String doCambiarNombreRutina(@RequestParam("nombre") String nombre,@RequestParam("idrutina") Integer idrutina,
                                                Model model,HttpSession sesion){
@@ -174,13 +175,8 @@ public class EntrenamientosController extends BaseController{
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
-            if(nombre!=""){
-                Rutina rutina = rutinaRepository.getById(idrutina);
-                rutina.setNombre(nombre);
-                rutinaRepository.save(rutina);
-            }
+            if(nombre!="") rutinaService.setNombreRutina(idrutina,nombre);
         }
-
 
         return strTo;
     }
