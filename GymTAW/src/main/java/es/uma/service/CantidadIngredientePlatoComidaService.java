@@ -71,6 +71,10 @@ public class CantidadIngredientePlatoComidaService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteById(Integer id){
+        cantidadIngredientePlatoComidaRepository.deleteById(id);
+    }
+
     public AsignacionPlatoComida setAsignacionPlatoComida(AsignacionPlatoComida asignacionPlatoComida, Integer idComida, Integer idPlato){
         CantidadIngredientePlatoComida apidc = cantidadIngredientePlatoComidaRepository.findById(idComida).orElse(null);
         asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getCliente().getId());

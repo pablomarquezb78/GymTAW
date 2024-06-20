@@ -51,5 +51,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where u.nombre like concat('%', :nombre, '%') and u.apellidos like concat('%', :apellidos, '%') and u.fechaNacimiento >= :fechaNacimiento and u.rol.id = :rol")
     List<User> filtrarUsuariosConRolYFecha(@Param("nombre") String nombre, @Param("apellidos") String apellidos,@Param("fechaNacimiento")LocalDate fechaNacimiento, @Param("rol") Integer rol);
-    
+
 }
