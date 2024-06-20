@@ -1,6 +1,6 @@
 package es.uma.ui;
 
-import es.uma.entity.TipoCantidad;
+import es.uma.dto.TipoComidaDTO;
 import es.uma.entity.TipoComida;
 
 
@@ -9,7 +9,15 @@ public class CantidadPlatoComida {
     private String nombreCliente;
     private String nombreDietista;
     private Integer cantidad;
-    private TipoComida tipoComida;
+    private Integer tipoComida;
+
+    public Integer getTipoComida() {
+        return tipoComida;
+    }
+
+    public void setTipoComida(Integer tipoComida) {
+        this.tipoComida = tipoComida;
+    }
 
     public Integer getId() {
         return id;
@@ -39,13 +47,6 @@ public class CantidadPlatoComida {
         return cantidad;
     }
 
-    public TipoComida getTipoComida() {
-        return tipoComida;
-    }
-
-    public void setTipoComida(TipoComida tipoComida) {
-        this.tipoComida = tipoComida;
-    }
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;

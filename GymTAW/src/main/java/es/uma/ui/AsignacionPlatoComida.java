@@ -1,10 +1,14 @@
 package es.uma.ui;
 
+import es.uma.dto.IngredienteDTO;
+import es.uma.dto.TipoComidaDTO;
 import es.uma.entity.Ingrediente;
 import es.uma.entity.TipoComida;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class AsignacionPlatoComida {
 
     private Integer idPlato;
@@ -13,71 +17,35 @@ public class AsignacionPlatoComida {
     private Integer idCliente;
     private Integer idDietista;
     private Integer cantidad;
-    private TipoComida tipoComida;
-    private List<Ingrediente> ingredientes;
+    private Integer tipoComida;
 
-    public Integer getIdPlato() {
-        return idPlato;
+    public void setTipoComida(Integer tipoComida) {
+        this.tipoComida = tipoComida;
     }
 
     public void setIdPlato(Integer idPlato) {
         this.idPlato = idPlato;
     }
 
-    public Integer getIdComida() {
-        return idComida;
-    }
-
     public void setIdComida(Integer idComida) {
         this.idComida = idComida;
-    }
-
-    public Integer getIdCliente() {
-        return idCliente;
     }
 
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
 
-    public Integer getIdDietista() {
-        return idDietista;
-    }
-
     public void setIdDietista(Integer idDietista) {
         this.idDietista = idDietista;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
     }
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 
-    public TipoComida getTipoComida() {
-        return tipoComida;
-    }
-
-    public void setTipoComida(TipoComida tipoComida) {
-        this.tipoComida = tipoComida;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
-    }
-
-    public List<Ingrediente> getIngredientes() {
-        return ingredientes;
-    }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
-        this.ingredientes = ingredientes;
     }
 
 

@@ -132,13 +132,19 @@ public class UserService {
         return this.convertlistEntityToDto(userRepository.filtrarUsuarios(nombre, apellidos));
     }
 
-    public List<UserDTO> filterUsersWithDate(String nombre, String apellidos, LocalDate fecha){
-        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConFecha(nombre, apellidos, fecha));
+    public List<UserDTO> filterUsersWithDate(String nombre, String apellidos, LocalDate fechaNacimiento){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConFecha(nombre, apellidos, fechaNacimiento));
     }
 
-    public List<UserDTO> filterUsersWithRol(String nombre, String apellidos, LocalDate fecha, Integer rol){
-        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRol(nombre, apellidos, fecha, rol));
+    public List<UserDTO> filterUsersWithRol(String nombre, String apellidos, Integer rol){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRol(nombre, apellidos, rol));
     }
+
+    public List<UserDTO> filterUsersWithRolAndDate(String nombre, String apellidos, LocalDate fechaNacimiento, Integer rol){
+        return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRolYFecha(nombre, apellidos, fechaNacimiento, rol));
+    }
+
+
 
     public UserDTO getById(Integer id){
         return this.convertEntityToDto(userRepository.findById(id).orElse(null));

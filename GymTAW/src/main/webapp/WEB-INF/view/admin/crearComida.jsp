@@ -4,14 +4,17 @@
 <%@ page import="es.uma.ui.CantidadPlatoComida" %>
 <%@ page import="es.uma.ui.AsignacionPlatoComida" %>
 <%@ page import="es.uma.entity.*" %>
+<%@ page import="es.uma.dto.UserDTO" %>
+<%@ page import="es.uma.dto.TipoComidaDTO" %>
+<%@ page import="es.uma.dto.IngredienteDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     AsignacionPlatoComida asignacionPlatoComida = (AsignacionPlatoComida) request.getAttribute("asignacionPlatoComida");
-    List<User> clientes = (List<User>) request.getAttribute("clientes");
-    List<User> dietistas = (List<User>) request.getAttribute("dietistas");
-    List<TipoComida> tiposComida = (List<TipoComida>) request.getAttribute("tipos");
-    List<Ingrediente> ingredientes = (List<Ingrediente>) request.getAttribute("ingredientes");
+    List<UserDTO> clientes = (List<UserDTO>) request.getAttribute("clientes");
+    List<UserDTO> dietistas = (List<UserDTO>) request.getAttribute("dietistas");
+    List<TipoComidaDTO> tiposComida = (List<TipoComidaDTO>) request.getAttribute("tiposComida");
+    List<IngredienteDTO> ingredientes = (List<IngredienteDTO>) request.getAttribute("ingredientes");
 %>
 <html>
 <head>
