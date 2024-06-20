@@ -5,8 +5,8 @@
 <%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%
-    List<ImplementacionEjercicioRutina> lista = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-    Rutina rutina = (Rutina) request.getAttribute("rutina");
+    List<ImplementacionEjercicioRutinaDTO> lista = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
+    RutinaDTO rutina = (RutinaDTO) request.getAttribute("rutina");
 
     Boolean editar = true;
 %>
@@ -56,7 +56,7 @@
         <%
 
             if(lista.size()>0 && editar){
-                for (ImplementacionEjercicioRutina imp : lista) {
+                for (ImplementacionEjercicioRutinaDTO imp : lista) {
         %>
         <tr>
             <td><%= imp.getEjercicio().getNombre() %></td>
@@ -83,7 +83,7 @@
                 }
             }
             else if(lista.size()>0 && !editar) {
-                for (ImplementacionEjercicioRutina imp : lista) {
+                for (ImplementacionEjercicioRutinaDTO imp : lista) {
         %>
         <tr>
             <td><%= imp.getEjercicio().getNombre() %></td>

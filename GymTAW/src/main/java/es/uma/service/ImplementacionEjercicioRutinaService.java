@@ -57,6 +57,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacionEjercicioRutinaDTO.setSets(implementacionEjercicioRutina.getSets());
         implementacionEjercicioRutinaDTO.setRepeticiones(implementacionEjercicioRutina.getRepeticiones());
         implementacionEjercicioRutinaDTO.setRutina(rutinaService.convertEntityToDto(implementacionEjercicioRutina.getRutina()));
+        implementacionEjercicioRutinaDTO.setEjercicio(ejercicioService.convertEntityToDto(implementacionEjercicioRutina.getEjercicio()));
 
         return implementacionEjercicioRutinaDTO;
     }

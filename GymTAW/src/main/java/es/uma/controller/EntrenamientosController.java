@@ -123,17 +123,17 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-
+    //todo
     @GetMapping("/crearrutina")
     public String doCrearRutina(@RequestParam("idrutina") Integer idrutina,Model model){
         String strTo = "/crosstrainer/entrenador_crear_rutina";
 
-        Rutina rutina = rutinaRepository.getById(idrutina);
 
-        List<ImplementacionEjercicioRutina> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinaID(rutina.getId());
-        if(lista==null){
-            lista = new ArrayList<>();
-        }
+        RutinaDTO rutina = rutinaService.getRutinaByID(idrutina);
+
+        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(rutina.getId());
+        
+        if(lista==null) lista = new ArrayList<>();
 
         model.addAttribute("rutina",rutina);
         model.addAttribute("implementaciones",lista);
