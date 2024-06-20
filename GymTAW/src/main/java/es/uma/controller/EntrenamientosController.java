@@ -49,7 +49,9 @@ public class EntrenamientosController extends BaseController{
     @Autowired
     private UserRolRepository userRolRepository;
     @Autowired
-
+    private FeedbackejercicioRepository feedbackejercicioRepository;
+    @Autowired
+    private FeedbackejercicioserieRepository feedbackejercicioserieRepository;
     private TipoEjercicioService tipoEjercicioService;
     @Autowired
     private EjercicioService ejercicioService;
@@ -501,6 +503,7 @@ public class EntrenamientosController extends BaseController{
 
             Implementacion implementacion = new Implementacion();
             //asignarImplementacionUI(implementacion,imp);
+            implementacionEjercicioRutinaService.asignarImplementacionDTOaImplementacionUI(implementacion,imp);
             implementacion.setId(id);
             model.addAttribute("implementacion",implementacion);
 
@@ -886,6 +889,7 @@ public class EntrenamientosController extends BaseController{
         }
         return dir;
     }
+
 
 
 
