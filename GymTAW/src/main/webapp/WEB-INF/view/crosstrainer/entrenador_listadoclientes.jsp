@@ -3,7 +3,7 @@
 <%@ page import="es.uma.dto.UserDTO" %>
 
 <%
-    List<User> lista = (List<User>) request.getAttribute("lista");
+    List<UserDTO> lista = (List<UserDTO>) request.getAttribute("lista");
 
 %>
 
@@ -60,7 +60,7 @@
 
 
         <%
-            for(User usuario : lista){
+            for(UserDTO usuario : lista){
         %>
 
         <td><%=usuario.getId()%></td>

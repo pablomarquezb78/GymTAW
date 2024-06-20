@@ -65,6 +65,15 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<UserDTO> getClientesDeEntrenadorYNombre(User user,String nombre) {
+        return userRepository.clientesAsociadosConEntrenadorYNombre(user,nombre)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+
+
     public UserDTO createNewUser(Integer registerId){
         UserDTO userDTO = new UserDTO();
         RegistroDTO registroDTO = registroService.getRegisterById(registerId);

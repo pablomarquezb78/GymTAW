@@ -2,10 +2,11 @@
 <%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Rutina" %>
+<%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String cabecera = "cabecera_entrenador.jsp";
-    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
+    List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
 %>
 <html>
 <head>
@@ -40,7 +41,7 @@
         </tr>
         </thead>
         <tbody>
-        <% for (Rutina rutina : rutinas) { %>
+        <% for (RutinaDTO rutina : rutinas) { %>
         <tr>
             <td><%= rutina.getNombre() %></td>
             <td><%= rutina.getEntrenador().getNombre() %></td>

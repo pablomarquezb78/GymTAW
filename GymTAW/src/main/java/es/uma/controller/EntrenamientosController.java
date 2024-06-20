@@ -57,14 +57,15 @@ public class EntrenamientosController extends BaseController{
     @Autowired
     private UserRolRepository userRolRepository;
 
-
+    //DONE
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
         UserRol rol = (UserRol) sesion.getAttribute("rol");
 
         if(estaAutenticado(sesion) && esEntrenador(rol) ){
-            List<User> lista = userRepository.clientesAsociadosConEntrenador((User) sesion.getAttribute("user"));
+            List<UserDTO> lista = userService.getClientesDeEntrenador((User) sesion.getAttribute("user"));
+
             model.addAttribute("lista",lista);
         }else {
             strTo= "redirect:/";
@@ -73,14 +74,15 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //DONE
     @PostMapping("/filtrarClientes")
     public String doFiltrarClientes (Model model, HttpSession sesion,@RequestParam("nombre") String nombre){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
         UserRol rol = (UserRol) sesion.getAttribute("rol");
 
         if(estaAutenticado(sesion) && esEntrenador(rol) ){
-            List<User> lista = userRepository.clientesAsociadosConEntrenadorYNombre((User) sesion.getAttribute("user"),nombre);
+
+            List<UserDTO> lista = userService.getClientesDeEntrenadorYNombre((User) sesion.getAttribute("user"),nombre);
+
             model.addAttribute("lista",lista);
         }else {
             strTo= "redirect:/";
@@ -773,19 +775,17 @@ public class EntrenamientosController extends BaseController{
         return dir;
     }
 
+    //DONE
     @GetMapping("/mostrarRutinas")
     public String verRutinasCompletas(HttpSession session, Model model){
 
-
-        String dir;
+        String dir = "crosstrainer/rutinas";
         UserRol rol = (UserRol) session.getAttribute("rol");
+
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+            List<RutinaDTO> rutinas = rutinaService.getAllRutinas();
 
-
-            List<Rutina> rutinas = rutinaRepository.findAll();
             model.addAttribute("rutinas",rutinas);
-            return "crosstrainer/rutinas";
-
         }else{
             dir = "redirect:/";
         }
@@ -793,18 +793,16 @@ public class EntrenamientosController extends BaseController{
     }
 
     @PostMapping("/filtrarRutinas")
-    public String filtrarRutinas(HttpSession session,@RequestParam("nombrerutina") String nombre,@RequestParam("pormi") Integer self, Model model){
+    public String filtrarRutinas(HttpSession session,@RequestParam("nombrerutina") String nombre,@RequestParam("pormi") Integer tipofiltrado, Model model){
 
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
+
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-            User selftrain = (User) session.getAttribute("user");
-            List<Rutina> rutinas;
-            if(self==0){
-                rutinas = rutinaRepository.buscarPorNombre(nombre);
-            }else{
-                rutinas = rutinaRepository.buscarPorNombreyEntrenador(nombre,selftrain.getId());
-            }
+            User self = (User) session.getAttribute("user");
+
+            List<RutinaDTO> rutinas = rutinaService.getRutinasPorNombreYEntrenador(nombre,tipofiltrado,self);
+
             model.addAttribute("rutinas",rutinas);
             return "crosstrainer/rutinas";
 

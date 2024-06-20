@@ -5,8 +5,12 @@ import es.uma.dao.RutinaRepository;
 import es.uma.dto.RutinaDTO;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
+import es.uma.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RutinaService {
@@ -18,6 +22,11 @@ public class RutinaService {
     @Autowired
     private RutinaRepository rutinaRepository;
 
+    public List<RutinaDTO> getAllRutinas(){
+        return rutinaRepository.findAll().stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
 
     public RutinaDTO convertEntityToDto(Rutina rutina) {
         RutinaDTO rutinaDTO = new RutinaDTO();
@@ -27,6 +36,22 @@ public class RutinaService {
         rutinaDTO.setFechaCreacion(rutina.getFechaCreacion());
         rutinaDTO.setImplementacionesEjercicioRutina(implementacionEjercicioRutinaService.convertListEntityToDto(rutina.getImplementacionesEjercicioRutina()));
         return rutinaDTO;
+    }
+
+    public List<RutinaDTO> getRutinasPorNombreYEntrenador(String nombre, Integer tipofiltrado, User self){
+
+        List<RutinaDTO> rutinas;
+        if(tipofiltrado==0){
+            rutinas = rutinaRepository.buscarPorNombre(nombre).stream()
+                    .map(this::convertEntityToDto)
+                    .collect(Collectors.toList());
+        }else{
+            rutinas = rutinaRepository.buscarPorNombreyEntrenador(nombre,self.getId()).stream()
+                    .map(this::convertEntityToDto)
+                    .collect(Collectors.toList());
+        }
+
+        return rutinas;
     }
 
     public RutinaDTO getRutinaByID(Integer idrutina) {
