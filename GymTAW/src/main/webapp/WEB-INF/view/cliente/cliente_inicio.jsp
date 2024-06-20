@@ -22,9 +22,9 @@
 
 <jsp:include page="cabecera_cliente.jsp"/>
 
-<h1 class="text-center position-absolute top-50 start-50 translate-middle" style="padding-bottom: 10%">¡Bienvenido <%=nombreUsuario%>!</h1>
+<h1 class="text-center position-absolute top-50 start-50 translate-middle" style="padding-bottom: 2%">¡Bienvenido <%=nombreUsuario%>!</h1>
 
-<div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-bottom: 5%">
+<div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-top: 2%">
     <div>
         <%if(diaEntrenamiento!=null){%>
         <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary">Ver entrenamiento de hoy</button>
