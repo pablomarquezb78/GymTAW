@@ -280,8 +280,6 @@ public class EntrenamientosController extends BaseController{
             User entrenador = (User) session.getAttribute("user");
             rutina.setEntrenador(entrenador);
 
-
-
             // Convertimos LocalDate to Instant
 
             rutina.setFechaCreacion(Instant.from(Instant.now()));

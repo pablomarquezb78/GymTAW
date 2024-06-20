@@ -17,11 +17,8 @@
 
 <h1>CREADOR EJERCICIO</h1>
 
-    <form method="post" action="/entrenamientos/entrenador-rutina">
-        <input hidden="hidden" name="id" value="<%=id%>">
         <a className="btn-success" href="/entrenamientos/entrenador-crearrutina?id=<%=id%>">Crear Rutina</a>
         <a className="btn-primary" href="/entrenamientos/entrenador-rutina?id=<%=id%>">Asociar Rutina</a>
-    </form>
 
 <%--
     <a href="/entrenamientos/creador-rutina" class="btn btn-success">Crear Rutina</a>
