@@ -3,7 +3,6 @@ package es.uma.controller;
 import es.uma.dao.*;
 import es.uma.entity.*;
 import es.uma.ui.FeedbackSerieForm;
-import es.uma.ui.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cliente")
@@ -52,7 +52,7 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
 
-            //Semana 1
+            //Semana 1 dia 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAENTRENAMIENTO
@@ -614,9 +614,92 @@ public class ClienteController extends BaseController{
         return dir;
     }
 
-    @GetMapping("/mostrarDesempeño")
+    @GetMapping("/mostrarDesempenyo")
     public String doMostrarDesempelo(){
-        return "";
+        return "cliente/cliente_desempenyo";
+    }
+
+    @GetMapping("/verDesempenyoDietas")
+    public String doVerDesempenyoDietas(@RequestParam(required = false, value = "fechaDesempenyoDieta") String fechaDesempenyoDieta, HttpSession session,Model model){
+        DiaDieta diaDieta;
+        User userEntity = (User) session.getAttribute("user");
+        if(fechaDesempenyoDieta==null){
+            LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
+            diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechaInicio);
+        }else{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
+            diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity,fechanueva);
+        }
+
+        Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = new HashMap<>();
+
+        List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
+
+        for (Comida c : comidas) {
+            Map<Plato, List<CantidadIngredientePlatoComida>> platosIngredientes = new HashMap<>();
+            List<Plato> platos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(c);
+
+            for (Plato p : platos) {
+                List<CantidadIngredientePlatoComida> cantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(p, c);
+                platosIngredientes.put(p, cantidades);
+            }
+
+            comidaPlatosCantidades.put(c, platosIngredientes);
+        }
+        model.addAttribute("comidaPlatosCantidades",comidaPlatosCantidades);
+
+        return "cliente/cliente_desempenyoDietas";
+    }
+
+    @GetMapping("/verDesempenyoEntrenamientos")
+    public String doVerDesmepenyoEntrenamientos(HttpSession session,Model model,@RequestParam(required = false, value = "fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento){
+        User userEntity = (User) session.getAttribute("user");
+        DiaEntrenamiento diaEntrenamiento;
+        if(fechaDesempenyoEntrenamiento==null){
+            LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
+            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechaInicio);
+        }else{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
+            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
+        }
+
+        List<ImplementacionEjercicioRutina> implementaciones;
+        Map<ImplementacionEjercicioRutina,List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
+
+        if(diaEntrenamiento!=null){
+            implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+
+            for(ImplementacionEjercicioRutina implementacion : implementaciones){
+                List<FeedbackEjercicioserie> fserie = new ArrayList<>();
+                if(implementacion.getSets()!=null){
+                    for(int serie = 0; serie<=Integer.parseInt(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone());serie++){
+                        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst(),"" + (serie + 1));
+                        fserie.add(feedbackEjercicioserie);
+                    }
+                }
+                implementacionEjercicioRutinaListMap.put(implementacion,fserie);
+            }
+
+        }else{
+            implementaciones = new ArrayList<>();
+        }
+
+        model.addAttribute("implementaciones",implementaciones);
+        model.addAttribute("implementacionEjercicioRutinaListMap",implementacionEjercicioRutinaListMap);
+
+        return "cliente/cliente_desempenyoEntrenamientos";
+    }
+
+    @PostMapping("/filtrarDesempenyoDieta")
+    public String doFiltrarDesempenyoDieta(@RequestParam("fechaDesempenyoDieta") String fechaDesempenyoDieta){
+        return "redirect:/cliente/verDesempenyoDietas?fechaDesempenyoDieta=" + fechaDesempenyoDieta;
+    }
+
+    @PostMapping("/filtrarDesempenyoEntrenamiento")
+    public String doFiltrarDesmpenyoEntrenamiento(@RequestParam("fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento){
+        return "redirect:/cliente/verDesempenyoEntrenamientos?fechaDesempenyoEntrenamiento=" + fechaDesempenyoEntrenamiento;
     }
 
     @GetMapping("/irInicio")
@@ -629,37 +712,6 @@ public class ClienteController extends BaseController{
             dir = "redirect:/";
         }
         return dir;
-    }
-
-    @GetMapping("/irAPerfil")
-    public String doIrAPerfil(Model model,HttpSession session){
-        String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esCliente(rol)) {
-            User userEntity = (User) session.getAttribute("user");
-            Usuario usuario = new Usuario();
-            setUser(usuario,userEntity);
-
-            model.addAttribute("usuario",usuario);
-            model.addAttribute("rolid",rol.getId());
-
-            dir ="/cliente/vistaPerfilCliente";
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
-
-    private void setUser(Usuario usuario,User user){
-        usuario.setId(user.getId());
-        usuario.setUsername(user.getUsername());
-        usuario.setNombre(user.getNombre());
-        usuario.setApellidos(user.getApellidos());
-        usuario.setTelefono(user.getTelefono());
-        usuario.setPeso(user.getPeso());
-        usuario.setAltura(user.getAltura());
-        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
-        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
     }
 
 }
