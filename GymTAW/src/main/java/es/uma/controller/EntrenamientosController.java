@@ -238,21 +238,36 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    @PostMapping("/entrenador-rutina")
-    public String doLoadFecha(@RequestParam("accion") String accion, @RequestParam("id") Integer idcliente,Model model, HttpSession session){
+    @GetMapping("/entrenador-rutina")
+    public String doLoadFecha(@RequestParam("id") Integer idcliente,Model model, HttpSession session){
 
        String url = "redirect:/";
        User user = (User) session.getAttribute("user");
 //       LocalDate fechaConvertida = convertirStringALocalDate(fecha);
 
-       if(accion.equals("crear")){
+            AsociacionRutina asociacionRutina = new AsociacionRutina();
+            asociacionRutina.setIdCliente(idcliente);
+            asociacionRutina.setIdTrainer(user.getId());
+
+            List<Rutina> rutinas = rutinaRepository.findAll();
+
+            model.addAttribute("asociacionRutina",asociacionRutina);
+            model.addAttribute("rutinas", rutinas);
+
+           return "/crosstrainer/entrenador_asociar_rutina";
+
+    }
+
+    @GetMapping("/entrenador-crearrutina")
+    public String entrenadorCrearRutina(@RequestParam("id") Integer id, Model model, HttpSession session){
+
             Rutina rutina = new Rutina();
             User entrenador = (User) session.getAttribute("user");
             rutina.setEntrenador(entrenador);
 
 
 
-           // Convertimos LocalDate to Instant
+            // Convertimos LocalDate to Instant
 
             rutina.setFechaCreacion(Instant.from(Instant.now()));
             rutina.setNombre("Rutina de " + entrenador.getNombre());
@@ -260,25 +275,9 @@ public class EntrenamientosController extends BaseController{
 
             return "redirect:/entrenamientos/crearrutina?idrutina=" + rutina.getId();
 
-       }
-
-       if(accion.equals("asociar")){
-           List<Rutina> rutinas = rutinaRepository.listarRutinasUsuario(user.getId());
-
-           AsociacionRutina asociacionRutina = new AsociacionRutina();
-           asociacionRutina.setIdCliente(idcliente);
-           asociacionRutina.setIdTrainer(user.getId());
-           asociacionRutina.setFecha(String.valueOf(Date.from(Instant.now())));
-
-           model.addAttribute("rutinas",rutinas);
-           model.addAttribute("asociacionRutina",asociacionRutina);
-
-           return "/crosstrainer/entrenador_asociar_rutina";
-       }
-
-       return url;
-
     }
+
+
 
   /*  @GetMapping("/creador-rutina")
     public String creadorRutina(Model model, HttpSession session){
@@ -306,10 +305,9 @@ public class EntrenamientosController extends BaseController{
     @PostMapping("/asociar-rutina")
     public String doAsociarRutina(AsociacionRutina asociacionRutina, Model model, HttpSession session){
 
+
         LocalDate fechaConvertida = convertirStringALocalDate(asociacionRutina.getFecha());
-
         Rutina rutina = rutinaRepository.getById(asociacionRutina.getIdRutina());
-
         User user = userRepository.getById(asociacionRutina.getIdCliente());
 
         DiaEntrenamiento diaEntrenamiento = new DiaEntrenamiento();

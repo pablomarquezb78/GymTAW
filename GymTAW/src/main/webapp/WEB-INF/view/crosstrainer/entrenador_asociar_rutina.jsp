@@ -32,7 +32,8 @@
 
         <form:hidden path="idCliente"></form:hidden>
         <form:hidden path="idTrainer"></form:hidden>
-        <form:hidden path="fecha"></form:hidden>
+        <form:input type="date" path="fecha"></form:input>
+        <br>
         <form:radiobuttons path="idRutina" items="${rutinas}" delimiter="<br>" itemValue="id" itemLabel="nombre"></form:radiobuttons>
         <br>
         <form:button class="btn btn-primary">Asociar</form:button>

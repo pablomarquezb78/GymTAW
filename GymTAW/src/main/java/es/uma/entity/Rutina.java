@@ -27,7 +27,7 @@ public class Rutina {
     private List<DiaEntrenamiento> diasEntrenamiento;
 
 
-    @OneToMany(mappedBy = "rutina")
+    @OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImplementacionEjercicioRutina> implementacionesEjercicioRutina;
 
     public Integer getId() {
