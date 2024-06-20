@@ -52,6 +52,7 @@ public class EntrenamientosController extends BaseController{
     private FeedbackejercicioRepository feedbackejercicioRepository;
     @Autowired
     private FeedbackejercicioserieRepository feedbackejercicioserieRepository;
+    @Autowired
     private TipoEjercicioService tipoEjercicioService;
     @Autowired
     private EjercicioService ejercicioService;
