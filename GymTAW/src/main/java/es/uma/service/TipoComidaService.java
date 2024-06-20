@@ -24,7 +24,6 @@ public class TipoComidaService {
 
     public TipoComidaDTO getById(Integer id){
         return this.convertEntityToDto(tipoComidaRepository.findById(id).orElse(null));
-
     }
 
     public TipoComidaDTO convertEntityToDto(TipoComida tipoComida){

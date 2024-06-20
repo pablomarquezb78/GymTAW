@@ -1,7 +1,11 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
+import es.uma.dto.EjercicioDTO;
+import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.*;
+import es.uma.service.EjercicioService;
+import es.uma.service.TipoEjercicioService;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import es.uma.ui.TipoEjercicioUI;
@@ -45,14 +49,19 @@ public class ComunController extends BaseController{
     @Autowired
     protected DiaEntrenamientoRepository diaEntrenamientoRepository;
 
+    @Autowired
+    private EjercicioService ejercicioService;
+    @Autowired
+    private TipoEjercicioService tipoEjercicioService;
+
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "admin/ejercicios";
-            List<Ejercicio> ejercicios = this.ejercicioRepository.findAll();
-            List<TipoEjercicio> tipos = this.tipoEjercicioRepository.findAll();
+            List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
+            List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("ejercicios", ejercicios);
             model.addAttribute("tipos", tipos);
             model.addAttribute("rol", rol);
@@ -69,14 +78,8 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)  || esEntrenador(rol)) {
             dir = "crearEjercicio";
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
-            ejercicioUI.setNombre(ejercicio.getNombre());
-            ejercicioUI.setIdTipo(ejercicio.getTipo().getId());
-            ejercicioUI.setEnlaceVideo(ejercicio.getEnlaceVideo());
-            ejercicioUI.setDescripcion(ejercicio.getDescripcion());
-            model.addAttribute("tipos", tipos);
-            model.addAttribute("ejercicioUI", ejercicioUI);
+            model.addAttribute("tipos", tipoEjercicioService.getAll());
+            model.addAttribute("ejercicioUI", ejercicioService.setEjercicioUI(id, ejercicioUI));
         } else {
             dir = "redirect:/";
         }
@@ -126,7 +129,7 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)  || esEntrenador(rol)) {
             dir = "redirect:/comun/mostrarEjercicios";
-            this.ejercicioRepository.deleteById(id);
+            ejercicioService.deleteById(id);
 
         } else {
             dir = "redirect:/";
@@ -140,8 +143,7 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "crearEjercicio";
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            model.addAttribute("tipos", tipos);
+            model.addAttribute("tipos", tipoEjercicioService.getAll());
             model.addAttribute("ejercicioUI", ejercicioUI);
         } else {
             dir = "redirect:/";
@@ -155,21 +157,10 @@ public class ComunController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)  || esEntrenador(rol)) {
             if(ejercicioUI.getId() == null){
-                Ejercicio nuevoEjercicio = new Ejercicio();
-                nuevoEjercicio.setNombre(ejercicioUI.getNombre());
-                nuevoEjercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
-                nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
-                nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
+                ejercicioService.saveExercise(ejercicioUI);
 
-                ejercicioRepository.save(nuevoEjercicio);
             }else{
-                Ejercicio ejercicio = ejercicioRepository.findById(ejercicioUI.getId()).orElse(null);
-                ejercicio.setNombre(ejercicioUI.getNombre());
-                ejercicio.setTipo(tipoEjercicioRepository.findById(ejercicioUI.getIdTipo()).orElse(null));
-                ejercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
-                ejercicio.setDescripcion(ejercicioUI.getDescripcion());
-
-                ejercicioRepository.save(ejercicio);
+                ejercicioService.editExercise(ejercicioUI);
             }
             dir = "redirect:/comun/mostrarEjercicios";
         } else {
@@ -188,14 +179,14 @@ public class ComunController extends BaseController{
                 dir = "redirect:/comun/mostrarEjercicios";
             }else {
                 if (ejercicioUI.getIdTipo() == null) {
-                    model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjercicios(ejercicioUI.getNombre(), ejercicioUI.getDescripcion()));
+                    model.addAttribute("ejercicios", ejercicioService.filterExercises(ejercicioUI.getNombre(), ejercicioUI.getDescripcion()));
                 } else {
-                    model.addAttribute("ejercicios", this.ejercicioRepository.filtrarEjerciciosConTipo(ejercicioUI.getNombre(), ejercicioUI.getDescripcion(), ejercicioUI.getIdTipo()));
+                    model.addAttribute("ejercicios", ejercicioService.filterExercisesWithType(ejercicioUI.getNombre(), ejercicioUI.getDescripcion(), ejercicioUI.getIdTipo()));
                 }
                 dir = "admin/ejercicios";
             }
             model.addAttribute("ejercicio", ejercicioUI);
-            model.addAttribute("tipos", this.tipoEjercicioRepository.findAll());
+            model.addAttribute("tipos", tipoEjercicioService.getAll());
 
         } else {
             dir = "redirect:/";

@@ -3,11 +3,13 @@
 <%@ page import="es.uma.entity.Ejercicio" %>
 <%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="es.uma.entity.UserRol" %>
+<%@ page import="es.uma.dto.EjercicioDTO" %>
+<%@ page import="es.uma.dto.TipoEjercicioDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
-    List<TipoEjercicio> tipos = (List<TipoEjercicio>) request.getAttribute("tipos");
+    List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
+    List<TipoEjercicioDTO> tipos = (List<TipoEjercicioDTO>) request.getAttribute("tipos");
 
     UserRol rol = (UserRol) request.getAttribute("rol");
     String title = "Trainer";
@@ -44,7 +46,7 @@
         <th></th>
     </tr>
     <%
-        for(Ejercicio ejercicio : ejercicios){
+        for(EjercicioDTO ejercicio : ejercicios){
     %>
     <tr>
         <td><%=ejercicio.getId()%></td>
