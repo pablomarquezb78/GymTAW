@@ -4,10 +4,11 @@
 <%@ page import="es.uma.entity.Rutina" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.User" %>
+<%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Rutina> rutinas = (List<Rutina>) request.getAttribute("rutinas");
+    List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
 
 %>
 
