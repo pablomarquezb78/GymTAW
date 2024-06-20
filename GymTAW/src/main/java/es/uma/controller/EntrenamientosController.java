@@ -56,14 +56,29 @@ public class EntrenamientosController extends BaseController{
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
 
 
-    //DONE
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
         UserRol rol = (UserRol) sesion.getAttribute("rol");
 
         if(estaAutenticado(sesion) && esEntrenador(rol) ){
-            List<UserDTO> lista = userService.getClientesDeEntrenador((User) sesion.getAttribute("user"));
+            List<User> lista = userRepository.clientesAsociadosConEntrenador((User) sesion.getAttribute("user"));
+            model.addAttribute("lista",lista);
+        }else {
+            strTo= "redirect:/";
+        }
+
+        return strTo;
+    }
+
+    //DONE
+    @PostMapping("/filtrarClientes")
+    public String doFiltrarClientes (Model model, HttpSession sesion,@RequestParam("nombre") String nombre){
+        String strTo = "/crosstrainer/entrenador_listadoclientes";
+        UserRol rol = (UserRol) sesion.getAttribute("rol");
+
+        if(estaAutenticado(sesion) && esEntrenador(rol) ){
+            List<User> lista = userRepository.clientesAsociadosConEntrenadorYNombre((User) sesion.getAttribute("user"),nombre);
             model.addAttribute("lista",lista);
         }else {
             strTo= "redirect:/";

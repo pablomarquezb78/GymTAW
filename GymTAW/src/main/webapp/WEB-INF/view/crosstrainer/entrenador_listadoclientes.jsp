@@ -3,7 +3,7 @@
 <%@ page import="es.uma.dto.UserDTO" %>
 
 <%
-    List<UserDTO> lista = (List<UserDTO>) request.getAttribute("lista");
+    List<User> lista = (List<User>) request.getAttribute("lista");
 
 %>
 
@@ -19,8 +19,36 @@
 <body>
 <jsp:include page="cabecera_entrenador.jsp"/>
 
+    <a href="/entrenamientos/crear-ejercicio" class="btn btn-success">Crear Ejercicio</a>
+    <a href="/entrenamientos/crear-tipo" class="btn btn-success">Crear Tipo</a>
+
+
+
     <h1> CLIENTES ASOCIADOS :</h1>
 
+    <form method="post" action="/entrenamientos/filtrarClientes">
+        <%
+            if(!lista.isEmpty()){
+        %>
+            <input name="nombre" type="text">
+            <button>Filtrar por Nombre</button>
+        <%
+            }else {
+        %>
+            <input type="hidden" value="" name="nombre" type="text">
+            <button>Reiniciar</button>
+        <%
+            }
+        %>
+    </form>
+
+    <%
+        if(lista.isEmpty()){
+    %>
+    <p>No hay usuarios asignados con ese nombre</p>
+    <%
+        }else{
+    %>
     <table border="1">
         <tr>
             <th>ID</th>
@@ -30,8 +58,9 @@
             <th></th>
         </tr>
 
+
         <%
-            for(UserDTO usuario : lista){
+            for(User usuario : lista){
         %>
 
         <td><%=usuario.getId()%></td>
@@ -40,10 +69,9 @@
         <td><a href="/entrenamientos/verperfilcliente?idcliente=<%=usuario.getId()%>">Ver Perfil</a></td>
         <td><a href="/entrenamientos/versemana?id=<%=usuario.getId()%>">Ver Entrenamientos</a></td>
         <%
-            }
+            }}
         %>
-        <a href="/entrenamientos/crear-ejercicio" class="btn btn-success">Crear Ejercicio</a>
-        <a href="/entrenamientos/crear-tipo" class="btn btn-success">Crear Tipo</a>
+
     </table>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 

@@ -23,6 +23,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/comun/verperfil">Perfil</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cerrarSesion">Cerrar sesión</a>
+            </li>
         </ul>
     </div>
 </nav>

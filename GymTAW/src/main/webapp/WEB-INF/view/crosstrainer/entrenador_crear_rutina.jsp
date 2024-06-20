@@ -22,7 +22,7 @@
 <body>
 <jsp:include page="cabecera_entrenador.jsp"></jsp:include>
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Nueva Rutina</h1>
+    <h1 class="text-center mb-4">Rutina</h1>
 
     <form action="/entrenamientos/cambiarnombrerutina" method="post" class="mb-4">
         <input type="hidden" name="idrutina" value="<%= rutina.getId() %>">

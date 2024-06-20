@@ -32,7 +32,7 @@
 
         <form:hidden path="idCliente"></form:hidden>
         <form:hidden path="idTrainer"></form:hidden>
-        <form:input type="date" path="fecha"></form:input>
+        <form:input value="2024-01-01" type="date" path="fecha"></form:input>
         <br>
         <form:radiobuttons path="idRutina" items="${rutinas}" delimiter="<br>" itemValue="id" itemLabel="nombre"></form:radiobuttons>
         <br>
