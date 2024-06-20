@@ -21,36 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController extends BaseController {
-
-    @Autowired
-    protected UserRepository userRepository;
-    @Autowired
-    protected RutinaRepository rutinaRepository;
-    @Autowired
-    protected EjercicioRepository ejercicioRepository;
-    @Autowired
-    protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-    @Autowired
-    protected TipoEjercicioRepository tipoEjercicioRepository;
-    @Autowired
-    protected UserRolRepository rolRepository;
-    @Autowired
-    protected AsignacionClienteEntrenadorRepository asignacionClienteEntrenadorRepository;
-    @Autowired
-    protected AsignacionClienteDietistaRepository asignacionClienteDietistaRepository;
-    @Autowired
-    protected PlatosRepository platosRepository;
-    @Autowired
-    protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
-    @Autowired
-    protected TipoComidaRepository tipoComidaRepository;
-    @Autowired
-    private ComidaRepository comidaRepository;
-    @Autowired
-    private DiaDietaRepository diaDietaRepository;
-    @Autowired
-    private IngredienteRepository ingredienteRepository;
-
+    
     @Autowired
     private UserService userService;
     @Autowired
@@ -530,8 +501,8 @@ public class AdminController extends BaseController {
             dir = "admin/crearComida";
             AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
             model.addAttribute("asignacionPlatoComida", cantidadIngredientePlatoComidaService.setAsignacionPlatoComida( asignacionPlatoComida, idComida, idPlato));
-            model.addAttribute("clientes", userRepository.listarClientes());
-            model.addAttribute("dietistas", userRepository.listarDietistas());
+            model.addAttribute("clientes", userService.getAllCustomers());
+            model.addAttribute("dietistas", userService.getAllDietistas());
             model.addAttribute("tiposComida", tipoComidaService.getAll());
         } else {
             dir = "redirect:/";
@@ -564,7 +535,7 @@ public class AdminController extends BaseController {
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/verComidasAsociadas?id="+idPlato;
-            this.cantidadIngredientePlatoComidaRepository.deleteById(idComida);
+            cantidadIngredientePlatoComidaService.deleteById(idComida);
 
         } else {
             dir = "redirect:/";
