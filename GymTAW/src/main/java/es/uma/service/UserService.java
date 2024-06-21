@@ -242,6 +242,13 @@ public class UserService {
         return userDTOout;
     }
 
+    public List<UserDTO> getClientesAsociadosAlDietista(UserDTO dietistaDTO)
+    {
+        User dietista = this.convertDtoToEntity(dietistaDTO);
+        List<User> clientes = userRepository.clientesAsociadosConDietista(dietista);
+        List<UserDTO> clientesDTO = this.convertlistEntityToDto(clientes);
+        return clientesDTO;
+    }
 
     public User convertDtoToEntity(UserDTO userDTO){
         User user = new User();

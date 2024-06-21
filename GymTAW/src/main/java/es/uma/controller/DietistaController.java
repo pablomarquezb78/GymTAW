@@ -109,13 +109,13 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
-    /*
     @GetMapping("/mostrarClientes")
     public String doLoadClientes(HttpSession session,
                                 Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
             if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
@@ -124,8 +124,8 @@ public class DietistaController extends BaseController{
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
-            User dietista = (User) session.getAttribute("user");
-            List<User> clientes = userRepository.clientesAsociadosConDietista(dietista);
+            UserDTO dietistaDTO = userDTO;
+            List<UserDTO> clientes = userService.getClientesAsociadosAlDietista(dietistaDTO);
             model.addAttribute("clientes", clientes);
             dir = "dietista/dietista_clientesAsociados";
         } else {
@@ -133,7 +133,6 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
     //ToDo: Hacer el cargado de platos correspondiente a la fecha con un metodo.
     //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato

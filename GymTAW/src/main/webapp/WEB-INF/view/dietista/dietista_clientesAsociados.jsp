@@ -2,10 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.User" %>
 <%@ page import="java.time.Year" %>
+<%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<User> clientes = (List<User>) request.getAttribute("clientes");
+    List<UserDTO> clientes = (List<UserDTO>) request.getAttribute("clientes");
 %>
 
 <html>
@@ -78,7 +79,7 @@
                 <tbody>
                 <%
                     int anyoActual = Year.now().getValue();
-                    for(User cliente : clientes) {
+                    for(UserDTO cliente : clientes) {
                 %>
                 <tr>
                     <td><%=cliente.getNombre()%> <%=cliente.getApellidos()%></td>
