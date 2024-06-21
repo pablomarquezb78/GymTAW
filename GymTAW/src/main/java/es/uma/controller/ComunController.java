@@ -1,10 +1,7 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
-import es.uma.dto.EjercicioDTO;
-import es.uma.dto.ImplementacionEjercicioRutinaDTO;
-import es.uma.dto.TipoEjercicioDTO;
-import es.uma.dto.UserRolDTO;
+import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.service.*;
 import es.uma.ui.EjercicioUI;
@@ -60,6 +57,8 @@ public class ComunController extends BaseController{
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
     @Autowired
     private UserRolService userRolService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
@@ -114,14 +113,14 @@ public class ComunController extends BaseController{
 
         String strTo = "/perfil";
 
-        User user = (User) session.getAttribute("user");
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
         if(!estaAutenticado(session)) {
             strTo = "redirect:/";
         }else {
             Usuario usuario = new Usuario();
-            setUser(usuario,user);
+            userService.setUserVerPerfilCliente(usuario,userService.convertDtoToEntity(user));
             model.addAttribute("usuario",usuario);
             model.addAttribute("rolid",rol.getId());
         }
