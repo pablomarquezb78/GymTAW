@@ -1,6 +1,3 @@
-<%@ page import="es.uma.entity.Comida" %>
-<%@ page import="es.uma.entity.Plato" %>
-<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="es.uma.dto.ComidaDTO" %>
@@ -25,7 +22,6 @@
     </form>
 
     <%
-        // Obtener el mapa de comidaPlatosCantidades del request
         Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = (Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>>) request.getAttribute("comidaPlatosCantidades");
 
         if (comidaPlatosCantidades.isEmpty()) {

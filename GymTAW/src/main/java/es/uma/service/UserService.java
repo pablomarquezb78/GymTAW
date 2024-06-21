@@ -229,6 +229,12 @@ public class UserService {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("admin"));
     }
 
+    public boolean checkTrainerLogged(UserDTO userDTO, UserRolDTO userRolDTO)
+    {
+        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("crosstrainer") || userRolDTO.getRolUsuario().equals("bodybuilder"));
+    }
+
+
     public boolean checkDietistaLogged(UserDTO userDTO, UserRolDTO userRolDTO)
     {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));

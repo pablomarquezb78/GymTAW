@@ -138,7 +138,7 @@ public class EntrenamientosController extends BaseController{
 
         RutinaDTO rutina = rutinaService.getRutinaByID(idrutina);
 
-        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(rutina.getId());
+        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaService.getImplementacionByRutina(rutina.getId());
 
         if(lista==null) lista = new ArrayList<>();
 

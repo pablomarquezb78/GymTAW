@@ -35,55 +35,73 @@
         if(ejercicios.size() > 0){
 
     %>
-    <table border="1" cellpadding="10" cellspacing="10">
+<table class="table table-bordered table-hover">
+    <thead class="text-white text-center" style="background-color: #343a40">
     <tr>
         <th>ID</th>
         <th>NOMBRE DEL EJERCICIO</th>
         <th>TIPO DE EJERCICIO</th>
         <th>ENLACE DEL VÍDEO</th>
         <th>DESCRIPCIÓN</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>ACCIONES</th>
     </tr>
+    </thead>
+    <tbody>
     <%
         for(EjercicioDTO ejercicio : ejercicios){
     %>
-    <tr>
+    <tr class="text-center">
         <td><%=ejercicio.getId()%></td>
         <td><%=ejercicio.getNombre()%></td>
         <td><%=ejercicio.getTipo().getTipoDeEjercicio()%></td>
         <td><%=ejercicio.getEnlaceVideo()%></td>
         <td><%=ejercicio.getDescripcion()%></td>
-        <td><a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Editar</a></td>
-        <td><a href="/comun/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a></td>
-        <td><a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>">Ver rutinas asociadas</a></td>
+        <td>
+            <a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-warning btn-sm">
+                <i class="fas fa-pencil-alt"></i> Editar
+            </a>
+            <a href="/comun/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i> Borrar
+            </a>
+            <a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>" class="btn btn-primary btn-sm"> <i class="fas fa-eye"></i> Ver rutinas asociadas
+            </a>
+        </td>
     </tr>
     <%
         }
-
     %>
-    </table>
-    <a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+    </tbody>
+</table>
+<a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3">Crear nuevo ejercicio</a>
 
-    <form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio">
-        <br>
-        <label>Nombre:</label>
-        <form:input path="nombre" size="15"></form:input>
-        <label>Descripcion:</label>
-        <form:input path="descripcion" size="10"></form:input>
-        <label>Tipo:</label>
-        <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id"></form:radiobuttons>
-        <br>
-        <form:button class="btn btn-success mt-3">Filtrar ejercicio</form:button>
-    </form:form>
+<form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio" class="p-4">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="nombre">Nombre:</label>
+            <form:input path="nombre" id="nombre" class="form-control" style="width: auto;"/>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="descripcion">Descripción:</label>
+            <form:input size="100" path="descripcion" id="descripcion" class="form-control" style="width: auto;"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>Tipo:</label>
+            <div>
+                <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id" class="form-check form-check-inline"/>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Filtrar ejercicio</button>
+</form:form>
 
     <%
         }else{
     %>
             <h2>No hay ningún ejercicio :(</h2>
             <br>
-            <a href="/comun/crearNuevoEjercicio" class="btn btn-success mt-3">Crear nuevo ejercicio</a>
+            <a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3">Crear nuevo ejercicio</a>
     <%
         }
     %>

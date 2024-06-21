@@ -27,7 +27,12 @@ public class DiaDietaService {
     }
 
     public DiaDietaDTO getDiaDietaDeClienteFecha(Integer userId, LocalDate fecha){
-        return convertEntityToDto(diaDietaRepository.diaDietaConcretoCliente(userId,fecha));
+        DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userId,fecha);
+        if(diaDieta!=null){
+            return convertEntityToDto(diaDieta);
+        }else{
+            return null;
+        }
     }
 
     public DiaDietaDTO getDiaDietaByDietistaClienteFecha(UserDTO dietistaDTO, UserDTO clienteDTO, LocalDate fecha)

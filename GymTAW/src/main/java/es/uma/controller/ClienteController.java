@@ -79,7 +79,7 @@ public class ClienteController extends BaseController{
             session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
 
             //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
-            List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionesDeRutinaID(diaEntrenamiento.getRutina().getId());
+            List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
 
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("diaEntrenamiento",diaEntrenamiento);
@@ -116,7 +116,7 @@ public class ClienteController extends BaseController{
             //MANTENEMOS EL OBJETO UI ACTUALIZADO
             FeedbackSerieForm feedbackSerieForm = new FeedbackSerieForm();
             feedbackSerieForm.setImplementacionId(Integer.parseInt(id));
-            feedbackSerieForm.setFeedbackEjercicio(feedbackEjercicio);
+            feedbackSerieForm.setFeedbackEjercicioId(feedbackEjercicio.getId());
 
             //COMPROBAMOS SI EL EJERCICIO TIENE SERIES ESTIPULADAS
             boolean tieneSeries = implementacion.getSets()!=null;
@@ -327,7 +327,7 @@ public class ClienteController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
             //ACTUALIZAMOS EL FEEDBACK DEL EJERCICIO EN LA SERIE SELECCIONADA
-            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicio().getId(), feedbackSerieForm.getSerieSeleccionada());
+            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicioId(), feedbackSerieForm.getSerieSeleccionada());
             feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
             feedbackEjercicioserie.setRepeticionesRealizadas(feedbackSerieForm.getRepeticionesRealizadas());
 
@@ -347,7 +347,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicio().getId(),feedbackSerieForm.getSerieSeleccionada());
+            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicioId(),feedbackSerieForm.getSerieSeleccionada());
 
             //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
             String pesoRealizado = feedbackSerieForm.getPesoRealizado();
@@ -549,7 +549,8 @@ public class ClienteController extends BaseController{
     }
 
     @PostMapping("guardarFeedbackComida")
-    public String doGuardarFeedbackComida(@RequestParam("comidaId") Integer comidaId, @RequestParam(required = false, value = "realizado") Byte realizado, HttpSession session){
+    public String doGuardarFeedbackComida(@RequestParam("comidaId") Integer comidaId, @RequestParam(required = false, value = "realizado") Byte realizado,
+                                          @RequestParam("platoSeleccionadoID") Integer platoSeleccionadoID,HttpSession session){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
@@ -561,7 +562,11 @@ public class ClienteController extends BaseController{
                 comidaService.guardarComida(comida);
             }
 
-            dir = "redirect:/cliente/seleccionarComida?id=" + comida.getId();
+            if(platoSeleccionadoID!=null){
+                dir = "redirect:/cliente/seleccionarComida?id=" + comida.getId() + "&platoSeleccionado=" + platoSeleccionadoID;
+            }else{
+                dir = "redirect:/cliente/seleccionarComida?id=" + comida.getId();
+            }
         } else {
             dir = "redirect:/";
         }
@@ -652,19 +657,22 @@ public class ClienteController extends BaseController{
 
             Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = new HashMap<>();
 
-            List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
+            if(diaDieta!=null){
+                List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
 
-            for (ComidaDTO c : comidas) {
-                Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>> platosIngredientes = new HashMap<>();
-                List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(c.getId());
+                for (ComidaDTO c : comidas) {
+                    Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>> platosIngredientes = new HashMap<>();
+                    List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(c.getId());
 
-                for (PlatoDTO p : platos) {
-                    List<CantidadIngredientePlatoComidaDTO> cantidades = cantidadIngredientePlatoComidaService.getCantidadesByPlatoComida(p.getId(),c.getId());
-                    platosIngredientes.put(p, cantidades);
+                    for (PlatoDTO p : platos) {
+                        List<CantidadIngredientePlatoComidaDTO> cantidades = cantidadIngredientePlatoComidaService.getCantidadesByPlatoComida(p.getId(),c.getId());
+                        platosIngredientes.put(p, cantidades);
+                    }
+
+                    comidaPlatosCantidades.put(c, platosIngredientes);
                 }
-
-                comidaPlatosCantidades.put(c, platosIngredientes);
             }
+
             model.addAttribute("comidaPlatosCantidades",comidaPlatosCantidades);
 
             dir = "cliente/cliente_desempenyoDietas";

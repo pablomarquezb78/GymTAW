@@ -152,6 +152,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacionEjercicioRutinaDTO.setMetros(implementacionEjercicioRutina.getMetros());
         implementacionEjercicioRutinaDTO.setPeso(implementacionEjercicioRutina.getPeso());
         implementacionEjercicioRutinaDTO.setSets(implementacionEjercicioRutina.getSets());
+        implementacionEjercicioRutinaDTO.setTiempo(implementacionEjercicioRutina.getTiempo());
         implementacionEjercicioRutinaDTO.setRepeticiones(implementacionEjercicioRutina.getRepeticiones());
         implementacionEjercicioRutinaDTO.setRutina(rutinaService.convertEntityToDto(implementacionEjercicioRutina.getRutina()));
         implementacionEjercicioRutinaDTO.setEjercicio(ejercicioService.convertEntityToDto(implementacionEjercicioRutina.getEjercicio()));
@@ -167,6 +168,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacionEjercicioRutina.setMetros(implementacionEjercicioRutinaDTO.getMetros());
         implementacionEjercicioRutina.setPeso(implementacionEjercicioRutinaDTO.getPeso());
         implementacionEjercicioRutina.setSets(implementacionEjercicioRutinaDTO.getSets());
+        implementacionEjercicioRutina.setTiempo(implementacionEjercicioRutinaDTO.getTiempo());
         implementacionEjercicioRutina.setRepeticiones(implementacionEjercicioRutinaDTO.getRepeticiones());
         implementacionEjercicioRutina.setRutina(rutinaService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getRutina()));
         implementacionEjercicioRutina.setEjercicio(ejercicioService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getEjercicio()));
@@ -175,24 +177,13 @@ public class ImplementacionEjercicioRutinaService {
 
         return implementacionEjercicioRutina;
     }
-    
+
     public List<ImplementacionEjercicioRutinaDTO> convertListEntityToDto(List<ImplementacionEjercicioRutina> implementacionEjercicioRutinaList){
         List<ImplementacionEjercicioRutinaDTO> implementacionEjercicioRutinaDTOList = new ArrayList<>();
         for (ImplementacionEjercicioRutina implementacionEjercicioRutina : implementacionEjercicioRutinaList){
             implementacionEjercicioRutinaDTOList.add(this.convertEntityToDto(implementacionEjercicioRutina));
         }
         return implementacionEjercicioRutinaDTOList;
-    }
-
-    public List<ImplementacionEjercicioRutinaDTO> getImplementacionesDeRutinaID(Integer id){
-
-        List<ImplementacionEjercicioRutinaDTO> lista = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinaID(id)
-                .stream()
-                .map(this::convertEntityToDto)
-                .collect(Collectors.toList());
-
-
-        return lista;
     }
 
     public ImplementacionEjercicioRutinaDTO getImplementacionPorId(Integer id){

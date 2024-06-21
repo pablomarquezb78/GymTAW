@@ -1,6 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.Comida" %>
-<%@ page import="es.uma.entity.DiaDieta" %>
 <%@ page import="es.uma.dto.ComidaDTO" %>
 <%@ page import="es.uma.dto.DiaDietaDTO" %>
 <%--
