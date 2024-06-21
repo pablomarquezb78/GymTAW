@@ -45,6 +45,24 @@ public class DiaDietaService {
         return diaDietaDTO;
     }
 
+    public DiaDietaDTO getDiaDietaByDietistaClienteFechaOrCreateIfNull(UserDTO dietistaDTO, UserDTO clienteDTO, LocalDate fecha)
+    {
+        User dietista = userService.convertDtoToEntity(dietistaDTO);
+        User cliente = userService.convertDtoToEntity(clienteDTO);
+        DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+        if(diaDieta == null)
+        {
+            diaDieta = new DiaDieta();
+            diaDieta.setCliente(cliente);
+            diaDieta.setDietista(dietista);
+            diaDieta.setFecha(fecha);
+            diaDietaRepository.save(diaDieta);
+            diaDieta = diaDietaRepository.getUltimoDiaDietaAdded();
+        }
+        DiaDietaDTO diaDietaDTO = convertEntityToDto(diaDieta);
+        return diaDietaDTO;
+    }
+
     public void save(DiaDieta diaDieta){
         diaDietaRepository.save(diaDieta);
     }

@@ -5,13 +5,16 @@
 <%@ page import="es.uma.entity.*" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="es.uma.ui.ComidaUI" %>
+<%@ page import="es.uma.dto.UserDTO" %>
+<%@ page import="es.uma.dto.TipoComidaDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User cliente = (User) request.getAttribute("cliente");
+    UserDTO cliente = (UserDTO) request.getAttribute("cliente");
     LocalDate fecha = (LocalDate) request.getAttribute("fecha");
-    TipoComida selectedComida = (TipoComida) request.getAttribute("selectedComida");
-    List<Plato> platosDisponibles = (List<Plato>) request.getAttribute("platosDisponibles");
+    TipoComidaDTO selectedComida = (TipoComidaDTO) request.getAttribute("selectedComida");
+    List<PlatoDTO> platosDisponibles = (List<PlatoDTO>) request.getAttribute("platosDisponibles");
     ComidaUI comidaUI = (ComidaUI) request.getAttribute("comidaUI");
     List<Plato> listaPlatosComidaOut = new ArrayList<>(comidaUI.getListaPlatosComida());
 %>
