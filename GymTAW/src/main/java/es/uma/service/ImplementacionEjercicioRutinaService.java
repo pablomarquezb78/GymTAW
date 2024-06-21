@@ -38,20 +38,6 @@ public class ImplementacionEjercicioRutinaService {
         return convertEntityToDto(implementacionEjercicioRutinaRepository.getById(idImplementacion));
     }
 
-    public ImplementacionEjercicioRutina convertDtoToEntity(ImplementacionEjercicioRutinaDTO implementacionEjercicioRutinaDTO) {
-        ImplementacionEjercicioRutina implementacionEjercicioRutina = new ImplementacionEjercicioRutina();
-        implementacionEjercicioRutina.setId(implementacionEjercicioRutinaDTO.getId());
-        implementacionEjercicioRutina.setMetros(implementacionEjercicioRutinaDTO.getMetros());
-        implementacionEjercicioRutina.setPeso(implementacionEjercicioRutinaDTO.getPeso());
-        implementacionEjercicioRutina.setSets(implementacionEjercicioRutinaDTO.getSets());
-        implementacionEjercicioRutina.setRepeticiones(implementacionEjercicioRutinaDTO.getRepeticiones());
-        implementacionEjercicioRutina.setRutina(rutinaService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getRutina()));
-        implementacionEjercicioRutina.setEjercicio(ejercicioService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getEjercicio()));
-
-        return implementacionEjercicioRutina;
-    }
-
-
     public void asignarImplementacionUIaImplementacionDTO(ImplementacionEjercicioRutinaDTO implementacionDTO,Implementacion implementacionUI){
         //implementacion.setEjercicio(imp.getEjercicio());
         implementacionDTO.setSets(implementacionUI.getSets());
@@ -130,8 +116,7 @@ public class ImplementacionEjercicioRutinaService {
 
         return implementacionEjercicioRutina;
     }
-
-
+    
     public List<ImplementacionEjercicioRutinaDTO> convertListEntityToDto(List<ImplementacionEjercicioRutina> implementacionEjercicioRutinaList){
         List<ImplementacionEjercicioRutinaDTO> implementacionEjercicioRutinaDTOList = new ArrayList<>();
         for (ImplementacionEjercicioRutina implementacionEjercicioRutina : implementacionEjercicioRutinaList){
