@@ -2,11 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page import="es.uma.ui.PlatoDietistaUI" %>
+<%@ page import="es.uma.dto.IngredienteDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     PlatoDietistaUI platoDietista = (PlatoDietistaUI) request.getAttribute("platoDietista");
-    List<Ingrediente> ingredientesExistentes = (List<Ingrediente>) request.getAttribute("ingredientesExistentes");
+    List<IngredienteDTO> ingredientesExistentes = (List<IngredienteDTO>) request.getAttribute("ingredientesExistentes");
 %>
 
 <!DOCTYPE html>
@@ -88,7 +89,7 @@
                         <label for="addedIngrediente" class="form-label">Agregar Ingrediente:</label>
                         <select id="addedIngrediente" name="addedIngrediente" class="form-select">
                             <%
-                                for (Ingrediente ingrediente : ingredientesExistentes) {
+                                for (IngredienteDTO ingrediente : ingredientesExistentes) {
                             %>
                             <option value="<%= ingrediente.getId() %>"><%= ingrediente.getNombre() %></option>
                             <%

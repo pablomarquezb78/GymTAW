@@ -30,6 +30,13 @@ public class IngredienteService {
         return ingredienteDTOList;
     }
 
+    public List<IngredienteDTO> findAllIngredientes()
+    {
+        List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
+        List<IngredienteDTO> ingredienteDTOList = this.convertlistEntityToDto(listaIngredientes);
+        return ingredienteDTOList;
+    }
+
     public IngredienteDTO convertEntityToDto(Ingrediente ingrediente){
         IngredienteDTO ingredienteDTO = new IngredienteDTO();
         ingredienteDTO.setId(ingrediente.getId());

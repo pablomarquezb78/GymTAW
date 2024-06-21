@@ -123,7 +123,7 @@ public class PlatosController extends BaseController{
                 platoDietista.setIngredientes(new ArrayList<>());
             }
             model.addAttribute("platoDietista", platoDietista);
-            model.addAttribute("ingredientesExistentes", ingredienteRepository.findAll());
+            model.addAttribute("ingredientesExistentes", ingredienteService.findAllIngredientes());
             session.setAttribute("platoCreando", platoDietista);
             dir = "dietista/dietista_crearPlato";
         } else {
