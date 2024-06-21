@@ -1,5 +1,6 @@
 package es.uma.ui;
 
+import es.uma.dto.IngredienteDTO;
 import es.uma.entity.Ingrediente;
 import es.uma.entity.User;
 

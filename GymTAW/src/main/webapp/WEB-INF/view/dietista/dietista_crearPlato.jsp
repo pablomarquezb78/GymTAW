@@ -1,8 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page import="es.uma.ui.PlatoDietistaUI" %>
 <%@ page import="es.uma.dto.IngredienteDTO" %>
+<%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -79,15 +79,17 @@
                     %>
                 </ul>
                 <form:form method="post" action="addIngredienteExistente" modelAttribute="platoDietista">
-                    <form:hidden path="ingredientes"/>
                     <form:hidden path="id"/>
                     <form:hidden path="nombre"/>
                     <form:hidden path="tiempoDePreparacion"/>
                     <form:hidden path="receta"/>
                     <form:hidden path="enlaceReceta"/>
+                    <form:hidden path="ingredientes"/>
                     <div class="mb-3">
                         <label for="addedIngrediente" class="form-label">Agregar Ingrediente:</label>
-                        <select id="addedIngrediente" name="addedIngrediente" class="form-select">
+                        <form:select path="addedIngrediente" items="${ingredientesExistentes}" itemValue="id" itemLabel="nombre" class="form-select"/>
+                        <%--
+                        <from:select id="addedIngrediente" name="addedIngrediente" class="form-select">
                             <%
                                 for (IngredienteDTO ingrediente : ingredientesExistentes) {
                             %>
@@ -95,7 +97,8 @@
                             <%
                                 }
                             %>
-                        </select>
+                        </from:select>
+                        --%>
                     </div>
                     <button class="btn btn-primary">Añadir este ingrediente</button>
                 </form:form>

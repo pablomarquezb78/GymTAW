@@ -3,6 +3,7 @@ package es.uma.controller;
 import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
 import es.uma.dao.IngredienteRepository;
 import es.uma.dao.PlatosRepository;
+import es.uma.dto.IngredienteDTO;
 import es.uma.dto.PlatoDTO;
 import es.uma.dto.UserDTO;
 import es.uma.entity.*;
@@ -120,7 +121,6 @@ public class PlatosController extends BaseController{
             if(session.getAttribute("platoCreando") != null) { platoDietista = (PlatoDietistaUI) session.getAttribute("platoCreando");}
             else {
                 platoDietista = new PlatoDietistaUI();
-                platoDietista.setIngredientes(new ArrayList<>());
             }
             model.addAttribute("platoDietista", platoDietista);
             model.addAttribute("ingredientesExistentes", ingredienteService.findAllIngredientes());
@@ -132,6 +132,7 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
+    /*
     @GetMapping("/editarPlato")
     public String openEditarPlato(@RequestParam("platoId") Integer platoId, HttpSession session, Model model) {
         String dir;
@@ -144,7 +145,7 @@ public class PlatosController extends BaseController{
             platoDietista.setId(plato.getId());
             ArrayList<Ingrediente> ingredientes = new ArrayList<>();
             ingredientes.addAll(platosRepository.getIngredientesLinkedToPlato(plato));
-            platoDietista.setIngredientes(ingredientes);
+            //platoDietista.setIngredientes(ingredientes);
             platoDietista.setNombre(plato.getNombre());
             platoDietista.setReceta(plato.getReceta());
             platoDietista.setEnlaceReceta(plato.getEnlaceReceta());
@@ -159,7 +160,9 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/borrarPlato")
     public String doBorrarPlato(@RequestParam("platoId") Integer platoId, HttpSession session, Model model) {
         String dir;
@@ -183,6 +186,7 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
+    */
 
     @PostMapping("/addIngredienteExistente")
     public String doAddIngredienteExistente(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietistaUI
@@ -191,13 +195,11 @@ public class PlatosController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            ArrayList<Ingrediente> listaIngredientesPlato = platoDietistaUI.getIngredientes();
-            if(listaIngredientesPlato == null) listaIngredientesPlato = new ArrayList<>();
-            listaIngredientesPlato.add(ingredienteRepository.findById(platoDietistaUI.getAddedIngrediente()).orElse(null));
-            platoDietistaUI.setIngredientes(listaIngredientesPlato);
+            if(platoDietistaUI.getIngredientes() == null) platoDietistaUI.setIngredientes(new ArrayList<>());
+            platoDietistaUI = ingredienteService.addIngredienteToPlatoDietistaUI(platoDietistaUI);
 
             model.addAttribute("platoDietista", platoDietistaUI);
-            model.addAttribute("ingredientesExistentes", ingredienteRepository.findAll());
+            model.addAttribute("ingredientesExistentes", ingredienteService.findAllIngredientes());
             session.setAttribute("platoCreando", platoDietistaUI);
             dir = "dietista/dietista_crearPlato";
         } else {
@@ -206,6 +208,7 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
+    /*
     @GetMapping("/addNuevoIngrediente")
     public String doAddNuevoIngrediente(HttpSession session, Model model) {
         String dir;
@@ -220,7 +223,9 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/guardarNuevoIngrediente")
     public String doSaveNuevoIngrediente(@ModelAttribute("nuevoIngrediente") Ingrediente ingrediente , HttpSession session, Model model) {
         String dir;
@@ -236,7 +241,7 @@ public class PlatosController extends BaseController{
             ingredienteSave.setHidratosDeCarbono(ingrediente.getHidratosDeCarbono());
             ingredienteRepository.save(ingredienteSave);
             PlatoDietistaUI plato = (PlatoDietistaUI) session.getAttribute("platoCreando");
-            plato.getIngredientes().add(ingredienteRepository.getUltimosIngredientesAdded().getFirst());
+            //plato.getIngredientes().add(ingredienteRepository.getUltimosIngredientesAdded().getFirst());
             session.setAttribute("platoCreando", plato);
             dir = "redirect:/dietista/crearPlato";
         } else {
@@ -244,6 +249,7 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
+    */
 
     @GetMapping("/eliminarIngrediente")
     public String doEliminarIngredienteExistente(@RequestParam("ingredienteId") Integer ingredienteId
@@ -252,17 +258,10 @@ public class PlatosController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            PlatoDietistaUI platoDietista = (PlatoDietistaUI) session.getAttribute("platoCreando");
-            Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElse(null);
-            for(int i=0; i < platoDietista.getIngredientes().size(); ++i)
-            {
-                if(platoDietista.getIngredientes().get(i).getId() == ingrediente.getId())
-                {
-                    platoDietista.getIngredientes().remove(i);
-                }
-            }
+            PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
+            platoDietistaUI = ingredienteService.eliminarIngredienteToPlatoDietista(ingredienteId, platoDietistaUI);
 
-            session.setAttribute("platoCreando", platoDietista);
+            session.setAttribute("platoCreando", platoDietistaUI);
             dir = "redirect:/dietista/crearPlato";
         } else {
             dir = "redirect:/";
@@ -270,6 +269,7 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
+    /*
     @PostMapping("/guardarPlato")
     public String doGuardarPlato(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietista, HttpSession session, Model model) {
         String dir;
@@ -332,4 +332,5 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
+     */
 }

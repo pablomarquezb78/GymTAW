@@ -6,6 +6,7 @@ import es.uma.dto.IngredienteDTO;
 import es.uma.dto.PlatoDTO;
 import es.uma.entity.Ingrediente;
 import es.uma.entity.Plato;
+import es.uma.ui.PlatoDietistaUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,29 @@ public class IngredienteService {
         List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
         List<IngredienteDTO> ingredienteDTOList = this.convertlistEntityToDto(listaIngredientes);
         return ingredienteDTOList;
+    }
+
+    public PlatoDietistaUI addIngredienteToPlatoDietistaUI(PlatoDietistaUI platoDietistaUI)
+    {
+        ArrayList<Ingrediente> listaIngredientesPlato = platoDietistaUI.getIngredientes();
+        if(listaIngredientesPlato == null) listaIngredientesPlato = new ArrayList<>();
+        Ingrediente ingrediente = ingredienteRepository.findById(platoDietistaUI.getAddedIngrediente()).orElse(null);
+        listaIngredientesPlato.add(ingrediente);
+        platoDietistaUI.setIngredientes(listaIngredientesPlato);
+        return platoDietistaUI;
+    }
+
+    public PlatoDietistaUI eliminarIngredienteToPlatoDietista(Integer ingredienteId, PlatoDietistaUI platoDietistaUI)
+    {
+        Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElse(null);
+        for(int i=0; i < platoDietistaUI.getIngredientes().size(); ++i)
+        {
+            if(platoDietistaUI.getIngredientes().get(i).getId() == ingrediente.getId())
+            {
+                platoDietistaUI.getIngredientes().remove(i);
+            }
+        }
+        return platoDietistaUI;
     }
 
     public IngredienteDTO convertEntityToDto(Ingrediente ingrediente){
