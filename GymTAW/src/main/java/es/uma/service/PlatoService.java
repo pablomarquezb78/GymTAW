@@ -3,10 +3,8 @@ package es.uma.service;
 
 import es.uma.dao.PlatosRepository;
 import es.uma.dto.*;
-import es.uma.entity.Ejercicio;
-import es.uma.entity.Plato;
-import es.uma.entity.TipoComida;
-import es.uma.entity.User;
+import es.uma.entity.*;
+import es.uma.ui.PlatoDietistaUI;
 import es.uma.ui.PlatoUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,6 +92,22 @@ public class PlatoService {
         List<Plato> platosList = platosRepository.getPlatosLinkedToDietista(dietista);
         List<PlatoDTO> platosDTO = convertlistEntityToDto(platosList);
         return platosDTO;
+    }
+
+    public PlatoDietistaUI prepareEditarPlatoByPlatoDietistaUI(Integer platoId)
+    {
+        Plato plato = platosRepository.findById(platoId).orElse(null);
+        PlatoDietistaUI platoDietista = new PlatoDietistaUI();
+
+        platoDietista.setId(plato.getId());
+        ArrayList<Ingrediente> ingredientes = new ArrayList<>();
+        ingredientes.addAll(platosRepository.getIngredientesLinkedToPlato(plato));
+        platoDietista.setIngredientes(ingredientes);
+        platoDietista.setNombre(plato.getNombre());
+        platoDietista.setReceta(plato.getReceta());
+        platoDietista.setEnlaceReceta(plato.getEnlaceReceta());
+        platoDietista.setTiempoDePreparacion(plato.getTiempoDePreparacion());
+        return platoDietista;
     }
 
     public PlatoDTO convertEntityToDto(Plato plato){

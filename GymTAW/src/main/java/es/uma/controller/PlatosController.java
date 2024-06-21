@@ -132,35 +132,23 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
-    /*
     @GetMapping("/editarPlato")
     public String openEditarPlato(@RequestParam("platoId") Integer platoId, HttpSession session, Model model) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            Plato plato = platosRepository.findById(platoId).orElse(null);
-            PlatoDietistaUI platoDietista = new PlatoDietistaUI();
+            PlatoDietistaUI platoDietistaUI = platoService.prepareEditarPlatoByPlatoDietistaUI(platoId);
 
-            platoDietista.setId(plato.getId());
-            ArrayList<Ingrediente> ingredientes = new ArrayList<>();
-            ingredientes.addAll(platosRepository.getIngredientesLinkedToPlato(plato));
-            //platoDietista.setIngredientes(ingredientes);
-            platoDietista.setNombre(plato.getNombre());
-            platoDietista.setReceta(plato.getReceta());
-            platoDietista.setEnlaceReceta(plato.getEnlaceReceta());
-            platoDietista.setTiempoDePreparacion(plato.getTiempoDePreparacion());
-
-            model.addAttribute("platoDietista", platoDietista);
+            model.addAttribute("platoDietista", platoDietistaUI);
             model.addAttribute("ingredientesExistentes", ingredienteRepository.findAll());
-            session.setAttribute("platoCreando", platoDietista);
+            session.setAttribute("platoCreando", platoDietistaUI);
             dir = "dietista/dietista_crearPlato";
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
-    */
 
     /*
     @PostMapping("/borrarPlato")
