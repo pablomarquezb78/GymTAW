@@ -214,27 +214,27 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
-    /*
     @GetMapping("/showFechaCliente")
     public String doShowClienteAlterDateBack(HttpSession session,
                                          Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
             DiaComida diaComida = (DiaComida) session.getAttribute("diaComida");
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            List<TipoComida> tiposDeComida = tipoComidaRepository.findAll();
-            Pair<List<LocalDate>,Map<String, List<Plato>>> par = obtenerTablaComidas(cliente, dietista, diaComida);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            List<TipoComidaDTO> tiposDeComida = tipoComidaService.getAll();
+            Pair<List<LocalDate>,Map<String, List<PlatoDTO>>> par = comidaService.obtenerTablaComidas(clienteDTO, dietistaDTO, diaComida);
             List<LocalDate> listaFechas = par.a;
-            Map<String, List<Plato>> tablaComidas = par.b;
-            model.addAttribute("cliente", cliente);
+            Map<String, List<PlatoDTO>> tablaComidas = par.b;
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("tiposDeComida", tiposDeComida);
             session.setAttribute("diaDieta", diaDieta);
             model.addAttribute("diaComida", diaComida);
@@ -246,7 +246,6 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
     /*
     @PostMapping("/selectComidaCliente")
