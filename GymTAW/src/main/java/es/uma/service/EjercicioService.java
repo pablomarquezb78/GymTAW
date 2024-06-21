@@ -1,13 +1,16 @@
 package es.uma.service;
 
 import es.uma.dao.EjercicioRepository;
+import es.uma.dao.TipoEjercicioRepository;
 import es.uma.dto.EjercicioDTO;
 import es.uma.dto.TipoEjercicioDTO;
 import es.uma.entity.Ejercicio;
+import es.uma.entity.TipoEjercicio;
 import es.uma.ui.EjercicioUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.PanelUI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +19,8 @@ public class EjercicioService {
 
     @Autowired
     EjercicioRepository ejercicioRepository;
-
+    @Autowired
+    TipoEjercicioRepository tipoEjercicioRepository;
 
     @Autowired
     public TipoEjercicioService tipoEjercicioService;
@@ -96,6 +100,17 @@ public class EjercicioService {
         return ejercicioRepository.filtrarEjercicioPorNombre(nombre).stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public void crearEjercicioDeUI( EjercicioUI ejercicioUI){
+        Ejercicio nuevoEjercicio = new Ejercicio();
+        nuevoEjercicio.setNombre(ejercicioUI.getNombre());
+        nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
+        nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
+
+        TipoEjercicio tipoEjercicio = tipoEjercicioRepository.getById(ejercicioUI.getIdTipo());
+        nuevoEjercicio.setTipo(tipoEjercicio);
+        ejercicioRepository.save(nuevoEjercicio);
     }
 
     public EjercicioDTO convertEntityToDto(Ejercicio ejercicio){

@@ -1,5 +1,4 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="es.uma.ui.EjercicioUI" %>

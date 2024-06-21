@@ -208,16 +208,13 @@ public class EntrenamientosController extends BaseController{
 
             Implementacion implementacion = new Implementacion();
 
-            //Rutina r = rutinaRepository.getById(idrutina);
             RutinaDTO r = rutinaService.getRutinaByID(idrutina);
             implementacion.setRutina(r.getId());
             model.addAttribute("implementacion",implementacion);
 
-            //List<Ejercicio> ejercicios = ejercicioRepository.findAll();
             List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
             model.addAttribute("ejercicios",ejercicios);
 
-            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("tipos",tipos);
 
@@ -240,11 +237,9 @@ public class EntrenamientosController extends BaseController{
 
             model.addAttribute("implementacion",implementacion);
 
-            //List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorNombre(implementacion.getNombrefiltrado());
             List<EjercicioDTO> ejercicios = ejercicioService.getEjerciciosPorNombre(implementacion.getNombrefiltrado());
             model.addAttribute("ejercicios",ejercicios);
 
-            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("tipos",tipos);
 
@@ -640,7 +635,7 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/crear-ejercicio")
     public String doCrearEjercicio(HttpSession sesion, Model model){
 
-        UserRol userRol = (UserRol) sesion.getAttribute("rol");
+        UserRolDTO userRol = (UserRolDTO) sesion.getAttribute("rol");
 
         EjercicioUI ejercicioUI = new EjercicioUI();
         ejercicioUI.setTrainerEjercicio(userRol.getRolUsuario());
@@ -655,14 +650,8 @@ public class EntrenamientosController extends BaseController{
     @PostMapping("/guardar-ejercicio")
     public String doGuardarEjercicio(@ModelAttribute ("ejercicioUI") EjercicioUI ejercicioUI,HttpSession sesion){
 
-        Ejercicio nuevoEjercicio = new Ejercicio();
-        nuevoEjercicio.setNombre(ejercicioUI.getNombre());
-        nuevoEjercicio.setDescripcion(ejercicioUI.getDescripcion());
-        nuevoEjercicio.setEnlaceVideo(ejercicioUI.getEnlaceVideo());
-        TipoEjercicio tipoEjercicio = tipoEjercicioRepository.getById(ejercicioUI.getIdTipo());
-        nuevoEjercicio.setTipo(tipoEjercicio);
+        ejercicioService.crearEjercicioDeUI(ejercicioUI);
 
-        ejercicioRepository.save(nuevoEjercicio);
         return "redirect:/";
     }
 
