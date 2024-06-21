@@ -98,7 +98,8 @@ public class EntrenamientosController extends BaseController{
         String strTo = "/crosstrainer/entrenador_semana";
 
         if(estaAutenticado(session)){
-            List<DiaEntrenamiento> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
+            //List<DiaEntrenamiento> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
+                List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.getDiasDeClienteID(idcliente);
 
             model.addAttribute("idcliente",idcliente);
             model.addAttribute("diasEntrenamientos", dias);
@@ -230,15 +231,16 @@ public class EntrenamientosController extends BaseController{
 
             model.addAttribute("implementacion",implementacion);
 
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorNombre(implementacion.getNombrefiltrado());
+            //List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorNombre(implementacion.getNombrefiltrado());
+            List<EjercicioDTO> ejercicios = ejercicioService.getEjerciciosPorNombre(implementacion.getNombrefiltrado());
             model.addAttribute("ejercicios",ejercicios);
 
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("tipos",tipos);
 
-            Boolean editable = false;
+            Boolean editable = true;
             model.addAttribute("editable",editable);
-
         }
 
 
@@ -315,7 +317,6 @@ public class EntrenamientosController extends BaseController{
 
     @PostMapping("/asociar-rutina")
     public String doAsociarRutina(AsociacionRutina asociacionRutina, Model model, HttpSession session){
-
 
         LocalDate fechaConvertida = convertirStringALocalDate(asociacionRutina.getFecha());
         Rutina rutina = rutinaRepository.getById(asociacionRutina.getIdRutina());
@@ -609,7 +610,7 @@ public class EntrenamientosController extends BaseController{
 
         EjercicioUI ejercicioUI = new EjercicioUI();
         ejercicioUI.setTrainerEjercicio(userRol.getRolUsuario());
-        List<TipoEjercicio> tipoEjercicios = tipoEjercicioRepository.findAll();
+        List<TipoEjercicioDTO> tipoEjercicios = tipoEjercicioService.getAll();
         model.addAttribute("tipos",tipoEjercicios);
         model.addAttribute("ejercicioUI",ejercicioUI);
 
@@ -630,13 +631,14 @@ public class EntrenamientosController extends BaseController{
         return "redirect:/";
     }
 
+    //DONE
     @GetMapping("/mostrarTiposEjercicio")
     public String mostrarTiposEjercicio(HttpSession session, Model model){
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
-            List<TipoEjercicio> tiposEjercicio = tipoEjercicioRepository.findAll();
+            List<TipoEjercicioDTO> tiposEjercicio = tipoEjercicioService.getAll();
 
             model.addAttribute("tiposEjercicio", tiposEjercicio);
             model.addAttribute("rol", rol);
@@ -742,6 +744,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    //DONE
     @GetMapping("/verImplementacionesAsociadasTipo")
     public String verImplementacionesAsociadasTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
 
@@ -749,11 +752,17 @@ public class EntrenamientosController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
-            TipoEjercicio tipoEjercicio = tipoEjercicioRepository.findById(id).orElse(null);
-            List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorTipo(id);
+            //TipoEjercicio tipoEjercicio = tipoEjercicioRepository.findById(id).orElse(null);
+
+            //List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioPorTipo(id);
+
+            List<EjercicioDTO> ejercicios = ejercicioService.getEjerciciosDeTipoDeEjercicio(id);
             model.addAttribute("ejercicios",ejercicios);
             //model.addAttribute("tipoEjercicio", tipoEjercicio);
-            model.addAttribute("tipos", tipoEjercicioRepository.findAll());
+
+            List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
+
+            model.addAttribute("tipos", tipos);
             model.addAttribute("rol",rol);
             model.addAttribute("ejercicio", new EjercicioUI());
 

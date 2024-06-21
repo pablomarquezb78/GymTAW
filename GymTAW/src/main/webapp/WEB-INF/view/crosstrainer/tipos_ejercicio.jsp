@@ -2,12 +2,13 @@
 <%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Ejercicio" %>
+<%@ page import="es.uma.dto.TipoEjercicioDTO" %>
 
 
 <%
 
     UserRol userRol = (UserRol) request.getAttribute("rol");
-    List<TipoEjercicio> tiposEjercicio = (List<TipoEjercicio>) request.getAttribute("tiposEjercicio");
+    List<TipoEjercicioDTO> tiposEjercicio = (List<TipoEjercicioDTO>) request.getAttribute("tiposEjercicio");
     String cabecera = "cabecera_entrenador.jsp";
 
 %>
@@ -30,7 +31,7 @@
 </tr>
 <%
     if(tiposEjercicio.size() > 0){
-        for(TipoEjercicio tipo : tiposEjercicio){
+        for(TipoEjercicioDTO tipo : tiposEjercicio){
 %>
 <tr>
     <td><%=tipo.getId()%></td>

@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Integer id = (Integer) request.getAttribute("idcliente");
-    List<DiaEntrenamiento> diaEntrenamientos = (List<DiaEntrenamiento>) request.getAttribute("diasEntrenamientos");
+    List<DiaEntrenamientoDTO> diaEntrenamientos = (List<DiaEntrenamientoDTO>) request.getAttribute("diasEntrenamientos");
 %>
 <html>
 
@@ -31,7 +31,7 @@
         <%
             if(!diaEntrenamientos.isEmpty()){
 
-                for(DiaEntrenamiento diaEntrenamiento : diaEntrenamientos){
+                for(DiaEntrenamientoDTO diaEntrenamiento : diaEntrenamientos){
 
         %>
 

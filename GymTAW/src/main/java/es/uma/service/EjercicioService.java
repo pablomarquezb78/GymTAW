@@ -92,6 +92,12 @@ public class EjercicioService {
         ejercicioRepository.deleteById(id);
     }
 
+    public List<EjercicioDTO> getEjerciciosPorNombre(String nombre){
+        return ejercicioRepository.filtrarEjercicioPorNombre(nombre).stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
     public EjercicioDTO convertEntityToDto(Ejercicio ejercicio){
         EjercicioDTO ejercicioDTO = new EjercicioDTO();
         ejercicioDTO.setId(ejercicio.getId());
