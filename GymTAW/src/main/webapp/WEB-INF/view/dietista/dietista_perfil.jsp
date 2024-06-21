@@ -1,9 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.User" %>
+<%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User dietista = (User) request.getAttribute("dietista");
+    UserDTO dietista = (UserDTO) request.getAttribute("dietista");
 %>
 
 <!DOCTYPE html>

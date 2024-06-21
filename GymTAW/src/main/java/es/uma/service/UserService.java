@@ -215,6 +215,19 @@ public class UserService {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));
     }
 
+    public UserDTO guardarDietistaPerfilEdit(UserDTO userDTO, Usuario dietista)
+    {
+        User dietistaUser = this.convertDtoToEntity(userDTO);
+        dietistaUser.setNombre(dietista.getNombre());
+        dietistaUser.setApellidos(dietista.getApellidos());
+        dietistaUser.setAltura(dietista.getAltura());
+        dietistaUser.setPeso(dietista.getPeso());
+        dietistaUser.setDescripcionPersonal(dietista.getDescripcionPersonal());
+        userRepository.save(dietistaUser);
+        UserDTO userDTOout = this.convertEntityToDto(dietistaUser);
+        return userDTOout;
+    }
+
 
     public User convertDtoToEntity(UserDTO userDTO){
         User user = new User();

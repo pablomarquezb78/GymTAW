@@ -1,10 +1,14 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
+import es.uma.dto.UserDTO;
+import es.uma.dto.UserRolDTO;
 import es.uma.entity.*;
+import es.uma.service.UserService;
 import es.uma.ui.*;
 import org.antlr.v4.runtime.misc.Pair;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -17,35 +21,34 @@ import java.util.*;
 @RequestMapping("/dietista")
 public class DietistaController extends BaseController{
 
-    private final UserRepository userRepository;
-    private final TipoComidaRepository tipoComidaRepository;
-    private final DiaDietaRepository diaDietaRepository;
-    private final ComidaRepository comidaRepository;
-    private final CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
-    private final PlatosRepository platosRepository;
-    private final TipoCantidadRepository tipoCantidadRepository;
-    private final AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
-    private final IngredienteRepository ingredienteRepository;
-
-    public DietistaController(UserRepository userRepository, TipoComidaRepository tipoComidaRepository, DiaDietaRepository diaDietaRepository, ComidaRepository comidaRepository, CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository, PlatosRepository platosRepository, TipoCantidadRepository tipoCantidadRepository, AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy, IngredienteRepository ingredienteRepository) {
-        super();
-        this.userRepository = userRepository;
-        this.tipoComidaRepository = tipoComidaRepository;
-        this.diaDietaRepository = diaDietaRepository;
-        this.comidaRepository = comidaRepository;
-        this.cantidadIngredientePlatoComidaRepository = cantidadIngredientePlatoComidaRepository;
-        this.platosRepository = platosRepository;
-        this.tipoCantidadRepository = tipoCantidadRepository;
-        this.asignacionPlatoIngredienteDietistacreadorRepositoy = asignacionPlatoIngredienteDietistacreadorRepositoy;
-        this.ingredienteRepository = ingredienteRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TipoComidaRepository tipoComidaRepository;
+    @Autowired
+    private DiaDietaRepository diaDietaRepository;
+    @Autowired
+    private ComidaRepository comidaRepository;
+    @Autowired
+    private CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
+    @Autowired
+    private PlatosRepository platosRepository;
+    @Autowired
+    private TipoCantidadRepository tipoCantidadRepository;
+    @Autowired
+    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
+    @Autowired
+    private IngredienteRepository ingredienteRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/mostrarPerfil")
     public String doLoadProfile(HttpSession session,
                              Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
             if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
@@ -54,7 +57,7 @@ public class DietistaController extends BaseController{
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
-            User dietista = (User) session.getAttribute("user");
+            UserDTO dietista = userDTO;
             model.addAttribute("dietista", dietista);
             dir = "dietista/dietista_perfil";
         } else {
@@ -67,10 +70,11 @@ public class DietistaController extends BaseController{
     public String doEditProfile(HttpSession session,
                                 Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
-            User dietistaUser = (User) session.getAttribute("user");
+            UserDTO dietistaUser = (UserDTO) session.getAttribute("user");
             Usuario dietista = new Usuario();
             dietista.setNombre(dietistaUser.getNombre());
             dietista.setApellidos(dietistaUser.getApellidos());
@@ -91,16 +95,12 @@ public class DietistaController extends BaseController{
     public String doSaveProfile(@ModelAttribute("dietista") Usuario dietista, HttpSession session,
                                 Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
-            User dietistaUser = (User) session.getAttribute("user");
-            dietistaUser.setNombre(dietista.getNombre());
-            dietistaUser.setApellidos(dietista.getApellidos());
-            dietistaUser.setAltura(dietista.getAltura());
-            dietistaUser.setPeso(dietista.getPeso());
-            dietistaUser.setDescripcionPersonal(dietista.getDescripcionPersonal());
-            userRepository.save(dietistaUser);
+            UserDTO userOutput = userService.guardarDietistaPerfilEdit(userDTO, dietista);
+            session.setAttribute("user", userOutput);
 
             dir = "redirect:/dietista/mostrarPerfil";
         } else {
@@ -109,6 +109,7 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
+    /*
     @GetMapping("/mostrarClientes")
     public String doLoadClientes(HttpSession session,
                                 Model model) {
@@ -132,10 +133,11 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
     //ToDo: Hacer el cargado de platos correspondiente a la fecha con un metodo.
     //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato
-        private Pair<List<LocalDate>,Map<String, List<Plato>>> obtenerTablaComidas(User cliente, User dietista, DiaComida diaComida)
+    private Pair<List<LocalDate>,Map<String, List<Plato>>> obtenerTablaComidas(User cliente, User dietista, DiaComida diaComida)
     {
 
         Map<String, List<Plato>> dataMap = new TreeMap<>();
@@ -155,6 +157,7 @@ public class DietistaController extends BaseController{
                 fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth() + 1 , dayOfMonth);
             } else //Caso en el que sumar dias implica cambiar de año
             {
+
                 int dayOfMonth = (diaComida.getDay() + i - 1) % Month.of(diaComida.getMonth()).length(leapYear);
                 fecha = LocalDate.of(diaComida.getYear() + 1, 1, dayOfMonth);
             }
@@ -186,6 +189,7 @@ public class DietistaController extends BaseController{
         return par;
     }
 
+    /*
     @GetMapping("/cliente")
     public String doShowCliente(@RequestParam("id") Integer clienteId, HttpSession session,
                                  Model model) {
@@ -224,7 +228,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/setFechaCliente")
     public String doShowClienteAlterDate(@ModelAttribute("diaComida") DiaComida diaComida, HttpSession session,
                                  Model model) {
@@ -251,7 +257,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @GetMapping("/showFechaCliente")
     public String doShowClienteAlterDateBack(HttpSession session,
                                          Model model) {
@@ -283,8 +291,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
-
+    /*
     @PostMapping("/selectComidaCliente")
     public String doShowComidaCliente(@ModelAttribute("diaComida") DiaComida diaComida, HttpSession session,
                                          Model model) {
@@ -344,7 +353,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/mostrarPlatoComida")
     public String doShowPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                       Model model) {
@@ -377,7 +388,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @GetMapping("/volverComida")
     public String doShowPlatoComidaClienteBack(HttpSession session,
                                            Model model) {
@@ -415,7 +428,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/addPlatoToPlatoComida")
     public String doAddPlatoToPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                            Model model) {
@@ -473,7 +488,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/eliminarPlatoComida")
     public String doDeletePlatoFromPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                                  Model model) {
@@ -526,7 +543,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/addIngredientePlatoComida")
     public String doLoadNewIngrediente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                  Model model) {
@@ -548,7 +567,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @GetMapping("/editarCantidadIngrediente")
     public String doLoadEditIngrediente(@RequestParam("cantidadId") Integer cantidadId, HttpSession session,
                                        Model model) {
@@ -573,7 +594,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @GetMapping("/deleteIngrediente")
     public String doDeleteIngrediente(@RequestParam("cantidadId") Integer cantidadId, HttpSession session,
                                         Model model) {
@@ -614,7 +637,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/guardarIngredienteImplementando")
     public String doSaveIngrediente(@ModelAttribute("ingredienteImplementandoUI") IngredienteImplementandoUI ingredienteImplementandoUI, HttpSession session,
                                        Model model) {
@@ -680,7 +705,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @GetMapping("/accederFeedbackComida")
     public String doLoadFeedbackComida(@RequestParam("comidaID") Integer comidaID, HttpSession session,
                                         Model model) {
@@ -713,7 +740,9 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 
+    /*
     @PostMapping("/feedbackComidaSelectedPlato")
     public String doLoadFeedbackComidaConPlato(@ModelAttribute("feedback") FeedbackDietistaMostrarUI feedback, HttpSession session,
                                        Model model) {
@@ -744,4 +773,5 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
+    */
 }
