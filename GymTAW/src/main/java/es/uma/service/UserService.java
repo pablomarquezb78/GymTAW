@@ -203,10 +203,16 @@ public class UserService {
         return this.convertlistEntityToDto(userRepository.dietistasNoAsociadosAlCliente(this.convertlistDtoToEntity(noDietist)));
     }
 
-    public boolean checkDietistaLogged(HttpSession session)
+    public UserDTO findUserByUsernameAndPassword(String username, String password){
+        User user = this.userRepository.findByUsernamePassword(username, password);
+        UserDTO userDTO = null;
+        if(user != null) userDTO = this.convertEntityToDto(user);
+        return userDTO;
+    }
+
+    public boolean checkDietistaLogged(UserDTO userDTO, UserRolDTO userRolDTO)
     {
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        return (session.getAttribute("user") != null) && (rol.getRolUsuario().equals("dietista"));
+        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));
     }
 
 

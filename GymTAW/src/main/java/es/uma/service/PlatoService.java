@@ -25,6 +25,8 @@ public class PlatoService {
     private IngredienteRepository ingredienteRepository;
     @Autowired
     private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
+    @Autowired
+    private UserService userService;
 
 
     public List<PlatoDTO> getAllDishes(){
@@ -91,9 +93,9 @@ public class PlatoService {
         return platoDTO;
     }
 
-    public List<PlatoDTO> getPlatosLinkedToDietista(HttpSession session)
+    public List<PlatoDTO> getPlatosLinkedToDietista(UserDTO dietistaDTO)
     {
-        User dietista = (User) session.getAttribute("user");
+        User dietista = userService.convertDtoToEntity(dietistaDTO);
         List<Plato> platosList = platosRepository.getPlatosLinkedToDietista(dietista);
         List<PlatoDTO> platosDTO = convertlistEntityToDto(platosList);
         return platosDTO;

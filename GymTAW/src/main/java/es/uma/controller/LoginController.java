@@ -3,7 +3,10 @@ package es.uma.controller;
 import es.uma.dao.PlatosRepository;
 import es.uma.dao.RegistroRepository;
 import es.uma.dao.UserRepository;
+import es.uma.dto.UserDTO;
+import es.uma.dto.UserRolDTO;
 import es.uma.entity.Registro;
+import es.uma.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import es.uma.entity.User;
@@ -30,14 +33,15 @@ public class LoginController extends  BaseController {
     final String bodybuilder = "bodybuilder";
     final String crosstrainer = "crosstrainer";
     final String dietista = "dietista";
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String doLoad(Model model, HttpSession session) {
         String webRedirect = "login";
         if (estaAutenticado(session)) {
-            UserRol userRolEntity = (UserRol) session.getAttribute("rol");
-            User userEntity = (User) session.getAttribute("user");
-            switch (userRolEntity.getRolUsuario()) {
+            UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+            switch (userRolDTO.getRolUsuario()) {
                 case admin:
                     webRedirect = "redirect:/admin/";
                     break;
@@ -66,17 +70,17 @@ public class LoginController extends  BaseController {
             , @RequestParam("password_login") String password
             , HttpSession session
             , Model model) {
-        User userEntity = this.userRepository.findByUsernamePassword(username, password);
-        if (userEntity == null) {
+        UserDTO userDTO = userService.findUserByUsernameAndPassword(username, password);
+        if (userDTO == null) {
             model.addAttribute("error", "Credenciales no encontradas");
             return "redirect:/";
         } else {
-            session.setAttribute("user", userEntity);
-            UserRol userRolEntity = userEntity.getRol();
-            session.setAttribute("rol", userRolEntity);
+            session.setAttribute("user", userDTO);
+            UserRolDTO userRolDTO = userDTO.getRol();
+            session.setAttribute("rol", userRolDTO);
 
             String webRedirect = "loginTest";
-            switch (userRolEntity.getRolUsuario()) {
+            switch (userRolDTO.getRolUsuario()) {
                 case admin:
                     webRedirect = "redirect:/admin/";
                     break;
