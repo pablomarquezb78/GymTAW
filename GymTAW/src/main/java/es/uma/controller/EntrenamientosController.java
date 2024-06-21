@@ -143,30 +143,30 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    @PostMapping("/guardarimplementacionrutina")
-    public String doGuardarImplementacionRutina(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
-        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina();
-
-        if(!estaAutenticado(sesion)){
-            strTo = "redirect:/";
-        }else{
-            ImplementacionEjercicioRutina imp;
-            if(implementacion.getId()!=null){
-                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
-                asignarImplementacionReal(imp,implementacion);
-            }else{
-                imp = new ImplementacionEjercicioRutina();
-                imp.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
-
-                asignarImplementacionReal(imp,implementacion);
-            }
-
-            this.implementacionEjercicioRutinaRepository.save(imp);
-        }
-
-
-        return strTo;
-    }
+//    @PostMapping("/guardarimplementacionrutina")
+//    public String doGuardarImplementacionRutina(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
+//        String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina();
+//
+//        if(!estaAutenticado(sesion)){
+//            strTo = "redirect:/";
+//        }else{
+//            ImplementacionEjercicioRutina imp;
+//            if(implementacion.getId()!=null){
+//                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+//                asignarImplementacionReal(imp,implementacion);
+//            }else{
+//                imp = new ImplementacionEjercicioRutina();
+//                imp.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
+//
+//                asignarImplementacionReal(imp,implementacion);
+//            }
+//
+//            this.implementacionEjercicioRutinaRepository.save(imp);
+//        }
+//
+//
+//        return strTo;
+//    }
 
     //DONE
     @PostMapping("/cambiarnombrerutina")
@@ -506,6 +506,8 @@ public class EntrenamientosController extends BaseController{
             //asignarImplementacionUI(implementacion,imp);
             implementacionEjercicioRutinaService.asignarImplementacionDTOaImplementacionUI(implementacion,imp);
             implementacion.setId(id);
+            String tiempo = imp.getTiempo();
+            String cal = imp.getKilocalorias();
             model.addAttribute("implementacion",implementacion);
 
             //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();

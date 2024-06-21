@@ -94,7 +94,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacionUI.setSets(implementacionDTO.getSets());
         implementacionUI.setRepeticiones(implementacionDTO.getRepeticiones());
         implementacionUI.setPeso(implementacionDTO.getPeso());
-        implementacionUI.setTiempo(implementacionDTO.getTiempo());
+        implementacionUI.setTiempo(implementacionDTO.getTiempo());//
         implementacionUI.setKilocalorias(implementacionDTO.getKilocalorias());
         implementacionUI.setMetros(implementacionDTO.getMetros());
     }
@@ -139,6 +139,8 @@ public class ImplementacionEjercicioRutinaService {
         implementacionEjercicioRutinaDTO.setRepeticiones(implementacionEjercicioRutina.getRepeticiones());
         implementacionEjercicioRutinaDTO.setRutina(rutinaService.convertEntityToDto(implementacionEjercicioRutina.getRutina()));
         implementacionEjercicioRutinaDTO.setEjercicio(ejercicioService.convertEntityToDto(implementacionEjercicioRutina.getEjercicio()));
+        implementacionEjercicioRutinaDTO.setKilocalorias(implementacionEjercicioRutina.getKilocalorias());
+        implementacionEjercicioRutinaDTO.setTiempo(implementacionEjercicioRutina.getTiempo());
 
         return implementacionEjercicioRutinaDTO;
     }
@@ -152,6 +154,8 @@ public class ImplementacionEjercicioRutinaService {
         implementacionEjercicioRutina.setRepeticiones(implementacionEjercicioRutinaDTO.getRepeticiones());
         implementacionEjercicioRutina.setRutina(rutinaService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getRutina()));
         implementacionEjercicioRutina.setEjercicio(ejercicioService.convertDtoToEntity(implementacionEjercicioRutinaDTO.getEjercicio()));
+        implementacionEjercicioRutina.setKilocalorias(implementacionEjercicioRutinaDTO.getKilocalorias());
+        implementacionEjercicioRutina.setTiempo(implementacionEjercicioRutinaDTO.getTiempo());
 
         return implementacionEjercicioRutina;
     }

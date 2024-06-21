@@ -11,7 +11,7 @@
 <%
     List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
     List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
-    Boolean editable = (Boolean) request.getAttribute("editable");
+    Boolean editable = true;
     List<TipoEjercicioDTO> tipos = (List<TipoEjercicioDTO>) request.getAttribute("tipos");
 
     Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
@@ -131,7 +131,7 @@
                                         String seleccionado = "";
                                         if(ej.getId()==implementacion.getEjercicio().getId()) seleccionado = "selected";
                                 %>
-                                    <option <%=seleccionado%> value="<%=ej.getId()%>"><%=ej.getNombre()%>></option>
+                                    <option <%=seleccionado%> value="<%=ej.getId()%>"><%=ej.getNombre()%></option>
                                 <%
                                     }
                                    // <form:select size="10" path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
