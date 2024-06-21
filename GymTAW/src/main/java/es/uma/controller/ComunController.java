@@ -65,7 +65,7 @@ public class ComunController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "admin/ejercicios";
             List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
@@ -83,7 +83,7 @@ public class ComunController extends BaseController{
     public String doEditarEjercicio(@RequestParam("id") Integer id, Model model, HttpSession session, EjercicioUI ejercicioUI) {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "crearEjercicio";
             model.addAttribute("tipos", tipoEjercicioService.getAll());
             model.addAttribute("ejercicioUI", ejercicioService.setEjercicioUI(id, ejercicioUI));
@@ -132,7 +132,7 @@ public class ComunController extends BaseController{
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "redirect:/comun/mostrarEjercicios";
             ejercicioService.deleteById(id);
 
@@ -146,7 +146,7 @@ public class ComunController extends BaseController{
     public String doCrearNuevoEjercicio(Model model, HttpSession session, EjercicioUI ejercicioUI) {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "crearEjercicio";
             model.addAttribute("tipos", tipoEjercicioService.getAll());
             model.addAttribute("ejercicioUI", ejercicioUI);
@@ -160,7 +160,7 @@ public class ComunController extends BaseController{
     public String doGuardarEjercicio(@ModelAttribute EjercicioUI ejercicioUI, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             if(ejercicioUI.getId() == null){
                 ejercicioService.saveExercise(ejercicioUI);
 
@@ -179,7 +179,7 @@ public class ComunController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         model.addAttribute("rol", rol);
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             if(ejercicioUI.estaVacio()){
                 dir = "redirect:/comun/mostrarEjercicios";
             }else {
@@ -266,7 +266,7 @@ public class ComunController extends BaseController{
     public String doVerImplementacionesAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "admin/mostrarImplementaciones";
             EjercicioDTO ejercicio = ejercicioService.getById(id);
             model.addAttribute("ejercicio", ejercicio);
@@ -285,7 +285,7 @@ public class ComunController extends BaseController{
     public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "crearImplementacion";
             model.addAttribute("ejercicios", ejercicioRepository.findAll());
             List<Rutina> rutinas = rutinaRepository.findAll();
@@ -342,12 +342,12 @@ public class ComunController extends BaseController{
     //Este guardar es para admin
     @PostMapping("/guardarImplementacion")
     public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,
-                                          @RequestParam("idejercicioseleccionado") Integer idej,HttpSession sesion){
+                                          @RequestParam("idejercicioseleccionado") Integer idej,HttpSession session){
 
         String dir;
-        UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (esAdmin(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol)) {
                 implementacion.setEjercicio(ejercicioService.getById(idej));
                 implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
                 dir ="redirect:/comun/verImplementacionesAsociadas?id="+idej;
@@ -363,7 +363,7 @@ public class ComunController extends BaseController{
     public String doBorrarImplementacion(@RequestParam("idEjercicio") Integer idEjercicio, @RequestParam("idImplementacion") Integer idImplementacion, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) ||esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) ||esEntrenador(rol)) {
             dir = "redirect:/comun/verImplementacionesAsociadas?id="+idEjercicio;
             implementacionEjercicioRutinaService.deleteById(idImplementacion);
 
@@ -377,7 +377,7 @@ public class ComunController extends BaseController{
     public String doFiltradoImplementaciones(@RequestParam("id") Integer id, HttpSession session, Model model, @ModelAttribute Implementacion implementacion){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             if(implementacion.estaVacio()){
                 dir = "redirect:/comun/verImplementacionesAsociadas?id="+id;
             }else{

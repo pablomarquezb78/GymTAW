@@ -162,8 +162,6 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaDTO.setId(cantidadIngredientePlatoComida.getId());
         cantidadIngredientePlatoComidaDTO.setCantidad(cantidadIngredientePlatoComida.getCantidad());
         cantidadIngredientePlatoComidaDTO.setComida(comidaService.convertEntityToDto(cantidadIngredientePlatoComida.getComida()));
-        cantidadIngredientePlatoComidaDTO.setTipoCantidad(tipoCantidadService.convertEntityToDto(cantidadIngredientePlatoComida.getTipoCantidad()));
-        cantidadIngredientePlatoComidaDTO.setIngrediente(ingredienteService.convertEntityToDto(cantidadIngredientePlatoComida.getIngrediente()));
         cantidadIngredientePlatoComidaDTO.setCantidadConsumida(cantidadIngredientePlatoComida.getCantidadConsumida());
         return cantidadIngredientePlatoComidaDTO;
     }
@@ -173,8 +171,6 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComida.setId(cantidadIngredientePlatoComidaDTO.getId());
         cantidadIngredientePlatoComida.setCantidad(cantidadIngredientePlatoComidaDTO.getCantidad());
         cantidadIngredientePlatoComida.setComida(comidaService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getComida()));
-        cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getTipoCantidad()));
-        cantidadIngredientePlatoComida.setIngrediente(ingredienteService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getIngrediente()));
         cantidadIngredientePlatoComida.setCantidadConsumida(cantidadIngredientePlatoComidaDTO.getCantidadConsumida());
         return cantidadIngredientePlatoComida;
     }
