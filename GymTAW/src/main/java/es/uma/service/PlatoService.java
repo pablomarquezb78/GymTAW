@@ -1,11 +1,14 @@
 package es.uma.service;
 
 
+import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
+import es.uma.dao.IngredienteRepository;
 import es.uma.dao.PlatosRepository;
 import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.PlatoDietistaUI;
 import es.uma.ui.PlatoUI;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,10 @@ public class PlatoService {
     public PlatosRepository platosRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private IngredienteRepository ingredienteRepository;
+    @Autowired
+    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
 
 
     public List<PlatoDTO> getAllDishes(){
@@ -86,9 +93,9 @@ public class PlatoService {
         return platoDTO;
     }
 
-    public List<PlatoDTO> getPlatosLinkedToDietista(UserDTO dietistaDTO)
+    public List<PlatoDTO> getPlatosLinkedToDietista(HttpSession session)
     {
-        User dietista = userService.convertDtoToEntity(dietistaDTO);
+        User dietista = (User) session.getAttribute("user");
         List<Plato> platosList = platosRepository.getPlatosLinkedToDietista(dietista);
         List<PlatoDTO> platosDTO = convertlistEntityToDto(platosList);
         return platosDTO;
@@ -108,6 +115,74 @@ public class PlatoService {
         platoDietista.setEnlaceReceta(plato.getEnlaceReceta());
         platoDietista.setTiempoDePreparacion(plato.getTiempoDePreparacion());
         return platoDietista;
+    }
+
+    public void crearPlatoByPlatoDietstaUI(PlatoDietistaUI platoDietistaUI, HttpSession session)
+    {
+        Plato plato = new Plato();
+        plato.setNombre(platoDietistaUI.getNombre());
+        plato.setTiempoDePreparacion(platoDietistaUI.getTiempoDePreparacion());
+        plato.setReceta(platoDietistaUI.getReceta());
+        plato.setEnlaceReceta(platoDietistaUI.getEnlaceReceta());
+        platosRepository.saveAndFlush(plato);
+        if(platoDietistaUI.getIngredientes() != null)
+        {
+            for(Ingrediente ingrediente : platoDietistaUI.getIngredientes())
+            {
+                AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
+                asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
+                asignacion.setDietista((User) session.getAttribute("user"));
+                asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
+                asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
+            }
+        }
+    }
+
+    public void editarPlatoByPlatoDietistaUI(PlatoDietistaUI platoDietistaUI, HttpSession session)
+    {
+        Plato plato = platosRepository.findById(platoDietistaUI.getId()).orElse(null);
+        plato.setNombre(platoDietistaUI.getNombre());
+        plato.setReceta(platoDietistaUI.getReceta());
+        plato.setEnlaceReceta(platoDietistaUI.getEnlaceReceta());
+        plato.setTiempoDePreparacion(platoDietistaUI.getTiempoDePreparacion());
+        platosRepository.save(plato);
+        if(platoDietistaUI.getIngredientes() != null)
+        {
+            List<Ingrediente> ingredientesPrevios = platosRepository.getIngredientesLinkedToPlato(plato);
+            if(!ingredientesPrevios.equals(platoDietistaUI.getIngredientes()))
+            {
+                for(Ingrediente ingrediente : ingredientesPrevios)
+                {
+                    User dietista = (User) session.getAttribute("user");
+                    AsignacionPlatoIngredienteDietistaCreador asignacion =
+                            asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
+                    asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
+                }
+                for(Ingrediente ingrediente : platoDietistaUI.getIngredientes())
+                {
+                    AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
+                    asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
+                    asignacion.setDietista((User) session.getAttribute("user"));
+                    asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
+                    asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
+                }
+            }
+        }
+    }
+
+    public void borrarPlatoByPlatoId(Integer platoId, HttpSession session)
+    {
+        Plato plato = platosRepository.findById(platoId).orElse(null);
+
+        List<Ingrediente> ingredientes = platosRepository.getIngredientesLinkedToPlato(plato);
+        for(Ingrediente ingrediente : ingredientes)
+        {
+            User dietista = (User) session.getAttribute("user");
+            AsignacionPlatoIngredienteDietistaCreador asignacion =
+                    asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
+            asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
+        }
+        platosRepository.delete(plato);
     }
 
     public PlatoDTO convertEntityToDto(Plato plato){

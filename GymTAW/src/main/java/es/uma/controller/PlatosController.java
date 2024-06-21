@@ -74,10 +74,8 @@ public class PlatosController extends BaseController{
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
-            //TODO: Hacer que la session lleve un UserDTO en lugar de user
-            UserDTO userDTO = userService.convertEntityToDto((User) session.getAttribute("user")); //Esta linea será eliminada
-            //----------------------------------------------------------------------------------------
-            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(userDTO);
+
+            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(session);
             model.addAttribute("listaPlatos", platosLinkedToDietista);
             dir = "dietista/dietista_platos";
         } else {
@@ -99,10 +97,8 @@ public class PlatosController extends BaseController{
                 model.addAttribute("selectedPlato", platoDTO);
                 model.addAttribute("listaIngredientes",ingredienteService.getIngredientesLinkedToPlato(platoDTO));
             }
-            //TODO: Hacer que la session lleve un UserDTO en lugar de user
-            UserDTO userDTO = userService.convertEntityToDto((User) session.getAttribute("user")); //Esta linea será eliminada
-            //----------------------------------------------------------------------------------------
-            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(userDTO);
+
+            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(session);
             model.addAttribute("listaPlatos", platosLinkedToDietista);
             dir = "dietista/dietista_platos";
         } else {
@@ -150,31 +146,19 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
-    /*
     @PostMapping("/borrarPlato")
     public String doBorrarPlato(@RequestParam("platoId") Integer platoId, HttpSession session, Model model) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            Plato plato = platosRepository.findById(platoId).orElse(null);
-
-            List<Ingrediente> ingredientes = platosRepository.getIngredientesLinkedToPlato(plato);
-            for(Ingrediente ingrediente : ingredientes)
-            {
-                User dietista = (User) session.getAttribute("user");
-                AsignacionPlatoIngredienteDietistaCreador asignacion =
-                        asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
-                asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
-            }
-            platosRepository.delete(plato);
+            platoService.borrarPlatoByPlatoId(platoId, session);
             dir = "redirect:/dietista/platos";
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
-    */
 
     @PostMapping("/addIngredienteExistente")
     public String doAddIngredienteExistente(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietistaUI
@@ -257,61 +241,17 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
-    /*
     @PostMapping("/guardarPlato")
-    public String doGuardarPlato(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietista, HttpSession session, Model model) {
+    public String doGuardarPlato(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietistaUI, HttpSession session, Model model) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
             //Crear plato
-            if(platoDietista.getId() == null) {
-                Plato plato = new Plato();
-                plato.setNombre(platoDietista.getNombre());
-                plato.setTiempoDePreparacion(platoDietista.getTiempoDePreparacion());
-                plato.setReceta(platoDietista.getReceta());
-                plato.setEnlaceReceta(platoDietista.getEnlaceReceta());
-                platosRepository.saveAndFlush(plato);
-                if(platoDietista.getIngredientes() != null)
-                {
-                    for(Ingrediente ingrediente : platoDietista.getIngredientes())
-                    {
-                        AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
-                        asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
-                        asignacion.setDietista((User) session.getAttribute("user"));
-                        asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
-                        asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
-                    }
-                }
+            if(platoDietistaUI.getId() == null) {
+                platoService.crearPlatoByPlatoDietstaUI(platoDietistaUI, session);
             } else { //Editar plato
-                Plato plato = platosRepository.findById(platoDietista.getId()).orElse(null);
-                plato.setNombre(platoDietista.getNombre());
-                plato.setReceta(platoDietista.getReceta());
-                plato.setEnlaceReceta(platoDietista.getEnlaceReceta());
-                plato.setTiempoDePreparacion(platoDietista.getTiempoDePreparacion());
-                platosRepository.save(plato);
-                if(platoDietista.getIngredientes() != null)
-                {
-                    List<Ingrediente> ingredientesPrevios = platosRepository.getIngredientesLinkedToPlato(plato);
-                    if(!ingredientesPrevios.equals(platoDietista.getIngredientes()))
-                    {
-                        for(Ingrediente ingrediente : ingredientesPrevios)
-                        {
-                            User dietista = (User) session.getAttribute("user");
-                            AsignacionPlatoIngredienteDietistaCreador asignacion =
-                                    asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
-                            asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
-                        }
-                        for(Ingrediente ingrediente : platoDietista.getIngredientes())
-                        {
-                            AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
-                            asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
-                            asignacion.setDietista((User) session.getAttribute("user"));
-                            asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
-                            asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
-                        }
-                    }
-                }
+                platoService.editarPlatoByPlatoDietistaUI(platoDietistaUI, session);
             }
             session.removeAttribute("platoCreando");
             dir = "redirect:/dietista/platos";
@@ -320,5 +260,4 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
-     */
 }
