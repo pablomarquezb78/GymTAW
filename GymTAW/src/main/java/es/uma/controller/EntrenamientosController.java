@@ -627,13 +627,13 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/mostrarTiposEjercicio")
     public String mostrarTiposEjercicio(HttpSession session, Model model){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
 
             List<TipoEjercicioDTO> tiposEjercicio = tipoEjercicioService.getAll();
 
             model.addAttribute("tiposEjercicio", tiposEjercicio);
-            model.addAttribute("rol", rol);
+            //model.addAttribute("rol", rol);
             dir = "crosstrainer/tipos_ejercicio";
 
         } else {
@@ -659,15 +659,15 @@ public class EntrenamientosController extends BaseController{
     public String editarTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
 
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
 
             dir = "crosstrainer/crearTipo";
             TipoEjercicio tipo = tipoEjercicioRepository.findById(id).orElse(null);
             TipoEjercicioUI tipoEjercicio = new TipoEjercicioUI();
             tipoEjercicio.setIdTipoEjercicio(tipo.getId());
             tipoEjercicio.setNombreTipoEjercicio(tipo.getTipoDeEjercicio());
-            model.addAttribute("rol", rol);
+            //model.addAttribute("rol", rol);
             model.addAttribute("tipoEjercicio", tipoEjercicio);
         } else {
             dir = "redirect:/";
@@ -679,8 +679,8 @@ public class EntrenamientosController extends BaseController{
     public String borrarTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
 
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
 
            tipoEjercicioRepository.deleteById(id);
            dir = "redirect:/entrenamientos/mostrarTiposEjercicio";

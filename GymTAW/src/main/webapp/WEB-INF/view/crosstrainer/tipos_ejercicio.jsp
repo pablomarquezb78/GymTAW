@@ -3,11 +3,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Ejercicio" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 
 
 <%
 
-    UserRol userRol = (UserRol) request.getAttribute("rol");
     List<TipoEjercicioDTO> tiposEjercicio = (List<TipoEjercicioDTO>) request.getAttribute("tiposEjercicio");
     String cabecera = "cabecera_entrenador.jsp";
 

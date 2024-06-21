@@ -5,7 +5,7 @@
 <%
 
     TipoEjercicioUI tipoEjercicioUI = (TipoEjercicioUI) request.getAttribute("tipoEjercicio");
-    UserRol userRol = (UserRol) session.getAttribute("rol");
+    //UserRol userRol = (UserRol) session.getAttribute("rol");
     String actionRol = "/entrenamientos/guardar-tipo-ejercicio";
     String cabecera = "cabecera_entrenador.jsp";
 
