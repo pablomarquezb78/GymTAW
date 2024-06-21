@@ -6,7 +6,6 @@ import es.uma.dto.UserDTO;
 import es.uma.dto.UserRolDTO;
 import es.uma.service.IngredienteService;
 import es.uma.service.PlatoService;
-import es.uma.service.UserService;
 import es.uma.ui.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +23,12 @@ public class PlatosController extends BaseController{
     @Autowired
     private PlatoService platoService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private IngredienteService ingredienteService;
 
     @GetMapping("/")
     public String doLoadMain(HttpSession session,
                          Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -55,7 +51,6 @@ public class PlatosController extends BaseController{
     public String doLoad(HttpSession session,
                          Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -82,7 +77,6 @@ public class PlatosController extends BaseController{
                          , HttpSession session
                          , Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -105,7 +99,6 @@ public class PlatosController extends BaseController{
     @GetMapping("/crearPlato")
     public String openCrearPlato(HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -127,7 +120,6 @@ public class PlatosController extends BaseController{
     @GetMapping("/editarPlato")
     public String openEditarPlato(@RequestParam("platoId") Integer platoId, HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -162,7 +154,6 @@ public class PlatosController extends BaseController{
     public String doAddIngredienteExistente(@ModelAttribute("platoDietista") PlatoDietistaUI platoDietistaUI
             , HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -182,7 +173,6 @@ public class PlatosController extends BaseController{
     @GetMapping("/addNuevoIngrediente")
     public String doAddNuevoIngrediente(HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -198,7 +188,6 @@ public class PlatosController extends BaseController{
     @PostMapping("/guardarNuevoIngrediente")
     public String doSaveNuevoIngrediente(@ModelAttribute("nuevoIngrediente") IngredienteDTO ingredienteDTO , HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
@@ -216,7 +205,6 @@ public class PlatosController extends BaseController{
     public String doEliminarIngredienteExistente(@RequestParam("ingredienteId") Integer ingredienteId
             , HttpSession session, Model model) {
         String dir;
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
