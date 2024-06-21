@@ -17,30 +17,28 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
-<table border="1" cellpadding="10" cellspacing="10">
+<table class="table table-bordered table-hover">
+    <thead class="text-center" style="background-color: #343a40; color: white;">
     <tr>
         <th>NOMBRE</th>
         <th>APELLIDOS</th>
         <th>ROL</th>
         <th>FECHA NACIMIENTO</th>
         <th></th>
-        <th></th>
     </tr>
-
-    <%
-        for(UserDTO entrenador : entrenadores){
-
-    %>
-    <tr>
-        <td><%=entrenador.getNombre()%></td>
-        <td><%=entrenador.getApellidos()%></td>
-        <td><%=entrenador.getRol().getRolUsuario()%></td>
-        <td><%=entrenador.getFechaNacimiento()%></td>
-        <td><a href="/admin/anyadirAsignacionEntrenador?id=<%=entrenador.getId()%>&idCliente=<%=cliente.getId()%>">Confirmar</a></td>
+    </thead>
+    <tbody>
+    <% for (UserDTO entrenador : entrenadores) { %>
+    <tr class="text-center">
+        <td><%= entrenador.getNombre() %></td>
+        <td><%= entrenador.getApellidos() %></td>
+        <td><%= entrenador.getRol().getRolUsuario() %></td>
+        <td><%= entrenador.getFechaNacimiento() %></td>
+        <td><a href="/admin/anyadirAsignacionEntrenador?id=<%= entrenador.getId() %>&idCliente=<%= cliente.getId() %>" class="btn btn-success btn-sm">Confirmar</a></td>
     </tr>
-    <%
-        }
-    %>
+    <% } %>
+    </tbody>
 </table>
+
 </body>
 </html>

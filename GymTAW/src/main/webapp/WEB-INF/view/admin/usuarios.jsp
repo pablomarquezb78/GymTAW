@@ -85,7 +85,7 @@
         <div class="form-group col-md-8">
             <label for="rol">Rol:</label>
             <div>
-                <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" itemValue="id" class="form-check form-check-inline"></form:radiobuttons>
+                <form:radiobuttons path="rol" items="${roles}" itemLabel="rolUsuario" delimiter="</br>" itemValue="id"></form:radiobuttons>
             </div>
         </div>
     </div>

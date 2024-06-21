@@ -286,13 +286,14 @@ public class ComunController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             dir = "crearImplementacion";
-            model.addAttribute("ejercicios", ejercicioRepository.findAll());
-            List<Rutina> rutinas = rutinaRepository.findAll();
+
             Implementacion implementacion = new Implementacion();
-            List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            //implementacion.setEjercicio(ejercicioRepository.findById(id).orElse(null));
-            model.addAttribute("tipos",tipos);
-            model.addAttribute("rutinas", rutinas);
+            implementacion.setEjercicio(ejercicioService.getById(id));
+
+
+            model.addAttribute("tipos",tipoEjercicioService.getAll());
+            model.addAttribute("rutinas", rutinaService.getAllRutinas());
+            model.addAttribute("ejercicios", ejercicioService.getAllExercises());
             model.addAttribute("implementacion", implementacion);
             model.addAttribute("rol", rol);
         } else {

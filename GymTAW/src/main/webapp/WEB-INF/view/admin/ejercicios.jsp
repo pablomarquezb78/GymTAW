@@ -89,7 +89,7 @@
         <div class="form-group col-md-12">
             <label>Tipo:</label>
             <div>
-                <form:radiobuttons path="idTipo" items="${tipos}" itemLabel="tipoDeEjercicio" itemValue="id" class="form-check form-check-inline"/>
+                <form:radiobuttons path="idTipo" items="${tipos}" delimiter="</br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
     <%
         }else{
     %>
-            <h2>No hay ningún ejercicio :(</h2>
+            <h2>No hay ningún ejercicio </h2>
             <br>
             <a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3">Crear nuevo ejercicio</a>
     <%

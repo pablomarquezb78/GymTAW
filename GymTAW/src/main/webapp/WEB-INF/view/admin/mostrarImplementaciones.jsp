@@ -36,7 +36,9 @@
 <jsp:include page="<%=cabecera%>"></jsp:include>
 
 <br/>
-<table border="1" cellpadding="10" cellspacing="10">
+<% if (implementaciones.size() > 0) { %>
+<table class="table table-bordered table-hover">
+    <thead class="text-center" style="background-color: #343a40; color: white;">
     <tr>
         <th>ID</th>
         <th>NOMBRE DE LA RUTINA</th>
@@ -46,57 +48,72 @@
         <th>METROS</th>
         <th>TIEMPO</th>
         <th>KCAL</th>
-        <th></th>
-        <th></th>
+        <th>ACCIONES</th>
     </tr>
-
-    <%
-        if(implementaciones.size() > 0){
-
-            for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
-    %>
-    <tr>
-        <td><%=implementacion.getId()%></td>
-        <td><%=implementacion.getRutina().getNombre()%></td>
-        <td><%=implementacion.getSets()%></td>
-        <td><%=implementacion.getRepeticiones()%></td>
-        <td><%=implementacion.getPeso()%></td>
-        <td><%=implementacion.getMetros()%></td>
-        <td><%=implementacion.getTiempo()%></td>
-        <td><%=implementacion.getKilocalorias()%></td>
-        <td><a href="/entrenamientos/editarimplementacionentrenamientos?id=<%=implementacion.getId()%>">Editar</a></td>
-        <td><a href="/comun/borrarImplementacion?idEjercicio=<%=ejercicio.getId()%>&idImplementacion=<%=implementacion.getId()%>">Borrar</a></td>
+    </thead>
+    <tbody>
+    <% for (ImplementacionEjercicioRutinaDTO implementacion : implementaciones) { %>
+    <tr class="text-center">
+        <td><%= implementacion.getId() %></td>
+        <td><%= implementacion.getRutina().getNombre() %></td>
+        <td><%= implementacion.getSets() %></td>
+        <td><%= implementacion.getRepeticiones() %></td>
+        <td><%= implementacion.getPeso() %></td>
+        <td><%= implementacion.getMetros() %></td>
+        <td><%= implementacion.getTiempo() %></td>
+        <td><%= implementacion.getKilocalorias() %></td>
+        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-warning btn-sm">Editar</a>
+        <a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm">Borrar</a></td>
     </tr>
-    <%
-            }
-        }else{
-    %>
-        <h1>No hay ninguna implementación :(</h1>
-    <%
-        }
-    %>
+    <% } %>
+    </tbody>
 </table>
-<a href="/comun/crearImplementacion?id=<%=ejercicio.getId()%>">Crear nueva implementacion</a>
+<% } else { %>
+<div class="text-center">
+    <h1>No hay ninguna implementación :(</h1>
+</div>
+<% } %>
+<a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-warning">Crear nueva implementación</a>
 
-<form:form action="<%=dir%>" method="post" modelAttribute="implementacion">
-    <br>
-    <label>Rutina:</label>
-    <form:select path="rutina" items="${rutinas}" itemLabel="nombre" itemValue="id" ></form:select>
-    <label>Series: </label>
-    <form:input path="sets" size="50"></form:input>
-    <label>Repeticiones:</label>
-    <form:input path="repeticiones" size="10"></form:input>
-    <br>
-    <label>Peso:</label>
-    <form:input path="peso" size="10"></form:input>
-    <label>Tiempo:</label>
-    <form:input path="tiempo" size="10"></form:input>
-    <label>Metros:</label>
-    <form:input path="metros" size="10"></form:input>
-    <label>Kcal:</label>
-    <form:input path="kilocalorias" size="10"></form:input>
-    <br>
-    <form:button class="btn btn-success mt-3">Filtrar implementacion</form:button>
+
+<form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="rutina">Rutina:</label>
+            <form:select path="rutina" items="${rutinas}" itemLabel="nombre" itemValue="id" class="form-control" style="width: auto;"></form:select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="sets">Series:</label>
+            <form:input path="sets" id="sets" class="form-control" size="10" style="width: auto;"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="repeticiones">Repeticiones:</label>
+            <form:input path="repeticiones" id="repeticiones" class="form-control" size="10" style="width: auto;"/>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="peso">Peso:</label>
+            <form:input path="peso" id="peso" class="form-control" size="10" style="width: auto;"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="tiempo">Tiempo:</label>
+            <form:input path="tiempo" id="tiempo" class="form-control" size="10" style="width: auto;"/>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="metros">Metros:</label>
+            <form:input path="metros" id="metros" class="form-control" size="10" style="width: auto;"/>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="kilocalorias">Kcal:</label>
+            <form:input path="kilocalorias" id="kilocalorias" class="form-control" size="10" style="width: auto;"/>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Filtrar implementacion</button>
 </form:form>
+
+
 </body>
 </html>

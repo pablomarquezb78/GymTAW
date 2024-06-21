@@ -28,7 +28,9 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
-<table border="1" cellpadding="10" cellspacing="10">
+<% if (comidas.size() > 0) { %>
+<table class="table table-bordered table-hover">
+    <thead class="text-center" style="background-color: #343a40; color: white;">
     <tr>
         <th>ID</th>
         <th>FECHA/DÍA</th>
@@ -37,53 +39,71 @@
         <th>FRANJA HORARIA</th>
         <th>CANTIDAD</th>
         <th>INGREDIENTES</th>
-        <th></th>
-        <th></th>
+        <th>ACCIONES</th>
     </tr>
-
-    <%
-        for(CantidadIngredientePlatoComidaDTO comida : comidas){
-
-    %>
-    <tr>
-        <td><%=comida.getId()%></td>
-        <td><%=comida.getComida().getDiaDieta().getFecha()%></td>
-        <td><%=comida.getComida().getDiaDieta().getCliente().getNombre()%></td>
-        <td><%=comida.getComida().getDiaDieta().getDietista().getNombre()%></td>
-        <td><%=comida.getComida().getTipoComida().getComidaDelDia()%></td>
-        <td><%=comida.getCantidad()%></td>
+    </thead>
+    <tbody>
+    <% for (CantidadIngredientePlatoComidaDTO comida : comidas) { %>
+    <tr class="text-center">
+        <td><%= comida.getId() %></td>
+        <td><%= comida.getComida().getDiaDieta().getFecha() %></td>
+        <td><%= comida.getComida().getDiaDieta().getCliente().getNombre() %></td>
+        <td><%= comida.getComida().getDiaDieta().getDietista().getNombre() %></td>
+        <td><%= comida.getComida().getTipoComida().getComidaDelDia() %></td>
+        <td><%= comida.getCantidad() %></td>
         <td>
-            <% for(IngredienteDTO ingrediente : ingredientes){
-            %>
-                <%=ingrediente.getNombre() +", "%>
             <%
+                String ingredientesStr = "";
+                for (IngredienteDTO ingrediente : ingredientes) {
+                    ingredientesStr += ingrediente.getNombre() + ", ";
+                }
+                if (ingredientesStr.length() > 0) {
+                    ingredientesStr = ingredientesStr.substring(0, ingredientesStr.length() - 2);
                 }
             %>
+            <%= ingredientesStr %>
         </td>
-
-        <td><a href="/admin/editarComida?idPlato=<%=plato.getId()%>&idComida=<%=comida.getId()%>">Editar</a></td>
-        <td><a href="/admin/borrarComida?idPlato=<%=plato.getId()%>&idComida=<%=comida.getId()%>">Borrar</a></td>
+        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-warning btn-sm">Editar</a>
+        <a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm">Borrar</a></td>
     </tr>
-    <%
-        }
-    %>
+    <% } %>
+    </tbody>
 </table>
-<a href="/admin/crearNuevaComida?idPlato=<%=plato.getId()%>" class="btn btn-success mt-3">Crear nueva comida</a>
+<% } else { %>
+<div class="text-center">
+    <h1>No hay comidas creadas</h1>
+</div>
+<% } %>
+
+<div>
+    <a href="/admin/crearNuevaComida?idPlato=<%= plato.getId() %>" class="btn btn-warning mt-3">Crear nueva comida</a>
+</div>
+
 
 <br>
-<form:form action="<%=dir%>" method="post" modelAttribute="cantidadPlatoComida">
-    <br>
-    <label>Cliente:</label>
-    <form:input path="nombreCliente" size="15"></form:input>
-    <label>Dietista: </label>
-    <form:input path="nombreDietista" size="50"></form:input>
-    <br>
-    <label>Franja horaria:</label>
-    <form:select path="tipoComida" items="${tiposComida}" itemLabel="comidaDelDia" itemValue="id"></form:select>
-    <label>Cantidad:</label>
-    <form:input path="cantidad" size="50"></form:input>
-    <br>
-    <form:button class="btn btn-success mt-3">Filtrar plato</form:button>
+<form:form action="<%=dir%>" method="post" modelAttribute="cantidadPlatoComida" class="p-4">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="nombreCliente">Cliente:</label>
+            <form:input path="nombreCliente" id="nombreCliente" class="form-control" size="15" style="width: auto;"/>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="nombreDietista">Dietista:</label>
+            <form:input path="nombreDietista" id="nombreDietista" class="form-control" size="15" style="width: auto;"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="tipoComida">Franja horaria:</label>
+            <form:select path="tipoComida" items="${tiposComida}" itemLabel="comidaDelDia" itemValue="id" class="form-control" style="width: auto;"></form:select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="cantidad">Cantidad:</label>
+            <form:input path="cantidad" id="cantidad" class="form-control" size="10" style="width: auto;"/>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Filtrar plato</button>
 </form:form>
+
 </body>
 </html>

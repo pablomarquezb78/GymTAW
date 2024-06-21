@@ -18,7 +18,16 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
-<table border="1" cellpadding="10" cellspacing="10">
+
+<%
+    if (peticiones.isEmpty()) {
+%>
+<h1 class="text-center">No hay peticiones de registro</h1>
+<%
+} else {
+%>
+<table class="table table-bordered table-hover">
+    <thead class="text-center" style="background-color: #343a40; color: white;">
     <tr>
         <th>ID</th>
         <th>NOMBRE</th>
@@ -26,36 +35,44 @@
         <th>ROL</th>
         <th>FECHA NACIMIENTO</th>
         <th>TELEFONO</th>
-        <th></th>
-        <th></th>
+        <th>ACCIONES</th>
     </tr>
-
-    <%
-        String rol = "";
-        for(RegistroDTO usuario : peticiones){
-            if(usuario.getRol() == 2){
-                rol = "cliente";
-            }else if(usuario.getRol() == 3){
-                rol = "bodybuilder";
-            }else if(usuario.getRol() == 4){
-                rol = "crosstrainer";
-            }else if(usuario.getRol() == 5){
-                rol = "dietista";
-            }
-    %>
-    <tr>
-        <td><%=usuario.getId()%></td>
-        <td><%=usuario.getNombre()%></td>
-        <td><%=usuario.getApellidos()%></td>
-        <td><%=rol%></td>
-        <td><%=usuario.getFechaNacimiento()%></td>
-        <td><%=usuario.getTelefono()%></td>
-        <td><a href="/admin/autenticar?id=<%=usuario.getId()%>" class="btn btn-success"> Autenticar </a></td>
-        <td><a href="/admin/borrarPeticion?id=<%=usuario.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Cancelar</a></td>
+    </thead>
+    <tbody>
+    <% for (RegistroDTO usuario : peticiones) { %>
+    <tr class="text-center">
+        <td><%= usuario.getId() %></td>
+        <td><%= usuario.getNombre() %></td>
+        <td><%= usuario.getApellidos() %></td>
+        <td>
+            <%
+                String rol = "";
+                switch (usuario.getRol()) {
+                    case 2: rol = "cliente"; break;
+                    case 3: rol = "bodybuilder"; break;
+                    case 4: rol = "crosstrainer"; break;
+                    case 5: rol = "dietista"; break;
+                    default: rol = "Otro";
+                }
+            %>
+            <%= rol %>
+        </td>
+        <td><%= usuario.getFechaNacimiento() %></td>
+        <td><%= usuario.getTelefono() %></td>
+        <td>
+            <a href="/admin/autenticar?id=<%= usuario.getId() %>" class="btn btn-success btn-sm"> Autenticar </a>
+            <a href="/admin/borrarPeticion?id=<%= usuario.getId() %>" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i> Cancelar
+            </a>
+        </td>
     </tr>
-    <%
-        }
-    %>
+    <% } %>
+    </tbody>
 </table>
+<%
+    }
+%>
+
+
 </body>
 </html>
