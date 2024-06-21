@@ -3,6 +3,7 @@
 <%@ page import="es.uma.dto.ComidaDTO" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
+<%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,19 +12,21 @@
 </head>
 <body>
 
+<%
+    LocalDate localDate = (LocalDate) request.getAttribute("fecha");
+    Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = (Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>>) request.getAttribute("comidaPlatosCantidades");
+%>
 <jsp:include page="cabecera_cliente.jsp"/>
 
 <div class="d-flex flex-column align-items-center">
     <h1>Desempeño de las dietas</h1>
 
     <form method="post" action="/cliente/filtrarDesempenyoDieta" class="d-flex gap-3">
-        <input class="form-control w-100" type="date" name="fechaDesempenyoDieta">
+        <input class="form-control w-100" type="date" value="<%=localDate%>" name="fechaDesempenyoDieta">
         <button class="btn btn-primary">Filtrar</button>
     </form>
 
     <%
-        Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = (Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>>) request.getAttribute("comidaPlatosCantidades");
-
         if (comidaPlatosCantidades.isEmpty()) {
     %>
     ¡No hay comidas asignadas para este día!

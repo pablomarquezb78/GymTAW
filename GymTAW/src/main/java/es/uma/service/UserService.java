@@ -236,6 +236,10 @@ public class UserService {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));
     }
 
+    public boolean checkClienteLogged(UserDTO userDTO, UserRolDTO userRolDTO){
+        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("cliente"));
+    }
+
     public UserDTO guardarDietistaPerfilEdit(UserDTO userDTO, Usuario dietista)
     {
         User dietistaUser = this.convertDtoToEntity(userDTO);

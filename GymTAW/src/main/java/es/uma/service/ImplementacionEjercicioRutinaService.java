@@ -35,7 +35,6 @@ public class ImplementacionEjercicioRutinaService {
     @Autowired
     private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
-
     public void guardarImplementacion(ImplementacionEjercicioRutinaDTO implmentacionDTO){
         this.implementacionEjercicioRutinaRepository.save(convertDtoToEntity(implmentacionDTO));
     }

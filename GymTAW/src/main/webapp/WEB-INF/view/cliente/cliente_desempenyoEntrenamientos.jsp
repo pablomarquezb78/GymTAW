@@ -1,13 +1,15 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="java.time.LocalDate" %>
-<%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
+<%@ page import="es.uma.dto.FeedbackEjercicioDTO" %>
 <%@ page import="es.uma.dto.FeedbackEjercicioserieDTO" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="org.antlr.v4.runtime.misc.Pair" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     LocalDate localDate = (LocalDate) request.getAttribute("fecha");
-    UserRol userRol = (UserRol) request.getAttribute("rol");
+    UserRolDTO userRol = (UserRolDTO) request.getAttribute("rol");
 
     String cabecera = "../crosstrainer/cabecera_entrenador.jsp";
     String disabled = "disabled";
@@ -38,10 +40,10 @@
 
     <%
         // Obtener el mapa de entrenamientoFeedbackSeries del request
-        List<ImplementacionEjercicioRutinaDTO> l = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
-        Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>> map = (Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>>) request.getAttribute("implementacionEjercicioRutinaListMap");
+        List<Pair<ImplementacionEjercicioRutinaDTO,FeedbackEjercicioDTO>> listaPares = (List<Pair<ImplementacionEjercicioRutinaDTO,FeedbackEjercicioDTO>>) request.getAttribute("listaPares");
+        Map<ImplementacionEjercicioRutinaDTO,List<FeedbackEjercicioserieDTO>> map = (Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>>) request.getAttribute("implementacionEjercicioRutinaListMap");
 
-        if (l == null || l.isEmpty()) {
+        if (listaPares == null || listaPares.isEmpty()) {
     %>
     ¡No hay entrenamientos asignados para este día!
     <%
@@ -68,10 +70,10 @@
         </thead>
         <tbody>
             <%
-    for (ImplementacionEjercicioRutinaDTO implementacion : l) {
+    for (Pair<ImplementacionEjercicioRutinaDTO,FeedbackEjercicioDTO> par : listaPares) {
         String tiempo = "-";
-        if (implementacion.getTiempo() != null && !implementacion.getTiempo().isEmpty()) {
-            int tiempoINT = Integer.parseInt(implementacion.getTiempo());
+        if (par.a.getTiempo() != null && !par.a.getTiempo().isEmpty()) {
+            int tiempoINT = Integer.parseInt(par.a.getTiempo());
             int minutos = tiempoINT / 60;
             int segundos = tiempoINT % 60;
             tiempo = "";
@@ -80,15 +82,15 @@
         }
 %>
         <tr>
-            <td><%= implementacion.getEjercicio().getNombre() %></td>
-            <td><%= implementacion.getEjercicio().getTipo().getTipoDeEjercicio() %></td>
-            <td><%= implementacion.getSets() == null ? "-" : implementacion.getSets() %></td>
-            <td><%= !implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() != null ? implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() : "-" %></td>
-            <td><%= implementacion.getRepeticiones() == null ? "-" : implementacion.getRepeticiones() %></td>
+            <td><%= par.a.getEjercicio().getNombre() %></td>
+            <td><%= par.a.getEjercicio().getTipo().getTipoDeEjercicio() %></td>
+            <td><%= par.a.getSets() == null ? "-" : par.a.getSets() %></td>
+            <td><%= par.b.getSeguimientoSetsDone() != null ? par.b.getSeguimientoSetsDone() : "-" %></td>
+            <td><%= par.a.getRepeticiones() == null ? "-" : par.a.getRepeticiones() %></td>
             <td>
                 <%
-                    List<FeedbackEjercicioserieDTO> feedbackEjercicioseries = map.get(implementacion);
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getRepeticiones() != null) {
+                    List<FeedbackEjercicioserieDTO> feedbackEjercicioseries = map.get(par.a);
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && par.a.getRepeticiones() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
@@ -101,10 +103,10 @@
                     }
                 %>
             </td>
-            <td><%= implementacion.getPeso() == null ? "-" : implementacion.getPeso() + "kg" %></td>
+            <td><%= par.a.getPeso() == null ? "-" : par.a.getPeso() + "kg" %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getPeso() != null) {
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && par.a.getPeso() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado() == null ? "-" : f.getPesoRealizado() + "kg" %><br/>
@@ -112,15 +114,15 @@
                     }
                 } else {
                 %>
-                <%= !implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoPesoDone() != null ? implementacion.getFeedbacks().get(0).getSeguimientoPesoDone() : "-" %>
+                <%= par.b.getSeguimientoPesoDone() != null ? par.b.getSeguimientoPesoDone() : "-" %>
                 <%
                     }
                 %>
             </td>
-            <td><%= implementacion.getTiempo() == null ? "-" : tiempo %></td>
+            <td><%= par.a.getTiempo() == null ? "-" : tiempo %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getTiempo() != null) {
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && par.a.getTiempo() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                             tiempo = "-";
                             if (f.getTiempoRealizado() != null && !f.getTiempoRealizado().isEmpty()) {
@@ -137,8 +139,8 @@
                     }
                 } else {
                     tiempo = "-";
-                    if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone() != null && !implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone().isEmpty()) {
-                        int tiempoINT = Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone());
+                    if (par.b.getSeguimientoTiempoDone() != null && !par.b.getSeguimientoTiempoDone().isEmpty()) {
+                        int tiempoINT = Integer.parseInt(par.b.getSeguimientoTiempoDone());
                         int minutos = tiempoINT / 60;
                         int segundos = tiempoINT % 60;
                         tiempo = "";
@@ -146,15 +148,15 @@
                         if (segundos != 0) tiempo += segundos + "s";
                     }
                 %>
-                <%= !implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone() != null ? tiempo : "-" %>
+                <%= par.b.getSeguimientoTiempoDone() != null ? tiempo : "-" %>
                 <%
                     }
                 %>
             </td>
-            <td><%= implementacion.getKilocalorias() == null ? "-" : implementacion.getKilocalorias() %></td>
+            <td><%= par.a.getKilocalorias() == null ? "-" : par.a.getKilocalorias() %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getKilocalorias() != null) {
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && par.a.getKilocalorias() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> ->  Kcal: <%= f.getKilocaloriasRealizado() == null ? "-" : f.getKilocaloriasRealizado() %><br/>
@@ -162,15 +164,15 @@
                     }
                 } else {
                 %>
-                <%= !implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoKilocaloriasDone() != null ? implementacion.getFeedbacks().get(0).getSeguimientoKilocaloriasDone() : "-" %>
+                <%= par.b.getSeguimientoKilocaloriasDone() != null ? par.b.getSeguimientoKilocaloriasDone() : "-" %>
                 <%
                     }
                 %>
             </td>
-            <td><%= implementacion.getMetros() == null ? "-" : implementacion.getMetros() %></td>
+            <td><%= par.a.getMetros() == null ? "-" : par.a.getMetros() %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getMetros() != null) {
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && par.a.getMetros() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Metros: <%= f.getMetrosRealizado() == null ? "-" : f.getMetrosRealizado() %><br/>
@@ -178,7 +180,7 @@
                     }
                 } else {
                 %>
-                <%= !implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoMetrosDone() != null ? implementacion.getFeedbacks().get(0).getSeguimientoMetrosDone() : "-" %>
+                <%= par.b.getSeguimientoMetrosDone() != null ? par.b.getSeguimientoMetrosDone() : "-" %>
                 <%
                     }
                 %>
