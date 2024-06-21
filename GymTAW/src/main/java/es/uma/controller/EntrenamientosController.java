@@ -66,7 +66,7 @@ public class EntrenamientosController extends BaseController{
         UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
         UserDTO userDTO = (UserDTO) sesion.getAttribute("user");
 
-        if(estaAutenticado(sesion) && esEntrenador(userRolService.convertDtoToEntity(rol)) ){
+        if(estaAutenticado(sesion) && esEntrenador(rol)){
             List<UserDTO> lista = userService.getClientesDeEntrenador(userService.convertDtoToEntity(userDTO));
             model.addAttribute("lista",lista);
         }
@@ -84,7 +84,7 @@ public class EntrenamientosController extends BaseController{
         UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
         UserDTO userdto = (UserDTO) sesion.getAttribute("user");
 
-        if(estaAutenticado(sesion) && esEntrenador(userRolService.convertDtoToEntity(rol)) ){
+        if(estaAutenticado(sesion) && esEntrenador(rol) ){
 
             List<UserDTO> lista = userService.getClientesDeEntrenadorYNombre(userService.convertDtoToEntity(userdto),nombre);
 
@@ -119,7 +119,7 @@ public class EntrenamientosController extends BaseController{
     public String doCreateEntrenamiento(@RequestParam("id") Integer id, Model model, HttpSession session){
         String strTo =  "/crosstrainer/entrenador_crear_entrenamiento";
 
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
         if(estaAutenticado(session) && esEntrenador(rol) ) {
             model.addAttribute("idcliente", id);
@@ -628,7 +628,7 @@ public class EntrenamientosController extends BaseController{
     public String mostrarTiposEjercicio(HttpSession session, Model model){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
             List<TipoEjercicioDTO> tiposEjercicio = tipoEjercicioService.getAll();
 
@@ -660,7 +660,7 @@ public class EntrenamientosController extends BaseController{
 
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
             dir = "crosstrainer/crearTipo";
             TipoEjercicio tipo = tipoEjercicioRepository.findById(id).orElse(null);
@@ -680,7 +680,7 @@ public class EntrenamientosController extends BaseController{
 
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
            tipoEjercicioRepository.deleteById(id);
            dir = "redirect:/entrenamientos/mostrarTiposEjercicio";
@@ -741,7 +741,7 @@ public class EntrenamientosController extends BaseController{
     public String verImplementacionesAsociadasTipo(HttpSession session, Model model, @RequestParam("id") Integer id){
 
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
             //TipoEjercicio tipoEjercicio = tipoEjercicioRepository.findById(id).orElse(null);
@@ -773,7 +773,7 @@ public class EntrenamientosController extends BaseController{
         String dir = "crosstrainer/rutinas";
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             List<RutinaDTO> rutinas = rutinaService.getAllRutinas();
 
             model.addAttribute("rutinas",rutinas);
@@ -789,7 +789,7 @@ public class EntrenamientosController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
             UserDTO self = (UserDTO) session.getAttribute("user");
 
             List<RutinaDTO> rutinas = rutinaService.getRutinasPorNombreYEntrenador(nombre,tipofiltrado,userService.convertDtoToEntity(self));
@@ -808,7 +808,7 @@ public class EntrenamientosController extends BaseController{
 
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
 
             Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
             rutinaRepository.delete(rutina);
@@ -824,7 +824,7 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/verDesempenyoEntrenamientosEntrenador")
     public String doVerDesmepenyoEntrenamientos(@RequestParam("fecha") LocalDate fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esEntrenador(rol)) {
             User userEntity = userRepository.findById(idUsuario).orElse(null);
             DiaEntrenamiento diaEntrenamiento;
