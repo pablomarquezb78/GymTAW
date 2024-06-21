@@ -234,7 +234,7 @@ public class UserService {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("crosstrainer") || userRolDTO.getRolUsuario().equals("bodybuilder"));
     }
 
-
+    //UNUSED
     public boolean checkDietistaLogged(UserDTO userDTO, UserRolDTO userRolDTO)
     {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));

@@ -34,7 +34,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
             //Remove resto de session attributes
@@ -57,7 +57,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
             if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
@@ -84,7 +84,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             if(platoId != null){
                 PlatoDTO platoDTO = platoService.findById(Integer.valueOf(platoId));
@@ -107,7 +107,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             PlatoDietistaUI platoDietista;
             if(session.getAttribute("platoCreando") != null) { platoDietista = (PlatoDietistaUI) session.getAttribute("platoCreando");}
@@ -129,7 +129,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             PlatoDietistaUI platoDietistaUI = platoService.prepareEditarPlatoByPlatoDietistaUI(platoId);
 
@@ -148,7 +148,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             platoService.borrarPlatoByPlatoId(platoId, userDTO);
             dir = "redirect:/dietista/platos";
@@ -164,7 +164,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             if(platoDietistaUI.getIngredientes() == null) platoDietistaUI.setIngredientes(new ArrayList<>());
             platoDietistaUI = ingredienteService.addIngredienteToPlatoDietistaUI(platoDietistaUI);
@@ -184,7 +184,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             IngredienteDTO nuevoIngrediente = new IngredienteDTO();
             model.addAttribute("nuevoIngrediente", nuevoIngrediente);
@@ -200,7 +200,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
             platoDietistaUI = platoService.addNewIngredienteToPlatoDietistaUI(ingredienteDTO, platoDietistaUI);
@@ -218,7 +218,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
             platoDietistaUI = ingredienteService.eliminarIngredienteToPlatoDietista(ingredienteId, platoDietistaUI);
@@ -236,7 +236,7 @@ public class PlatosController extends BaseController{
         String dir;
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
-        if (userService.checkDietistaLogged(userDTO, userRolDTO))
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             //Crear plato
             if(platoDietistaUI.getId() == null) {
