@@ -1,11 +1,11 @@
 package es.uma.service;
 
-import es.uma.dao.DiaDietaRepository;
 import es.uma.dao.DiaEntrenamientoRepository;
 import es.uma.dao.FeedbackejercicioRepository;
 import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dto.DiaEntrenamientoDTO;
 import es.uma.dto.FeedbackEjercicioDTO;
+import es.uma.dto.FeedbackEjercicioserieDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.entity.DiaEntrenamiento;
 import es.uma.entity.FeedbackEjercicio;
@@ -21,27 +21,33 @@ public class FeedbackEjercicioService {
     @Autowired
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
     @Autowired
-    private EjercicioService ejercicioService;
-    @Autowired
-    private DiaEntrenamientoService diaEntrenamientoService;
-    @Autowired
-    private DiaDietaRepository diaDietaRepository;
-    @Autowired
     private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
     @Autowired
     private DiaEntrenamientoRepository diaEntrenamientoRepository;
+    @Autowired
+    private FeedbackEjercicioSerieService feedbackEjercicioSerieService;
 
     //Feedbackserie e implementacion
 
     public FeedbackEjercicioDTO getFeedbackEjercicioPorImplementacionYDia(ImplementacionEjercicioRutinaDTO implementacion, DiaEntrenamientoDTO diaEntrenamiento){
-        return convertEntityToDto(feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion.getId(),diaEntrenamiento.getId()));
+        FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion.getId(),diaEntrenamiento.getId());
+        if(feedbackEjercicio!=null){
+            return convertEntityToDto(feedbackEjercicio);
+        }else{
+            return null;
+        }
     }
 
     public FeedbackEjercicioDTO getFeedbackEjercicioById(Integer id){
-        return convertEntityToDto(feedbackejercicioRepository.findById(id).orElse(null));
+        FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(id).orElse(null);
+        if(feedbackEjercicio!=null){
+            return convertEntityToDto(feedbackEjercicio);
+        }else{
+            return null;
+        }
     }
 
-    public void createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId){
+    public FeedbackEjercicioDTO createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId){
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.findById(diaEntrenamientoId).orElse(null);
         ImplementacionEjercicioRutina implementacionEjercicioRutina = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
         FeedbackEjercicio feedbackEjercicio = new FeedbackEjercicio();
@@ -49,6 +55,7 @@ public class FeedbackEjercicioService {
         feedbackEjercicio.setImplementacion(implementacionEjercicioRutina);
         feedbackEjercicio.setRealizado((byte) 0);
         feedbackejercicioRepository.save(feedbackEjercicio);
+        return convertEntityToDto(feedbackEjercicio);
     }
 
     public FeedbackEjercicioDTO convertEntityToDto(FeedbackEjercicio feedbackEjercicio) {
@@ -60,6 +67,8 @@ public class FeedbackEjercicioService {
         feedbackEjercicioDTO.setSeguimientoSetsDone(feedbackEjercicio.getSeguimientoSetsDone());
         feedbackEjercicioDTO.setSeguimientoTiempoDone(feedbackEjercicio.getSeguimientoTiempoDone());
         feedbackEjercicioDTO.setRealizado(feedbackEjercicio.getRealizado());
+        feedbackEjercicioDTO.setFeedbacks(feedbackEjercicioSerieService.convertListEntityToDto(feedbackEjercicio.getFeedbacks()));
+        feedbackEjercicioDTO.setImplementacion(implementacionEjercicioRutinaService.convertEntityToDto(feedbackEjercicio.getImplementacion()));
         return feedbackEjercicioDTO;
     }
 
@@ -72,6 +81,8 @@ public class FeedbackEjercicioService {
         feedbackEjercicio.setSeguimientoSetsDone(feedbackEjercicioDTO.getSeguimientoSetsDone());
         feedbackEjercicio.setSeguimientoTiempoDone(feedbackEjercicioDTO.getSeguimientoTiempoDone());
         feedbackEjercicio.setRealizado(feedbackEjercicioDTO.getRealizado());
+        feedbackEjercicio.setFeedbacks(feedbackEjercicioSerieService.convertListDtoToEntity(feedbackEjercicioDTO.getFeedbacks()));
+        feedbackEjercicio.setImplementacion(implementacionEjercicioRutinaService.convertDtoToEntity(feedbackEjercicioDTO.getImplementacion()));
         return feedbackEjercicio;
     }
 

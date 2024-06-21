@@ -246,7 +246,7 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping("/anyadirAsignacionEntrenador")
-    public String doAnyadirAsignacionEntrenador(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, Model model, HttpSession session) {
+    public String doAnyadirAsignacionEntrenador(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, HttpSession session) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {

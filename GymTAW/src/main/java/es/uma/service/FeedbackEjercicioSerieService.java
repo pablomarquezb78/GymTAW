@@ -18,8 +18,6 @@ public class FeedbackEjercicioSerieService {
     @Autowired
     protected FeedbackejercicioserieRepository feedbackejercicioserieRepository;
     @Autowired
-    private FeedbackEjercicioService feedbackEjercicioService;
-    @Autowired
     private FeedbackejercicioRepository feedbackejercicioRepository;
 
     public List<FeedbackEjercicioserieDTO> getFeedbackSeriePorFeedbackEjercicio(Integer feedbackEjercicioId){
@@ -30,6 +28,9 @@ public class FeedbackEjercicioSerieService {
     }
 
     public FeedbackEjercicioserieDTO getFeedbackPorEjecicioYSerie(Integer feedbackEjercicioId, String set){
+        if(feedbackEjercicioId==null){
+            return null;
+        }
         FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(feedbackEjercicioId,set);
         if(feedbackEjercicioserie!=null){
             return convertEntityToDto(feedbackEjercicioserie);
@@ -70,6 +71,15 @@ public class FeedbackEjercicioSerieService {
         }
         return feedbackEjercicioserieDTOSList;
     }
+
+    public List<FeedbackEjercicioserie> convertListDtoToEntity(List<FeedbackEjercicioserieDTO> feedbackEjercicioserieDTOs){
+        List<FeedbackEjercicioserie> feedbackEjercicioserieList = new ArrayList<>();
+        for (FeedbackEjercicioserieDTO feedbackEjercicioserieDTO : feedbackEjercicioserieDTOs){
+            feedbackEjercicioserieList.add(this.convertDtoToEntity(feedbackEjercicioserieDTO));
+        }
+        return feedbackEjercicioserieList;
+    }
+
 
     public void borrarFeedbackEjercicioSerie(Integer feedbackEjercicioserieId){
         FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.findById(feedbackEjercicioserieId).orElse(null);

@@ -21,8 +21,13 @@ public class DiaEntrenamientoService {
     @Autowired
     private RutinaService rutinaService;
 
-    public DiaEntrenamientoDTO getbyID(Integer id){
+    public DiaEntrenamientoDTO getbyID(Integer id) {
         return convertEntityToDto(diaEntrenamientoRepository.getById(id));
+    }
+
+    public void guardarDiaEntrenamiento(DiaEntrenamientoDTO diaEntrenamientoDTO){
+        DiaEntrenamiento diaEntrenamiento = convertDtoToEntity(diaEntrenamientoDTO);
+        diaEntrenamientoRepository.save(diaEntrenamiento);
     }
 
     public List<DiaEntrenamientoDTO> getDiasDeClienteID(Integer idclient){
@@ -31,12 +36,16 @@ public class DiaEntrenamientoService {
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
 
-
         return dias;
     }
 
     public DiaEntrenamientoDTO getDiaEntrenamientoDeClienteFecha(Integer idClient, LocalDate fecha){
-        return convertEntityToDto(diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(idClient,fecha));
+        DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(idClient,fecha);
+        if(diaEntrenamiento!=null){
+            return convertEntityToDto(diaEntrenamiento);
+        }else{
+            return null;
+        }
     }
 
     public DiaEntrenamientoDTO convertEntityToDto(DiaEntrenamiento diaEntrenamiento) {

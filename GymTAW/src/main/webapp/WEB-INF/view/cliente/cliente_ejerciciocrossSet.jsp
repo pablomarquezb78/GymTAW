@@ -3,6 +3,9 @@
 <%@ page import="es.uma.entity.FeedbackEjercicioserie"%>
 <%@ page import="es.uma.ui.FeedbackSerieForm" %>
 <%@ page import="es.uma.entity.FeedbackEjercicio" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
+<%@ page import="es.uma.dto.FeedbackEjercicioDTO" %>
+<%@ page import="es.uma.dto.FeedbackEjercicioserieDTO" %>
 <%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
@@ -12,9 +15,9 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    ImplementacionEjercicioRutina implementacion = (ImplementacionEjercicioRutina) request.getAttribute("implementacion");
-    FeedbackEjercicio feedbackEjercicio = (FeedbackEjercicio) request.getAttribute("feedback");
-    FeedbackEjercicioserie feedbackEjercicioSerie = (FeedbackEjercicioserie)request.getAttribute("feedbackSerie");
+    ImplementacionEjercicioRutinaDTO implementacion = (ImplementacionEjercicioRutinaDTO) request.getAttribute("implementacion");
+    FeedbackEjercicioDTO feedbackEjercicio = (FeedbackEjercicioDTO) request.getAttribute("feedback");
+    FeedbackEjercicioserieDTO feedbackEjercicioSerie = (FeedbackEjercicioserieDTO)request.getAttribute("feedbackSerie");
     FeedbackSerieForm feedbackSerieForm = (FeedbackSerieForm) request.getAttribute("feedbackSerieForm");
 
     Byte realizado = feedbackEjercicio.getRealizado();

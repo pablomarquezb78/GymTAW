@@ -1,8 +1,10 @@
 <%@ page import="es.uma.entity.Plato" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
-<%@ page import="es.uma.entity.Comida" %>
-<%@ page import="es.uma.entity.Ingrediente" %><%--
+<%@ page import="es.uma.dto.ComidaDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
+<%--
   Created by IntelliJ IDEA.
   User: Usuario
   Date: 18/06/2024
@@ -11,11 +13,11 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    Comida comida = (Comida) request.getAttribute("comida");
-    List<Plato> platos = (List<Plato>) request.getAttribute("platos");
-    List<CantidadIngredientePlatoComida> cantidades = (List<CantidadIngredientePlatoComida>) request.getAttribute("cantidades");
-    Plato platoSeleccionado = (Plato) request.getAttribute("platoSeleccionado");
-    CantidadIngredientePlatoComida cantidadSeleccionada = (CantidadIngredientePlatoComida) request.getAttribute("cantidadSeleccionada");
+    ComidaDTO comida = (ComidaDTO) request.getAttribute("comida");
+    List<PlatoDTO> platos = (List<PlatoDTO>) request.getAttribute("platos");
+    List<CantidadIngredientePlatoComidaDTO> cantidades = (List<CantidadIngredientePlatoComidaDTO>) request.getAttribute("cantidades");
+    PlatoDTO platoSeleccionado = (PlatoDTO) request.getAttribute("platoSeleccionado");
+    CantidadIngredientePlatoComidaDTO cantidadSeleccionada = (CantidadIngredientePlatoComidaDTO) request.getAttribute("cantidadSeleccionada");
 
     Byte realizado = comida.getRealizado();
     Integer platoSeleccionadoId, cantidadSeleccionadaID;

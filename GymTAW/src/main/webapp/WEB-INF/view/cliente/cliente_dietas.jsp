@@ -1,6 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Comida" %>
 <%@ page import="es.uma.entity.DiaDieta" %>
+<%@ page import="es.uma.dto.ComidaDTO" %>
+<%@ page import="es.uma.dto.DiaDietaDTO" %>
 <%--
   Created by IntelliJ IDEA.
   User: Pablo Márquez Benítez
@@ -10,8 +12,8 @@
 --%>
 <%
     //OBTENEMOS PARAMETROS
-    List<Comida> comidas = (List<Comida>) request.getAttribute("comidas");
-    DiaDieta diaDieta = (DiaDieta) request.getAttribute("diaDieta");
+    List<ComidaDTO> comidas = (List<ComidaDTO>) request.getAttribute("comidas");
+    DiaDietaDTO diaDieta = (DiaDietaDTO) request.getAttribute("diaDieta");
 
     String filtroDia = request.getParameter("filtroDia");
     String filtroSemana = request.getParameter("filtroSemana");

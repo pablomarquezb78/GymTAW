@@ -21,11 +21,11 @@ public interface CantidadIngredientePlatoComidaRepository extends JpaRepository<
     @Query("select cipc from CantidadIngredientePlatoComida cipc where cipc.plato = :plato and cipc.comida.diaDieta.cliente.nombre like concat('%', :nombreCliente, '%') and cipc.comida.diaDieta.dietista.nombre like concat('%', :nombreDietista, '%') and cipc.comida.tipoComida = :tipoComida and cipc.cantidad >= :cantidad")
     List<CantidadIngredientePlatoComida> filtrarPlatosConCantidad(@Param("plato") Plato plato, @Param("nombreCliente") String nombreCliente, @Param("nombreDietista") String nombreDietista, @Param("tipoComida") TipoComida tipoComida, @Param("cantidad") Integer cantidad);
 
-    @Query("select p from CantidadIngredientePlatoComida c, Plato p where c.comida = :comida and c.plato = p")
-    List<Plato> findPlatosInComida(@Param("comida")Comida comida);
+    @Query("select p from CantidadIngredientePlatoComida c, Plato p where c.comida.id = :comidaId and c.plato = p")
+    List<Plato> findPlatosInComida(@Param("comidaId")Integer comidaId);
 
-    @Query("select c from CantidadIngredientePlatoComida c where c.comida = :comida and c.plato = :plato")
-    List<CantidadIngredientePlatoComida> findCantidadByPlatoComida(@Param("plato") Plato plato, @Param("comida") Comida comida);
+    @Query("select c from CantidadIngredientePlatoComida c where c.comida.id = :comidaId and c.plato.id = :platoId")
+    List<CantidadIngredientePlatoComida> findCantidadByPlatoComida(@Param("platoId") Integer platoId, @Param("comidaId") Integer comidaId);
 
     @Query("select c from CantidadIngredientePlatoComida c where c.comida = :comida and c.plato = :plato and c.ingrediente = :ingrediente")
     List<CantidadIngredientePlatoComida> findCantidadByPlatoComidaIngrediente(@Param("plato") Plato plato, @Param("comida") Comida comida, @Param("ingrediente")Ingrediente ingrediente);

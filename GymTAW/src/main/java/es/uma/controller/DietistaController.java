@@ -160,7 +160,7 @@ public class DietistaController extends BaseController{
             }
             DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha); //Obtenemos el dia de la dieta (columna de la tabla)
             listaFechas.add(fecha);
-            List<Comida> comidasDelDia = comidaRepository.findByDiaDieta(diaDieta);
+            List<Comida> comidasDelDia = comidaRepository.findByDiaDieta(diaDieta.getId());
             int j = 1; //Sabemos que alojamos 5 tipos de comidas al dia
             for(TipoComida tipoComida : tiposComida) //Recorremos cada fila de la columna
             {
@@ -173,7 +173,7 @@ public class DietistaController extends BaseController{
                 if (comida != null)
                 {
                     //Como sabemos que esa comida existe sacamos los platos a mostrar
-                    listaPlatosComida = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida);
+                    listaPlatosComida = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
                 }
                 String key = "Dia" + i + "Comida" + j;
                 //Si la lista de platos esta empty se muestra un mensaje en la tabla
@@ -319,7 +319,7 @@ public class DietistaController extends BaseController{
             ArrayList<Plato> platosComida = new ArrayList<>();
             List<Comida> comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
             if(!comida.isEmpty()) {
-                platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst()));
+                platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst().getId()));
             } else {
                 Comida comidaAdd = new Comida();
                 comidaAdd.setTipoComida(selectedComida);
@@ -361,7 +361,7 @@ public class DietistaController extends BaseController{
 
             comidaUI.setPlatoExistente(false);
             List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato(), comidaActual.getFirst());
+            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
             comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
 
             model.addAttribute("cliente", cliente);
@@ -396,7 +396,7 @@ public class DietistaController extends BaseController{
             comidaUI.setPlatoExistente(false);
             ArrayList<Plato> platosComida = new ArrayList<>();
             List<Comida> comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst()));
+            platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst().getId()));
             comidaUI.setListaPlatosComida(platosComida);
             ArrayList<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = new ArrayList<>();
             comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
@@ -456,7 +456,7 @@ public class DietistaController extends BaseController{
                 comidaUI.setPlatoExistente(true);
                 comidaUI.setSelectedPlato(null);
             }
-            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato(), comidaActual.getFirst());
+            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
             comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
 
 
@@ -502,7 +502,7 @@ public class DietistaController extends BaseController{
             platosComida.removeAll(platosRemove);
             comidaUI.setListaPlatosComida(platosComida);
 
-            List<CantidadIngredientePlatoComida> cantidadesIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(selectedPlato, comidaActual.getFirst());
+            List<CantidadIngredientePlatoComida> cantidadesIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(selectedPlato.getId(), comidaActual.getFirst().getId());
             for (CantidadIngredientePlatoComida c : cantidadesIngredientePlatoComida)
             {
                 cantidadIngredientePlatoComidaRepository.delete(c);
@@ -595,7 +595,7 @@ public class DietistaController extends BaseController{
             cantidadIngredientePlatoComidaRepository.delete(c);
 
 
-            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoActual, comidaActual);
+            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoActual.getId(), comidaActual.getId());
             comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
             comidaUI.setPlatoExistente(false);
             //comidaUI.setSelectedPlato(null);
@@ -652,7 +652,7 @@ public class DietistaController extends BaseController{
 
             if(modoEdicion)
             {
-                List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato(), comidaActual.getFirst());
+                List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
                 //cantidadIngredientePlatoComidaList.remove(ingredienteImplementandoUI.getIngrediente());
                 comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
             }
@@ -697,7 +697,7 @@ public class DietistaController extends BaseController{
             DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
             List<Comida> listaComidas = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
             Comida comida = listaComidas.getFirst();
-            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida);
+            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
             FeedbackDietistaMostrarUI feedback = new FeedbackDietistaMostrarUI();
             feedback.setPlatoMostrando(null);
             feedback.setCantidadesIngredientePlatoComida(new ArrayList<>());
@@ -729,8 +729,8 @@ public class DietistaController extends BaseController{
             DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
             List<Comida> listaComidas = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
             Comida comida = listaComidas.getFirst();
-            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida);
-            List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando(), comida);
+            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
+            List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando().getId(), comida.getId());
             feedback.setCantidadesIngredientePlatoComida(listaCantidades);
 
             model.addAttribute("diaDieta", diaDieta);

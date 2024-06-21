@@ -5,6 +5,8 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="javax.management.relation.Role" %>
 <%@ page import="es.uma.entity.UserRol" %>
+<%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
+<%@ page import="es.uma.dto.FeedbackEjercicioserieDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     LocalDate localDate = (LocalDate) request.getAttribute("fecha");
@@ -39,8 +41,8 @@
 
     <%
         // Obtener el mapa de entrenamientoFeedbackSeries del request
-        List<ImplementacionEjercicioRutina> l = (List<ImplementacionEjercicioRutina>) request.getAttribute("implementaciones");
-        Map<ImplementacionEjercicioRutina, List<FeedbackEjercicioserie>> map = (Map<ImplementacionEjercicioRutina, List<FeedbackEjercicioserie>>) request.getAttribute("implementacionEjercicioRutinaListMap");
+        List<ImplementacionEjercicioRutinaDTO> l = (List<ImplementacionEjercicioRutinaDTO>) request.getAttribute("implementaciones");
+        Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>> map = (Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>>) request.getAttribute("implementacionEjercicioRutinaListMap");
 
         if (l == null || l.isEmpty()) {
     %>
@@ -69,7 +71,7 @@
         </thead>
         <tbody>
             <%
-    for (ImplementacionEjercicioRutina implementacion : l) {
+    for (ImplementacionEjercicioRutinaDTO implementacion : l) {
         String tiempo = "-";
         if (implementacion.getTiempo() != null && !implementacion.getTiempo().isEmpty()) {
             int tiempoINT = Integer.parseInt(implementacion.getTiempo());
@@ -88,9 +90,9 @@
             <td><%= implementacion.getRepeticiones() == null ? "-" : implementacion.getRepeticiones() %></td>
             <td>
                 <%
-                    List<FeedbackEjercicioserie> feedbackEjercicioseries = map.get(implementacion);
+                    List<FeedbackEjercicioserieDTO> feedbackEjercicioseries = map.get(implementacion);
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getRepeticiones() != null) {
-                        for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
+                        for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
                 <%
@@ -106,7 +108,7 @@
             <td>
                 <%
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getPeso() != null) {
-                        for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
+                        for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado() == null ? "-" : f.getPesoRealizado() + "kg" %><br/>
                 <%
@@ -122,7 +124,7 @@
             <td>
                 <%
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getTiempo() != null) {
-                        for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
+                        for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                             tiempo = "-";
                             if (f.getTiempoRealizado() != null && !f.getTiempoRealizado().isEmpty()) {
                                 int tiempoINT = Integer.parseInt(f.getTiempoRealizado());
@@ -156,7 +158,7 @@
             <td>
                 <%
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getKilocalorias() != null) {
-                        for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
+                        for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> ->  Kcal: <%= f.getKilocaloriasRealizado() == null ? "-" : f.getKilocaloriasRealizado() %><br/>
                 <%
@@ -172,7 +174,7 @@
             <td>
                 <%
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getMetros() != null) {
-                        for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
+                        for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
                 Ser<%= f.getSerie() %> -> Metros: <%= f.getMetrosRealizado() == null ? "-" : f.getMetrosRealizado() %><br/>
                 <%

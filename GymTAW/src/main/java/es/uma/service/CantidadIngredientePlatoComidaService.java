@@ -1,6 +1,7 @@
 package es.uma.service;
 
 import es.uma.dao.CantidadIngredientePlatoComidaRepository;
+import es.uma.dao.ComidaRepository;
 import es.uma.dto.CantidadIngredientePlatoComidaDTO;
 import es.uma.dto.IngredienteDTO;
 import es.uma.dto.PlatoDTO;
@@ -32,6 +33,27 @@ public class CantidadIngredientePlatoComidaService {
     private UserService userService;
     @Autowired
     private DiaDietaService diaDietaService;
+    @Autowired
+    private ComidaRepository comidaRepository;
+
+    public List<PlatoDTO> getPlatosByComida(Integer comidaId){
+        return cantidadIngredientePlatoComidaRepository.findPlatosInComida(comidaId)
+                .stream()
+                .map(platoService::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CantidadIngredientePlatoComidaDTO> getCantidadesByPlatoComida(Integer platoId,Integer comidaId){
+        return cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoId,comidaId)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public void guardarCantidad(CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO){
+        CantidadIngredientePlatoComida cantidadIngredientePlatoComida = convertDtoToEntity(cantidadIngredientePlatoComidaDTO);
+        cantidadIngredientePlatoComidaRepository.save(cantidadIngredientePlatoComida);
+    }
 
     public List<CantidadIngredientePlatoComidaDTO> getByDish(Integer id){
         return cantidadIngredientePlatoComidaRepository.buscarPorPlato(id)
@@ -136,7 +158,15 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaDTO.setCantidad(cantidadIngredientePlatoComida.getCantidad());
         cantidadIngredientePlatoComidaDTO.setComida(comidaService.convertEntityToDto(cantidadIngredientePlatoComida.getComida()));
         return cantidadIngredientePlatoComidaDTO;
-
     }
+
+    public CantidadIngredientePlatoComida convertDtoToEntity(CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO) {
+        CantidadIngredientePlatoComida cantidadIngredientePlatoComida = new CantidadIngredientePlatoComida();
+        cantidadIngredientePlatoComida.setId(cantidadIngredientePlatoComidaDTO.getId());
+        cantidadIngredientePlatoComida.setCantidad(cantidadIngredientePlatoComidaDTO.getCantidad());
+        cantidadIngredientePlatoComida.setComida(comidaService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getComida()));
+        return cantidadIngredientePlatoComida;
+    }
+
 
 }

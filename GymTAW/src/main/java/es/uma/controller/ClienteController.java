@@ -20,22 +20,6 @@ import java.util.*;
 public class ClienteController extends BaseController{
 
     @Autowired
-    protected ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-    @Autowired
-    protected FeedbackejercicioRepository feedbackejercicioRepository;
-    @Autowired
-    protected FeedbackejercicioserieRepository feedbackejercicioserieRepository;
-    @Autowired
-    protected DiaEntrenamientoRepository diaEntrenamientoRepository;
-    @Autowired
-    protected DiaDietaRepository diaDietaRepository;
-    @Autowired
-    protected ComidaRepository comidaRepository;
-    @Autowired
-    protected CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
-    @Autowired
-    protected PlatosRepository platosRepository;
-    @Autowired
     private DiaEntrenamientoService diaEntrenamientoService;
     @Autowired
     private DiaDietaService diaDietaService;
@@ -45,6 +29,12 @@ public class ClienteController extends BaseController{
     private FeedbackEjercicioService feedbackEjercicioService;
     @Autowired
     private FeedbackEjercicioSerieService feedbackEjercicioSerieService;
+    @Autowired
+    private ComidaService comidaService;
+    @Autowired
+    private CantidadIngredientePlatoComidaService cantidadIngredientePlatoComidaService;
+    @Autowired
+    private PlatoService platoService;
 
     //NOTA: LOS EJERCICIOS DE BODY SIEMPRE TENDRÁN SERIES, COMO MÍNIMO UNA, PERO LOS EJERCICIOS DE CROSSFIT PUEDEN TENER O NO TENER SERIES ESTIPULADAS.
     //AUNQUE LA INTERPRETACIÓN DE NO TENER UNA SERIE SEA EQUIVALENTE A TENER UNA SERIE, HACERLO ASÍ LO HACE MÁS SIMPLE Y COHERENTE, YA QUE EN BODY
@@ -119,7 +109,7 @@ public class ClienteController extends BaseController{
             //CREAMOS EL FEEDBACK DEL EJERCICIO
             FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
             if(feedbackEjercicio==null){
-                feedbackEjercicioService.createFeedbackEjercicio(diaEntrenamiento.getId(),implementacion.getId());
+                feedbackEjercicio = feedbackEjercicioService.createFeedbackEjercicio(diaEntrenamiento.getId(),implementacion.getId());
             }
             model.addAttribute("feedback",feedbackEjercicio);
 
@@ -195,7 +185,6 @@ public class ClienteController extends BaseController{
         return dir;
     }
 
-
     @PostMapping("/filtrarFechaEntrenamiento")
     public String doFiltrarFechaEntrenamiento(@RequestParam("filtroDia") String filtroDia,
                                               Model model, HttpSession session){
@@ -221,7 +210,7 @@ public class ClienteController extends BaseController{
                 List<ImplementacionEjercicioRutinaDTO> implementaciones;
                 if(diaEntrenamiento != null){
                     //Obtengo la especifiacion de los ejercicios de las rutinas
-                    implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+                    implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
                 }else{
                     //No hay implementaciones para ese dia
                     implementaciones = new ArrayList<>();
@@ -262,11 +251,11 @@ public class ClienteController extends BaseController{
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
-                DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
-                List<Comida> comidas;
+                DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fechaInicio);
+                List<ComidaDTO> comidas;
                 if(diaDieta != null){
                     //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
-                    comidas = comidaRepository.findByDiaDieta(diaDieta);
+                    comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
                 }else{
                     comidas = new ArrayList<>();
                 }
@@ -465,11 +454,11 @@ public class ClienteController extends BaseController{
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAEDIETA
-            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fechaInicio);
             session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
 
             //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
-            List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
+            List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
 
             model.addAttribute("comidas",comidas);
             model.addAttribute("diaDieta",diaDieta);
@@ -487,21 +476,21 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            Comida comida = comidaRepository.findById(Integer.parseInt(id)).orElse(null);
+            ComidaDTO comida = comidaService.getComidaByID(Integer.parseInt(id));
 
-            List<Plato> platos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida);
-            Plato platoSeleccionadoEntity;
+            List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(comida.getId());
+            PlatoDTO platoSeleccionadoEntity;
             if(platoSeleccionado == null){
                 platoSeleccionadoEntity = platos.getFirst();
             }else{
-                platoSeleccionadoEntity = platosRepository.findById(Integer.parseInt(platoSeleccionado)).orElse(null);
+                platoSeleccionadoEntity = platoService.getById(Integer.parseInt(platoSeleccionado));
             }
-            List<CantidadIngredientePlatoComida> cantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoSeleccionadoEntity,comida);
-            CantidadIngredientePlatoComida cantidadSeleccionadaEntity;
+            List<CantidadIngredientePlatoComidaDTO> cantidades = cantidadIngredientePlatoComidaService.getCantidadesByPlatoComida(platoSeleccionadoEntity.getId(),comida.getId());
+            CantidadIngredientePlatoComidaDTO cantidadSeleccionadaEntity;
             if(cantidadSeleccionada == null){
                 cantidadSeleccionadaEntity = cantidades.getFirst();
             }else{
-                cantidadSeleccionadaEntity = cantidadIngredientePlatoComidaRepository.findById(Integer.parseInt(cantidadSeleccionada)).orElse(null);
+                cantidadSeleccionadaEntity = cantidadIngredientePlatoComidaService.getById(Integer.parseInt(cantidadSeleccionada));
             }
 
             model.addAttribute("comida", comida);
@@ -547,10 +536,10 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            CantidadIngredientePlatoComida cantidad = cantidadIngredientePlatoComidaRepository.findById(cantidadID).orElse(null);
+            CantidadIngredientePlatoComidaDTO cantidad = cantidadIngredientePlatoComidaService.getById(cantidadID);
             if(cantidad!=null) {
                 cantidad.setCantidadConsumida(cantidadConsumida);
-                cantidadIngredientePlatoComidaRepository.save(cantidad);
+                cantidadIngredientePlatoComidaService.guardarCantidad(cantidad);
             }
             dir = "redirect:/cliente/seleccionarComida?id=" + comidaId + "&platoSeleccionado=" + platoId + "&cantidadSeleccionada=" + cantidadID;
         } else {
@@ -564,12 +553,12 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            Comida comida = comidaRepository.findById(comidaId).orElse(null);
+            ComidaDTO comida = comidaService.getComidaByID(comidaId);
 
             if(comida!=null){
                 if(realizado==null) realizado = 0;
                 comida.setRealizado(realizado);
-                comidaRepository.save(comida);
+                comidaService.guardarComida(comida);
             }
 
             dir = "redirect:/cliente/seleccionarComida?id=" + comida.getId();
@@ -586,14 +575,14 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
-            DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fecha);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fecha);
 
             if(diaDieta!=null){
                 diaDieta.setSeguimiento(seguimientoDieta);
-                diaDietaRepository.save(diaDieta);
+                diaDietaService.guardarDiaDieta(diaDieta);
 
                 //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
-                List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
+                List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
 
                 model.addAttribute("comidas",comidas);
                 model.addAttribute("diaDieta",diaDieta);
@@ -613,14 +602,14 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
-            DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fecha);
+            DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fecha);
 
             if(diaEntrenamiento!=null){
                 diaEntrenamiento.setSeguimiento(seguimientoDieta);
-                diaEntrenamientoRepository.save(diaEntrenamiento);
+                diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
 
                 //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
-                List<ImplementacionEjercicioRutina> implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+                List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
 
                 model.addAttribute("implementaciones",implementaciones);
                 model.addAttribute("diaEntrenamiento",diaEntrenamiento);
@@ -650,27 +639,27 @@ public class ClienteController extends BaseController{
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
-            DiaDieta diaDieta;
+            DiaDietaDTO diaDieta;
             User userEntity = (User) session.getAttribute("user");
             if(fechaDesempenyoDieta==null){
                 LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
-                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechaInicio);
+                diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fechaInicio);
             }else{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
-                diaDieta = diaDietaRepository.diaDietaConcretoCliente(userEntity.getId(),fechanueva);
+                diaDieta = diaDietaService.getDiaDietaDeClienteFecha(userEntity.getId(),fechanueva);
             }
 
-            Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = new HashMap<>();
+            Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = new HashMap<>();
 
-            List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta);
+            List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
 
-            for (Comida c : comidas) {
-                Map<Plato, List<CantidadIngredientePlatoComida>> platosIngredientes = new HashMap<>();
-                List<Plato> platos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(c);
+            for (ComidaDTO c : comidas) {
+                Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>> platosIngredientes = new HashMap<>();
+                List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(c.getId());
 
-                for (Plato p : platos) {
-                    List<CantidadIngredientePlatoComida> cantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(p, c);
+                for (PlatoDTO p : platos) {
+                    List<CantidadIngredientePlatoComidaDTO> cantidades = cantidadIngredientePlatoComidaService.getCantidadesByPlatoComida(p.getId(),c.getId());
                     platosIngredientes.put(p, cantidades);
                 }
 
@@ -691,7 +680,7 @@ public class ClienteController extends BaseController{
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)) {
             User userEntity = (User) session.getAttribute("user");
-            DiaEntrenamiento diaEntrenamiento;
+            DiaEntrenamientoDTO diaEntrenamiento;
             LocalDate fechanueva;
             if(fechaDesempenyoEntrenamiento==null){
                 fechanueva = LocalDate.of(2000, 1, 1);
@@ -699,19 +688,19 @@ public class ClienteController extends BaseController{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 fechanueva = LocalDate.parse(fechaDesempenyoEntrenamiento, formatter);
             }
-            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(),fechanueva);
+            diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(),fechanueva);
 
-            List<ImplementacionEjercicioRutina> implementaciones;
-            Map<ImplementacionEjercicioRutina,List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
+            List<ImplementacionEjercicioRutinaDTO> implementaciones;
+            Map<ImplementacionEjercicioRutinaDTO,List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
 
             if(diaEntrenamiento!=null){
-                implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+                implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
 
-                for(ImplementacionEjercicioRutina implementacion : implementaciones){
-                    List<FeedbackEjercicioserie> fserie = new ArrayList<>();
+                for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
+                    List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
                     if(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone()!=null){
                         for(int serie = 0; serie<Integer.parseInt(implementacion.getFeedbacks().getFirst().getSeguimientoSetsDone());serie++){
-                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().getFirst().getId(),"" + (serie + 1));
+                            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(implementacion.getFeedbacks().getFirst().getId(), "" + (serie + 1));
                             fserie.add(feedbackEjercicioserie);
                         }
                     }

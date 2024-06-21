@@ -3,6 +3,9 @@
 <%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="es.uma.dto.ComidaDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -23,7 +26,7 @@
 
     <%
         // Obtener el mapa de comidaPlatosCantidades del request
-        Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> comidaPlatosCantidades = (Map<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>>) request.getAttribute("comidaPlatosCantidades");
+        Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = (Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>>) request.getAttribute("comidaPlatosCantidades");
 
         if (comidaPlatosCantidades.isEmpty()) {
     %>
@@ -43,15 +46,15 @@
         <tbody>
         <%
             // Iteramos sobre cada entrada
-            for (Map.Entry<Comida, Map<Plato, List<CantidadIngredientePlatoComida>>> entryComida : comidaPlatosCantidades.entrySet()) {
-                Comida comida = entryComida.getKey();
-                Map<Plato, List<CantidadIngredientePlatoComida>> platosCantidades = entryComida.getValue();
+            for (Map.Entry<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> entryComida : comidaPlatosCantidades.entrySet()) {
+                ComidaDTO comida = entryComida.getKey();
+                Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>> platosCantidades = entryComida.getValue();
 
                 // Mostrar el nombre de la comida en la primera fila de cada grupo de platos
                 boolean firstRow = true;
-                for (Map.Entry<Plato, List<CantidadIngredientePlatoComida>> entryPlato : platosCantidades.entrySet()) {
-                    Plato plato = entryPlato.getKey();
-                    List<CantidadIngredientePlatoComida> cantidades = entryPlato.getValue();
+                for (Map.Entry<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>> entryPlato : platosCantidades.entrySet()) {
+                    PlatoDTO plato = entryPlato.getKey();
+                    List<CantidadIngredientePlatoComidaDTO> cantidades = entryPlato.getValue();
 
                     // Mostrar el nombre de la comida solo en la primera fila de cada grupo de platos
                     if (firstRow) {
@@ -67,7 +70,7 @@
                 <%
                     // Iterar sobre las cantidades de ingredientes para este plato
                     boolean firstCantidad = true;
-                    for (CantidadIngredientePlatoComida cantidad : cantidades) {
+                    for (CantidadIngredientePlatoComidaDTO cantidad : cantidades) {
                         if (!firstCantidad) {
                 %>
                 <br> <!-- Para separar múltiples cantidades de ingredientes -->
@@ -84,7 +87,7 @@
                 <%
                     // Iterar sobre las cantidades de ingredientes para este plato
                     firstCantidad = true;
-                    for (CantidadIngredientePlatoComida cantidad : cantidades) {
+                    for (CantidadIngredientePlatoComidaDTO cantidad : cantidades) {
                         if (!firstCantidad) {
                 %>
                 <br> <!-- Para separar múltiples cantidades de ingredientes -->
