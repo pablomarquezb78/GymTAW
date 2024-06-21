@@ -6,7 +6,9 @@ import es.uma.dto.*;
 import es.uma.entity.AsignacionClienteDietista;
 import es.uma.entity.AsignacionClienteEntrenador;
 import es.uma.entity.User;
+import es.uma.entity.UserRol;
 import es.uma.ui.Usuario;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -199,6 +201,12 @@ public class UserService {
 
     public List<UserDTO> noAsociatedDietist(List<UserDTO> noDietist){
         return this.convertlistEntityToDto(userRepository.dietistasNoAsociadosAlCliente(this.convertlistDtoToEntity(noDietist)));
+    }
+
+    public boolean checkDietistaLogged(HttpSession session)
+    {
+        UserRol rol = (UserRol) session.getAttribute("rol");
+        return (session.getAttribute("user") != null) && (rol.getRolUsuario().equals("dietista"));
     }
 
 
