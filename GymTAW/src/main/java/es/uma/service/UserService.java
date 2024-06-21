@@ -224,10 +224,6 @@ public class UserService {
         return userDTO;
     }
 
-    public boolean checkAdminLogged(UserDTO userDTO, UserRolDTO userRolDTO)
-    {
-        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("admin"));
-    }
 
     public boolean checkTrainerLogged(UserDTO userDTO, UserRolDTO userRolDTO)
     {
