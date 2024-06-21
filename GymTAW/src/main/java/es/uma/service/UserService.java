@@ -224,6 +224,11 @@ public class UserService {
         return userDTO;
     }
 
+    public boolean checkAdminLogged(UserDTO userDTO, UserRolDTO userRolDTO)
+    {
+        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("admin"));
+    }
+
     public boolean checkDietistaLogged(UserDTO userDTO, UserRolDTO userRolDTO)
     {
         return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));

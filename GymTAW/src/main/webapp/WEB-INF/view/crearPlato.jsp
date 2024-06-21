@@ -2,11 +2,12 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.ui.PlatoUI" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     PlatoUI platoUI = (PlatoUI) request.getAttribute("platoUI");
-    UserRol userRol = (UserRol) session.getAttribute("rol");
+    UserRolDTO userRol = (UserRolDTO) session.getAttribute("rol");
     String actionRol = "";
     if(userRol.getId() == 1 && platoUI.getId() == null) {
         actionRol = "/admin/anyadirPlato";

@@ -44,8 +44,9 @@ public class AdminController extends BaseController {
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             model.addAttribute("clientes", userService.getAllCustomers().size());
             model.addAttribute("entrenadores", userService.getAllTrainers().size());
             model.addAttribute("dietistas", userService.getAllDietistas().size());
@@ -61,8 +62,9 @@ public class AdminController extends BaseController {
     @GetMapping("/autenticarUsuarios")
     public String doAutenticarUsuarios(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             model.addAttribute("peticiones", registroService.getAllRegisters());
             dir = "admin/registro";
         } else {
@@ -74,8 +76,9 @@ public class AdminController extends BaseController {
     @GetMapping("/autenticar")
     public String doAutenticar(@RequestParam("id") Integer id, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             userService.createNewUser(id);
             registroService.deleteRegisterById(id);
             dir = "redirect:/admin/autenticarUsuarios";
@@ -88,8 +91,9 @@ public class AdminController extends BaseController {
     @GetMapping("/borrarPeticion")
     public String doBorrarPeticion(@RequestParam("id") Integer id, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/autenticarUsuarios";
             registroService.deleteRegisterById(id);
 
@@ -102,8 +106,9 @@ public class AdminController extends BaseController {
     @GetMapping("/mostrarUsuarios")
     public String doUsuarios(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             model.addAttribute("usuario", new Usuario());
             model.addAttribute("roles", userRolService.getAllRoles());
             model.addAttribute("usuarios", userService.getAllUsers());
@@ -117,8 +122,9 @@ public class AdminController extends BaseController {
     @PostMapping("/filtrarUsuarios")
     public String doFiltrarUsuarios(Model model, HttpSession session, @ModelAttribute Usuario usuario) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             model.addAttribute("roles", userRolService.getAllRoles());
             if(usuario.estaVacio()){
                 dir = "redirect:/admin/mostrarUsuarios";
@@ -144,8 +150,9 @@ public class AdminController extends BaseController {
     @GetMapping("/crearNuevoUsuario")
     public String doCrearUsuario(Model model, HttpSession session, Usuario usuario) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)){
             model.addAttribute("roles", userRolService.getAllRoles());
             model.addAttribute("usuario", usuario);
             dir = "admin/crearUsuario";
@@ -158,8 +165,9 @@ public class AdminController extends BaseController {
     @PostMapping("/guardarUsuario")
     public String doGuardarUsuario(@ModelAttribute Usuario usuario, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             if(usuario.getId() == null){
                 userService.saveUser(usuario);
             }else{
@@ -177,13 +185,14 @@ public class AdminController extends BaseController {
     @GetMapping("/editarUsuario")
     public String doEditarUsuario(@RequestParam("id") Integer id, HttpSession session, Usuario usuario, Model model){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "/admin/crearUsuario";
 
             //REFACTORIZAR
-            UserDTO user = userService.getById(id);
-            usuario =  userService.setUsuario(usuario, user);
+            UserDTO editUser = userService.getById(id);
+            usuario =  userService.setUsuario(usuario, editUser);
 
             List<UserRolDTO> roles = userRolService.getAllRoles();
 
@@ -200,8 +209,9 @@ public class AdminController extends BaseController {
     @GetMapping("/borrarUsuario")
     public String doBorrarUsuario(@RequestParam("id") Integer id, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/mostrarUsuarios";
             userService.deleteById(id);
 
@@ -214,8 +224,9 @@ public class AdminController extends BaseController {
     @GetMapping("/asignarCliente")
     public String doAsignar(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/asignar";
             model.addAttribute("clientes", userService.getAllCustomers());
         } else {
@@ -228,8 +239,9 @@ public class AdminController extends BaseController {
     public String doAsignarEntrenador(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
         //Cargar todos los entrenadores que no esten asignados al cliente
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/asignacionEntrenador";
 
             //REFACTORIZAR
@@ -248,8 +260,9 @@ public class AdminController extends BaseController {
     @GetMapping("/anyadirAsignacionEntrenador")
     public String doAnyadirAsignacionEntrenador(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/asignarEntrenador?id="+id+"&idCliente="+idCliente;
             asignacionClienteEntrenadorService.addTrainer(id, idCliente);
 
@@ -262,8 +275,9 @@ public class AdminController extends BaseController {
     @GetMapping("/asignarDietista")
     public String doAsignarDietista(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/asignacionDietista";
 
             //REFACTORIZAR
@@ -282,8 +296,9 @@ public class AdminController extends BaseController {
     @GetMapping("/anyadirAsignacionDietista")
     public String doAnyadirAsignacionDietista(@RequestParam("id") Integer id, @RequestParam("idCliente") Integer idCliente, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/asignarDietista?id="+id+"&idCliente="+idCliente;
             asignacionClienteDietistaService.addDietist(id, idCliente);
         } else {
@@ -295,8 +310,9 @@ public class AdminController extends BaseController {
     @GetMapping("/eliminarAsignaciones")
     public String doEliminarAsignaciones(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/eliminarAsignacion";
             List<AsignacionClienteDietistaDTO> asignacionesDietista = asignacionClienteDietistaService.findByCustomer(id);
             List<AsignacionClienteEntrenadorDTO> asignacionesEntrenador = asignacionClienteEntrenadorService.findByCustomer(id);
@@ -311,8 +327,9 @@ public class AdminController extends BaseController {
     @GetMapping("/eliminarAsignacionEntrenador")
     public String doEliminarAsignacionEntrenador(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             Integer clienteID = asignacionClienteEntrenadorService.deleteAsociation(id);
             dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
         } else {
@@ -324,8 +341,9 @@ public class AdminController extends BaseController {
     @GetMapping("/eliminarAsignacionDietista")
     public String doEliminarAsignacionDietista(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             Integer clienteID = asignacionClienteDietistaService.deleteAsociation(id);
             dir = "redirect:/admin/eliminarAsignaciones?id="+clienteID;
         } else {
@@ -338,8 +356,9 @@ public class AdminController extends BaseController {
     @GetMapping("/mostrarPlatos")
     public String doPlatos(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)){
             dir = "admin/platos";
             List<PlatoDTO> platos = platoService.getAllDishes();
             model.addAttribute("plato", new PlatoUI());
@@ -353,8 +372,9 @@ public class AdminController extends BaseController {
     @PostMapping("/filtrarPlatos")
     public String doFiltrarPlatos(Model model, HttpSession session, @ModelAttribute PlatoUI platoUI) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             if(platoUI.estaVacio()){
                 dir = "redirect:/admin/mostrarPlatos";
             }else {
@@ -371,8 +391,9 @@ public class AdminController extends BaseController {
     @GetMapping("/crearNuevoPlato")
     public String doCrearNuevoPlato(Model model, HttpSession session, PlatoUI platoUI) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/crearPlato";
             model.addAttribute("platoUI", platoUI);
         } else {
@@ -384,8 +405,9 @@ public class AdminController extends BaseController {
     @PostMapping("/anyadirPlato")
     public String doAnyadirPlato(@ModelAttribute PlatoUI platoUI, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             if(platoUI.getId() == null){
                 dir = "redirect:/admin/mostrarPlatos";
                 platoService.addDish(platoUI);
@@ -403,8 +425,9 @@ public class AdminController extends BaseController {
     @GetMapping("/editarPlato")
     public String doEditarPlato(@RequestParam("id") Integer id, Model model, HttpSession session, PlatoUI platoUI) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/crearPlato";
             model.addAttribute("platoUI", platoService.setPlatoUI(id, platoUI));
         } else {
@@ -417,8 +440,9 @@ public class AdminController extends BaseController {
     @GetMapping("/borrarPlato")
     public String doBorrarPlato(@RequestParam("id") Integer id, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/mostrarPlatos";
             platoService.deleteById(id);
 
@@ -433,8 +457,9 @@ public class AdminController extends BaseController {
     @GetMapping("/verComidasAsociadas")
     public String doVerComidasAsociadas(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/mostrarComidas";
 
             model.addAttribute("comidas", cantidadIngredientePlatoComidaService.getByDish(id));
@@ -451,8 +476,9 @@ public class AdminController extends BaseController {
     @PostMapping("/filtrarComidas")
     public String doFiltrarComidas(@RequestParam("id") Integer id, Model model, HttpSession session, @ModelAttribute CantidadPlatoComida cantidadPlatoComida) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)){
             if(cantidadPlatoComida.estaVacio()){
                 dir = "redirect:/admin/verComidasAsociadas?id="+id;
             }else{
@@ -477,8 +503,9 @@ public class AdminController extends BaseController {
     @GetMapping("/crearNuevaComida")
     public String doCrearNuevaComida(@RequestParam("idPlato") Integer idPlato, Model model, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/crearComida";
             AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
             asignacionPlatoComida.setIdPlato(idPlato);
@@ -496,8 +523,9 @@ public class AdminController extends BaseController {
     @GetMapping("/editarComida")
     public String doCrearNuevaComida(@RequestParam("idPlato") Integer idPlato, @RequestParam("idComida") Integer idComida, Model model, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "admin/crearComida";
             AsignacionPlatoComida asignacionPlatoComida = new AsignacionPlatoComida();
             model.addAttribute("asignacionPlatoComida", cantidadIngredientePlatoComidaService.setAsignacionPlatoComida( asignacionPlatoComida, idComida, idPlato));
@@ -513,8 +541,9 @@ public class AdminController extends BaseController {
     @PostMapping("/guardarComida")
     public String doGuardarComida(@ModelAttribute AsignacionPlatoComida asignacionPlatoComida, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             if(asignacionPlatoComida.getIdComida() == null){
                 dir = "redirect:/admin/verComidasAsociadas?id="+asignacionPlatoComida.getIdPlato();
                 cantidadIngredientePlatoComidaService.saveFood(asignacionPlatoComida);
@@ -532,8 +561,9 @@ public class AdminController extends BaseController {
     @GetMapping("/borrarComida")
     public String doBorrarComida(@RequestParam("idPlato") Integer idPlato, @RequestParam("idComida") Integer idComida, HttpSession session){
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkAdminLogged(user, rol)) {
             dir = "redirect:/admin/verComidasAsociadas?id="+idPlato;
             cantidadIngredientePlatoComidaService.deleteById(idComida);
 

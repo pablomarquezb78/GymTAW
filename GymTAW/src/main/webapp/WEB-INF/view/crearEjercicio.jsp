@@ -4,12 +4,13 @@
 <%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="es.uma.ui.EjercicioUI" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<TipoEjercicioDTO> tipos = (List<TipoEjercicioDTO>) request.getAttribute("tipos");
     EjercicioUI ejercicioUI = (EjercicioUI) request.getAttribute("ejercicioUI");
-    UserRol userRol = (UserRol) session.getAttribute("rol");
+    UserRolDTO userRol = (UserRolDTO) session.getAttribute("rol");
     Boolean disabled = true;
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String clase = "Crossfit";

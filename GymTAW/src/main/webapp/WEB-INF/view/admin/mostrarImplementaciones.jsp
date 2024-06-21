@@ -8,6 +8,7 @@
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%@ page import="es.uma.dto.EjercicioDTO" %>
 <%@ page import="es.uma.dto.RutinaDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -17,7 +18,7 @@
 
     String dir = "/comun/filtrarImplementaciones?id="+ejercicio.getId();
 
-    UserRol rol = (UserRol) request.getAttribute("rol");
+    UserRolDTO rol = (UserRolDTO) request.getAttribute("rol");
     String title = "Trainer";
     String cabecera = "../crosstrainer/cabecera_entrenador.jsp";
     if(rol.getId() == 1){
