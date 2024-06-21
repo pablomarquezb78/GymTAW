@@ -323,7 +323,7 @@ public class ComunController extends BaseController{
         if (esEntrenador(rol)) {
             implementacion.setEjercicio(ejercicioService.getById(idej));
             implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
-            dir ="redirect:/comun/verImplementacionesAsociadas?id="+idej;
+            dir ="redirect:/entrenamientos/crearrutina?idrutina="+implementacion.getRutina();
 
         } else {
             dir = "redirect:/";
@@ -339,7 +339,7 @@ public class ComunController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (estaAutenticado(session) && esAdmin(rol)) {
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
                 implementacion.setEjercicio(ejercicioService.getById(idej));
                 implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
                 dir ="redirect:/comun/verImplementacionesAsociadas?id="+idej;

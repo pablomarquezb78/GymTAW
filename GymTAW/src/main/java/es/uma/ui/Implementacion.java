@@ -28,6 +28,15 @@ public class Implementacion {
     private String nombrefiltrado;
     private Integer idfiltrado;
     private Integer idejercicio;
+    private Integer auxValue;
+
+    public void setAuxValue(Integer auxValue) {
+        this.auxValue = auxValue;
+    }
+
+    public Integer getAuxValue() {
+        return auxValue;
+    }
 
     public Integer getIdejercicio() {
         return idejercicio;

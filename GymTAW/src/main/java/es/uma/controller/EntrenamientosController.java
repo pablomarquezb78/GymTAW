@@ -11,6 +11,7 @@ import es.uma.ui.Implementacion;
 import es.uma.ui.Usuario;
 import es.uma.ui.TipoEjercicioUI;
 import jakarta.servlet.http.HttpSession;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +59,10 @@ public class EntrenamientosController extends BaseController{
     private EjercicioService ejercicioService;
     @Autowired
     private UserRolService userRolService;
+    @Autowired
+    private FeedbackEjercicioService feedbackEjercicioService;
+    @Autowired
+    private FeedbackEjercicioSerieService feedbackEjercicioSerieService;
 
     //DONE
     @GetMapping("/")
@@ -491,6 +496,9 @@ public class EntrenamientosController extends BaseController{
             implementacion.setId(id);
             String tiempo = imp.getTiempo();
             String cal = imp.getKilocalorias();
+
+            implementacion.setAuxValue(1);
+
             model.addAttribute("implementacion",implementacion);
 
             //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
@@ -502,6 +510,8 @@ public class EntrenamientosController extends BaseController{
             model.addAttribute("ejercicios",ejercicios);
 
             Boolean editable = true;
+
+
             model.addAttribute("editable",editable);
         }
 
@@ -528,6 +538,8 @@ public class EntrenamientosController extends BaseController{
             implementacion.setId(id);
             String tiempo = imp.getTiempo();
             String cal = imp.getKilocalorias();
+            implementacion.setAuxValue(0);
+
             model.addAttribute("implementacion",implementacion);
 
             //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
@@ -538,7 +550,6 @@ public class EntrenamientosController extends BaseController{
             List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
             model.addAttribute("ejercicios",ejercicios);
 
-            model.addAttribute("entrenamiento",1);
             Boolean editable = true;
             model.addAttribute("editable",editable);
         }
@@ -864,34 +875,36 @@ public class EntrenamientosController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esEntrenador(rol)) {
-            User userEntity = userRepository.findById(idUsuario).orElse(null);
-            DiaEntrenamiento diaEntrenamiento;
+            UserDTO userEntity = userService.getById(idUsuario);
+            DiaEntrenamientoDTO diaEntrenamiento;
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate fechanueva = fecha;
-            diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(userEntity.getId(), fechanueva);
+            diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(), fechanueva);
 
-            List<ImplementacionEjercicioRutina> implementaciones;
-            Map<ImplementacionEjercicioRutina, List<FeedbackEjercicioserie>> implementacionEjercicioRutinaListMap = new HashMap<>();
+            List<ImplementacionEjercicioRutinaDTO> implementaciones = new ArrayList<>();
+            Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
+            List<Pair<ImplementacionEjercicioRutinaDTO, FeedbackEjercicioDTO>> listaPares = new ArrayList<>();
 
             if (diaEntrenamiento != null) {
-                implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+                if (diaEntrenamiento.getRutina() != null && diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina() != null) {
+                    implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
 
-                for (ImplementacionEjercicioRutina implementacion : implementaciones) {
-                    List<FeedbackEjercicioserie> fserie = new ArrayList<>();
-                    if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() != null) {
-                        for (int serie = 0; serie < Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoSetsDone()); serie++) {
-                            FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.encontrarPorFeedbackEjercicioYSerie(implementacion.getFeedbacks().get(0).getId(), "" + (serie + 1));
-                            fserie.add(feedbackEjercicioserie);
+                    for (ImplementacionEjercicioRutinaDTO implementacion : implementaciones) {
+                        FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion, diaEntrenamiento);
+                        List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
+                        if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() != null) {
+                            for (int serie = 0; serie < Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoSetsDone()); serie++) {
+                                FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
+                                fserie.add(feedbackEjercicioserie);
+                            }
                         }
+                        implementacionEjercicioRutinaListMap.put(implementacion, fserie);
                     }
-                    implementacionEjercicioRutinaListMap.put(implementacion, fserie);
                 }
-            } else {
-                implementaciones = new ArrayList<>();
             }
 
-            model.addAttribute("implementaciones", implementaciones);
+            model.addAttribute("listaPares", listaPares);
             model.addAttribute("implementacionEjercicioRutinaListMap", implementacionEjercicioRutinaListMap);
             model.addAttribute("fecha", fecha);
             model.addAttribute("rol", rol);
@@ -902,8 +915,5 @@ public class EntrenamientosController extends BaseController{
         }
         return dir;
     }
-
-
-
 
 }

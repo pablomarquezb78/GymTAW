@@ -38,7 +38,9 @@
         actionRol = "/comun/guardarImplementacion";
         cabecera = "./admin/cabeceraAdmin.jsp";
         disabled = true;
-    }else if(entrenamiento !=null && entrenamiento==1){
+    }else if(implementacion.getAuxValue() == 0){
+        actionRol = "/comun/guardarImplementacion";
+    }else{
         actionRol = "/comun/guardarImplementacionTrainer";
     }
 
@@ -161,6 +163,7 @@
                                     <form:radiobuttons path="idfiltrado" items="${tipos}" delimiter="<br>" itemLabel="tipoDeEjercicio" itemValue="id"/>
                                     <form:hidden path="iddia"/>
                                     <form:hidden path="id"/>
+                                    <form:hidden path="auxValue"></form:hidden>
                                     <br>
                                     <button class="btn btn-secondary mt-3">Filtrar</button>
                                 </form:form>
