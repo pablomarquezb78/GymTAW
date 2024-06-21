@@ -18,8 +18,8 @@ public class BaseController {
         return session.getAttribute("user") != null;
     }
     protected boolean esAdmin(UserRolDTO rol){return rol.getRolUsuario().equals("admin");}
-    protected boolean esEntrenador(UserRol rol){return rol.getRolUsuario().equals("crosstrainer") || rol.getRolUsuario().equals("bodybuilder");}
     protected boolean esDietista(UserRolDTO rol) {return  rol.getRolUsuario().equals("dietista");}
+    protected boolean esEntrenador(UserRolDTO rol){return rol.getRolUsuario().equals("crosstrainer") || rol.getRolUsuario().equals("bodybuilder");}
     protected boolean esCliente(UserRol rol) { return  rol.getRolUsuario().equals("cliente");}
 
 }
