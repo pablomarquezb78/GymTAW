@@ -599,32 +599,8 @@ public class EntrenamientosController extends BaseController{
         if(!estaAutenticado(sesion)){
             strTo = "redirect:/";
         }else{
-
-            //ImplementacionEjercicioRutina imp;
-
-            ImplementacionEjercicioRutinaDTO imp;
             implementacion.setEjercicio(ejercicioService.getById(idej));
-
-            if(implementacion.getId()!=null){
-                //imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
-                //asignarImplementacionReal(imp,implementacion);
-                imp = implementacionEjercicioRutinaService.getByID(implementacion.getId());
-                implementacionEjercicioRutinaService.asignarImplementacionUIaImplementacionDTO(imp,implementacion);
-            }else{
-                //imp = new ImplementacionEjercicioRutinaD();
-                //DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacion.getIdDia());
-                //imp.setRutina(dia.getRutina());
-                //asignarImplementacionReal(imp,implementacion);
-
-                imp = new ImplementacionEjercicioRutinaDTO();
-                DiaEntrenamientoDTO dia = diaEntrenamientoService.getbyID(implementacion.getIdDia());
-                imp.setRutina(dia.getRutina());
-
-                implementacionEjercicioRutinaService.asignarImplementacionUIaImplementacionDTO(imp,implementacion);
-            }
-
-            //this.implementacionEjercicioRutinaRepository.save(imp);
-            this.implementacionEjercicioRutinaService.guardarImplementacion(imp);
+            implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
         }
 
 

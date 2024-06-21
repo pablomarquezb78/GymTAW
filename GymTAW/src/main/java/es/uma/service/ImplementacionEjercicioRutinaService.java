@@ -1,10 +1,13 @@
 package es.uma.service;
 
 
+import es.uma.dao.DiaEntrenamientoRepository;
 import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dao.RutinaRepository;
+import es.uma.dto.DiaEntrenamientoDTO;
 import es.uma.dto.EjercicioDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
+import es.uma.entity.DiaEntrenamiento;
 import es.uma.entity.Ejercicio;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
@@ -28,11 +31,47 @@ public class ImplementacionEjercicioRutinaService {
     private EjercicioService ejercicioService;
     @Autowired
     private RutinaService rutinaService;
+    @Autowired
+    private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
 
     public void guardarImplementacion(ImplementacionEjercicioRutinaDTO implmentacionDTO){
         this.implementacionEjercicioRutinaRepository.save(convertDtoToEntity(implmentacionDTO));
     }
+
+    private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
+        implementacion.setEjercicio(ejercicioService.convertDtoToEntity(imp.getEjercicio()));
+        implementacion.setSets(imp.getSets());
+        implementacion.setRepeticiones(imp.getRepeticiones());
+        implementacion.setPeso(imp.getPeso());
+        implementacion.setTiempo(imp.getTiempo());
+        implementacion.setKilocalorias(imp.getKilocalorias());
+        implementacion.setMetros(imp.getMetros());
+    }
+
+    public void guardarImplementacionUI(Implementacion implementacionUI){
+
+        ImplementacionEjercicioRutina imp;
+
+        if(implementacionUI.getId()!=null){ //Editar
+
+            imp = this.implementacionEjercicioRutinaRepository.findById(implementacionUI.getId()).orElse(null);
+            asignarImplementacionReal(imp,implementacionUI);
+
+        }else{//Crear
+
+            imp = new ImplementacionEjercicioRutina();
+            DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacionUI.getIdDia());
+            imp.setRutina(dia.getRutina());
+            asignarImplementacionReal(imp,implementacionUI);
+            
+        }
+
+        this.implementacionEjercicioRutinaRepository.save(imp);
+
+    }
+
+
 
     public ImplementacionEjercicioRutinaDTO getByID(Integer idImplementacion){
         return convertEntityToDto(implementacionEjercicioRutinaRepository.getById(idImplementacion));
