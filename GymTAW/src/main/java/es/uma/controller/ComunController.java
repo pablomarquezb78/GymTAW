@@ -4,11 +4,9 @@ import es.uma.dao.*;
 import es.uma.dto.EjercicioDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.dto.TipoEjercicioDTO;
+import es.uma.dto.UserRolDTO;
 import es.uma.entity.*;
-import es.uma.service.EjercicioService;
-import es.uma.service.ImplementacionEjercicioRutinaService;
-import es.uma.service.RutinaService;
-import es.uma.service.TipoEjercicioService;
+import es.uma.service.*;
 import es.uma.ui.EjercicioUI;
 import es.uma.ui.Implementacion;
 import es.uma.ui.TipoEjercicioUI;
@@ -60,12 +58,17 @@ public class ComunController extends BaseController{
     private RutinaService rutinaService;
     @Autowired
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
+    @Autowired
+    private UserRolService userRolService;
 
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+
+
+
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
             dir = "admin/ejercicios";
             List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();

@@ -5,13 +5,14 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.dto.EjercicioDTO" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
     List<TipoEjercicioDTO> tipos = (List<TipoEjercicioDTO>) request.getAttribute("tipos");
 
-    UserRol rol = (UserRol) request.getAttribute("rol");
+    UserRolDTO rol = (UserRolDTO) request.getAttribute("rol");
     String title = "Trainer";
     String cabecera = "../crosstrainer/cabecera_entrenador.jsp";
     if(rol.getId() == 1){

@@ -8,6 +8,7 @@
 <%@ page import="es.uma.dto.EjercicioDTO" %>
 <%@ page import="es.uma.dto.RutinaDTO" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%
     List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
     List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
@@ -20,7 +21,9 @@
 
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
 
-    UserRol userRol = (UserRol) session.getAttribute("rol");
+    UserRolDTO userRol = (UserRolDTO) session.getAttribute("rol");
+
+
     String actionRol = "/entrenamientos/guardarimplementacion"; /// Esto<<<<<
     cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String filtrar = "/comun/filtrartipo";

@@ -94,6 +94,20 @@ public class UserService {
         return userDTO;
     }
 
+    public void setUserVerPerfilCliente(Usuario usuario,User user){
+        usuario.setRol(user.getRol().getId());
+        usuario.setId(user.getId());
+        usuario.setUsername(user.getUsername());
+        usuario.setNombre(user.getNombre());
+        usuario.setApellidos(user.getApellidos());
+        usuario.setTelefono(user.getTelefono());
+        usuario.setPeso(user.getPeso());
+        usuario.setAltura(user.getAltura());
+        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
+        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
+
+    }
+
     public void saveNewUser(UserDTO userDTO){
         User user = new User();
         user.setUsername(userDTO.getUsername());

@@ -56,15 +56,18 @@ public class EntrenamientosController extends BaseController{
     private TipoEjercicioService tipoEjercicioService;
     @Autowired
     private EjercicioService ejercicioService;
+    @Autowired
+    private UserRolService userRolService;
 
     //DONE
     @GetMapping("/")
     public String doListar (Model model, HttpSession sesion){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
-        UserRol rol = (UserRol) sesion.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
+        UserDTO userDTO = (UserDTO) sesion.getAttribute("user");
 
-        if(estaAutenticado(sesion) && esEntrenador(rol) ){
-            List<UserDTO> lista = userService.getClientesDeEntrenador((User) sesion.getAttribute("user"));
+        if(estaAutenticado(sesion) && esEntrenador(userRolService.convertDtoToEntity(rol)) ){
+            List<UserDTO> lista = userService.getClientesDeEntrenador(userService.convertDtoToEntity(userDTO));
             model.addAttribute("lista",lista);
         }
         else {
@@ -78,11 +81,12 @@ public class EntrenamientosController extends BaseController{
     @PostMapping("/filtrarClientes")
     public String doFiltrarClientes (Model model, HttpSession sesion,@RequestParam("nombre") String nombre){
         String strTo = "/crosstrainer/entrenador_listadoclientes";
-        UserRol rol = (UserRol) sesion.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
+        UserDTO userdto = (UserDTO) sesion.getAttribute("user");
 
-        if(estaAutenticado(sesion) && esEntrenador(rol) ){
+        if(estaAutenticado(sesion) && esEntrenador(userRolService.convertDtoToEntity(rol)) ){
 
-            List<UserDTO> lista = userService.getClientesDeEntrenadorYNombre((User) sesion.getAttribute("user"),nombre);
+            List<UserDTO> lista = userService.getClientesDeEntrenadorYNombre(userService.convertDtoToEntity(userdto),nombre);
 
             model.addAttribute("lista",lista);
         }else {
@@ -443,18 +447,7 @@ public class EntrenamientosController extends BaseController{
 //        implementacion.setMetros(imp.getMetros());
 //    }
 
-    private void setUser(Usuario usuario,User user){
-        usuario.setRol(user.getRol().getId());
-        usuario.setId(user.getId());
-        usuario.setUsername(user.getUsername());
-        usuario.setNombre(user.getNombre());
-        usuario.setApellidos(user.getApellidos());
-        usuario.setTelefono(user.getTelefono());
-        usuario.setPeso(user.getPeso());
-        usuario.setAltura(user.getAltura());
-        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
-        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
-    }
+
 
     @GetMapping("/verperfilcliente")
     public String doVerPerfilCliente(@RequestParam("idcliente") Integer id,HttpSession session,Model model){
@@ -465,13 +458,12 @@ public class EntrenamientosController extends BaseController{
             strTo = "redirect:/";
         }else {
 
-            User user = userRepository.getById(id);
+            UserDTO user = userService.getById(id);
             Usuario usuario = new Usuario();
-
-            setUser(usuario,user);
+            userService.setUserVerPerfilCliente(usuario,userService.convertDtoToEntity(user));
 
             model.addAttribute("usuario",usuario);
-            UserRol rol = (UserRol) session.getAttribute("rol");
+            UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
             model.addAttribute("rolid",rol.getId());
         }
 
