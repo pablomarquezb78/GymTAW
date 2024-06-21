@@ -2,16 +2,16 @@ package es.uma.service;
 
 
 import es.uma.dao.PlatosRepository;
-import es.uma.dto.EjercicioDTO;
-import es.uma.dto.PlatoDTO;
-import es.uma.dto.TipoComidaDTO;
+import es.uma.dto.*;
 import es.uma.entity.Ejercicio;
 import es.uma.entity.Plato;
 import es.uma.entity.TipoComida;
+import es.uma.entity.User;
 import es.uma.ui.PlatoUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +20,8 @@ public class PlatoService {
 
     @Autowired
     public PlatosRepository platosRepository;
+    @Autowired
+    private UserService userService;
 
 
     public List<PlatoDTO> getAllDishes(){
@@ -77,7 +79,21 @@ public class PlatoService {
 
     public void saveDish(Plato plato){
         platosRepository.save(plato);
+    }
 
+    public PlatoDTO findById(Integer platoId)
+    {
+        Plato p = platosRepository.findPlatoById(platoId);
+        PlatoDTO platoDTO = this.convertEntityToDto(p);
+        return platoDTO;
+    }
+
+    public List<PlatoDTO> getPlatosLinkedToDietista(UserDTO dietistaDTO)
+    {
+        User dietista = userService.convertDtoToEntity(dietistaDTO);
+        List<Plato> platosList = platosRepository.getPlatosLinkedToDietista(dietista);
+        List<PlatoDTO> platosDTO = convertlistEntityToDto(platosList);
+        return platosDTO;
     }
 
     public PlatoDTO convertEntityToDto(Plato plato){
@@ -98,5 +114,21 @@ public class PlatoService {
         plato.setReceta(platoDTO.getReceta());
         plato.setTiempoDePreparacion(platoDTO.getTiempoDePreparacion());
         return plato;
+    }
+
+    public List<PlatoDTO> convertlistEntityToDto(List<Plato> platoList){
+        List<PlatoDTO> platoDTOList = new ArrayList<>();
+        for(Plato plato : platoList){
+            platoDTOList.add(this.convertEntityToDto(plato));
+        }
+        return platoDTOList;
+    }
+
+    public List<Plato> convertlistDtoToEntity(List<PlatoDTO> platoDTOList){
+        List<Plato> platoList = new ArrayList<>();
+        for(PlatoDTO plato : platoDTOList){
+            platoList.add(this.convertDtoToEntity(plato));
+        }
+        return platoList;
     }
 }

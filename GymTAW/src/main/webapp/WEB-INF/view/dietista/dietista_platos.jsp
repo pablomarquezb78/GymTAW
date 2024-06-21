@@ -2,10 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.Ingrediente" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.dto.IngredienteDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    Plato plato = (Plato) request.getAttribute("selectedPlato");
+    PlatoDTO plato = (PlatoDTO) request.getAttribute("selectedPlato");
     String nombrePlato;
     String recetaPlato;
     String tiempoPlato;
@@ -18,10 +20,10 @@
         recetaPlato = "";
         tiempoPlato = "";
     }
-    List<Plato> listaPlatos = (List<Plato>) request.getAttribute("listaPlatos");
-    List<Ingrediente> listaIngredientes = (List<Ingrediente>) request.getAttribute("listaIngredientes");
+    List<PlatoDTO> listaPlatos = (List<PlatoDTO>) request.getAttribute("listaPlatos");
+    List<IngredienteDTO> listaIngredientes = (List<IngredienteDTO>) request.getAttribute("listaIngredientes");
     if (listaIngredientes == null) {
-        listaIngredientes = new ArrayList<Ingrediente>();
+        listaIngredientes = new ArrayList<IngredienteDTO>();
     }
 %>
 
@@ -87,7 +89,7 @@
                     <label for="platosDisplay" class="form-label">Seleccionar Plato:</label>
                     <select id="platosDisplay" name="platosDisplay" size="5" class="form-select">
                         <%
-                            for (Plato p : listaPlatos) {
+                            for (PlatoDTO p : listaPlatos) {
                                 String selected = "";
                                 if (p.equals(plato)) {
                                     selected = "selected";
@@ -136,7 +138,7 @@
                         <h5>Ingredientes:</h5>
                         <ul>
                             <%
-                                for (Ingrediente i : listaIngredientes) {
+                                for (IngredienteDTO i : listaIngredientes) {
                             %>
                             <li><%= i.getNombre() %></li>
                             <%

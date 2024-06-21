@@ -3,8 +3,12 @@ package es.uma.controller;
 import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
 import es.uma.dao.IngredienteRepository;
 import es.uma.dao.PlatosRepository;
-import es.uma.dao.UserRepository;
+import es.uma.dto.PlatoDTO;
+import es.uma.dto.UserDTO;
 import es.uma.entity.*;
+import es.uma.service.IngredienteService;
+import es.uma.service.PlatoService;
+import es.uma.service.UserService;
 import es.uma.ui.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +29,13 @@ public class PlatosController extends BaseController{
     @Autowired
     protected AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private IngredienteRepository ingredienteRepository;
+    @Autowired
+    private PlatoService platoService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private IngredienteService ingredienteService;
 
     @GetMapping("/")
     public String doLoadMain(HttpSession session,
@@ -59,14 +67,17 @@ public class PlatosController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(session.getAttribute("platoCreando") != null) { session.removeAttribute("platoCreando"); }
-            //Remove resto de session attributes
             if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
             if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
             if(session.getAttribute("diaComida") != null) { session.removeAttribute("diaComida"); }
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
-            model.addAttribute("listaPlatos", platosRepository.getPlatosLinkedToDietista((User) session.getAttribute("user")));
+            //TODO: Hacer que la session lleve un UserDTO en lugar de user
+            UserDTO userDTO = userService.convertEntityToDto((User) session.getAttribute("user")); //Esta linea será eliminada
+            //----------------------------------------------------------------------------------------
+            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(userDTO);
+            model.addAttribute("listaPlatos", platosLinkedToDietista);
             dir = "dietista/dietista_platos";
         } else {
             dir = "redirect:/";
@@ -83,11 +94,15 @@ public class PlatosController extends BaseController{
         if (estaAutenticado(session) && esDietista(rol))
         {
             if(platoId != null){
-                Plato plato = platosRepository.findPlatoById(Integer.valueOf(platoId));
-                model.addAttribute("selectedPlato", plato);
-                model.addAttribute("listaIngredientes",platosRepository.getIngredientesLinkedToPlato(plato));
+                PlatoDTO platoDTO = platoService.findById(Integer.valueOf(platoId));
+                model.addAttribute("selectedPlato", platoDTO);
+                model.addAttribute("listaIngredientes",ingredienteService.getIngredientesLinkedToPlato(platoDTO));
             }
-            model.addAttribute("listaPlatos", platosRepository.getPlatosLinkedToDietista((User) session.getAttribute("user")));
+            //TODO: Hacer que la session lleve un UserDTO en lugar de user
+            UserDTO userDTO = userService.convertEntityToDto((User) session.getAttribute("user")); //Esta linea será eliminada
+            //----------------------------------------------------------------------------------------
+            List<PlatoDTO> platosLinkedToDietista = platoService.getPlatosLinkedToDietista(userDTO);
+            model.addAttribute("listaPlatos", platosLinkedToDietista);
             dir = "dietista/dietista_platos";
         } else {
             dir = "redirect:/";
