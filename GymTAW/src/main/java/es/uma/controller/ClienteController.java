@@ -47,7 +47,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)){
+        if (estaAutenticado(session) && esCliente(rol)){
 
             //Semana 1 dia 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
@@ -70,8 +70,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)){
-
+        if (estaAutenticado(session) && esCliente(rol)){
             //Semana 1 dia 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
@@ -97,7 +96,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             //OBTENEMOS LA IMPLEMENTACION
             ImplementacionEjercicioRutinaDTO implementacion = implementacionEjercicioRutinaService.getImplementacionPorId(Integer.parseInt(id));
             model.addAttribute("implementacion",implementacion);
@@ -192,7 +191,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             String strTo = "/cliente/cliente_entrenamientos";
 
             //SI NO HAY FILTRO REDIRECCIONAR PARA MOSTRAR EL DIA DE HOY
@@ -234,7 +233,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             String strTo = "/cliente/cliente_dietas";
 
             //SI NO HAY FILTRO REDIRECCIONAR PARA MOSTRAR EL DIA DE HOY
@@ -280,8 +279,7 @@ public class ClienteController extends BaseController{
                                              HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             //OBTENEMOS EL FEEDBACK DEL EJERCICIO
             FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioById(feedbackEjercicioId);
 
@@ -327,8 +325,7 @@ public class ClienteController extends BaseController{
     public String doGuardarFeedbackSerieBody(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             //ACTUALIZAMOS EL FEEDBACK DEL EJERCICIO EN LA SERIE SELECCIONADA
             FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicioId(), feedbackSerieForm.getSerieSeleccionada());
             feedbackEjercicioserie.setPesoRealizado(feedbackSerieForm.getPesoRealizado());
@@ -349,8 +346,7 @@ public class ClienteController extends BaseController{
     public String doGuardarFeedbackSerieCross(@ModelAttribute("feedbackSerieForm") FeedbackSerieForm feedbackSerieForm, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackSerieForm.getFeedbackEjercicioId(),feedbackSerieForm.getSerieSeleccionada());
 
             //OBTENEMOS LO QUE EL USUARIO HA PODIDO RELLENAR (CUANDO EL CAMPO NO PROCEDE SE LE DESACTIVA EL INPUT)
@@ -391,7 +387,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             ImplementacionEjercicioRutinaDTO implementacion = implementacionEjercicioRutinaService.getImplementacionPorId(feedbackSerieForm.getImplementacionId());
 
             LocalDate dia = (LocalDate) session.getAttribute("fechaSeleccionada");
@@ -439,8 +435,7 @@ public class ClienteController extends BaseController{
                                      HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/ejercicio?id=" + implementacionId + "&set=" + set;
         } else {
             dir = "redirect:/";
@@ -453,7 +448,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             //Semana 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
@@ -479,8 +474,7 @@ public class ClienteController extends BaseController{
                                       @RequestParam(required = false,value = "cantidadSeleccionada") String cantidadSeleccionada,Model model, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             ComidaDTO comida = comidaService.getComidaByID(Integer.parseInt(id));
 
             List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(comida.getId());
@@ -515,8 +509,7 @@ public class ClienteController extends BaseController{
     public String doSeleccionarPlato(@RequestParam("platoSeleccionado") String platoSeleccionado, @RequestParam("comidaId") Integer comidaId, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/seleccionarComida?id=" + comidaId + "&platoSeleccionado=" + platoSeleccionado;
         } else {
             dir = "redirect:/";
@@ -528,8 +521,7 @@ public class ClienteController extends BaseController{
     public String doSeleccionarIngrediente(@RequestParam("platoId") Integer platoId, @RequestParam("comidaId") Integer comidaId, @RequestParam("cantidadSeleccionada") Integer cantidadSeleccionada, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/seleccionarComida?id=" + comidaId + "&platoSeleccionado=" + platoId + "&cantidadSeleccionada=" + cantidadSeleccionada;
         } else {
             dir = "redirect:/";
@@ -543,7 +535,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             CantidadIngredientePlatoComidaDTO cantidad = cantidadIngredientePlatoComidaService.getById(cantidadID);
             if(cantidad!=null) {
                 cantidad.setCantidadConsumida(cantidadConsumida);
@@ -561,8 +553,7 @@ public class ClienteController extends BaseController{
                                           @RequestParam("platoSeleccionadoID") Integer platoSeleccionadoID,HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             ComidaDTO comida = comidaService.getComidaByID(comidaId);
 
             if(comida!=null){
@@ -587,7 +578,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fecha);
 
@@ -614,7 +605,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fecha);
 
@@ -640,8 +631,7 @@ public class ClienteController extends BaseController{
     public String doMostrarDesempelo(HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "cliente/cliente_desempenyo";
         } else {
             dir = "redirect:/";
@@ -654,7 +644,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             DiaDietaDTO diaDieta;
             LocalDate fechanueva;
             if(fechaDesempenyoDieta==null){
@@ -699,7 +689,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             DiaEntrenamientoDTO diaEntrenamiento;
             LocalDate fechanueva;
             if(fechaDesempenyoEntrenamiento==null){
@@ -730,8 +720,6 @@ public class ClienteController extends BaseController{
                     listaPares.add(new Pair<>(implementacion,feedbackEjercicio));
                 }
 
-            }else{
-                implementaciones = new ArrayList<>();
             }
 
             model.addAttribute("listaPares",listaPares);
@@ -750,8 +738,7 @@ public class ClienteController extends BaseController{
     public String doFiltrarDesempenyoDieta(@RequestParam("fechaDesempenyoDieta") String fechaDesempenyoDieta, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/verDesempenyoDietas?fechaDesempenyoDieta=" + fechaDesempenyoDieta;
         } else {
             dir = "redirect:/";
@@ -763,8 +750,7 @@ public class ClienteController extends BaseController{
     public String doFiltrarDesmpenyoEntrenamiento(@RequestParam("fechaDesempenyoEntrenamiento") String fechaDesempenyoEntrenamiento, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/verDesempenyoEntrenamientos?fechaDesempenyoEntrenamiento=" + fechaDesempenyoEntrenamiento;
         } else {
             dir = "redirect:/";
@@ -776,8 +762,7 @@ public class ClienteController extends BaseController{
     public String doIrInicio(HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (userService.checkClienteLogged(user,rol)) {
+        if (estaAutenticado(session) && esCliente(rol)){
             dir = "redirect:/cliente/";
         } else {
             dir = "redirect:/";

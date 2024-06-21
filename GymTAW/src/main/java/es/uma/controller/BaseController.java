@@ -20,6 +20,6 @@ public class BaseController {
     protected boolean esAdmin(UserRolDTO rol){return rol.getRolUsuario().equals("admin");}
     protected boolean esDietista(UserRolDTO rol) {return  rol.getRolUsuario().equals("dietista");}
     protected boolean esEntrenador(UserRolDTO rol){return rol.getRolUsuario().equals("crosstrainer") || rol.getRolUsuario().equals("bodybuilder");}
-    protected boolean esCliente(UserRol rol) { return  rol.getRolUsuario().equals("cliente");}
+    protected boolean esCliente(UserRolDTO rol) { return  rol.getRolUsuario().equals("cliente");}
 
 }

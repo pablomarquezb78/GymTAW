@@ -224,22 +224,6 @@ public class UserService {
         return userDTO;
     }
 
-
-    public boolean checkTrainerLogged(UserDTO userDTO, UserRolDTO userRolDTO)
-    {
-        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("crosstrainer") || userRolDTO.getRolUsuario().equals("bodybuilder"));
-    }
-
-    //UNUSED
-    public boolean checkDietistaLogged(UserDTO userDTO, UserRolDTO userRolDTO)
-    {
-        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("dietista"));
-    }
-
-    public boolean checkClienteLogged(UserDTO userDTO, UserRolDTO userRolDTO){
-        return (userDTO != null) && (userRolDTO.getRolUsuario().equals("cliente"));
-    }
-
     public UserDTO guardarDietistaPerfilEdit(UserDTO userDTO, Usuario dietista)
     {
         User dietistaUser = this.convertDtoToEntity(userDTO);
