@@ -71,7 +71,7 @@
             <%
     for (ImplementacionEjercicioRutina implementacion : l) {
         String tiempo = "-";
-        if (implementacion.getTiempo() != null) {
+        if (implementacion.getTiempo() != null && !implementacion.getTiempo().isEmpty()) {
             int tiempoINT = Integer.parseInt(implementacion.getTiempo());
             int minutos = tiempoINT / 60;
             int segundos = tiempoINT % 60;
@@ -124,7 +124,7 @@
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getTiempo() != null) {
                         for (FeedbackEjercicioserie f : feedbackEjercicioseries) {
                             tiempo = "-";
-                            if (f.getTiempoRealizado() != null) {
+                            if (f.getTiempoRealizado() != null && !f.getTiempoRealizado().isEmpty()) {
                                 int tiempoINT = Integer.parseInt(f.getTiempoRealizado());
                                 int minutos = tiempoINT / 60;
                                 int segundos = tiempoINT % 60;
@@ -138,7 +138,7 @@
                     }
                 } else {
                     tiempo = "-";
-                    if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone() != null) {
+                    if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone() != null && !implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone().isEmpty()) {
                         int tiempoINT = Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoTiempoDone());
                         int minutos = tiempoINT / 60;
                         int segundos = tiempoINT % 60;

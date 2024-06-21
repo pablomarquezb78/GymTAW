@@ -894,5 +894,4 @@ public class EntrenamientosController extends BaseController{
 
 
 
-
 }
