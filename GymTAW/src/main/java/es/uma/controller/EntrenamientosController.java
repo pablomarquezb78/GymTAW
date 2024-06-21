@@ -65,9 +65,9 @@ public class EntrenamientosController extends BaseController{
 
         if(estaAutenticado(sesion) && esEntrenador(rol) ){
             List<UserDTO> lista = userService.getClientesDeEntrenador((User) sesion.getAttribute("user"));
-
             model.addAttribute("lista",lista);
-        }else {
+        }
+        else {
             strTo= "redirect:/";
         }
 
@@ -589,8 +589,11 @@ public class EntrenamientosController extends BaseController{
         implementacion.setMetros(imp.getMetros());
     }
 
+    //FINAL BOSS FINAL
+    //Este es el bueno
     @PostMapping("/guardarimplementacion")
-    public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
+    public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,
+                    @RequestParam("idejercicioseleccionado") Integer idej,HttpSession sesion){
 
         String strTo = "redirect:/entrenamientos/crearrutina?idrutina=" + implementacion.getRutina();
         if(!estaAutenticado(sesion)){
@@ -600,12 +603,13 @@ public class EntrenamientosController extends BaseController{
             //ImplementacionEjercicioRutina imp;
 
             ImplementacionEjercicioRutinaDTO imp;
+            implementacion.setEjercicio(ejercicioService.getById(idej));
 
             if(implementacion.getId()!=null){
                 //imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
                 //asignarImplementacionReal(imp,implementacion);
                 imp = implementacionEjercicioRutinaService.getByID(implementacion.getId());
-               // implementacionEjercicioRutinaService.asignarImplementacionUIaImplementacionDTO(imp,implementacion);
+                implementacionEjercicioRutinaService.asignarImplementacionUIaImplementacionDTO(imp,implementacion);
             }else{
                 //imp = new ImplementacionEjercicioRutinaD();
                 //DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacion.getIdDia());

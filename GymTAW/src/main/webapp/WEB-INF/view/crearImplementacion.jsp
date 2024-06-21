@@ -125,7 +125,19 @@
                     <div class="col-md-6">
                         <div class="form-group form-select">
                             <label class="form-label">Ejercicio:</label>
-                            <form:select size="10" path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                            <select name="idejercicioseleccionado"  size="10" class="form-control">
+                                <%
+                                    for(EjercicioDTO ej: ejercicios){
+                                        String seleccionado = "";
+                                        if(ej.getId()==implementacion.getEjercicio().getId()) seleccionado = "selected";
+                                %>
+                                    <option <%=seleccionado%> value="<%=ej.getId()%>"><%=ej.getNombre()%>></option>
+                                <%
+                                    }
+                                   // <form:select size="10" path="ejercicio" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                                %>
+
+                            </select>
                                 </div>
                                 <form:hidden path="rutina"></form:hidden>
                                 <form:hidden path="idDia"/>
