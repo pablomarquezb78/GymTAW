@@ -223,7 +223,6 @@ public class ComunController extends BaseController{
         }else{
 
             if(id!=null){
-                //ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.findById(id).orElse(null);
                 ImplementacionEjercicioRutinaDTO imp = implementacionEjercicioRutinaService.getByID(id);
 
                 if(imp!=null){
@@ -239,15 +238,11 @@ public class ComunController extends BaseController{
 
             model.addAttribute("implementacion",implementacion);
 
-            //Descomentar:
-            //List<Ejercicio> ejercicios = ejercicioRepository.filtrarEjercicioSoloDeTipo(implementacion.getTipofiltrado());
-            //model.addAttribute("ejercicios",ejercicios);
 
             List<EjercicioDTO> ejercicios = ejercicioService.getEjerciciosDeTipoDeEjercicio(implementacion.getIdfiltrado());
             model.addAttribute("ejercicios",ejercicios);
 
-            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
-            //model.addAttribute("tipos",tipos);
+
 
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("tipos",tipos);
