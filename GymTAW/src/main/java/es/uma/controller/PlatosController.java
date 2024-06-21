@@ -1,13 +1,9 @@
 package es.uma.controller;
 
-import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
-import es.uma.dao.IngredienteRepository;
-import es.uma.dao.PlatosRepository;
 import es.uma.dto.IngredienteDTO;
 import es.uma.dto.PlatoDTO;
 import es.uma.dto.UserDTO;
 import es.uma.dto.UserRolDTO;
-import es.uma.entity.*;
 import es.uma.service.IngredienteService;
 import es.uma.service.PlatoService;
 import es.uma.service.UserService;
@@ -17,7 +13,6 @@ import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +21,6 @@ import java.util.List;
 @RequestMapping("/dietista")
 public class PlatosController extends BaseController{
 
-    @Autowired
-    protected PlatosRepository platosRepository;
-    @Autowired
-    protected AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
-    @Autowired
-    private IngredienteRepository ingredienteRepository;
     @Autowired
     private PlatoService platoService;
     @Autowired
@@ -145,7 +134,7 @@ public class PlatosController extends BaseController{
             PlatoDietistaUI platoDietistaUI = platoService.prepareEditarPlatoByPlatoDietistaUI(platoId);
 
             model.addAttribute("platoDietista", platoDietistaUI);
-            model.addAttribute("ingredientesExistentes", ingredienteRepository.findAll());
+            model.addAttribute("ingredientesExistentes", ingredienteService.findAllIngredientes());
             session.setAttribute("platoCreando", platoDietistaUI);
             dir = "dietista/dietista_crearPlato";
         } else {
