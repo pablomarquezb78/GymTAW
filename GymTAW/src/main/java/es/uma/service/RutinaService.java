@@ -3,11 +3,13 @@ package es.uma.service;
 
 import es.uma.dao.RutinaRepository;
 import es.uma.dto.RutinaDTO;
+import es.uma.dto.UserDTO;
 import es.uma.entity.Rutina;
 import es.uma.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,17 @@ public class RutinaService {
         rutina.setEntrenador(userService.convertDtoToEntity(rutinaDTO.getEntrenador()));
         rutina.setFechaCreacion(rutinaDTO.getFechaCreacion());
         return rutina;
+    }
+
+    public RutinaDTO crearRutina(UserDTO entrenador){
+
+        Rutina rutina = new Rutina();
+        rutina.setEntrenador(userService.convertDtoToEntity(entrenador));
+        rutina.setFechaCreacion(Instant.from(Instant.now()));
+        rutina.setNombre("Rutina de " + entrenador.getNombre());
+        rutinaRepository.save(rutina);
+
+        return convertEntityToDto(rutina);
     }
 
     public void setNombreRutina(Integer idrutina,String nombre){

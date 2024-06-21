@@ -101,14 +101,13 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //todo
+
     @GetMapping("/versemana")
     public String doVerSemanaEntrenamientos (@RequestParam("id") Integer idcliente,Model model, HttpSession session){
         String strTo = "/crosstrainer/entrenador_semana";
 
         if(estaAutenticado(session)){
-            //List<DiaEntrenamiento> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idcliente);
-                List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.getDiasDeClienteID(idcliente);
+            List<DiaEntrenamientoDTO> dias = diaEntrenamientoService.getDiasDeClienteID(idcliente);
 
             model.addAttribute("idcliente",idcliente);
             model.addAttribute("diasEntrenamientos", dias);
@@ -256,12 +255,12 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //todo
+    //DONE
     @GetMapping("/entrenador-rutina")
     public String doLoadFecha(@RequestParam("id") Integer idcliente,Model model, HttpSession session){
 
             String strTo = "/crosstrainer/entrenador_asociar_rutina";
-            User user = (User) session.getAttribute("user");
+            UserDTO user = (UserDTO) session.getAttribute("user");
 
             if(!estaAutenticado(session)){
                 strTo = "redirect:/";
@@ -282,18 +281,13 @@ public class EntrenamientosController extends BaseController{
     }
 
 
+
+
     @GetMapping("/entrenador-crearrutina")
-    public String entrenadorCrearRutina(@RequestParam("id") Integer id, Model model, HttpSession session){
+    public String entrenadorCrearRutina(Model model, HttpSession session){
 
-            Rutina rutina = new Rutina();
-            User entrenador = (User) session.getAttribute("user");
-            rutina.setEntrenador(entrenador);
-
-            // Convertimos LocalDate to Instant
-
-            rutina.setFechaCreacion(Instant.from(Instant.now()));
-            rutina.setNombre("Rutina de " + entrenador.getNombre());
-            rutinaRepository.save(rutina);
+            UserDTO entrenador = (UserDTO) session.getAttribute("user");
+            RutinaDTO rutina = rutinaService.crearRutina(entrenador);
 
             return "redirect:/entrenamientos/crearrutina?idrutina=" + rutina.getId();
 
@@ -378,20 +372,22 @@ public class EntrenamientosController extends BaseController{
     }
     */
 
+
+    //todo
     @PostMapping("/borrardia")
     public String doBorrarDiaEntrenamiento (@RequestParam("id") Integer id,HttpSession session){
 
-        DiaEntrenamiento dia = (DiaEntrenamiento) diaEntrenamientoRepository.findById(id).orElse(null);
+        DiaEntrenamientoDTO dia = diaEntrenamientoService.getbyID(id);
 
         String strTo = "redirect:/entrenamientos/versemana?id=" + dia.getCliente().getId();
-
 
         if(!estaAutenticado(session)){
             strTo = "redicrect:/";
         }else{
-            diaEntrenamientoRepository.deleteById(id);
+            diaEntrenamientoService.borrarDiaID(id);
         }
         return strTo;
+
     }
 
     @PostMapping("/creardia")

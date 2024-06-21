@@ -25,6 +25,10 @@ public class DiaEntrenamientoService {
         return convertEntityToDto(diaEntrenamientoRepository.getById(id));
     }
 
+    public void borrarDiaID(Integer id){
+        this.diaEntrenamientoRepository.deleteById(id);
+    }
+
     public void guardarDiaEntrenamiento(DiaEntrenamientoDTO diaEntrenamientoDTO){
         DiaEntrenamiento diaEntrenamiento = convertDtoToEntity(diaEntrenamientoDTO);
         diaEntrenamientoRepository.save(diaEntrenamiento);

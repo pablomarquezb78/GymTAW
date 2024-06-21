@@ -5,6 +5,7 @@
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.entity.Rutina" %>
 <%@ page import="es.uma.dto.EjercicioDTO" %>
+<%@ page import="es.uma.dto.UserRolDTO" %>
 <%
     List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
     Boolean editable = (Boolean) request.getAttribute("editable");
@@ -13,7 +14,7 @@
 
     String sets = "", repeticiones = "", peso = "", tiempo = "", cal = "", metros = "";
 
-    UserRol userRol = (UserRol) session.getAttribute("rol");
+    UserRolDTO userRol = (UserRolDTO) session.getAttribute("rol");
     String actionRol = "/entrenamientos/guardarimplementacionrutina";
     Boolean disabled = false;
 
