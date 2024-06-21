@@ -4,13 +4,16 @@
 <%@ page import="es.uma.entity.*" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.time.LocalDate" %>
+<%@ page import="es.uma.dto.UserDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.dto.TipoComidaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User cliente = (User) request.getAttribute("cliente");
-    List<TipoComida> tiposDeComida = (List<TipoComida>) request.getAttribute("tiposDeComida");
+    UserDTO cliente = (UserDTO) request.getAttribute("cliente");
+    List<TipoComidaDTO> tiposDeComida = (List<TipoComidaDTO>) request.getAttribute("tiposDeComida");
     List<LocalDate> listaFechas = (List<LocalDate>) request.getAttribute("listaFechas");
-    Map<String, List<Plato>> tablaComidas = (Map<String, List<Plato>>) request.getAttribute("tablaComidas");
+    Map<String, List<PlatoDTO>> tablaComidas = (Map<String, List<PlatoDTO>>) request.getAttribute("tablaComidas");
 %>
 
 <html>
@@ -135,7 +138,7 @@
                         %>
                         <td>
                             <%
-                                List<Plato> platos = tablaComidas.get(diaComida);
+                                List<PlatoDTO> platos = tablaComidas.get(diaComida);
                                 if(platos == null || platos.isEmpty()) {
                             %>
                             (Platos no establecidos)
@@ -144,7 +147,7 @@
                             %>
                             <ul>
                                 <%
-                                    for(Plato p : platos) {
+                                    for(PlatoDTO p : platos) {
                                 %>
                                 <li><%= p.getNombre() %></li>
                                 <%

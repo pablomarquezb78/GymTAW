@@ -3,6 +3,7 @@ package es.uma.service;
 import es.uma.dao.DiaDietaRepository;
 import es.uma.dao.DiaEntrenamientoRepository;
 import es.uma.dto.DiaDietaDTO;
+import es.uma.dto.UserDTO;
 import es.uma.entity.DiaDieta;
 import es.uma.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class DiaDietaService {
         }else{
             return null;
         }
+    }
+
+    public DiaDietaDTO getDiaDietaByDietistaClienteFecha(UserDTO dietistaDTO, UserDTO clienteDTO, LocalDate fecha)
+    {
+        User dietista = userService.convertDtoToEntity(dietistaDTO);
+        User cliente = userService.convertDtoToEntity(clienteDTO);
+        DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+        DiaDietaDTO diaDietaDTO = null;
+        if(diaDieta != null) diaDietaDTO = convertEntityToDto(diaDieta);
+        return diaDietaDTO;
     }
 
     public void save(DiaDieta diaDieta){

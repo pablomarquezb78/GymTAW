@@ -1,10 +1,9 @@
 package es.uma.controller;
 
 import es.uma.dao.*;
-import es.uma.dto.UserDTO;
-import es.uma.dto.UserRolDTO;
+import es.uma.dto.*;
 import es.uma.entity.*;
-import es.uma.service.UserService;
+import es.uma.service.*;
 import es.uma.ui.*;
 import org.antlr.v4.runtime.misc.Pair;
 import jakarta.servlet.http.HttpSession;
@@ -41,6 +40,14 @@ public class DietistaController extends BaseController{
     private IngredienteRepository ingredienteRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private DiaDietaService diaDietaService;
+    @Autowired
+    private CantidadIngredientePlatoComidaService cantidadIngredientePlatoComidaService;
+    @Autowired
+    private ComidaService comidaService;
+    @Autowired
+    private TipoComidaService tipoComidaService;
 
     @GetMapping("/mostrarPerfil")
     public String doLoadProfile(HttpSession session,
@@ -124,6 +131,7 @@ public class DietistaController extends BaseController{
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
+
             UserDTO dietistaDTO = userDTO;
             List<UserDTO> clientes = userService.getClientesAsociadosAlDietista(dietistaDTO);
             model.addAttribute("clientes", clientes);
@@ -134,67 +142,13 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
-    //ToDo: Hacer el cargado de platos correspondiente a la fecha con un metodo.
-    //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato
-    private Pair<List<LocalDate>,Map<String, List<Plato>>> obtenerTablaComidas(User cliente, User dietista, DiaComida diaComida)
-    {
-
-        Map<String, List<Plato>> dataMap = new TreeMap<>();
-        List<LocalDate> listaFechas = new ArrayList<>();
-        List<TipoComida> tiposComida = tipoComidaRepository.findAll();
-
-        for (int i = 1; i<=7; ++i) //Sabemos que vamos a mostrar los dias de 1 a los 7 siguientes
-        {
-            LocalDate fecha;
-            boolean leapYear = Year.isLeap(diaComida.getYear());
-            if(diaComida.getDay() + i - 1 <= Month.of(diaComida.getMonth()).length(leapYear)) //Caso normal en el que sumar dias no supone cambiar de mes
-            {
-                fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay() + i - 1);
-            } else if (diaComida.getMonth() < 12) //Caso en el que sumar dias cambia de mes
-            {
-                int dayOfMonth = (diaComida.getDay() + i - 1) % Month.of(diaComida.getMonth()).length(leapYear);
-                fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth() + 1 , dayOfMonth);
-            } else //Caso en el que sumar dias implica cambiar de año
-            {
-
-                int dayOfMonth = (diaComida.getDay() + i - 1) % Month.of(diaComida.getMonth()).length(leapYear);
-                fecha = LocalDate.of(diaComida.getYear() + 1, 1, dayOfMonth);
-            }
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha); //Obtenemos el dia de la dieta (columna de la tabla)
-            listaFechas.add(fecha);
-            List<Comida> comidasDelDia = comidaRepository.findByDiaDieta(diaDieta.getId());
-            int j = 1; //Sabemos que alojamos 5 tipos de comidas al dia
-            for(TipoComida tipoComida : tiposComida) //Recorremos cada fila de la columna
-            {
-                List<Plato> listaPlatosComida = new ArrayList<>();
-                Comida comida = null;
-                for(Comida c : comidasDelDia) //En caso de que haya alguna comida asignada a ese tramo de comida lo guardamos
-                {
-                    if(c.getTipoComida().equals(tipoComida)) comida = c;
-                }
-                if (comida != null)
-                {
-                    //Como sabemos que esa comida existe sacamos los platos a mostrar
-                    listaPlatosComida = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
-                }
-                String key = "Dia" + i + "Comida" + j;
-                //Si la lista de platos esta empty se muestra un mensaje en la tabla
-                //Si la lista tiene datos se muestran los datos
-                dataMap.put(key, listaPlatosComida);
-                ++j;
-            }
-        }
-        Pair<List<LocalDate>,Map<String, List<Plato>>> par = new Pair<>(listaFechas, dataMap);
-        return par;
-    }
-
-    /*
     @GetMapping("/cliente")
     public String doShowCliente(@RequestParam("id") Integer clienteId, HttpSession session,
                                  Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
             if(session.getAttribute("clienteSeleccionado") != null) { session.removeAttribute("clienteSeleccionado"); }
             if(session.getAttribute("diaDieta") != null) { session.removeAttribute("diaDieta"); }
@@ -202,21 +156,25 @@ public class DietistaController extends BaseController{
             if(session.getAttribute("fecha") != null) { session.removeAttribute("fecha"); }
             if(session.getAttribute("selectedComida") != null) { session.removeAttribute("selectedComida"); }
             if(session.getAttribute("comidaUI") != null) { session.removeAttribute("comidaUI"); }
-            User cliente = userRepository.findById(clienteId).orElse(null);
-            session.setAttribute("clienteSeleccionado", cliente);
-            User dietista = (User) session.getAttribute("user");
-            List<TipoComida> tiposDeComida = tipoComidaRepository.findAll();
+
+            UserDTO clienteDTO = userService.getById(clienteId);
+            session.setAttribute("clienteSeleccionado", clienteDTO);
+
+            UserDTO dietistaDTO = userDTO;
+
+            List<TipoComidaDTO> tiposDeComida = tipoComidaService.getAll();
             DiaComida diaComida = new DiaComida();
             diaComida.setYear(Year.now().getValue());
             diaComida.setMonth(YearMonth.now().getMonth().getValue());
             diaComida.setDay(MonthDay.now().getDayOfMonth());
             LocalDate fecha = LocalDate.of(diaComida.getYear(), diaComida.getMonth(), diaComida.getDay());
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
+            DiaDietaDTO diaDieta = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
             session.setAttribute("diaDieta", diaDieta);
-            Pair<List<LocalDate>,Map<String, List<Plato>>> par = obtenerTablaComidas(cliente, dietista, diaComida);
+
+            Pair<List<LocalDate>,Map<String, List<PlatoDTO>>> par = comidaService.obtenerTablaComidas(clienteDTO, dietistaDTO, diaComida);
             List<LocalDate> listaFechas = par.a;
-            Map<String, List<Plato>> tablaComidas = par.b;
-            model.addAttribute("cliente", cliente);
+            Map<String, List<PlatoDTO>> tablaComidas = par.b;
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("tiposDeComida", tiposDeComida);
             model.addAttribute("diaComida", diaComida);
             model.addAttribute("listaFechas", listaFechas);
@@ -227,7 +185,6 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
     /*
     @PostMapping("/setFechaCliente")
