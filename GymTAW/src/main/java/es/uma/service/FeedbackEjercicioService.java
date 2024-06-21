@@ -5,7 +5,6 @@ import es.uma.dao.FeedbackejercicioRepository;
 import es.uma.dao.ImplementacionEjercicioRutinaRepository;
 import es.uma.dto.DiaEntrenamientoDTO;
 import es.uma.dto.FeedbackEjercicioDTO;
-import es.uma.dto.FeedbackEjercicioserieDTO;
 import es.uma.dto.ImplementacionEjercicioRutinaDTO;
 import es.uma.entity.DiaEntrenamiento;
 import es.uma.entity.FeedbackEjercicio;
@@ -47,16 +46,24 @@ public class FeedbackEjercicioService {
         }
     }
 
-    public FeedbackEjercicioDTO createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId){
+    public FeedbackEjercicioDTO createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId) {
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.findById(diaEntrenamientoId).orElse(null);
         ImplementacionEjercicioRutina implementacionEjercicioRutina = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
+
         FeedbackEjercicio feedbackEjercicio = new FeedbackEjercicio();
         feedbackEjercicio.setDiaEntrenamiento(diaEntrenamiento);
         feedbackEjercicio.setImplementacion(implementacionEjercicioRutina);
         feedbackEjercicio.setRealizado((byte) 0);
         feedbackejercicioRepository.save(feedbackEjercicio);
-        return convertEntityToDto(feedbackEjercicio);
+
+        FeedbackEjercicioDTO feedbackEjercicioDTO = new FeedbackEjercicioDTO();
+        feedbackEjercicioDTO.setId(feedbackEjercicio.getId());
+        feedbackEjercicioDTO.setRealizado(feedbackEjercicio.getRealizado());
+        feedbackEjercicioDTO.setImplementacion(implementacionEjercicioRutinaService.convertEntityToDto(feedbackEjercicio.getImplementacion()));
+
+        return feedbackEjercicioDTO;
     }
+
 
     public FeedbackEjercicioDTO convertEntityToDto(FeedbackEjercicio feedbackEjercicio) {
         FeedbackEjercicioDTO feedbackEjercicioDTO = new FeedbackEjercicioDTO();
@@ -87,8 +94,16 @@ public class FeedbackEjercicioService {
     }
 
     public void guardarFeedbackEjercicio(FeedbackEjercicioDTO feedbackEjercicioDTO){
-        FeedbackEjercicio feedbackEjercicio = convertDtoToEntity(feedbackEjercicioDTO);
-        feedbackejercicioRepository.save(feedbackEjercicio);
+        FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioDTO.getId()).orElse(null);
+        if(feedbackEjercicio!=null){
+            feedbackEjercicio.setRealizado(feedbackEjercicioDTO.getRealizado());
+            feedbackEjercicio.setSeguimientoSetsDone(feedbackEjercicioDTO.getSeguimientoSetsDone());
+            feedbackEjercicio.setSeguimientoMetrosDone(feedbackEjercicioDTO.getSeguimientoMetrosDone());
+            feedbackEjercicio.setSeguimientoTiempoDone(feedbackEjercicioDTO.getSeguimientoTiempoDone());
+            feedbackEjercicio.setSeguimientoKilocaloriasDone(feedbackEjercicioDTO.getSeguimientoKilocaloriasDone());
+            feedbackEjercicio.setSeguimientoPesoDone(feedbackEjercicioDTO.getSeguimientoPesoDone());
+            feedbackejercicioRepository.save(feedbackEjercicio);
+        }
     }
 
 }

@@ -1,6 +1,4 @@
-<%@ page import="es.uma.entity.Plato" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
 <%@ page import="es.uma.dto.ComidaDTO" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
@@ -44,14 +42,13 @@
 <body>
 
 <jsp:include page="cabecera_cliente.jsp"/>
-<h1>Platos del <%=comida.getTipoComida().getComidaDelDia()%>:</h1>
+<h1 class="text-center">Platos del <%=comida.getTipoComida().getComidaDelDia()%>:</h1>
 
 <form method="post" action="/cliente/seleccionarPlato">
     <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
-    <div class="d-flex flex-column w-25 m-3">
-        <span>Plato:</span>
-        <select name="platoSeleccionado" class="form-select w-50">
-            <%for(Plato p: platos){%>
+    <div class="d-flex flex-column w-25 align-items-center mx-auto">
+        <select name="platoSeleccionado" class="form-select w-50 mt-3">
+            <%for(PlatoDTO p: platos){%>
             <option value="<%=p.getId()%>" <%= (p.getId() == platoSeleccionadoId) ? "selected" : "" %>><%=p.getNombre()%></option>
             <%}%>
         </select>
@@ -59,56 +56,60 @@
     </div>
 </form>
 
-<div class="bg-secondary w-25 m-3 p-3 rounded">
-    <form method="post" action="/cliente/guardarFeedbackComida">
-        <h3>Feedback de <%=comida.getTipoComida().getComidaDelDia()%>:</h3>
-        <div class="d-flex gap-2">
-            <span class="text-white">Realizado:</span>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" name="realizado" value="1" <%= realizado == 1 ? "checked" : "" %>>
+<div class="d-flex justify-content-center">
+    <div class="bg-secondary w-25 h-25 m-3 p-3 rounded">
+        <form method="post" action="/cliente/guardarFeedbackComida">
+            <h3>Feedback de <%=comida.getTipoComida().getComidaDelDia()%>:</h3>
+            <div class="d-flex gap-2">
+                <span class="text-white">Realizado:</span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="realizado" value="1" <%= realizado == 1 ? "checked" : "" %>>
+                </div>
             </div>
-        </div>
-        <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
-        <button class="btn btn-success mt-3">Guardar</button>
-    </form>
-</div>
+            <input type="hidden" value="<%=platoSeleccionadoId%>" name="platoSeleccionadoID">
+            <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
+            <button class="btn btn-success mt-3">Guardar</button>
+        </form>
+    </div>
 
-<div class="bg-secondary w-25 m-3 rounded">
-    <div class="m-3">
-        <h3>Ingredientes de <%=platoSeleccionado.getNombre()%>:</h3>
-        <div class="d-flex gap-3">
-            <form method="post" action="/cliente/seleccionarIngrediente">
-                <select name="cantidadSeleccionada" size="<%=cantidades.size()%>" class="form-select w-100">
-                    <%for(CantidadIngredientePlatoComida c : cantidades){%>
-                    <option value="<%=c.getId()%>" <%= (c.getId() == cantidadSeleccionadaID) ? "selected" : "" %>><%=c.getCantidad()%> <%=c.getTipoCantidad().getTipoCantidadMedida()%> de <%=c.getIngrediente().getNombre()%></option>
-                    <%}%>
-                </select>
-                <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
-                <input type="hidden" value="<%=platoSeleccionado.getId()%>" name="platoId">
-                <button class="btn btn-primary mt-3">Seleccionar Ingrediente</button>
-            </form>
-
-            <form method="post" action="/cliente/guardarCantidadConsumidaIngrediente" style="<%= realizado == 0 ? "display:none" : "" %>">
-                <div class="d-flex flex-column">
-                    <span class="text-white">Cantidad Consumida(<%=cantidadSeleccionada.getTipoCantidad().getTipoCantidadMedida()%>):</span>
-                    <input type="number" name="cantidadConsumida" value="<%=cantidadSeleccionada.getCantidadConsumida()%>">
+    <div class="bg-secondary w-25 m-3 rounded">
+        <div class="m-3">
+            <h3>Ingredientes de <%=platoSeleccionado.getNombre()%>:</h3>
+            <div class="d-flex gap-3">
+                <form method="post" action="/cliente/seleccionarIngrediente">
+                    <span class="text-white">Ingrediente:</span>
+                    <select name="cantidadSeleccionada" size="<%=cantidades.size()%>" class="form-select w-100">
+                        <%for(CantidadIngredientePlatoComidaDTO c : cantidades){%>
+                        <option value="<%=c.getId()%>" <%= (c.getId() == cantidadSeleccionadaID) ? "selected" : "" %>><%=c.getCantidad()%> <%=c.getTipoCantidad().getTipoCantidadMedida()%> de <%=c.getIngrediente().getNombre()%></option>
+                        <%}%>
+                    </select>
                     <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
                     <input type="hidden" value="<%=platoSeleccionado.getId()%>" name="platoId">
-                    <input type="hidden" value="<%=cantidadSeleccionada.getId()%>" name="cantidadID">
-                    <button class="btn btn-primary mt-3">Guardar</button>
-                </div>
-            </form>
+                    <button class="btn btn-primary mt-3">Seleccionar Ingrediente</button>
+                </form>
+
+                <form method="post" action="/cliente/guardarCantidadConsumidaIngrediente" style="<%= realizado == 0 ? "display:none" : "" %>">
+                    <div class="d-flex flex-column">
+                        <span class="text-white">Cantidad Consumida(<%=cantidadSeleccionada.getTipoCantidad().getTipoCantidadMedida()%>):</span>
+                        <input type="number" name="cantidadConsumida" value="<%=cantidadSeleccionada.getCantidadConsumida()%>">
+                        <input type="hidden" value="<%=comida.getId()%>" name="comidaId">
+                        <input type="hidden" value="<%=platoSeleccionado.getId()%>" name="platoId">
+                        <input type="hidden" value="<%=cantidadSeleccionada.getId()%>" name="cantidadID">
+                        <button class="btn btn-primary mt-3">Guardar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="bg-secondary w-25 m-3 p-3 rounded">
-    <h3>Enlace receta:</h3>
-    <a class="text-white"><%=platoSeleccionado.getEnlaceReceta()%></a>
-    <h3>Tiempo de preparacion:</h3>
-    <span class="text-white"><%=platoSeleccionado.getTiempoDePreparacion()%></span>
-    <h3>Receta:</h3>
-    <p class="text-white"><%=platoSeleccionado.getReceta()%></p>
+    <div class="bg-secondary w-25 m-3 p-3 rounded">
+        <h3>Enlace receta:</h3>
+        <a class="text-white"><%=platoSeleccionado.getEnlaceReceta()%></a>
+        <h3>Tiempo de preparacion:</h3>
+        <span class="text-white"><%=platoSeleccionado.getTiempoDePreparacion()%>m</span>
+        <h3>Receta:</h3>
+        <p class="text-white"><%=platoSeleccionado.getReceta()%></p>
+    </div>
 </div>
 
 </body>

@@ -80,10 +80,11 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserieList;
     }
 
-
     public void borrarFeedbackEjercicioSerie(Integer feedbackEjercicioserieId){
         FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.findById(feedbackEjercicioserieId).orElse(null);
-        feedbackejercicioserieRepository.delete(feedbackEjercicioserie);
+        if(feedbackEjercicioserie!=null){
+            feedbackejercicioserieRepository.delete(feedbackEjercicioserie);
+        }
     }
 
     public void prerararFeedbackEjercicioSeries(Integer serie,Integer feedbackEjercicioId){
@@ -97,8 +98,15 @@ public class FeedbackEjercicioSerieService {
     }
 
     public void guardarFeedbackEjercicioSerie(FeedbackEjercicioserieDTO feedbackEjercicioserieDTO){
-        FeedbackEjercicioserie feedbackEjercicioserie = convertDtoToEntity(feedbackEjercicioserieDTO);
-        feedbackejercicioserieRepository.save(feedbackEjercicioserie);
+        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.findById(feedbackEjercicioserieDTO.getId()).orElse(null);
+        if(feedbackEjercicioserie!=null){
+            feedbackEjercicioserie.setPesoRealizado(feedbackEjercicioserieDTO.getPesoRealizado());
+            feedbackEjercicioserie.setRepeticionesRealizadas(feedbackEjercicioserieDTO.getRepeticionesRealizadas());
+            feedbackEjercicioserie.setTiempoRealizado(feedbackEjercicioserieDTO.getTiempoRealizado());
+            feedbackEjercicioserie.setMetrosRealizado(feedbackEjercicioserieDTO.getMetrosRealizado());
+            feedbackEjercicioserie.setKilocaloriasRealizado(feedbackEjercicioserieDTO.getKilocaloriasRealizado());
+            feedbackejercicioserieRepository.save(feedbackEjercicioserie);
+        }
     }
 
 }

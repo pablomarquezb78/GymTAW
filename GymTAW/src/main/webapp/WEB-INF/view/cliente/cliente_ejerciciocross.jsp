@@ -78,7 +78,7 @@
             <form:input type="number" disabled="<%=!hayMetros%>" path="metrosRealizado" size="5" required="<%=hayMetros%>"></form:input>
 
             <form:hidden path="implementacionId"></form:hidden>
-            <form:hidden path="feedbackEjercicio"></form:hidden><br/>
+            <form:hidden path="feedbackEjercicioId"></form:hidden><br/>
             <form:button class="btn btn-success mt-3">Guardar</form:button>
         </form:form>
     </div>

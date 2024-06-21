@@ -1,7 +1,5 @@
 package es.uma.ui;
 
-import es.uma.dto.FeedbackEjercicioDTO;
-
 public class FeedbackSerieForm {
 
     protected Integer implementacionId;
@@ -12,14 +10,14 @@ public class FeedbackSerieForm {
     protected Integer minutosRealizados;
     protected String kilocaloriasRealizado;
     protected String metrosRealizado;
-    protected FeedbackEjercicioDTO feedbackEjercicio;
+    protected Integer feedbackEjercicioId;
 
-    public FeedbackEjercicioDTO getFeedbackEjercicio() {
-        return feedbackEjercicio;
+    public Integer getFeedbackEjercicioId() {
+        return feedbackEjercicioId;
     }
 
-    public void setFeedbackEjercicio(FeedbackEjercicioDTO feedbackEjercicio) {
-        this.feedbackEjercicio = feedbackEjercicio;
+    public void setFeedbackEjercicioId(Integer feedbackEjercicioId) {
+        this.feedbackEjercicioId = feedbackEjercicioId;
     }
 
     public Integer getSegundosRealizados() {

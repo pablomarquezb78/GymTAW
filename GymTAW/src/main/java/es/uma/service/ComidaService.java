@@ -29,8 +29,11 @@ public class ComidaService {
     }
 
     public void guardarComida(ComidaDTO comidaDTO){
-        Comida comida = convertDtoToEntity(comidaDTO);
-        comidaRepository.save(comida);
+        Comida comida = comidaRepository.findById(comidaDTO.getId()).orElse(null);
+        if(comida!=null){
+            comida.setRealizado(comidaDTO.getRealizado());
+            comidaRepository.save(comida);
+        }
     }
 
     public ComidaDTO getComidaByID(Integer id){
@@ -58,6 +61,7 @@ public class ComidaService {
         comidaDTO.setId(comida.getId());
         comidaDTO.setTipoComida(tipoComidaService.convertEntityToDto(comida.getTipoComida()));
         comidaDTO.setDiaDieta(diaDietaService.convertEntityToDto(comida.getDiaDieta()));
+        comidaDTO.setRealizado(comida.getRealizado());
         return comidaDTO;
     }
 
@@ -66,6 +70,7 @@ public class ComidaService {
         comida.setId(comidaDTO.getId());
         comida.setTipoComida(tipoComidaService.convertDtoToEntity(comidaDTO.getTipoComida()));
         comida.setDiaDieta(diaDietaService.convertDtoToEntity(comidaDTO.getDiaDieta()));
+        comida.setRealizado(comidaDTO.getRealizado());
         return comida;
     }
 
