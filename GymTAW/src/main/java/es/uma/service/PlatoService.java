@@ -8,7 +8,6 @@ import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.PlatoDietistaUI;
 import es.uma.ui.PlatoUI;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,7 +116,7 @@ public class PlatoService {
         return platoDietista;
     }
 
-    public void crearPlatoByPlatoDietstaUI(PlatoDietistaUI platoDietistaUI, HttpSession session)
+    public void crearPlatoByPlatoDietstaUI(PlatoDietistaUI platoDietistaUI, UserDTO userDTO)
     {
         Plato plato = new Plato();
         plato.setNombre(platoDietistaUI.getNombre());
@@ -131,14 +130,15 @@ public class PlatoService {
             {
                 AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
                 asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
-                asignacion.setDietista((User) session.getAttribute("user"));
+                User user = userService.convertDtoToEntity(userDTO);
+                asignacion.setDietista(user);
                 asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
                 asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
             }
         }
     }
 
-    public void editarPlatoByPlatoDietistaUI(PlatoDietistaUI platoDietistaUI, HttpSession session)
+    public void editarPlatoByPlatoDietistaUI(PlatoDietistaUI platoDietistaUI, UserDTO userDTO)
     {
         Plato plato = platosRepository.findById(platoDietistaUI.getId()).orElse(null);
         plato.setNombre(platoDietistaUI.getNombre());
@@ -153,7 +153,7 @@ public class PlatoService {
             {
                 for(Ingrediente ingrediente : ingredientesPrevios)
                 {
-                    User dietista = (User) session.getAttribute("user");
+                    User dietista = userService.convertDtoToEntity(userDTO);
                     AsignacionPlatoIngredienteDietistaCreador asignacion =
                             asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
                     asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
@@ -162,7 +162,8 @@ public class PlatoService {
                 {
                     AsignacionPlatoIngredienteDietistaCreador asignacion = new AsignacionPlatoIngredienteDietistaCreador();
                     asignacion.setPlato(platosRepository.getUltimoPlatoAdded());
-                    asignacion.setDietista((User) session.getAttribute("user"));
+                    User dietista = userService.convertDtoToEntity(userDTO);
+                    asignacion.setDietista(dietista);
                     asignacion.setIngrediente(ingredienteRepository.findById(ingrediente.getId()).orElse(null));
                     asignacionPlatoIngredienteDietistacreadorRepositoy.saveAndFlush(asignacion);
                 }
@@ -170,14 +171,14 @@ public class PlatoService {
         }
     }
 
-    public void borrarPlatoByPlatoId(Integer platoId, HttpSession session)
+    public void borrarPlatoByPlatoId(Integer platoId, UserDTO userDTO)
     {
         Plato plato = platosRepository.findById(platoId).orElse(null);
 
         List<Ingrediente> ingredientes = platosRepository.getIngredientesLinkedToPlato(plato);
         for(Ingrediente ingrediente : ingredientes)
         {
-            User dietista = (User) session.getAttribute("user");
+            User dietista = userService.convertDtoToEntity(userDTO);
             AsignacionPlatoIngredienteDietistaCreador asignacion =
                     asignacionPlatoIngredienteDietistacreadorRepositoy.getAsignacionBy(ingrediente, plato, dietista).getFirst();
             asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
@@ -185,7 +186,7 @@ public class PlatoService {
         platosRepository.delete(plato);
     }
 
-    public PlatoDietistaUI addNewIngredienteToPlatoDietistaUI(IngredienteDTO ingredienteDTO, HttpSession session)
+    public PlatoDietistaUI addNewIngredienteToPlatoDietistaUI(IngredienteDTO ingredienteDTO, PlatoDietistaUI platoDietistaUI)
     {
         Ingrediente ingrediente = new Ingrediente();
         ingrediente.setId(ingredienteDTO.getId());
@@ -196,7 +197,6 @@ public class PlatoService {
         ingrediente.setProteinas(ingredienteDTO.getProteinas());
         ingrediente.setHidratosDeCarbono(ingredienteDTO.getHidratosDeCarbono());
         ingredienteRepository.save(ingrediente);
-        PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
         if (platoDietistaUI.getIngredientes() == null) platoDietistaUI.setIngredientes(new ArrayList<>());
         platoDietistaUI.getIngredientes().add(ingredienteRepository.getUltimosIngredientesAdded().getFirst());
         return platoDietistaUI;

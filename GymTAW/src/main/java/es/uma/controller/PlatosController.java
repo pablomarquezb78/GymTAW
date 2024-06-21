@@ -161,7 +161,7 @@ public class PlatosController extends BaseController{
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
-            platoService.borrarPlatoByPlatoId(platoId, session);
+            platoService.borrarPlatoByPlatoId(platoId, userDTO);
             dir = "redirect:/dietista/platos";
         } else {
             dir = "redirect:/";
@@ -213,7 +213,8 @@ public class PlatosController extends BaseController{
         UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
         if (userService.checkDietistaLogged(userDTO, userRolDTO))
         {
-            PlatoDietistaUI platoDietistaUI = platoService.addNewIngredienteToPlatoDietistaUI(ingredienteDTO, session);
+            PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
+            platoDietistaUI = platoService.addNewIngredienteToPlatoDietistaUI(ingredienteDTO, platoDietistaUI);
             session.setAttribute("platoCreando", platoDietistaUI);
             dir = "redirect:/dietista/crearPlato";
         } else {
@@ -250,9 +251,9 @@ public class PlatosController extends BaseController{
         {
             //Crear plato
             if(platoDietistaUI.getId() == null) {
-                platoService.crearPlatoByPlatoDietstaUI(platoDietistaUI, session);
+                platoService.crearPlatoByPlatoDietstaUI(platoDietistaUI, userDTO);
             } else { //Editar plato
-                platoService.editarPlatoByPlatoDietistaUI(platoDietistaUI, session);
+                platoService.editarPlatoByPlatoDietistaUI(platoDietistaUI, userDTO);
             }
             session.removeAttribute("platoCreando");
             dir = "redirect:/dietista/platos";
