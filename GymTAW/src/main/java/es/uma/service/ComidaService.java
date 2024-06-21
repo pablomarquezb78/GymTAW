@@ -4,13 +4,9 @@ import es.uma.dao.CantidadIngredientePlatoComidaRepository;
 import es.uma.dao.ComidaRepository;
 import es.uma.dao.DiaDietaRepository;
 import es.uma.dao.TipoComidaRepository;
-import es.uma.dto.ComidaDTO;
-import es.uma.dto.PlatoDTO;
-import es.uma.dto.UserDTO;
-import es.uma.entity.Comida;
-import es.uma.entity.DiaDieta;
-import es.uma.entity.TipoComida;
-import es.uma.entity.User;
+import es.uma.dto.*;
+import es.uma.entity.*;
+import es.uma.ui.ComidaUI;
 import es.uma.ui.DiaComida;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +132,29 @@ public class ComidaService {
         return par;
     }
 
+    public ComidaUI initialSetUpComidaUI(DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
+    {
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaDTO);
+        ComidaUI comidaUI = new ComidaUI();
+        comidaUI.setPlatoExistente(false);
+        ArrayList<Plato> platosComida = new ArrayList<>();
+        List<Comida> comida = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
+        if(!comida.isEmpty()) {
+            platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst().getId()));
+        } else {
+            Comida comidaAdd = new Comida();
+            comidaAdd.setTipoComida(tipoComida);
+            comidaAdd.setDiaDieta(diaDieta);
+            comidaRepository.save(comidaAdd);
+        }
+        comidaUI.setListaPlatosComida(platosComida);
+        ArrayList<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = new ArrayList<>();
+        comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+        comidaUI.setSelectedPlato(null);
+        return comidaUI;
+    }
+
     public ComidaDTO convertEntityToDto(Comida comida){
         ComidaDTO comidaDTO = new ComidaDTO();
         comidaDTO.setId(comida.getId());
@@ -152,6 +171,14 @@ public class ComidaService {
         comida.setDiaDieta(diaDietaService.convertDtoToEntity(comidaDTO.getDiaDieta()));
         comida.setRealizado(comidaDTO.getRealizado());
         return comida;
+    }
+
+    public List<ComidaDTO> convertlistEntityToDto(List<Comida> comidaList){
+        List<ComidaDTO> comidaDTOList = new ArrayList<>();
+        for(Comida comida : comidaList){
+            comidaDTOList.add(this.convertEntityToDto(comida));
+        }
+        return comidaDTOList;
     }
 
 }

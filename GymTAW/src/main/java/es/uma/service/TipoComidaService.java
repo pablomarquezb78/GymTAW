@@ -3,6 +3,7 @@ package es.uma.service;
 import es.uma.dao.TipoComidaRepository;
 import es.uma.dto.TipoComidaDTO;
 import es.uma.entity.TipoComida;
+import es.uma.ui.DiaComida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,11 @@ public class TipoComidaService {
 
     public TipoComidaDTO getById(Integer id){
         return this.convertEntityToDto(tipoComidaRepository.findById(id).orElse(null));
+    }
+
+    public TipoComidaDTO getSelectedComidaFromDiaComida(DiaComida diaComida)
+    {
+        return convertEntityToDto(diaComida.getTipoComida());
     }
 
     public TipoComidaDTO convertEntityToDto(TipoComida tipoComida){
