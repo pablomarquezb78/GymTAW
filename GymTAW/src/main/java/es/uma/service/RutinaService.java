@@ -36,6 +36,10 @@ public class RutinaService {
         return rutina;
     }
 
+    public void borrarRutinaID(Integer id){
+        rutinaRepository.deleteById(id);
+    }
+
     public RutinaDTO crearRutina(UserDTO entrenador){
 
         Rutina rutina = new Rutina();

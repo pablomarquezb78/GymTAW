@@ -24,6 +24,10 @@ public class TipoEjercicioService {
                 .collect(Collectors.toList());
     }
 
+    public void guardarNuevoEj(TipoEjercicioDTO nuevoTipoEjercicio){
+        tipoEjercicioRepository.save(convertDtoToEntity(nuevoTipoEjercicio));
+    }
+
     public TipoEjercicioDTO getById(Integer id){
         return convertEntityToDto(tipoEjercicioRepository.findById(id).orElse(null));
     }
