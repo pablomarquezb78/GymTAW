@@ -4,8 +4,9 @@
 <%@ page import="es.uma.ui.Implementacion" %>
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.entity.Rutina" %>
+<%@ page import="es.uma.dto.EjercicioDTO" %>
 <%
-    List<Ejercicio> ejercicios = (List<Ejercicio>) request.getAttribute("ejercicios");
+    List<EjercicioDTO> ejercicios = (List<EjercicioDTO>) request.getAttribute("ejercicios");
     Boolean editable = (Boolean) request.getAttribute("editable");
 
     Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
@@ -91,7 +92,18 @@
                     </div>
                     <div class="form-group form-select">
                         <label class="form-label">Ejercicio:</label>
-                        <form:select path="ejercicio" size="3" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                        <select name="idejercicioelegido" size="5" class="form-control">
+                            <%
+                                for(EjercicioDTO ejercicioDTO: ejercicios){
+                            %>
+                                    <option value="<%=ejercicioDTO.getId()%>"><%=ejercicioDTO.getNombre()%></option>
+                            <%
+                                }
+                            %>
+                        </select>
+                        <%
+                            //                        <form:select path="ejercicio" size="3" items="${ejercicios}" itemValue="id" itemLabel="nombre" class="form-control"></form:select>
+                        %>
                     </div>
                     <form:hidden path="id"/>
                     <form:hidden path="rutina"/>

@@ -12,6 +12,7 @@ import es.uma.entity.Ejercicio;
 import es.uma.entity.ImplementacionEjercicioRutina;
 import es.uma.entity.Rutina;
 import es.uma.ui.Implementacion;
+import es.uma.ui.PlatoUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +129,21 @@ public class ImplementacionEjercicioRutinaService {
 
     public void deleteById(Integer id){
         implementacionEjercicioRutinaRepository.deleteById(id);
+    }
+
+    public void guardarNuevaImplementacion(Implementacion implementacion){
+        ImplementacionEjercicioRutina imp;
+        if(implementacion.getId()!=null){
+            imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
+            asignarImplementacionReal(imp,implementacion);
+        }else{
+            imp = new ImplementacionEjercicioRutina();
+            imp.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
+
+            asignarImplementacionReal(imp,implementacion);
+        }
+
+        this.implementacionEjercicioRutinaRepository.save(imp);
     }
 
     public ImplementacionEjercicioRutinaDTO convertEntityToDto(ImplementacionEjercicioRutina implementacionEjercicioRutina) {
