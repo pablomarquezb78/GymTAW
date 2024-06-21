@@ -771,9 +771,9 @@ public class EntrenamientosController extends BaseController{
     public String verRutinasCompletas(HttpSession session, Model model){
 
         String dir = "crosstrainer/rutinas";
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
             List<RutinaDTO> rutinas = rutinaService.getAllRutinas();
 
             model.addAttribute("rutinas",rutinas);
@@ -787,12 +787,12 @@ public class EntrenamientosController extends BaseController{
     public String filtrarRutinas(HttpSession session,@RequestParam("nombrerutina") String nombre,@RequestParam("pormi") Integer tipofiltrado, Model model){
 
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-            User self = (User) session.getAttribute("user");
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
+            UserDTO self = (UserDTO) session.getAttribute("user");
 
-            List<RutinaDTO> rutinas = rutinaService.getRutinasPorNombreYEntrenador(nombre,tipofiltrado,self);
+            List<RutinaDTO> rutinas = rutinaService.getRutinasPorNombreYEntrenador(nombre,tipofiltrado,userService.convertDtoToEntity(self));
 
             model.addAttribute("rutinas",rutinas);
             return "crosstrainer/rutinas";
@@ -807,8 +807,8 @@ public class EntrenamientosController extends BaseController{
     public String borrarRutina(HttpSession session, Model model, @RequestParam("idrutina") Integer idRutina){
 
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(userRolService.convertDtoToEntity(rol)) || esEntrenador(userRolService.convertDtoToEntity(rol))) {
 
             Rutina rutina = rutinaRepository.findById(idRutina).orElse(null);
             rutinaRepository.delete(rutina);

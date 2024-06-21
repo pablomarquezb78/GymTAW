@@ -31,7 +31,7 @@
     </form>
 
     <% if(rutinas.size() > 0) { %>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
         <thead class="thead-dark">
         <tr>
             <th>Nombre</th>
