@@ -111,17 +111,15 @@ public class ComunController extends BaseController{
 
         String strTo = "/perfil";
 
+        User user = (User) session.getAttribute("user");
+        UserRol rol = (UserRol) session.getAttribute("rol");
+
         if(!estaAutenticado(session)) {
             strTo = "redirect:/";
         }else {
-
-            User user = (User) session.getAttribute("user");
             Usuario usuario = new Usuario();
-
             setUser(usuario,user);
-
             model.addAttribute("usuario",usuario);
-            UserRol rol = (UserRol) session.getAttribute("rol");
             model.addAttribute("rolid",rol.getId());
         }
 
@@ -343,38 +341,18 @@ public class ComunController extends BaseController{
 
     //Este guardar es para admin
     @PostMapping("/guardarImplementacion")
-    public String doGuardarImplementacion(@ModelAttribute Implementacion implementacion, HttpSession session){
+    public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,
+                                          @RequestParam("idejercicioseleccionado") Integer idej,HttpSession sesion){
+
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        String idEjercicio;
-        if (estaAutenticado(session) && esAdmin(rol)) {
-            if(implementacion.getId() == null){
-                ImplementacionEjercicioRutina ier = new ImplementacionEjercicioRutina();
-                ier.setKilocalorias(implementacion.getKilocalorias());
-                //ier.setEjercicio(implementacion.getEjercicio());
-                ier.setRutina(rutinaRepository.findById(implementacion.getRutina()).orElse(null));
-                ier.setPeso(implementacion.getPeso());
-                ier.setMetros(implementacion.getMetros());
-                ier.setTiempo(implementacion.getTiempo());
-                ier.setSets(implementacion.getSets());
-                ier.setRepeticiones(implementacion.getRepeticiones());
+        UserRol rol = (UserRol) sesion.getAttribute("rol");
 
-                implementacionEjercicioRutinaRepository.save(ier);
-                idEjercicio = implementacion.getEjercicio().getId().toString();
-            }else{
-                ImplementacionEjercicioRutina ier = implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
-                ier.setKilocalorias(implementacion.getKilocalorias());
-                ier.setPeso(implementacion.getPeso());
-                ier.setMetros(implementacion.getMetros());
-                ier.setTiempo(implementacion.getTiempo());
-                ier.setSets(implementacion.getSets());
-                ier.setRepeticiones(implementacion.getRepeticiones());
+        if (estaAutenticado(sesion) && esAdmin(rol)) {
 
-                implementacionEjercicioRutinaRepository.save(ier);
-                idEjercicio = ier.getEjercicio().getId().toString();
-            }
+                implementacion.setEjercicio(ejercicioService.getById(idej));
+                implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
 
-            dir = "redirect:/comun/verImplementacionesAsociadas?id="+idEjercicio;
+            dir ="redirect:/comun/verImplementacionesAsociadas?id="+idej;
 
         } else {
             dir = "redirect:/";

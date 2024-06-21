@@ -611,7 +611,6 @@ public class EntrenamientosController extends BaseController{
     @GetMapping("/crear-ejercicio")
     public String doCrearEjercicio(HttpSession sesion, Model model){
 
-
         UserRol userRol = (UserRol) sesion.getAttribute("rol");
 
         EjercicioUI ejercicioUI = new EjercicioUI();

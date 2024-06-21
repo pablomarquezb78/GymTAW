@@ -63,7 +63,7 @@
         <td><%=implementacion.getMetros()%></td>
         <td><%=implementacion.getTiempo()%></td>
         <td><%=implementacion.getKilocalorias()%></td>
-        <td><a href="/comun/editarImplementacion?id=<%=implementacion.getId()%>">Editar</a></td>
+        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%=implementacion.getId()%>">Editar</a></td>
         <td><a href="/comun/borrarImplementacion?idEjercicio=<%=ejercicio.getId()%>&idImplementacion=<%=implementacion.getId()%>">Borrar</a></td>
     </tr>
     <%

@@ -64,7 +64,7 @@ public class ImplementacionEjercicioRutinaService {
             DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacionUI.getIdDia());
             imp.setRutina(dia.getRutina());
             asignarImplementacionReal(imp,implementacionUI);
-            
+
         }
 
         this.implementacionEjercicioRutinaRepository.save(imp);
