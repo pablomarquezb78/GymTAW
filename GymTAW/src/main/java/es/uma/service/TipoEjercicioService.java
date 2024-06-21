@@ -17,6 +17,11 @@ public class TipoEjercicioService {
     @Autowired
     private TipoEjercicioRepository tipoEjercicioRepository;
 
+    public void borrarTipoID(Integer id){
+        tipoEjercicioRepository.deleteById(id);
+
+    }
+
     public List<TipoEjercicioDTO> getAll(){
         return tipoEjercicioRepository.findAll()
                 .stream()
