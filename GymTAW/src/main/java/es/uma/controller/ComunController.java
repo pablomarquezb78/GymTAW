@@ -274,7 +274,6 @@ public class ComunController extends BaseController{
             model.addAttribute("rutinas", rutinaService.getAllRutinas());
             model.addAttribute("implementacion", new Implementacion());
             model.addAttribute("rol", rol);
-
         } else {
             dir = "redirect:/";
         }
@@ -313,30 +312,23 @@ public class ComunController extends BaseController{
     }
 
     //Este guardar es para entrenador
-    @PostMapping("/guardarimplementacion")
-    public String doGuardarImplementacionEntrenador(@ModelAttribute("implementacion") Implementacion implementacion,HttpSession sesion){
-        String strTo = "redirect:/entrenamientos/editardia?iddia=" + implementacion.getIdDia();
+    //Este guardar es para admin
+    @PostMapping("/guardarImplementacionTrainer")
+    public String doGuardarImplementacionTrainer(@ModelAttribute("implementacion") Implementacion implementacion,
+                                          @RequestParam("idejercicioseleccionado") Integer idej,HttpSession sesion){
 
-        if(!estaAutenticado(sesion)){
-            strTo = "redirect:/";
-        }else{
-            ImplementacionEjercicioRutina imp;
-            if(implementacion.getId()!=null){
-                imp = this.implementacionEjercicioRutinaRepository.findById(implementacion.getId()).orElse(null);
-                asignarImplementacionReal(imp,implementacion);
-            }else{
-                imp = new ImplementacionEjercicioRutina();
-                DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacion.getIdDia());
-                imp.setRutina(dia.getRutina());
+        String dir;
+        UserRolDTO rol = (UserRolDTO) sesion.getAttribute("rol");
 
-                asignarImplementacionReal(imp,implementacion);
-            }
+        if (esEntrenador(rol)) {
+            implementacion.setEjercicio(ejercicioService.getById(idej));
+            implementacionEjercicioRutinaService.guardarImplementacionUI(implementacion);
+            dir ="redirect:/comun/verImplementacionesAsociadas?id="+idej;
 
-            this.implementacionEjercicioRutinaRepository.save(imp);
+        } else {
+            dir = "redirect:/";
         }
-
-
-        return strTo;
+        return dir;
     }
 
     //Este guardar es para admin

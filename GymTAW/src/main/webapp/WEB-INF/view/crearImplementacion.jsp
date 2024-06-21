@@ -17,6 +17,9 @@
 
     Implementacion implementacion = (Implementacion) request.getAttribute("implementacion");
 
+    Integer entrenamiento = (Integer) request.getAttribute("entrenamiento");
+
+
     String sets = "", repeticiones = "", peso = "", tiempo = "", cal = "", metros = "";
 
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
@@ -30,12 +33,15 @@
 
     Boolean isAdmin = userRol.getId() == 1;
 
-    Boolean disabled = false;
+    Boolean disabled = true;
     if(isAdmin) {
         actionRol = "/comun/guardarImplementacion";
         cabecera = "./admin/cabeceraAdmin.jsp";
         disabled = true;
+    }else if(entrenamiento !=null && entrenamiento==1){
+        actionRol = "/comun/guardarImplementacionTrainer";
     }
+
     if (editable != null && editable) {
         sets = implementacion.getSets();
         repeticiones = implementacion.getRepeticiones();

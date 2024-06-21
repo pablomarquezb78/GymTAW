@@ -509,6 +509,44 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
+    //final boss:
+    //todo //CHECK?
+    @GetMapping("/editarimplementacionentrenamientos")
+    public String doEditarImplementacionEntrenamientos(@RequestParam("id") Integer id,
+                                                   Model model,HttpSession sesion){
+        String strTo = "crearImplementacion";
+
+        if(!estaAutenticado(sesion)){
+            strTo = "redirect:/";
+        }else{
+            //ImplementacionEjercicioRutina imp = implementacionEjercicioRutinaRepository.getById(id);
+            ImplementacionEjercicioRutinaDTO imp = implementacionEjercicioRutinaService.getByID(id);
+
+            Implementacion implementacion = new Implementacion();
+            //asignarImplementacionUI(implementacion,imp);
+            implementacionEjercicioRutinaService.asignarImplementacionDTOaImplementacionUI(implementacion,imp);
+            implementacion.setId(id);
+            String tiempo = imp.getTiempo();
+            String cal = imp.getKilocalorias();
+            model.addAttribute("implementacion",implementacion);
+
+            //List<TipoEjercicio> tipos = tipoEjercicioRepository.findAll();
+            List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
+            model.addAttribute("tipos",tipos);
+
+            //List<Ejercicio> ejercicios = ejercicioRepository.findAll();
+            List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
+            model.addAttribute("ejercicios",ejercicios);
+
+            model.addAttribute("entrenamiento",1);
+            Boolean editable = true;
+            model.addAttribute("editable",editable);
+        }
+
+
+        return strTo;
+    }
+
 
 
 //Comentado
