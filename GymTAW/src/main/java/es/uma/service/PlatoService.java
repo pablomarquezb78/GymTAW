@@ -22,8 +22,6 @@ public class PlatoService {
     @Autowired
     public PlatosRepository platosRepository;
     @Autowired
-    private UserService userService;
-    @Autowired
     private IngredienteRepository ingredienteRepository;
     @Autowired
     private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
@@ -183,6 +181,23 @@ public class PlatoService {
             asignacionPlatoIngredienteDietistacreadorRepositoy.delete(asignacion);
         }
         platosRepository.delete(plato);
+    }
+
+    public PlatoDietistaUI addNewIngredienteToPlatoDietistaUI(IngredienteDTO ingredienteDTO, HttpSession session)
+    {
+        Ingrediente ingrediente = new Ingrediente();
+        ingrediente.setId(ingredienteDTO.getId());
+        ingrediente.setNombre(ingredienteDTO.getNombre());
+        ingrediente.setAzucares(ingredienteDTO.getAzucares());
+        ingrediente.setGrasas(ingredienteDTO.getGrasas());
+        ingrediente.setKilocalorias(ingredienteDTO.getKilocalorias());
+        ingrediente.setProteinas(ingredienteDTO.getProteinas());
+        ingrediente.setHidratosDeCarbono(ingredienteDTO.getHidratosDeCarbono());
+        ingredienteRepository.save(ingrediente);
+        PlatoDietistaUI platoDietistaUI = (PlatoDietistaUI) session.getAttribute("platoCreando");
+        if (platoDietistaUI.getIngredientes() == null) platoDietistaUI.setIngredientes(new ArrayList<>());
+        platoDietistaUI.getIngredientes().add(ingredienteRepository.getUltimosIngredientesAdded().getFirst());
+        return platoDietistaUI;
     }
 
     public PlatoDTO convertEntityToDto(Plato plato){

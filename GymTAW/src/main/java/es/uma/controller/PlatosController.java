@@ -180,14 +180,13 @@ public class PlatosController extends BaseController{
         return dir;
     }
 
-    /*
     @GetMapping("/addNuevoIngrediente")
     public String doAddNuevoIngrediente(HttpSession session, Model model) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            Ingrediente nuevoIngrediente = new Ingrediente();
+            IngredienteDTO nuevoIngrediente = new IngredienteDTO();
             model.addAttribute("nuevoIngrediente", nuevoIngrediente);
             dir = "dietista/dietista_crearIngrediente";
         } else {
@@ -195,33 +194,21 @@ public class PlatosController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/guardarNuevoIngrediente")
-    public String doSaveNuevoIngrediente(@ModelAttribute("nuevoIngrediente") Ingrediente ingrediente , HttpSession session, Model model) {
+    public String doSaveNuevoIngrediente(@ModelAttribute("nuevoIngrediente") IngredienteDTO ingredienteDTO , HttpSession session, Model model) {
         String dir;
         UserRol rol = (UserRol) session.getAttribute("rol");
         if (estaAutenticado(session) && esDietista(rol))
         {
-            Ingrediente ingredienteSave = new Ingrediente();
-            ingredienteSave.setNombre(ingrediente.getNombre());
-            ingredienteSave.setKilocalorias(ingrediente.getKilocalorias());
-            ingredienteSave.setProteinas(ingrediente.getProteinas());
-            ingredienteSave.setAzucares(ingrediente.getAzucares());
-            ingredienteSave.setGrasas(ingrediente.getGrasas());
-            ingredienteSave.setHidratosDeCarbono(ingrediente.getHidratosDeCarbono());
-            ingredienteRepository.save(ingredienteSave);
-            PlatoDietistaUI plato = (PlatoDietistaUI) session.getAttribute("platoCreando");
-            //plato.getIngredientes().add(ingredienteRepository.getUltimosIngredientesAdded().getFirst());
-            session.setAttribute("platoCreando", plato);
+            PlatoDietistaUI platoDietistaUI = platoService.addNewIngredienteToPlatoDietistaUI(ingredienteDTO, session);
+            session.setAttribute("platoCreando", platoDietistaUI);
             dir = "redirect:/dietista/crearPlato";
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
-    */
 
     @GetMapping("/eliminarIngrediente")
     public String doEliminarIngredienteExistente(@RequestParam("ingredienteId") Integer ingredienteId
