@@ -497,7 +497,7 @@ public class EntrenamientosController extends BaseController{
             String tiempo = imp.getTiempo();
             String cal = imp.getKilocalorias();
 
-            implementacion.setAuxValue(1);
+            implementacion.setAuxValue(0);
 
             model.addAttribute("implementacion",implementacion);
 
@@ -538,7 +538,7 @@ public class EntrenamientosController extends BaseController{
             implementacion.setId(id);
             String tiempo = imp.getTiempo();
             String cal = imp.getKilocalorias();
-            implementacion.setAuxValue(0);
+            implementacion.setAuxValue(1);
 
             model.addAttribute("implementacion",implementacion);
 

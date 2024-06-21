@@ -66,7 +66,7 @@
             <td><%= imp.getMetros()%> Mts</td>
             <td><%= imp.getTiempo() == null ? "" : imp.getTiempo()%></td>
             <td>
-                <form action="/entrenamientos/editarimplementaciondefinitiva" method="get" class="d-inline">
+                <form action="/entrenamientos/editarimplementacionentrenamientos" method="get" class="d-inline">
                     <input type="hidden" name="id" value="<%= imp.getId() %>">
                     <button type="submit" class="btn btn-primary btn-sm">Editar</button>
                 </form>
