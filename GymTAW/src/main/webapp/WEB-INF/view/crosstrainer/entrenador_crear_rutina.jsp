@@ -64,7 +64,7 @@
             <td><%= imp.getRepeticiones()%></td>
             <td><%= imp.getPeso()%> Kg</td>
             <td><%= imp.getMetros()%> Mts</td>
-            <td><%= imp.getTiempo()%></td>
+            <td><%= imp.getTiempo() == null ? "" : imp.getTiempo()%></td>
             <td>
                 <form action="/entrenamientos/editarimplementaciondefinitiva" method="get" class="d-inline">
                     <input type="hidden" name="id" value="<%= imp.getId() %>">
