@@ -1,8 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.Ejercicio" %>
-<%@ page import="es.uma.entity.TipoEjercicio" %>
-<%@ page import="es.uma.entity.UserRol" %>
 <%@ page import="es.uma.dto.EjercicioDTO" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
 <%@ page import="es.uma.dto.UserRolDTO" %>
@@ -60,13 +57,13 @@
         <td><%=ejercicio.getEnlaceVideo()%></td>
         <td><%=ejercicio.getDescripcion()%></td>
         <td>
-            <a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-warning btn-sm">
+            <a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-primary btn-sm">
                 <i class="fas fa-pencil-alt"></i> Editar
             </a>
             <a href="/comun/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger btn-sm">
                 <i class="fas fa-trash-alt"></i> Borrar
             </a>
-            <a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>" class="btn btn-primary btn-sm"> <i class="fas fa-eye"></i> Ver rutinas asociadas
+            <a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>" class="btn btn-info btn-sm"> <i class="fas fa-eye"></i> Ver rutinas asociadas
             </a>
         </td>
     </tr>
@@ -75,7 +72,7 @@
     %>
     </tbody>
 </table>
-<a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3"><i class="fas fa-plus"></i> Crear nuevo ejercicio</a>
+<a href="/comun/crearNuevoEjercicio" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nuevo ejercicio</a>
 
 <form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio" class="p-4">
     <div class="form-row">
@@ -104,7 +101,7 @@
     %>
             <h2>No hay ningún ejercicio </h2>
             <br>
-            <a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3">Crear nuevo ejercicio</a>
+            <a href="/comun/crearNuevoEjercicio" class="btn btn-primary mt-3">Crear nuevo ejercicio</a>
     <%
         }
     %>

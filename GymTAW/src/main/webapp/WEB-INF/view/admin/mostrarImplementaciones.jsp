@@ -66,7 +66,7 @@
         <td><%= implementacion.getMetros()%></td>
         <td><%= implementacion.getTiempo()%>s</td>
         <td><%= implementacion.getKilocalorias() %></td>
-        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-warning btn-sm"> <i class="fas fa-pencil-alt"></i> Editar</a>
+        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-primary btn-sm"> <i class="fas fa-pencil-alt"></i> Editar</a>
         <a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm"> <i class="fas fa-trash-alt"></i> Borrar</a></td>
     </tr>
     <% } %>
@@ -77,7 +77,7 @@
     <h1>No hay ninguna implementación :(</h1>
 </div>
 <% } %>
-<a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-warning"><i class="fas fa-plus"></i> Crear nueva implementación</a>
+<a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-primary"><i class="fas fa-plus"></i> Crear nueva implementación</a>
 
 
 <form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">
