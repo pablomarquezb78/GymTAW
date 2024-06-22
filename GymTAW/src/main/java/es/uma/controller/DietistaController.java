@@ -50,6 +50,10 @@ public class DietistaController extends BaseController{
     private TipoComidaService tipoComidaService;
     @Autowired
     private PlatoService platoService;
+    @Autowired
+    private IngredienteService ingredienteService;
+    @Autowired
+    private TipoCantidadService tipoCantidadService;
 
     @GetMapping("/mostrarPerfil")
     public String doLoadProfile(HttpSession session,
@@ -285,27 +289,23 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
-    /*
     @PostMapping("/mostrarPlatoComida")
     public String doShowPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                       Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
 
-            comidaUI.setPlatoExistente(false);
-            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
-            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+            comidaUI = comidaService.mostrarPlatoComidaSetUpComidaUI(comidaUI, diaDietaDTO, selectedComida);
 
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -318,34 +318,24 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @GetMapping("/volverComida")
     public String doShowPlatoComidaClienteBack(HttpSession session,
                                            Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
 
-            ComidaUI comidaUI = new ComidaUI();
-            comidaUI.setPlatoExistente(false);
-            ArrayList<Plato> platosComida = new ArrayList<>();
-            List<Comida> comida = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            platosComida.addAll(cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getFirst().getId()));
-            comidaUI.setListaPlatosComida(platosComida);
-            ArrayList<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = new ArrayList<>();
-            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
-            comidaUI.setSelectedPlato(null);
+            ComidaUI comidaUI = comidaService.initialSetUpComidaUI(diaDietaDTO, selectedComida);
 
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -358,54 +348,24 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/addPlatoToPlatoComida")
     public String doAddPlatoToPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                            Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
 
-            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            Plato addingPlato = comidaUI.getAddingPlato();
-            List<Plato> platosComida = comidaUI.getListaPlatosComida();
-            if(!platosComida.contains(addingPlato))
-            {
-                platosComida.add(addingPlato);
-                comidaUI.setListaPlatosComida(platosComida);
+            comidaUI = comidaService.addPlatoToPlatoComida(comidaUI, diaDietaDTO, selectedComida);
 
-                List<Ingrediente> ingredientesPlato = platosRepository.getIngredientesLinkedToPlato(addingPlato);
-                for (Ingrediente i : ingredientesPlato)
-                {
-                    CantidadIngredientePlatoComida cantidadIngredientePlatoComida = new CantidadIngredientePlatoComida();
-                    cantidadIngredientePlatoComida.setPlato(addingPlato);
-                    cantidadIngredientePlatoComida.setComida(comidaActual.getFirst());
-                    cantidadIngredientePlatoComida.setIngrediente(i);
-                    cantidadIngredientePlatoComida.setCantidad(0);
-                    List<TipoCantidad> tipoCantidadList = tipoCantidadRepository.findAll();
-                    cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadList.getFirst());
-                    cantidadIngredientePlatoComidaRepository.save(cantidadIngredientePlatoComida);
-                }
-
-                comidaUI.setSelectedPlato(addingPlato);
-            } else {
-                comidaUI.setPlatoExistente(true);
-                comidaUI.setSelectedPlato(null);
-            }
-            List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
-            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
-
-
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -418,49 +378,24 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/eliminarPlatoComida")
     public String doDeletePlatoFromPlatoComidaCliente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                                  Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
 
-            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
-            Plato selectedPlato = comidaUI.getSelectedPlato();
-            List<Plato> platosComida = comidaUI.getListaPlatosComida();
-            List<Plato> platosRemove = new ArrayList<>();
-            for(Plato p : platosComida)
-            {
-                if(p.equals(selectedPlato))
-                {
-                    platosRemove.add(p);
-                }
-            }
-            platosComida.removeAll(platosRemove);
-            comidaUI.setListaPlatosComida(platosComida);
+            comidaUI = comidaService.deletePlatoFromPlatoComida(comidaUI, diaDietaDTO, selectedComida);
 
-            List<CantidadIngredientePlatoComida> cantidadesIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(selectedPlato.getId(), comidaActual.getFirst().getId());
-            for (CantidadIngredientePlatoComida c : cantidadesIngredientePlatoComida)
-            {
-                cantidadIngredientePlatoComidaRepository.delete(c);
-            }
-
-            comidaUI.setPlatoExistente(false);
-            comidaUI.setSelectedPlato(null);
-            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(new ArrayList<>());
-
-
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -473,45 +408,42 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/addIngredientePlatoComida")
     public String doLoadNewIngrediente(@ModelAttribute("comidaUI") ComidaUI comidaUI, HttpSession session,
                                  Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            session.setAttribute("comidaUI", comidaUI);
-            IngredienteImplementandoUI ingredienteImplementandoUI = new IngredienteImplementandoUI();
-            List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
-            List<TipoCantidad> listaTipoCantidad = tipoCantidadRepository.findAll();
-            model.addAttribute("ingredienteImplementandoUI", ingredienteImplementandoUI);
-            model.addAttribute("listaIngredientes", listaIngredientes);
-            model.addAttribute("listaTipoCantidad", listaTipoCantidad);
+            if(comidaUI.getSelectedPlato() != null)
+            {
+                session.setAttribute("comidaUI", comidaUI);
+                IngredienteImplementandoUI ingredienteImplementandoUI = new IngredienteImplementandoUI();
+                List<IngredienteDTO> listaIngredientes = ingredienteService.findAllIngredientes();
+                List<TipoCantidadDTO> listaTipoCantidad = tipoCantidadService.getAll();
+                model.addAttribute("ingredienteImplementandoUI", ingredienteImplementandoUI);
+                model.addAttribute("listaIngredientes", listaIngredientes);
+                model.addAttribute("listaTipoCantidad", listaTipoCantidad);
 
-            dir = "dietista/dietista_ingredienteImplementando";
+                dir = "dietista/dietista_ingredienteImplementando";
+            } else {
+                dir = "redirect:/dietista/volverComida";
+            }
         } else {
             dir = "redirect:/";
         }
         return dir;
     }
-    */
 
-    /*
     @GetMapping("/editarCantidadIngrediente")
     public String doLoadEditIngrediente(@RequestParam("cantidadId") Integer cantidadId, HttpSession session,
                                        Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
-            IngredienteImplementandoUI ingredienteImplementandoUI = new IngredienteImplementandoUI();
-            ingredienteImplementandoUI.setIngrediente(c.getIngrediente());
-            ingredienteImplementandoUI.setCantidad(c.getCantidad());
-            ingredienteImplementandoUI.setTipoCantidad(c.getTipoCantidad());
+            IngredienteImplementandoUI ingredienteImplementandoUI = ingredienteService.setUpEditIngredienteFromPlatoComida(cantidadId);
             List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
             List<TipoCantidad> listaTipoCantidad = tipoCantidadRepository.findAll();
             model.addAttribute("ingredienteImplementandoUI", ingredienteImplementandoUI);
@@ -524,37 +456,24 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @GetMapping("/deleteIngrediente")
     public String doDeleteIngrediente(@RequestParam("cantidadId") Integer cantidadId, HttpSession session,
                                         Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
 
             ComidaUI comidaUI = (ComidaUI) session.getAttribute("comidaUI");
-            CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
-            Plato platoActual = c.getPlato();
-            Comida comidaActual = c.getComida();
-            cantidadIngredientePlatoComidaRepository.delete(c);
+            comidaUI = comidaService.deleteIngredienteFromPlatoComida(comidaUI, cantidadId);
 
-
-            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoActual.getId(), comidaActual.getId());
-            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
-            comidaUI.setPlatoExistente(false);
-            //comidaUI.setSelectedPlato(null);
-
-
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -567,25 +486,25 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/guardarIngredienteImplementando")
     public String doSaveIngrediente(@ModelAttribute("ingredienteImplementandoUI") IngredienteImplementandoUI ingredienteImplementandoUI, HttpSession session,
                                        Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            TipoComida selectedComida = (TipoComida) session.getAttribute("selectedComida");
-            List<Plato> platosDisponibles = platosRepository.getPlatosLinkedToDietista(dietista);
-            List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, selectedComida);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
+            List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
+            List<ComidaDTO> comidaActual = comidaService.getComidasByDiaDietaAndTipoComida(diaDietaDTO, selectedComida);
 
             ComidaUI comidaUI = (ComidaUI) session.getAttribute("comidaUI");
+            //Pasar esto de abajo a Service
+            /*
             List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComidaIngrediente(comidaUI.getSelectedPlato(), comidaActual.getFirst(), ingredienteImplementandoUI.getIngrediente());
             boolean modoEdicion = !cantidadIngredientePlatoComida.isEmpty();
             CantidadIngredientePlatoComida cantidad;
@@ -608,7 +527,6 @@ public class DietistaController extends BaseController{
             if(modoEdicion)
             {
                 List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
-                //cantidadIngredientePlatoComidaList.remove(ingredienteImplementandoUI.getIngrediente());
                 comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
             }
             else
@@ -619,10 +537,9 @@ public class DietistaController extends BaseController{
                 comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
             }
             comidaUI.setPlatoExistente(false);
-            //comidaUI.setSelectedPlato(null);
+            */
 
-
-            model.addAttribute("cliente", cliente);
+            model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
             model.addAttribute("selectedComida", selectedComida);
             model.addAttribute("platosDisponibles", platosDisponibles);
@@ -635,7 +552,6 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
     /*
     @GetMapping("/accederFeedbackComida")

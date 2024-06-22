@@ -44,8 +44,8 @@
             <td><%= cliente.getApellidos() %></td>
             <td><%= cliente.getRol().getRolUsuario() %></td>
             <td><%= cliente.getFechaNacimiento() %></td>
-            <td><%= cliente.getPeso() %></td>
-            <td><%= cliente.getAltura() %></td>
+            <td><%= cliente.getPeso()%>Kg</td>
+            <td><%= cliente.getAltura()%>cm</td>
             <td><%= cliente.getTelefono() %></td>
             <td>
                 <a href="/admin/asignarEntrenador?id=<%= cliente.getId() %>" class="btn btn-primary btn-sm">

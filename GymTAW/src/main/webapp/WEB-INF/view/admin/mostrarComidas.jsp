@@ -50,7 +50,7 @@
         <td><%= comida.getComida().getDiaDieta().getCliente().getNombre() %></td>
         <td><%= comida.getComida().getDiaDieta().getDietista().getNombre() %></td>
         <td><%= comida.getComida().getTipoComida().getComidaDelDia() %></td>
-        <td><%= comida.getCantidad() %></td>
+        <td><%= comida.getCantidad() %>g</td>
         <td>
             <%
                 String ingredientesStr = "";

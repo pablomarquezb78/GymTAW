@@ -1,12 +1,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.*" %>
 <%@ page import="es.uma.ui.IngredienteImplementandoUI" %>
+<%@ page import="es.uma.dto.TipoCantidadDTO" %>
+<%@ page import="es.uma.dto.IngredienteDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Ingrediente> listaIngredientes = (List<Ingrediente>) request.getAttribute("listaIngredientes");
-    List<TipoCantidad> listaTipoCantidad = (List<TipoCantidad>) request.getAttribute("listaTipoCantidad");
+    List<IngredienteDTO> listaIngredientes = (List<IngredienteDTO>) request.getAttribute("listaIngredientes");
+    List<TipoCantidadDTO> listaTipoCantidad = (List<TipoCantidadDTO>) request.getAttribute("listaTipoCantidad");
     IngredienteImplementandoUI ingredienteImplementandoUI = (IngredienteImplementandoUI) request.getAttribute("ingredienteImplementandoUI");
 %>
 
