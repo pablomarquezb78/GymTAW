@@ -76,9 +76,13 @@
 <div class="text-center">
     <h1>No hay ninguna implementación :(</h1>
 </div>
-<% } %>
+<% }
+    if(rol.getId() == 1){
+%>
 <a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-primary"><i class="fas fa-plus"></i> Crear nueva implementación</a>
-
+<%
+    }
+%>
 
 <form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">
     <div class="form-row">

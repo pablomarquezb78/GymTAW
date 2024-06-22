@@ -23,7 +23,7 @@
             padding: 30px;
             border-radius: 10px;
             color: black;
-            margin-top: 50px;
+            margin-top: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
@@ -35,8 +35,8 @@
             font-weight: bold;
         }
         .placeholder-image {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background: #e0e0e0;
             border-radius: 50%;
             display: flex;

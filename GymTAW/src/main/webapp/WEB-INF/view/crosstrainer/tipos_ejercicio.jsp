@@ -11,7 +11,7 @@
 %>
 <html>
 <head>
-    <title>Tipos de ejercicio</title>
+    <title>Tipos de ejercicios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous">
     <style>
@@ -31,15 +31,8 @@
             text-align: center;
         }
         th {
-            background-color: #007bff;
+            background-color: #343a40 !important;
             color: #ffffff;
-        }
-        .btn-custom {
-            margin-right: 10px;
-        }
-        .btn-editar {
-            background-color: #28a745;
-            border-color: #28a745;
         }
         .btn-borrar {
             background-color: #dc3545;
@@ -54,7 +47,7 @@
 <jsp:include page="<%=cabecera%>"></jsp:include>
 <br>
 <div class="container">
-    <h1>Tipos de ejercicio</h1>
+    <h1>Tipos de ejercicios</h1>
 
     <table class="table table-bordered table-striped">
         <thead>
