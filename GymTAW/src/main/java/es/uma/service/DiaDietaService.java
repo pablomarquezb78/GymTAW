@@ -35,6 +35,7 @@ public class DiaDietaService {
         }
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public DiaDietaDTO getDiaDietaByDietistaClienteFecha(UserDTO dietistaDTO, UserDTO clienteDTO, LocalDate fecha)
     {
         User dietista = userService.convertDtoToEntity(dietistaDTO);
@@ -45,6 +46,7 @@ public class DiaDietaService {
         return diaDietaDTO;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public DiaDietaDTO getDiaDietaByDietistaClienteFechaOrCreateIfNull(UserDTO dietistaDTO, UserDTO clienteDTO, LocalDate fecha)
     {
         User dietista = userService.convertDtoToEntity(dietistaDTO);

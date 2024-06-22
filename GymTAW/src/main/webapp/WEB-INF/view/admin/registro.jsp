@@ -5,6 +5,8 @@
 
 <%
     List<RegistroDTO> peticiones = (List<RegistroDTO>) request.getAttribute("peticiones");
+    request.setAttribute("paginaActual", "autenticar");
+
 %>
 
 <html>

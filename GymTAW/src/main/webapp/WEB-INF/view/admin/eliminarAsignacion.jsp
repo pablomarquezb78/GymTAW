@@ -9,6 +9,7 @@
 <%
     List<AsignacionClienteEntrenadorDTO> asignacionesEntrenador = (List<AsignacionClienteEntrenadorDTO>) request.getAttribute("asignacionesEntrenador");
     List<AsignacionClienteDietistaDTO> asignacionesDietista = (List<AsignacionClienteDietistaDTO>) request.getAttribute("asignacionesDietista");
+    request.setAttribute("paginaActual", "asignar");
 %>
 
 <html>

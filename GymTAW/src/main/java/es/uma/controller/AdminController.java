@@ -1,8 +1,6 @@
 package es.uma.controller;
 
-import es.uma.dao.*;
 import es.uma.dto.*;
-import es.uma.entity.*;
 import es.uma.service.*;
 import es.uma.ui.*;
 

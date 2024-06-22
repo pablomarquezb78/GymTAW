@@ -10,6 +10,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+//@author: Jaime Ezequiel Rodriguez Rodriguez
+//@author: Pablo Miguel Aguilar Blanco
+
 public interface AsignacionPlatoIngredienteDietistacreadorRepositoy extends JpaRepository<AsignacionPlatoIngredienteDietistaCreador, Integer> {
 
     @Query("select a from AsignacionPlatoIngredienteDietistaCreador a where a.ingrediente = :ingrediente and a.plato = :plato and a.dietista = :dietista")

@@ -8,6 +8,8 @@
 <%
     List<UserRolDTO> roles = (List<UserRolDTO>) request.getAttribute("roles");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
+    request.setAttribute("paginaActual", "usuarios");
+
 %>
 <html>
 <head>
@@ -31,9 +33,6 @@
         .form-select,
         .form-input {
             margin-bottom: 15px;
-        }
-        .hidden {
-            display: none;
         }
     </style>
 </head>

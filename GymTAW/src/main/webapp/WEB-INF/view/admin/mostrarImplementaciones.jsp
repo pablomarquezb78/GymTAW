@@ -21,6 +21,8 @@
     UserRolDTO rol = (UserRolDTO) request.getAttribute("rol");
     String title = "Trainer";
     String cabecera = "../crosstrainer/cabecera_entrenador.jsp";
+    request.setAttribute("paginaActual", "ejercicios");
+
     if(rol.getId() == 1){
         title = "Admin";
         cabecera = "cabeceraAdmin.jsp";
@@ -31,6 +33,8 @@
 <head>
     <title>Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
 </head>
 <body>
 <jsp:include page="<%=cabecera%>"></jsp:include>
@@ -62,8 +66,8 @@
         <td><%= implementacion.getMetros()%></td>
         <td><%= implementacion.getTiempo()%>s</td>
         <td><%= implementacion.getKilocalorias() %></td>
-        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-warning btn-sm">Editar</a>
-        <a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm">Borrar</a></td>
+        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-primary btn-sm"> <i class="fas fa-pencil-alt"></i> Editar</a>
+        <a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm"> <i class="fas fa-trash-alt"></i> Borrar</a></td>
     </tr>
     <% } %>
     </tbody>
@@ -73,7 +77,7 @@
     <h1>No hay ninguna implementación :(</h1>
 </div>
 <% } %>
-<a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-warning">Crear nueva implementación</a>
+<a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-primary"><i class="fas fa-plus"></i> Crear nueva implementación</a>
 
 
 <form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">

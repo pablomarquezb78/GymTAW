@@ -27,6 +27,7 @@ public class TipoComidaService {
         return this.convertEntityToDto(tipoComidaRepository.findById(id).orElse(null));
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public TipoComidaDTO getSelectedComidaFromDiaComida(DiaComida diaComida)
     {
         return convertEntityToDto(diaComida.getTipoComida());

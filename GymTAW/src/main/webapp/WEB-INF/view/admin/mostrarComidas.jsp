@@ -17,12 +17,15 @@
     List<TipoComidaDTO> tiposComida = (List<TipoComidaDTO>) request.getAttribute("tiposComida");
     PlatoDTO plato = (PlatoDTO) request.getAttribute("plato");
     String dir = "/admin/filtrarComidas?id="+plato.getId();
+    request.setAttribute("paginaActual", "platos");
 %>
 
 <html>
 <head>
     <title>Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
 </head>
 <body>
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
@@ -63,8 +66,8 @@
             %>
             <%= ingredientesStr %>
         </td>
-        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-warning btn-sm">Editar</a>
-        <a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm">Borrar</a></td>
+        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Editar</a>
+        <a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a></td>
     </tr>
     <% } %>
     </tbody>
@@ -76,7 +79,7 @@
 <% } %>
 
 <div>
-    <a href="/admin/crearNuevaComida?idPlato=<%= plato.getId() %>" class="btn btn-warning mt-3">Crear nueva comida</a>
+    <a href="/admin/crearNuevaComida?idPlato=<%= plato.getId() %>" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nueva comida</a>
 </div>
 
 

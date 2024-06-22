@@ -47,6 +47,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacion.setTiempo(imp.getTiempo());
         implementacion.setKilocalorias(imp.getKilocalorias());
         implementacion.setMetros(imp.getMetros());
+        implementacion.setRutina(rutinaService.convertDtoToEntity(rutinaService.getRutinaByID(imp.getRutina())));
     }
 
     public void guardarImplementacionUI(Implementacion implementacionUI){
@@ -61,8 +62,6 @@ public class ImplementacionEjercicioRutinaService {
         }else{//Crear
 
             imp = new ImplementacionEjercicioRutina();
-            DiaEntrenamiento dia = diaEntrenamientoRepository.getById(implementacionUI.getIdDia());
-            imp.setRutina(dia.getRutina());
             asignarImplementacionReal(imp,implementacionUI);
 
         }

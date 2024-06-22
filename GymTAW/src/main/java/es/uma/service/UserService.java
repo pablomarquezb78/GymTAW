@@ -230,6 +230,7 @@ public class UserService {
         return this.convertlistEntityToDto(userRepository.dietistasNoAsociadosAlCliente(this.convertlistDtoToEntity(noDietist)));
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public UserDTO findUserByUsernameAndPassword(String username, String password){
         User user = this.userRepository.findByUsernamePassword(username, password);
         UserDTO userDTO = null;
@@ -237,6 +238,7 @@ public class UserService {
         return userDTO;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public UserDTO guardarDietistaPerfilEdit(UserDTO userDTO, Usuario dietista)
     {
         User dietistaUser = this.convertDtoToEntity(userDTO);
@@ -250,6 +252,7 @@ public class UserService {
         return userDTOout;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<UserDTO> getClientesAsociadosAlDietista(UserDTO dietistaDTO)
     {
         User dietista = this.convertDtoToEntity(dietistaDTO);

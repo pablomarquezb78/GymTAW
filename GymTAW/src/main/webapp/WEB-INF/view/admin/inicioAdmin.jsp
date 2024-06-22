@@ -10,6 +10,8 @@
     Integer dietistas = (Integer) request.getAttribute("dietistas");
     Integer ejercicios = (Integer) request.getAttribute("ejercicios");
     Integer platos = (Integer) request.getAttribute("platos");
+    request.setAttribute("paginaActual", "inicio");
+
 %>
 <!DOCTYPE html>
 <html lang="es">

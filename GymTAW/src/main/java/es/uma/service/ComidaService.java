@@ -74,6 +74,8 @@ public class ComidaService {
             return new ArrayList<>();
         }
     }
+
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<ComidaDTO> getComidasByDiaDietaAndTipoComida(DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
     {
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
@@ -86,7 +88,7 @@ public class ComidaService {
         return comidaDTOList;
     }
 
-    //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public Pair<List<LocalDate>, Map<String, List<PlatoDTO>>> obtenerTablaComidas(UserDTO clienteDTO, UserDTO dietistaDTO, DiaComida diaComida)
     {
         User cliente = userService.convertDtoToEntity(clienteDTO);
@@ -145,6 +147,7 @@ public class ComidaService {
         return par;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI initialSetUpComidaUI(DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
     {
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
@@ -168,6 +171,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI mostrarPlatoComidaSetUpComidaUI(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
     {
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
@@ -179,6 +183,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI addPlatoToPlatoComida(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
     {
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
@@ -214,6 +219,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI deletePlatoFromPlatoComida(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
     {
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
@@ -244,6 +250,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI deleteIngredienteFromPlatoComida(ComidaUI comidaUI, Integer cantidadId)
     {
         CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
@@ -256,6 +263,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public ComidaUI saveIngrediente(ComidaUI comidaUI, IngredienteImplementandoUI ingredienteImplementandoUI, List<ComidaDTO> listComidaDTO)
     {
         List<Comida> listaComida = this.convertlistDtoToEntity(listComidaDTO);
@@ -313,6 +321,7 @@ public class ComidaService {
         return comida;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<ComidaDTO> convertlistEntityToDto(List<Comida> comidaList){
         List<ComidaDTO> comidaDTOList = new ArrayList<>();
         for(Comida comida : comidaList){
@@ -321,6 +330,7 @@ public class ComidaService {
         return comidaDTOList;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<Comida> convertlistDtoToEntity(List<ComidaDTO> comidaDTOList){
         List<Comida> comidaList = new ArrayList<>();
         for(ComidaDTO comidaDTO : comidaDTOList){

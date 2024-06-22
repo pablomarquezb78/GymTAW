@@ -1,12 +1,11 @@
 package es.uma.ui;
 
-import es.uma.dto.PlatoDTO;
 import es.uma.entity.CantidadIngredientePlatoComida;
-import es.uma.entity.Ingrediente;
 import es.uma.entity.Plato;
 
 import java.util.List;
 
+//@author: Jaime Ezequiel Rodriguez Rodriguez
 public class ComidaUI {
 
     protected List<Plato> listaPlatosComida;

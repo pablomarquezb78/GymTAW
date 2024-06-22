@@ -2,12 +2,10 @@ package es.uma.service;
 
 import es.uma.dao.CantidadIngredientePlatoComidaRepository;
 import es.uma.dao.ComidaRepository;
-import es.uma.dto.CantidadIngredientePlatoComidaDTO;
-import es.uma.dto.IngredienteDTO;
-import es.uma.dto.PlatoDTO;
-import es.uma.dto.TipoComidaDTO;
+import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.AsignacionPlatoComida;
+import es.uma.ui.FeedbackDietistaMostrarUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -157,15 +155,24 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaRepository.save(cipc);
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
+    public FeedbackDietistaMostrarUI setUpFeedbackComidaSelectedPlato(FeedbackDietistaMostrarUI feedback, ComidaDTO comidaDTO)
+    {
+        List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando().getId(), comidaDTO.getId());
+        feedback.setCantidadesIngredientePlatoComida(listaCantidades);
+        return feedback;
+    }
+
     public CantidadIngredientePlatoComidaDTO convertEntityToDto(CantidadIngredientePlatoComida cantidadIngredientePlatoComida){
         CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO = new CantidadIngredientePlatoComidaDTO();
         cantidadIngredientePlatoComidaDTO.setId(cantidadIngredientePlatoComida.getId());
         cantidadIngredientePlatoComidaDTO.setCantidad(cantidadIngredientePlatoComida.getCantidad());
         cantidadIngredientePlatoComidaDTO.setComida(comidaService.convertEntityToDto(cantidadIngredientePlatoComida.getComida()));
         cantidadIngredientePlatoComidaDTO.setCantidadConsumida(cantidadIngredientePlatoComida.getCantidadConsumida());
-        cantidadIngredientePlatoComidaDTO.setTipoCantidad(tipoCantidadService.convertEntityToDto(cantidadIngredientePlatoComida.getTipoCantidad()));
         if(cantidadIngredientePlatoComida.getIngrediente()!=null){
             cantidadIngredientePlatoComidaDTO.setIngrediente(ingredienteService.convertEntityToDto(cantidadIngredientePlatoComida.getIngrediente()));
+        if(cantidadIngredientePlatoComida.getTipoCantidad() != null){
+            cantidadIngredientePlatoComidaDTO.setTipoCantidad(tipoCantidadService.convertEntityToDto(cantidadIngredientePlatoComida.getTipoCantidad()));
         }
         return cantidadIngredientePlatoComidaDTO;
     }
@@ -176,10 +183,10 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComida.setCantidad(cantidadIngredientePlatoComidaDTO.getCantidad());
         cantidadIngredientePlatoComida.setComida(comidaService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getComida()));
         cantidadIngredientePlatoComida.setCantidadConsumida(cantidadIngredientePlatoComidaDTO.getCantidadConsumida());
-        cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getTipoCantidad()));
         if(cantidadIngredientePlatoComidaDTO.getIngrediente()!=null){
             cantidadIngredientePlatoComida.setIngrediente(ingredienteService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getIngrediente()));
-
+        if(cantidadIngredientePlatoComida.getTipoCantidad() != null){
+            cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getTipoCantidad()));
         }
         return cantidadIngredientePlatoComida;
     }

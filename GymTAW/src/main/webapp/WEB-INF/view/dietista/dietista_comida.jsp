@@ -19,6 +19,8 @@
     List<Plato> listaPlatosComidaOut = new ArrayList<>(comidaUI.getListaPlatosComida());
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista comida seleccionada</title>

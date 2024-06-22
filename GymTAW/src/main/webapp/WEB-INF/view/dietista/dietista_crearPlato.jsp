@@ -10,6 +10,8 @@
     List<IngredienteDTO> ingredientesExistentes = (List<IngredienteDTO>) request.getAttribute("ingredientesExistentes");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <!DOCTYPE html>
 <html>
 <head>

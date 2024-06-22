@@ -13,6 +13,7 @@
     Boolean disabled = true;
     String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String clase = "Crossfit";
+    request.setAttribute("paginaActual", "ejercicios");
     if(userRol.getId() == 1) {
         disabled = false;
         cabecera = "./admin/cabeceraAdmin.jsp";

@@ -7,6 +7,8 @@
     Usuario dietista = (Usuario) request.getAttribute("dietista");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista editar perfil</title>

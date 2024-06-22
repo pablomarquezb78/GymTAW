@@ -27,9 +27,11 @@ public interface CantidadIngredientePlatoComidaRepository extends JpaRepository<
     @Query("select c from CantidadIngredientePlatoComida c where c.comida.id = :comidaId and c.plato.id = :platoId")
     List<CantidadIngredientePlatoComida> findCantidadByPlatoComida(@Param("platoId") Integer platoId, @Param("comidaId") Integer comidaId);
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     @Query("select c from CantidadIngredientePlatoComida c where c.comida = :comida and c.plato = :plato and c.ingrediente = :ingrediente")
     List<CantidadIngredientePlatoComida> findCantidadByPlatoComidaIngrediente(@Param("plato") Plato plato, @Param("comida") Comida comida, @Param("ingrediente")Ingrediente ingrediente);
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     @Query("select distinct c from CantidadIngredientePlatoComida c order by c.id desc limit 1")
     CantidadIngredientePlatoComida getUltimaCantidadAdded();
 }

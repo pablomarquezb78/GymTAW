@@ -1,11 +1,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.Plato" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<PlatoDTO> platos = (List<PlatoDTO>) request.getAttribute("platos");
+    request.setAttribute("paginaActual", "platos");
+
 %>
 
 <html>
@@ -41,9 +42,9 @@
         <td><%=plato.getEnlaceReceta()%></td>
 
         <td>
-            <a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</a>
+            <a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Editar</a>
             <a href="/admin/borrarPlato?id=<%=plato.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a>
-            <a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>" class="btn btn-primary"> <i class="fas fa-eye"></i> Ver comidas asociadas</a>
+            <a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>" class="btn btn-info"> <i class="fas fa-eye"></i> Ver comidas asociadas</a>
         </td>
     </tr>
     <%
@@ -52,7 +53,7 @@
     </tbody>
 </table>
 
-<a href="/admin/crearNuevoPlato" class="btn btn-warning mt-3">Crear nuevo plato</a>
+<a href="/admin/crearNuevoPlato" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nuevo plato</a>
 
 <form:form action="/admin/filtrarPlatos" method="post" modelAttribute="plato" class="p-4">
     <div class="form-row">

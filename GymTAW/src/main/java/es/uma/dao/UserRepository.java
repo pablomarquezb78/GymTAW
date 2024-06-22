@@ -22,6 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u,AsignacionClienteEntrenador asig WHERE u.id = asig.cliente.id and asig.entrenador = :entrenador and u.nombre like %:nombre%")
     List<User> clientesAsociadosConEntrenadorYNombre(@Param("entrenador") User entrenador,@Param("nombre") String nombre);
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     @Query("select u from User u,AsignacionClienteDietista asig WHERE u.id = asig.cliente.id and asig.dietista = :dietista")
     List<User> clientesAsociadosConDietista(@Param("dietista") User dietista);
 

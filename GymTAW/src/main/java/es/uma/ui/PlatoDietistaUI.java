@@ -6,6 +6,7 @@ import es.uma.entity.User;
 
 import java.util.ArrayList;
 
+//@author: Jaime Ezequiel Rodriguez Rodriguez
 public class PlatoDietistaUI {
 
     private Integer id;

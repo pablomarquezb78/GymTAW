@@ -11,6 +11,8 @@
     IngredienteImplementandoUI ingredienteImplementandoUI = (IngredienteImplementandoUI) request.getAttribute("ingredienteImplementandoUI");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista ingrediente implementando</title>
