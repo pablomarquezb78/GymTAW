@@ -5,6 +5,7 @@ import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.ComidaUI;
 import es.uma.ui.DiaComida;
+import es.uma.ui.IngredienteImplementandoUI;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -255,6 +256,45 @@ public class ComidaService {
         return comidaUI;
     }
 
+    public ComidaUI saveIngrediente(ComidaUI comidaUI, IngredienteImplementandoUI ingredienteImplementandoUI, List<ComidaDTO> listComidaDTO)
+    {
+        List<Comida> listaComida = this.convertlistDtoToEntity(listComidaDTO);
+        Comida comidaActual = listaComida.getFirst();
+        List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComidaIngrediente(comidaUI.getSelectedPlato(), comidaActual, ingredienteImplementandoUI.getIngrediente());
+        boolean modoEdicion = !cantidadIngredientePlatoComida.isEmpty();
+        CantidadIngredientePlatoComida cantidad;
+        if(modoEdicion)
+        {
+            cantidad = cantidadIngredientePlatoComida.getFirst();
+            cantidadIngredientePlatoComida.remove(cantidad);
+        }
+        else
+        {
+            cantidad = new CantidadIngredientePlatoComida();
+            cantidad.setIngrediente(ingredienteImplementandoUI.getIngrediente());
+            cantidad.setComida(comidaActual);
+            cantidad.setPlato(comidaUI.getSelectedPlato());
+        }
+        cantidad.setCantidad(ingredienteImplementandoUI.getCantidad());
+        cantidad.setTipoCantidad(ingredienteImplementandoUI.getTipoCantidad());
+        cantidadIngredientePlatoComidaRepository.save(cantidad);
+
+        if(modoEdicion)
+        {
+            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getId());
+            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
+        }
+        else
+        {
+            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = comidaUI.getListaCantidadIngredientesPlatoSeleccionado();
+            CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.getUltimaCantidadAdded();
+            cantidadIngredientePlatoComidaList.add(c);
+            comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
+        }
+        comidaUI.setPlatoExistente(false);
+        return comidaUI;
+    }
+
     public ComidaDTO convertEntityToDto(Comida comida){
         ComidaDTO comidaDTO = new ComidaDTO();
         comidaDTO.setId(comida.getId());
@@ -279,6 +319,14 @@ public class ComidaService {
             comidaDTOList.add(this.convertEntityToDto(comida));
         }
         return comidaDTOList;
+    }
+
+    public List<Comida> convertlistDtoToEntity(List<ComidaDTO> comidaDTOList){
+        List<Comida> comidaList = new ArrayList<>();
+        for(ComidaDTO comidaDTO : comidaDTOList){
+            comidaList.add(this.convertDtoToEntity(comidaDTO));
+        }
+        return comidaList;
     }
 
 }

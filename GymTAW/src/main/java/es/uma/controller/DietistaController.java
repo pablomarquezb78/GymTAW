@@ -500,44 +500,10 @@ public class DietistaController extends BaseController{
             DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
             TipoComidaDTO selectedComida = (TipoComidaDTO) session.getAttribute("selectedComida");
             List<PlatoDTO> platosDisponibles = platoService.getPlatosLinkedToDietista(dietistaDTO);
-            List<ComidaDTO> comidaActual = comidaService.getComidasByDiaDietaAndTipoComida(diaDietaDTO, selectedComida);
+            List<ComidaDTO> listaComidaDTO = comidaService.getComidasByDiaDietaAndTipoComida(diaDietaDTO, selectedComida);
 
             ComidaUI comidaUI = (ComidaUI) session.getAttribute("comidaUI");
-            //Pasar esto de abajo a Service
-            /*
-            List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComidaIngrediente(comidaUI.getSelectedPlato(), comidaActual.getFirst(), ingredienteImplementandoUI.getIngrediente());
-            boolean modoEdicion = !cantidadIngredientePlatoComida.isEmpty();
-            CantidadIngredientePlatoComida cantidad;
-            if(modoEdicion)
-            {
-                cantidad = cantidadIngredientePlatoComida.getFirst();
-                cantidadIngredientePlatoComida.remove(cantidad);
-            }
-            else
-            {
-                cantidad = new CantidadIngredientePlatoComida();
-                cantidad.setIngrediente(ingredienteImplementandoUI.getIngrediente());
-                cantidad.setComida(comidaActual.getFirst());
-                cantidad.setPlato(comidaUI.getSelectedPlato());
-            }
-            cantidad.setCantidad(ingredienteImplementandoUI.getCantidad());
-            cantidad.setTipoCantidad(ingredienteImplementandoUI.getTipoCantidad());
-            cantidadIngredientePlatoComidaRepository.save(cantidad);
-
-            if(modoEdicion)
-            {
-                List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
-                comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
-            }
-            else
-            {
-                List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = comidaUI.getListaCantidadIngredientesPlatoSeleccionado();
-                CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.getUltimaCantidadAdded();
-                cantidadIngredientePlatoComidaList.add(c);
-                comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
-            }
-            comidaUI.setPlatoExistente(false);
-            */
+           comidaUI = comidaService.saveIngrediente(comidaUI, ingredienteImplementandoUI, listaComidaDTO);
 
             model.addAttribute("cliente", clienteDTO);
             model.addAttribute("fecha", fecha);
