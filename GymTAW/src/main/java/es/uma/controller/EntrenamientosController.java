@@ -27,18 +27,7 @@ import java.util.*;
 @RequestMapping("/entrenamientos")
 public class EntrenamientosController extends BaseController{
 
-    @Autowired
-    protected UserRepository userRepository;
-    @Autowired
-    protected DiaEntrenamientoRepository diaEntrenamientoRepository;
-    @Autowired
-    private EjercicioRepository ejercicioRepository;
-    @Autowired
-    private RutinaRepository rutinaRepository;
-    @Autowired
-    private ImplementacionEjercicioRutinaRepository implementacionEjercicioRutinaRepository;
-    @Autowired
-    private TipoEjercicioRepository tipoEjercicioRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -47,12 +36,6 @@ public class EntrenamientosController extends BaseController{
     private RutinaService rutinaService;
     @Autowired
     private ImplementacionEjercicioRutinaService implementacionEjercicioRutinaService;
-    @Autowired
-    private UserRolRepository userRolRepository;
-    @Autowired
-    private FeedbackejercicioRepository feedbackejercicioRepository;
-    @Autowired
-    private FeedbackejercicioserieRepository feedbackejercicioserieRepository;
     @Autowired
     private TipoEjercicioService tipoEjercicioService;
     @Autowired
@@ -73,6 +56,7 @@ public class EntrenamientosController extends BaseController{
 
         if(estaAutenticado(sesion) && esEntrenador(rol)){
             List<UserDTO> lista = userService.getClientesDeEntrenador(userService.convertDtoToEntity(userDTO));
+
             model.addAttribute("lista",lista);
         }
         else {
@@ -358,7 +342,6 @@ public class EntrenamientosController extends BaseController{
         if(!estaAutenticado(session)){
             strTo = "redicrect:/";
         }else{
-            User cliente = (User) userRepository.findById(idcliente).orElse(null);
             List<DiaEntrenamiento> dias =  diaEntrenamientoRepository.diasEntrenamientosdeCliente(cliente);
             model.addAttribute("dias",dias);
             model.addAttribute("cliente",cliente);
@@ -393,7 +376,6 @@ public class EntrenamientosController extends BaseController{
 //        if(!estaAutenticado(session)){
 //            strTo = "redirect:/";
 //        }else{
-//            User cliente = (User) userRepository.findById(clienteid).orElse(null);
 //            DiaEntrenamiento dia = new DiaEntrenamiento();
 //            dia.setFecha(LocalDate.now());
 //            dia.setCliente(cliente);
