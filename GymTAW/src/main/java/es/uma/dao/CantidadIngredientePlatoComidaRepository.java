@@ -12,6 +12,9 @@ public interface CantidadIngredientePlatoComidaRepository extends JpaRepository<
     @Query("select cipc from CantidadIngredientePlatoComida cipc where cipc.plato.id = :id")
     List<CantidadIngredientePlatoComida> buscarPorPlato(@Param("id") Integer id);
 
+    @Query("select cipc from CantidadIngredientePlatoComida cipc where cipc.comida.id = :id")
+    List<CantidadIngredientePlatoComida> buscarPorComida(@Param("id") Integer id);
+
     @Query("select ing from CantidadIngredientePlatoComida cipc, Ingrediente ing where cipc.plato.id = :id and cipc.ingrediente = ing")
     List<Ingrediente> buscarIngredientesPorPlato(@Param("id") Integer id);
 

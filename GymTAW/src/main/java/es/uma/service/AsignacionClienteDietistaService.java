@@ -5,8 +5,10 @@ import es.uma.dao.AsignacionClienteDietistaRepository;
 import es.uma.dao.AsignacionClienteEntrenadorRepository;
 import es.uma.dto.AsignacionClienteDietistaDTO;
 import es.uma.dto.AsignacionClienteEntrenadorDTO;
+import es.uma.dto.UserDTO;
 import es.uma.entity.AsignacionClienteDietista;
 import es.uma.entity.AsignacionClienteEntrenador;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,10 @@ public class AsignacionClienteDietistaService {
         return this.convertListEntityToDto(asignacionClienteDietistaRepository.buscarPorCliente(id));
     }
 
+    public List<AsignacionClienteDietistaDTO> findByDietist(Integer id){
+        return this.convertListEntityToDto(asignacionClienteDietistaRepository.buscarPorDietista(id));
+    }
+
     public void addDietist(Integer id, Integer idCliente){
         AsignacionClienteDietista acd = new AsignacionClienteDietista();
         acd.setDietista(userService.convertDtoToEntity(userService.getById(id)));
@@ -38,6 +44,24 @@ public class AsignacionClienteDietistaService {
         Integer clienteID = acd.getCliente().getId();
         asignacionClienteDietistaRepository.delete(acd);
         return clienteID;
+    }
+
+    public void deleteByDietist(Integer id){
+        List<AsignacionClienteDietista> asignaciones = asignacionClienteDietistaRepository.buscarPorDietista(id);
+        if (asignaciones != null || !asignaciones.isEmpty()) {
+            for (AsignacionClienteDietista asignacion : asignaciones) {
+                asignacionClienteDietistaRepository.deleteById(asignacion.getId());
+            }
+        }
+    }
+
+    public void deleteByCustomer(Integer id){
+        List<AsignacionClienteDietista> asignacionesDietista = asignacionClienteDietistaRepository.buscarPorCliente(id);
+        if (asignacionesDietista != null || !asignacionesDietista.isEmpty()) {
+            for (AsignacionClienteDietista asignacionDietista : asignacionesDietista) {
+                asignacionClienteDietistaRepository.deleteById(asignacionDietista.getId());
+            }
+        }
     }
 
 

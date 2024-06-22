@@ -1,4 +1,4 @@
-<%@ page import="es.uma.entity.User" %>
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -43,6 +43,9 @@
 <div class="container">
     <h3>Lista de clientes</h3>
     <p>Asigna entrenadores o dietistas a un cliente</p>
+    <%
+        if (clientes != null && !clientes.isEmpty()) {
+    %>
     <table class="table table-bordered table-hover">
         <thead class="table_header text-white text-center">
         <tr>
@@ -58,15 +61,17 @@
         </tr>
         </thead>
         <tbody>
-        <% for(UserDTO cliente : clientes) { %>
+        <%
+            for (UserDTO cliente : clientes) {
+        %>
         <tr class="text-center">
             <td><%= cliente.getId() %></td>
             <td><%= cliente.getNombre() %></td>
             <td><%= cliente.getApellidos() %></td>
             <td><%= cliente.getRol().getRolUsuario() %></td>
             <td><%= cliente.getFechaNacimiento() %></td>
-            <td><%= cliente.getPeso()%>Kg</td>
-            <td><%= cliente.getAltura()%>cm</td>
+            <td><%= cliente.getPeso() %>Kg</td>
+            <td><%= cliente.getAltura() %>cm</td>
             <td><%= cliente.getTelefono() %></td>
             <td>
                 <a href="/admin/asignarEntrenador?id=<%= cliente.getId() %>" class="btn btn-primary btn-sm">
@@ -80,9 +85,19 @@
                 </a>
             </td>
         </tr>
-        <% } %>
+        <%
+            }
+        %>
         </tbody>
     </table>
+    <%
+    } else {
+    %>
+    <p>No hay clientes inscritos en la aplicación</p>
+    <%
+        }
+    %>
 </div>
+
 </body>
 </html>

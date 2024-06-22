@@ -26,6 +26,10 @@ public class AsignacionClienteEntrenadorService {
         return this.convertListEntityToDto(asignacionClienteEntrenadorRepository.buscarPorCliente(id));
     }
 
+    public List<AsignacionClienteEntrenadorDTO> findByTrainer(Integer id){
+        return this.convertListEntityToDto(asignacionClienteEntrenadorRepository.buscarPorEntrenador(id));
+    }
+
     public void addTrainer(Integer id, Integer idCliente){
         AsignacionClienteEntrenador ace = new AsignacionClienteEntrenador();
         ace.setEntrenador(userService.convertDtoToEntity(userService.getById(id)));
@@ -39,6 +43,24 @@ public class AsignacionClienteEntrenadorService {
         Integer clienteID = ace.getCliente().getId();
         asignacionClienteEntrenadorRepository.delete(ace);
         return clienteID;
+    }
+
+    public void deleteByTrainer(Integer id){
+        List<AsignacionClienteEntrenador> asignaciones = asignacionClienteEntrenadorRepository.buscarPorEntrenador(id);
+        if (asignaciones != null || !asignaciones.isEmpty()) {
+            for (AsignacionClienteEntrenador asignacion : asignaciones) {
+                asignacionClienteEntrenadorRepository.deleteById(asignacion.getId());
+            }
+        }
+    }
+
+    public void deleteByCustomer(Integer id){
+        List<AsignacionClienteEntrenador> asignacionesEntrenador = asignacionClienteEntrenadorRepository.buscarPorCliente(id);
+        if (asignacionesEntrenador != null || !asignacionesEntrenador.isEmpty()) {
+            for (AsignacionClienteEntrenador asignacionEntrenador : asignacionesEntrenador) {
+                asignacionClienteEntrenadorRepository.deleteById(asignacionEntrenador.getId());
+            }
+        }
     }
 
 

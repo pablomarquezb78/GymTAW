@@ -51,6 +51,15 @@ public class DiaEntrenamientoService {
         return dias;
     }
 
+    public List<DiaEntrenamientoDTO> getByCustomer(Integer idclient){
+        List<DiaEntrenamientoDTO> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idclient)
+                .stream()
+                .map(this::convertEntityToDtoAdmin)
+                .collect(Collectors.toList());
+
+        return dias;
+    }
+
     public DiaEntrenamientoDTO getDiaEntrenamientoDeClienteFecha(Integer idClient, LocalDate fecha){
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(idClient,fecha);
         if(diaEntrenamiento!=null){
@@ -67,6 +76,12 @@ public class DiaEntrenamientoService {
         diaEntrenamientoDTO.setSeguimiento(diaEntrenamiento.getSeguimiento());
         diaEntrenamientoDTO.setCliente(userService.convertEntityToDto(diaEntrenamiento.getCliente()));
         diaEntrenamientoDTO.setRutina(rutinaService.convertEntityToDto(diaEntrenamiento.getRutina()));
+        return diaEntrenamientoDTO;
+    }
+
+    public DiaEntrenamientoDTO convertEntityToDtoAdmin(DiaEntrenamiento diaEntrenamiento) {
+        DiaEntrenamientoDTO diaEntrenamientoDTO = new DiaEntrenamientoDTO();
+        diaEntrenamientoDTO.setId(diaEntrenamiento.getId());
         return diaEntrenamientoDTO;
     }
 

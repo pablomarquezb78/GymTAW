@@ -55,6 +55,21 @@ public class ComidaService {
         }
     }
 
+    public void deleteByDiaDieta(DiaDietaDTO diaDietaDTO){
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta.getId());
+        for(Comida comida : comidas){
+            comidaRepository.deleteById(comida.getId());
+        }
+    }
+
+    public List<ComidaDTO> getByCustomer(Integer id){
+        return comidaRepository.findByCustomer(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
+    }
+    public List<ComidaDTO> getByDietist(Integer id){
+        return comidaRepository.findByDietist(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
+    }
+
     public ComidaDTO getComidaByID(Integer id){
         Comida comida = comidaRepository.findById(id).orElse(null);
         if(comida!=null){

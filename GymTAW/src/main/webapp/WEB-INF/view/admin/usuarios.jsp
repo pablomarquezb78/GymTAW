@@ -1,3 +1,4 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.dto.UserDTO" %>
@@ -44,6 +45,9 @@
 </br>
 <div class="container">
     <h3>Lista de usuarios</h3>
+    <%
+        if (usuarios != null && !usuarios.isEmpty()) {
+    %>
     <table class="table table-bordered table-hover">
         <thead class="text-white text-center" style="background-color: #343a40">
         <tr>
@@ -60,7 +64,7 @@
         </thead>
         <tbody>
         <%
-            for(UserDTO user : usuarios){
+            for (UserDTO user : usuarios) {
         %>
         <tr class="text-center">
             <td><%=user.getId()%></td>
@@ -85,8 +89,16 @@
         %>
         </tbody>
     </table>
+    <%
+    } else {
+    %>
+    <p>No hay usuarios inscritos en la aplicación</p>
+    <%
+        }
+    %>
     <a href="/admin/crearNuevoUsuario" class="btn btn-primary mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
 </div>
+
 <br>
 
 <div class="container">

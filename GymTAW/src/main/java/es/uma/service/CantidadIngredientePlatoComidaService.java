@@ -31,8 +31,7 @@ public class CantidadIngredientePlatoComidaService {
     private UserService userService;
     @Autowired
     private DiaDietaService diaDietaService;
-    @Autowired
-    private ComidaRepository comidaRepository;
+
     @Autowired
     private TipoCantidadService tipoCantidadService;
 
@@ -98,6 +97,14 @@ public class CantidadIngredientePlatoComidaService {
 
     public void deleteById(Integer id){
         cantidadIngredientePlatoComidaRepository.deleteById(id);
+    }
+
+    public void deleteByFood(ComidaDTO comidaDTO){
+        Comida comida = comidaService.convertDtoToEntity(comidaDTO);
+        List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.buscarPorComida(comida.getId());
+        for(CantidadIngredientePlatoComida cantidadIngredientePlatoComida : cantidadIngredientePlatoComidaList){
+            cantidadIngredientePlatoComidaRepository.deleteById(cantidadIngredientePlatoComida.getId());
+        }
     }
 
     public AsignacionPlatoComida setAsignacionPlatoComida(AsignacionPlatoComida asignacionPlatoComida, Integer idComida, Integer idPlato){

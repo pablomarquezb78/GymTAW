@@ -40,6 +40,12 @@ public class RutinaService {
         rutinaRepository.deleteById(id);
     }
 
+    public void deleteByTrainer(Integer id){
+        for(Rutina rutina : rutinaRepository.buscarPorEntrenador(id)){
+            rutinaRepository.deleteById(rutina.getId());
+        }
+    }
+
     public RutinaDTO crearRutina(UserDTO entrenador){
 
         Rutina rutina = new Rutina();

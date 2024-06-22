@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DiaDietaService {
@@ -32,6 +34,36 @@ public class DiaDietaService {
             return convertEntityToDto(diaDieta);
         }else{
             return null;
+        }
+    }
+
+    public List<DiaDietaDTO> getByCustomer(Integer id){
+        return diaDietaRepository.findByCustomer(id).stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<DiaDietaDTO> getByDietist(Integer id){
+        return diaDietaRepository.findByDietist(id).stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteByCustomer(Integer id){
+        List<DiaDieta> diaDietas = diaDietaRepository.findByCustomer(id);
+        if(diaDietas != null || !diaDietas.isEmpty()){
+            for(DiaDieta dieta : diaDietas){
+                diaDietaRepository.deleteById(dieta.getId());
+            }
+        }
+    }
+
+    public void deleteByDietist(Integer id){
+        List<DiaDieta> diaDietas = diaDietaRepository.findByDietist(id);
+        if(diaDietas != null || !diaDietas.isEmpty()){
+            for(DiaDieta dieta : diaDietas){
+                diaDietaRepository.deleteById(dieta.getId());
+            }
         }
     }
 
