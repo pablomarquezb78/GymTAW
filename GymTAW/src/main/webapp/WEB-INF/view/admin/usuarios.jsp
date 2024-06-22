@@ -1,8 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.User" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.UserRol" %>
-<%@ page import="es.uma.ui.Usuario" %>
 <%@ page import="es.uma.dto.UserDTO" %>
 <%@ page import="es.uma.dto.UserRolDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -52,7 +49,7 @@
         <td><%=user.getAltura()%>cm</td>
         <td><%=user.getTelefono()%></td>
         <td>
-            <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-warning btn-sm">
+            <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-primary btn-sm">
                 <i class="fas fa-pencil-alt"></i> Editar
             </a>
             <a href="/admin/borrarUsuario?id=<%=user.getId()%>" class="btn btn-danger btn-sm">
@@ -65,7 +62,7 @@
     %>
     </tbody>
 </table>
-<a href="/admin/crearNuevoUsuario" class="btn btn-warning mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
+<a href="/admin/crearNuevoUsuario" class="btn btn-primary mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
 <br>
 
 <form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario" class="p-4">
