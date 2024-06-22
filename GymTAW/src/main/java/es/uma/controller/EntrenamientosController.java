@@ -852,42 +852,47 @@ public class EntrenamientosController extends BaseController{
     }
 
     @GetMapping("/verDesempenyoEntrenamientosEntrenador")
-    public String doVerDesmepenyoEntrenamientos(@RequestParam("fecha") LocalDate fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
+    public String doVerDesmepenyoEntrenamientos(@RequestParam(required = false, value = "fecha") String fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esEntrenador(rol)) {
             UserDTO userEntity = userService.getById(idUsuario);
             DiaEntrenamientoDTO diaEntrenamiento;
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechanueva = fecha;
+            LocalDate fechanueva;
+            if(fecha==null){
+                fechanueva = LocalDate.of(2000, 1, 1);
+            }else{
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                fechanueva = LocalDate.parse(fecha, formatter);
+            }
             diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(), fechanueva);
 
             List<ImplementacionEjercicioRutinaDTO> implementaciones = new ArrayList<>();
             Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
             List<Pair<ImplementacionEjercicioRutinaDTO, FeedbackEjercicioDTO>> listaPares = new ArrayList<>();
 
-            if (diaEntrenamiento != null) {
-                if (diaEntrenamiento.getRutina() != null && diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina() != null) {
-                    implementaciones = diaEntrenamiento.getRutina().getImplementacionesEjercicioRutina();
+            if(diaEntrenamiento!=null){
+                implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
 
-                    for (ImplementacionEjercicioRutinaDTO implementacion : implementaciones) {
-                        FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion, diaEntrenamiento);
-                        List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
-                        if (!implementacion.getFeedbacks().isEmpty() && implementacion.getFeedbacks().get(0).getSeguimientoSetsDone() != null) {
-                            for (int serie = 0; serie < Integer.parseInt(implementacion.getFeedbacks().get(0).getSeguimientoSetsDone()); serie++) {
-                                FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
-                                fserie.add(feedbackEjercicioserie);
-                            }
+                for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
+                    FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
+                    List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
+                    if(feedbackEjercicio.getSeguimientoSetsDone()!=null){
+                        for(int serie = 0; serie<Integer.parseInt(feedbackEjercicio.getSeguimientoSetsDone());serie++){
+                            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
+                            fserie.add(feedbackEjercicioserie);
                         }
-                        implementacionEjercicioRutinaListMap.put(implementacion, fserie);
                     }
+                    implementacionEjercicioRutinaListMap.put(implementacion,fserie);
+                    listaPares.add(new Pair<>(implementacion,feedbackEjercicio));
                 }
+
             }
 
             model.addAttribute("listaPares", listaPares);
             model.addAttribute("implementacionEjercicioRutinaListMap", implementacionEjercicioRutinaListMap);
-            model.addAttribute("fecha", fecha);
+            model.addAttribute("fecha", fechanueva);
             model.addAttribute("rol", rol);
 
             dir = "cliente/cliente_desempenyoEntrenamientos";

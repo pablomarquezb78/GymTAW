@@ -96,7 +96,7 @@
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getRepeticiones() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() != null ? "-" : f.getRepeticionesRealizadas() %><br/>
+                Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
                 <%
                     }
                 } else {
@@ -112,7 +112,7 @@
                     if (feedbackEjercicioseries != null && !implementacion.getPeso().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado().isEmpty() ? "-" : f.getPesoRealizado() + "kg" %><br/>
+                Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado()==null ? "-" : f.getPesoRealizado() + "kg" %><br/>
                 <%
                     }
                 } else {
