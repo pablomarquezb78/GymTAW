@@ -122,9 +122,42 @@ public class ComunController extends BaseController{
             model.addAttribute("usuario",usuario);
             model.addAttribute("rolid",rol.getId());
         }
+        return strTo;
+    }
 
+    @GetMapping("/editarPerfil")
+    public String doEditarPerfilPropio(HttpSession session,Model model){
 
+        String strTo = "/editarperfilpropio";
 
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+
+        if(!estaAutenticado(session)) {
+            strTo = "redirect:/";
+        }else {
+            Usuario usuario = new Usuario();
+            userService.setUserVerPerfilCliente(usuario,userService.convertDtoToEntity(user));
+            model.addAttribute("usuario",usuario);
+            model.addAttribute("rolid",rol.getId());
+        }
+        return strTo;
+    }
+
+    @PostMapping("/guardarPerfil")
+    public String doGuardarPerfilPropio(HttpSession session,@ModelAttribute("usuario") Usuario usuario,Model model){
+
+        String strTo = "redirect:/comun/editarPerfil";
+
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+
+        if(!estaAutenticado(session)) {
+            strTo = "redirect:/";
+        }else {
+            userService.guardarCambiosPerfil(usuario);
+            session.setAttribute("user",userService.getById(usuario.getId()));
+        }
         return strTo;
     }
 

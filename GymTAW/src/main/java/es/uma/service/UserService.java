@@ -108,6 +108,19 @@ public class UserService {
 
     }
 
+    public void guardarCambiosPerfil(Usuario usuario){
+
+        User user = userRepository.getById(usuario.getId());
+        user.setNombre(usuario.getNombre());
+        user.setApellidos(usuario.getApellidos());
+        user.setTelefono(usuario.getTelefono());
+        user.setPeso(usuario.getPeso());
+        user.setAltura(usuario.getAltura());
+        user.setFechaNacimiento(LocalDate.parse(usuario.getFechaNacimiento()));
+        user.setDescripcionPersonal(usuario.getDescripcionPersonal());
+        userRepository.save(user);
+    }
+
     public void saveNewUser(UserDTO userDTO){
         User user = new User();
         user.setUsername(userDTO.getUsername());
