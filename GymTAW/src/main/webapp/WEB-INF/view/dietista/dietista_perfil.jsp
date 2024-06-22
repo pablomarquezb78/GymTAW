@@ -6,6 +6,8 @@
     UserDTO dietista = (UserDTO) request.getAttribute("dietista");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <!DOCTYPE html>
 <html>
 <head>

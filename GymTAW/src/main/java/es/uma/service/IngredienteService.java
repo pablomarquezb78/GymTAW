@@ -27,7 +27,7 @@ public class IngredienteService {
     @Autowired
     private CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
 
-
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<IngredienteDTO> getIngredientesLinkedToPlato(PlatoDTO platoDTO)
     {
         Plato p = platoService.convertDtoToEntity(platoDTO);
@@ -36,6 +36,7 @@ public class IngredienteService {
         return ingredienteDTOList;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<IngredienteDTO> findAllIngredientes()
     {
         List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
@@ -43,6 +44,7 @@ public class IngredienteService {
         return ingredienteDTOList;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public PlatoDietistaUI addIngredienteToPlatoDietistaUI(PlatoDietistaUI platoDietistaUI)
     {
         ArrayList<Ingrediente> listaIngredientesPlato = platoDietistaUI.getIngredientes();
@@ -53,6 +55,7 @@ public class IngredienteService {
         return platoDietistaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public PlatoDietistaUI eliminarIngredienteToPlatoDietista(Integer ingredienteId, PlatoDietistaUI platoDietistaUI)
     {
         Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElse(null);
@@ -66,6 +69,7 @@ public class IngredienteService {
         return platoDietistaUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public IngredienteImplementandoUI setUpEditIngredienteFromPlatoComida(Integer cantidadId)
     {
         CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
@@ -76,6 +80,7 @@ public class IngredienteService {
         return ingredienteImplementandoUI;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public IngredienteDTO convertEntityToDto(Ingrediente ingrediente){
         IngredienteDTO ingredienteDTO = new IngredienteDTO();
         ingredienteDTO.setId(ingrediente.getId());
@@ -88,6 +93,7 @@ public class IngredienteService {
         return ingredienteDTO;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public Ingrediente convertDtoToEntity(IngredienteDTO ingredienteDTO){
         Ingrediente ingrediente = new Ingrediente();
         ingrediente.setId(ingredienteDTO.getId());
@@ -100,6 +106,7 @@ public class IngredienteService {
         return ingrediente;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<IngredienteDTO> convertlistEntityToDto(List<Ingrediente> ingredienteList){
         List<IngredienteDTO> ingredienteDTOList = new ArrayList<>();
         for(Ingrediente ingrediente : ingredienteList){
@@ -108,6 +115,7 @@ public class IngredienteService {
         return ingredienteDTOList;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<Ingrediente> convertlistDtoToEntity(List<IngredienteDTO> ingredienteDTOList){
         List<Ingrediente> ingredienteList = new ArrayList<>();
         for(IngredienteDTO ingredienteDTO : ingredienteDTOList){

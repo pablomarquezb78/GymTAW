@@ -14,6 +14,7 @@ public interface ComidaRepository extends JpaRepository<Comida, Integer> {
     @Query("select c from Comida c where c.diaDieta.id = :diaDietaId order by c.tipoComida.id")
     List<Comida> findByDiaDieta(@Param("diaDietaId") Integer diaDietaId);
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     @Query("select distinct c from Comida c where c.diaDieta = :diaDieta and c.tipoComida = :tipoComida")
     List<Comida> findByDiaAndTipoComido(@Param("diaDieta") DiaDieta diaDieta, @Param("tipoComida")TipoComida tipoComida);
 

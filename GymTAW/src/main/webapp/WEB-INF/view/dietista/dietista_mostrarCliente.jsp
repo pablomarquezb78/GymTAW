@@ -16,6 +16,8 @@
     Map<String, List<PlatoDTO>> tablaComidas = (Map<String, List<PlatoDTO>>) request.getAttribute("tablaComidas");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista cliente</title>

@@ -155,6 +155,7 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaRepository.save(cipc);
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public FeedbackDietistaMostrarUI setUpFeedbackComidaSelectedPlato(FeedbackDietistaMostrarUI feedback, ComidaDTO comidaDTO)
     {
         List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando().getId(), comidaDTO.getId());

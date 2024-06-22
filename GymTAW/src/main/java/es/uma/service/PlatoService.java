@@ -85,6 +85,7 @@ public class PlatoService {
         platosRepository.save(plato);
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public PlatoDTO findById(Integer platoId)
     {
         Plato p = platosRepository.findPlatoById(platoId);
@@ -92,6 +93,7 @@ public class PlatoService {
         return platoDTO;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<PlatoDTO> getPlatosLinkedToDietista(UserDTO dietistaDTO)
     {
         User dietista = userService.convertDtoToEntity(dietistaDTO);
@@ -100,6 +102,7 @@ public class PlatoService {
         return platosDTO;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public PlatoDietistaUI prepareEditarPlatoByPlatoDietistaUI(Integer platoId)
     {
         Plato plato = platosRepository.findById(platoId).orElse(null);
@@ -116,6 +119,7 @@ public class PlatoService {
         return platoDietista;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public void crearPlatoByPlatoDietstaUI(PlatoDietistaUI platoDietistaUI, UserDTO userDTO)
     {
         Plato plato = new Plato();
@@ -138,6 +142,7 @@ public class PlatoService {
         }
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public void editarPlatoByPlatoDietistaUI(PlatoDietistaUI platoDietistaUI, UserDTO userDTO)
     {
         Plato plato = platosRepository.findById(platoDietistaUI.getId()).orElse(null);
@@ -171,6 +176,7 @@ public class PlatoService {
         }
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public void borrarPlatoByPlatoId(Integer platoId, UserDTO userDTO)
     {
         Plato plato = platosRepository.findById(platoId).orElse(null);
@@ -186,6 +192,7 @@ public class PlatoService {
         platosRepository.delete(plato);
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public PlatoDietistaUI addNewIngredienteToPlatoDietistaUI(IngredienteDTO ingredienteDTO, PlatoDietistaUI platoDietistaUI)
     {
         Ingrediente ingrediente = new Ingrediente();
@@ -222,6 +229,7 @@ public class PlatoService {
         return plato;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<PlatoDTO> convertlistEntityToDto(List<Plato> platoList){
         List<PlatoDTO> platoDTOList = new ArrayList<>();
         for(Plato plato : platoList){
@@ -230,6 +238,7 @@ public class PlatoService {
         return platoDTOList;
     }
 
+    //@author: Jaime Ezequiel Rodriguez Rodriguez
     public List<Plato> convertlistDtoToEntity(List<PlatoDTO> platoDTOList){
         List<Plato> platoList = new ArrayList<>();
         for(PlatoDTO plato : platoDTOList){

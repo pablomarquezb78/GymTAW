@@ -15,6 +15,8 @@
     FeedbackDietistaMostrarUI feedback = (FeedbackDietistaMostrarUI) request.getAttribute("feedback");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista comida feedback</title>

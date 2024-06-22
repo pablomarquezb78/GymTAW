@@ -9,6 +9,8 @@
     List<UserDTO> clientes = (List<UserDTO>) request.getAttribute("clientes");
 %>
 
+<%-- @author: Jaime Ezequiel Rodriguez Rodriguez --%>
+
 <html>
 <head>
     <title>Dietista clientes asociados</title>

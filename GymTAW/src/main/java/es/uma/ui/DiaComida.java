@@ -2,6 +2,7 @@ package es.uma.ui;
 
 import es.uma.entity.TipoComida;
 
+//@author: Jaime Ezequiel Rodriguez Rodriguez
 public class DiaComida {
 
     protected int year;
