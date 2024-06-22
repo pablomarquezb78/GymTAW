@@ -169,8 +169,9 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaDTO.setCantidad(cantidadIngredientePlatoComida.getCantidad());
         cantidadIngredientePlatoComidaDTO.setComida(comidaService.convertEntityToDto(cantidadIngredientePlatoComida.getComida()));
         cantidadIngredientePlatoComidaDTO.setCantidadConsumida(cantidadIngredientePlatoComida.getCantidadConsumida());
-        if(cantidadIngredientePlatoComida.getIngrediente()!=null){
+        if(cantidadIngredientePlatoComida.getIngrediente()!=null) {
             cantidadIngredientePlatoComidaDTO.setIngrediente(ingredienteService.convertEntityToDto(cantidadIngredientePlatoComida.getIngrediente()));
+        }
         if(cantidadIngredientePlatoComida.getTipoCantidad() != null){
             cantidadIngredientePlatoComidaDTO.setTipoCantidad(tipoCantidadService.convertEntityToDto(cantidadIngredientePlatoComida.getTipoCantidad()));
         }
@@ -183,13 +184,13 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComida.setCantidad(cantidadIngredientePlatoComidaDTO.getCantidad());
         cantidadIngredientePlatoComida.setComida(comidaService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getComida()));
         cantidadIngredientePlatoComida.setCantidadConsumida(cantidadIngredientePlatoComidaDTO.getCantidadConsumida());
-        if(cantidadIngredientePlatoComidaDTO.getIngrediente()!=null){
+        if(cantidadIngredientePlatoComidaDTO.getIngrediente()!=null) {
             cantidadIngredientePlatoComida.setIngrediente(ingredienteService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getIngrediente()));
+        }
         if(cantidadIngredientePlatoComida.getTipoCantidad() != null){
             cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getTipoCantidad()));
         }
         return cantidadIngredientePlatoComida;
     }
-
-
+    
 }
