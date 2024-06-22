@@ -21,7 +21,7 @@
     if(tipoEjercicio == null) tipoEjercicio="";
 
     String tiempo = "-";
-    if(implementacion.getTiempo()!=null){
+    if(implementacion.getTiempo()!=null && !implementacion.getTiempo().isEmpty()){
         int tiempoINT = Integer.parseInt(implementacion.getTiempo());
         int minutos = tiempoINT/60;
         int segundos = tiempoINT%60;
@@ -58,12 +58,12 @@
         <th scope="row">1</th>
         <td><%=implementacion.getEjercicio().getNombre()%></td>
         <td><%=implementacion.getEjercicio().getTipo().getTipoDeEjercicio()%></td>
-        <td><%=implementacion.getSets() != null ? implementacion.getSets() : "-"%></td>
-        <td><%=implementacion.getRepeticiones() != null ? implementacion.getRepeticiones() : "-"%></td>
-        <td><%=implementacion.getPeso() != null ? implementacion.getPeso() : "-"%></td>
+        <td><%=!implementacion.getSets().isEmpty() ? implementacion.getSets() : "-"%></td>
+        <td><%=!implementacion.getRepeticiones().isEmpty() ? implementacion.getRepeticiones() : "-"%></td>
+        <td><%=!implementacion.getPeso().isEmpty() ? implementacion.getPeso() : "-"%></td>
         <td><%=tiempo%></td>
-        <td><%=implementacion.getKilocalorias() != null ? implementacion.getKilocalorias() : "-"%></td>
-        <td><%=implementacion.getMetros() != null ? implementacion.getMetros() : "-"%></td>
+        <td><%=!implementacion.getKilocalorias().isEmpty() ? implementacion.getKilocalorias() : "-"%></td>
+        <td><%=!implementacion.getMetros().isEmpty() ? implementacion.getMetros() : "-"%></td>
     </tr>
     <tbody>
 </table>

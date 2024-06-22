@@ -82,7 +82,7 @@
             <%
     for(int i = 0; i< l.size(); i++){
         String tiempo = "-";
-        if(l.get(i).getTiempo()!=null){
+        if(l.get(i).getTiempo()!=null && !l.get(i).getTiempo().isEmpty()){
             int tiempoINT = Integer.parseInt(l.get(i).getTiempo());
             int minutos = tiempoINT/60;
             int segundos = tiempoINT%60;
@@ -95,12 +95,12 @@
             <th scope="row"><%=i+1%></th>
             <td><%=l.get(i).getEjercicio().getNombre()%></td>
             <td><%=l.get(i).getEjercicio().getTipo().getTipoDeEjercicio()%></td>
-            <td><%=l.get(i).getSets() != null ? l.get(i).getSets() : "-"%></td>
-            <td><%=l.get(i).getRepeticiones() != null ? l.get(i).getRepeticiones() : "-"%></td>
-            <td><%=l.get(i).getPeso() != null ? l.get(i).getPeso() + "kg" : "-"%></td>
+            <td><%=!l.get(i).getSets().isEmpty() ? l.get(i).getSets() : "-"%></td>
+            <td><%=!l.get(i).getRepeticiones().isEmpty() ? l.get(i).getRepeticiones() : "-"%></td>
+            <td><%=!l.get(i).getPeso().isEmpty() ? l.get(i).getPeso() + "kg" : "-"%></td>
             <td><%=tiempo%></td>
-            <td><%=l.get(i).getKilocalorias() != null ? l.get(i).getKilocalorias() : "-"%></td>
-            <td><%=l.get(i).getMetros() != null ? l.get(i).getMetros() : "-"%></td>
+            <td><%=!l.get(i).getKilocalorias().isEmpty() ? l.get(i).getKilocalorias() : "-"%></td>
+            <td><%=!l.get(i).getMetros().isEmpty() ? l.get(i).getMetros() : "-"%></td>
             <td><a href="ejercicio?id=<%=l.get(i).getId()%>" class="btn btn-primary">Seleccionar</a></td>
         </tr>
             <%
