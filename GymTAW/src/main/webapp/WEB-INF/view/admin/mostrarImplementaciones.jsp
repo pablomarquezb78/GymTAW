@@ -58,9 +58,9 @@
         <td><%= implementacion.getRutina().getNombre() %></td>
         <td><%= implementacion.getSets() %></td>
         <td><%= implementacion.getRepeticiones() %></td>
-        <td><%= implementacion.getPeso() %></td>
-        <td><%= implementacion.getMetros() %></td>
-        <td><%= implementacion.getTiempo() %></td>
+        <td><%= implementacion.getPeso()%>Kg</td>
+        <td><%= implementacion.getMetros()%></td>
+        <td><%= implementacion.getTiempo()%>s</td>
         <td><%= implementacion.getKilocalorias() %></td>
         <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-warning btn-sm">Editar</a>
         <a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm">Borrar</a></td>

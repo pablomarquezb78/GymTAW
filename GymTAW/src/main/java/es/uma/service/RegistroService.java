@@ -8,6 +8,7 @@ import es.uma.entity.Registro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,22 @@ public class RegistroService {
         return this.convertEntityToDto(registroRepository.findById(id).orElse(null));
     }
 
+    public void save(String username, String password, String nombre, String apellidos, String nacimiento, Integer telefono, Integer rol){
+        Registro peticion = new Registro();
+        peticion.setUsername(username);
+        peticion.setPassword(password);
+        peticion.setNombre(nombre);
+        peticion.setApellidos(apellidos);
+
+        LocalDate fecha = LocalDate.parse(nacimiento);
+
+        peticion.setFechaNacimiento(fecha);
+        peticion.setTelefono(telefono);
+        peticion.setRol(rol);
+
+        this.registroRepository.save(peticion);
+    }
+
     public void deleteRegisterById(Integer id){
         registroRepository.deleteById(id);
     }
@@ -41,6 +58,7 @@ public class RegistroService {
         registroDTO.setPassword(registro.getPassword());
         registroDTO.setRol(registro.getRol());
         registroDTO.setFechaNacimiento(registro.getFechaNacimiento());
+        registroDTO.setTelefono(registro.getTelefono());
 
         return registroDTO;
     }

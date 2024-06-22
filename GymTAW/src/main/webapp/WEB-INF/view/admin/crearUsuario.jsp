@@ -58,7 +58,7 @@
                             </div>
                             <div class="form-group form-input">
                                 <label class="form-label">*Contraseña:</label>
-                                <form:input path="password" size="25" class="form-control"/>
+                                <form:password path="password" size="25" class="form-control"/>
                             </div>
                             <div class="form-group form-input">
                                 <label class="form-label">*Nombre:</label>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="form-group form-input">
                                 <label class="form-label">*Fecha de nacimiento:</label>
-                                <form:input path="fechaNacimiento" size="10" class="form-control"/>
+                                <form:input path="fechaNacimiento" type="date" size="10" class="form-control"/>
                             </div>
                             <div class="form-group form-select">
                                 <label class="form-label">*Rol:</label> </br>

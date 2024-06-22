@@ -36,7 +36,7 @@
     <tr class="text-center">
         <td><%=plato.getId()%></td>
         <td><%=plato.getNombre()%></td>
-        <td><%=plato.getTiempoDePreparacion()%></td>
+        <td><%=plato.getTiempoDePreparacion()%>s</td>
         <td><%=plato.getReceta()%></td>
         <td><%=plato.getEnlaceReceta()%></td>
 

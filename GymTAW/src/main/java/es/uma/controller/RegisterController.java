@@ -3,6 +3,7 @@ package es.uma.controller;
 import es.uma.dao.RegistroRepository;
 import es.uma.dao.UserRepository;
 import es.uma.entity.Registro;
+import es.uma.service.RegistroService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,9 @@ import java.time.LocalDate;
 @Controller
 public class RegisterController extends BaseController{
 
-    @Autowired
-    protected UserRepository userRepository;
 
     @Autowired
-    protected RegistroRepository registroRepository;
+    protected RegistroService registroService;
 
     @GetMapping("/registrar")
     public String doRegistro(){
@@ -38,19 +37,7 @@ public class RegisterController extends BaseController{
         if(username == null || password == null || nombre == null || apellidos == null) {
             return "redirect:/";
         }
-        Registro peticion = new Registro();
-        peticion.setUsername(username);
-        peticion.setPassword(password);
-        peticion.setNombre(nombre);
-        peticion.setApellidos(apellidos);
-
-        LocalDate fecha = LocalDate.parse(nacimiento);
-
-        peticion.setFechaNacimiento(fecha);
-        peticion.setTelefono(telefono);
-        peticion.setRol(rol);
-
-        this.registroRepository.save(peticion);
+        registroService.save(username, password, nombre, apellidos, nacimiento, telefono, rol);
 
         return "redirect:/";
     }
