@@ -1,9 +1,6 @@
 package es.uma.service;
 
-import es.uma.dao.CantidadIngredientePlatoComidaRepository;
-import es.uma.dao.ComidaRepository;
-import es.uma.dao.DiaDietaRepository;
-import es.uma.dao.TipoComidaRepository;
+import es.uma.dao.*;
 import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.ComidaUI;
@@ -40,6 +37,10 @@ public class ComidaService {
     private CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
     @Autowired
     private PlatoService platoService;
+    @Autowired
+    private PlatosRepository platosRepository;
+    @Autowired
+    private TipoCantidadRepository tipoCantidadRepository;
 
     public void save(Comida comida){
         comidaRepository.save(comida);
@@ -71,6 +72,17 @@ public class ComidaService {
         }else{
             return new ArrayList<>();
         }
+    }
+    public List<ComidaDTO> getComidasByDiaDietaAndTipoComida(DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
+    {
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaDTO);
+        List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
+        List<ComidaDTO> comidaDTOList = new ArrayList<>();
+        if(comidaActual!=null){
+            comidaDTOList = this.convertlistEntityToDto(comidaActual);
+        }
+        return comidaDTOList;
     }
 
     //Puede ser un Map que la clave sea DiaXComidaX y los values sean las listas de Plato
@@ -152,6 +164,94 @@ public class ComidaService {
         ArrayList<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = new ArrayList<>();
         comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
         comidaUI.setSelectedPlato(null);
+        return comidaUI;
+    }
+
+    public ComidaUI mostrarPlatoComidaSetUpComidaUI(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
+    {
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaDTO);
+        comidaUI.setPlatoExistente(false);
+        List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
+        List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
+        comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+        return comidaUI;
+    }
+
+    public ComidaUI addPlatoToPlatoComida(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
+    {
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaDTO);
+        List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
+        Plato addingPlato = comidaUI.getAddingPlato();
+        List<Plato> platosComida = comidaUI.getListaPlatosComida();
+        if(!platosComida.contains(addingPlato))
+        {
+            platosComida.add(addingPlato);
+            comidaUI.setListaPlatosComida(platosComida);
+
+            List<Ingrediente> ingredientesPlato = platosRepository.getIngredientesLinkedToPlato(addingPlato);
+            for (Ingrediente i : ingredientesPlato)
+            {
+                CantidadIngredientePlatoComida cantidadIngredientePlatoComida = new CantidadIngredientePlatoComida();
+                cantidadIngredientePlatoComida.setPlato(addingPlato);
+                cantidadIngredientePlatoComida.setComida(comidaActual.getFirst());
+                cantidadIngredientePlatoComida.setIngrediente(i);
+                cantidadIngredientePlatoComida.setCantidad(0);
+                List<TipoCantidad> tipoCantidadList = tipoCantidadRepository.findAll();
+                cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadList.getFirst());
+                cantidadIngredientePlatoComidaRepository.save(cantidadIngredientePlatoComida);
+            }
+
+            comidaUI.setSelectedPlato(addingPlato);
+        } else {
+            comidaUI.setPlatoExistente(true);
+            comidaUI.setSelectedPlato(null);
+        }
+        List<CantidadIngredientePlatoComida> listaCantidadIngredientesPlatoSeleccionado = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(comidaUI.getSelectedPlato().getId(), comidaActual.getFirst().getId());
+        comidaUI.setListaCantidadIngredientesPlatoSeleccionado(listaCantidadIngredientesPlatoSeleccionado);
+        return comidaUI;
+    }
+
+    public ComidaUI deletePlatoFromPlatoComida(ComidaUI comidaUI, DiaDietaDTO diaDietaDTO, TipoComidaDTO tipoComidaDTO)
+    {
+        DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
+        TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaDTO);
+        List<Comida> comidaActual = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
+        Plato selectedPlato = comidaUI.getSelectedPlato();
+        List<Plato> platosComida = comidaUI.getListaPlatosComida();
+        List<Plato> platosRemove = new ArrayList<>();
+        for(Plato p : platosComida)
+        {
+            if(p.equals(selectedPlato))
+            {
+                platosRemove.add(p);
+            }
+        }
+        platosComida.removeAll(platosRemove);
+        comidaUI.setListaPlatosComida(platosComida);
+
+        List<CantidadIngredientePlatoComida> cantidadesIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(selectedPlato.getId(), comidaActual.getFirst().getId());
+        for (CantidadIngredientePlatoComida c : cantidadesIngredientePlatoComida)
+        {
+            cantidadIngredientePlatoComidaRepository.delete(c);
+        }
+
+        comidaUI.setPlatoExistente(false);
+        comidaUI.setSelectedPlato(null);
+        comidaUI.setListaCantidadIngredientesPlatoSeleccionado(new ArrayList<>());
+        return comidaUI;
+    }
+
+    public ComidaUI deleteIngredienteFromPlatoComida(ComidaUI comidaUI, Integer cantidadId)
+    {
+        CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
+        Plato platoActual = c.getPlato();
+        Comida comidaActual = c.getComida();
+        cantidadIngredientePlatoComidaRepository.delete(c);
+        List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoActual.getId(), comidaActual.getId());
+        comidaUI.setListaCantidadIngredientesPlatoSeleccionado(cantidadIngredientePlatoComidaList);
+        comidaUI.setPlatoExistente(false);
         return comidaUI;
     }
 

@@ -1,11 +1,14 @@
 package es.uma.service;
 
+import es.uma.dao.CantidadIngredientePlatoComidaRepository;
 import es.uma.dao.IngredienteRepository;
 import es.uma.dao.PlatosRepository;
 import es.uma.dto.IngredienteDTO;
 import es.uma.dto.PlatoDTO;
+import es.uma.entity.CantidadIngredientePlatoComida;
 import es.uma.entity.Ingrediente;
 import es.uma.entity.Plato;
+import es.uma.ui.IngredienteImplementandoUI;
 import es.uma.ui.PlatoDietistaUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ public class IngredienteService {
     private PlatoService platoService;
     @Autowired
     private PlatosRepository platosRepository;
+    @Autowired
+    private CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
 
 
     public List<IngredienteDTO> getIngredientesLinkedToPlato(PlatoDTO platoDTO)
@@ -59,6 +64,16 @@ public class IngredienteService {
             }
         }
         return platoDietistaUI;
+    }
+
+    public IngredienteImplementandoUI setUpEditIngredienteFromPlatoComida(Integer cantidadId)
+    {
+        CantidadIngredientePlatoComida c = cantidadIngredientePlatoComidaRepository.findById(cantidadId).orElse(null);
+        IngredienteImplementandoUI ingredienteImplementandoUI = new IngredienteImplementandoUI();
+        ingredienteImplementandoUI.setIngrediente(c.getIngrediente());
+        ingredienteImplementandoUI.setCantidad(c.getCantidad());
+        ingredienteImplementandoUI.setTipoCantidad(c.getTipoCantidad());
+        return ingredienteImplementandoUI;
     }
 
     public IngredienteDTO convertEntityToDto(Ingrediente ingrediente){
