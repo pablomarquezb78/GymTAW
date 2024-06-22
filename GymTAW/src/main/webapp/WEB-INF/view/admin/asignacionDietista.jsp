@@ -6,6 +6,7 @@
 <%
     List<UserDTO> dietistas = (List<UserDTO>) request.getAttribute("dietistas");
     UserDTO cliente = (UserDTO) request.getAttribute("cliente");
+    request.setAttribute("paginaActual", "asignar");
 %>
 
 <html>

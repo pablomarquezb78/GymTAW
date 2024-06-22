@@ -17,6 +17,7 @@
     List<TipoComidaDTO> tiposComida = (List<TipoComidaDTO>) request.getAttribute("tiposComida");
     PlatoDTO plato = (PlatoDTO) request.getAttribute("plato");
     String dir = "/admin/filtrarComidas?id="+plato.getId();
+    request.setAttribute("paginaActual", "platos");
 %>
 
 <html>

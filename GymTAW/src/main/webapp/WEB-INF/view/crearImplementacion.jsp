@@ -30,6 +30,7 @@
     String actionRol = "/entrenamientos/guardarimplementacion"; /// Esto<<<<<
     cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     String filtrar = "/comun/filtrartipo";
+    request.setAttribute("paginaActual", "ejercicios");
 
     Boolean isAdmin = userRol.getId() == 1;
 

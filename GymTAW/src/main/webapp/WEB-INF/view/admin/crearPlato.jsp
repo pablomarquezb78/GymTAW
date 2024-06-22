@@ -6,7 +6,7 @@
 
 <%
     PlatoUI platoUI = (PlatoUI) request.getAttribute("platoUI");
-
+    request.setAttribute("paginaActual", "platos");
 %>
 <html>
 <head>

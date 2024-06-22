@@ -15,6 +15,8 @@
     List<UserDTO> dietistas = (List<UserDTO>) request.getAttribute("dietistas");
     List<TipoComidaDTO> tiposComida = (List<TipoComidaDTO>) request.getAttribute("tiposComida");
     List<IngredienteDTO> ingredientes = (List<IngredienteDTO>) request.getAttribute("ingredientes");
+    request.setAttribute("paginaActual", "platos");
+
 %>
 <html>
 <head>

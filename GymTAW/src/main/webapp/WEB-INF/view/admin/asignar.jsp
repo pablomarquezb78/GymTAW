@@ -5,6 +5,8 @@
 
 <%
     List<UserDTO> clientes = (List<UserDTO>) request.getAttribute("clientes");
+    request.setAttribute("paginaActual", "asignar");
+
 %>
 
 <html>

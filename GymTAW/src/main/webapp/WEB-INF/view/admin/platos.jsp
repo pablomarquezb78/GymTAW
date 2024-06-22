@@ -6,6 +6,8 @@
 
 <%
     List<PlatoDTO> platos = (List<PlatoDTO>) request.getAttribute("platos");
+    request.setAttribute("paginaActual", "platos");
+
 %>
 
 <html>

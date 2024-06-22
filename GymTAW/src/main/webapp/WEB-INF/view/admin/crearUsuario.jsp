@@ -8,6 +8,8 @@
 <%
     List<UserRolDTO> roles = (List<UserRolDTO>) request.getAttribute("roles");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
+    request.setAttribute("paginaActual", "usuarios");
+
 %>
 <html>
 <head>
