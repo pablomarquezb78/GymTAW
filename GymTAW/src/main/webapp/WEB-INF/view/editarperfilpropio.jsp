@@ -1,8 +1,11 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <%@ page import="es.uma.ui.Usuario" %>
 
+
 <%
-    Usuario usuario = (Usuario) request.getAttribute("usuario");
     Integer rolid = (Integer) request.getAttribute("rolid");
+    Usuario usuario = (Usuario) request.getAttribute("usuario");
 
     String cabecera = "";
     if(rolid==1) cabecera = "./admin/cabeceraAdmin.jsp"; //admin
@@ -61,15 +64,40 @@
                     </div>
                 </div>
                 <div class="profile-header">
-                    Perfil de: <%= usuario.getUsername() %>
+                    Perfil de: ${usuario.username}
                 </div>
-                <p><span class="profile-label">Nombre:</span> <%= usuario.getNombre() %></p>
-                <p><span class="profile-label">Apellidos:</span> <%= usuario.getApellidos() %></p>
-                <p><span class="profile-label">Num. Tlf:</span> <%= usuario.getTelefono() %></p>
-                <p><span class="profile-label">Peso:</span> <%= usuario.getPeso() %> Kg</p>
-                <p><span class="profile-label">Altura:</span> <%= usuario.getAltura() %> cm</p>
-                <p><span class="profile-label">Fecha de Nacimiento:</span> <%= usuario.getFechaNacimiento() %></p>
-                <p><span class="profile-label">Descripcion Personal:</span> <%= usuario.getDescripcionPersonal() %></p>
+                <form:form modelAttribute="usuario" method="post" action="/comun/guardarPerfil">
+                    <div class="mb-3">
+                        <label for="nombre" class="profile-label">Nombre:</label>
+                        <form:input path="nombre" id="nombre" cssClass="form-control"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellidos" class="profile-label">Apellidos:</label>
+                        <form:input path="apellidos" id="apellidos" cssClass="form-control"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono" class="profile-label">Num. Tlf:</label>
+                        <form:input path="telefono" id="telefono" cssClass="form-control"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="peso" class="profile-label">Peso:</label>
+                        <form:input path="peso" id="peso" cssClass="form-control" type="number"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="altura" class="profile-label">Altura:</label>
+                        <form:input path="altura" id="altura" cssClass="form-control" type="number"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaNacimiento" class="profile-label">Fecha de Nacimiento:</label>
+                        <form:input path="fechaNacimiento" id="fechaNacimiento" cssClass="form-control" type="date"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcionPersonal" class="profile-label">Descripcion Personal:</label>
+                        <form:textarea path="descripcionPersonal" id="descripcionPersonal" cssClass="form-control"/>
+                    </div>
+                    <form:hidden path="id"></form:hidden>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form:form>
             </div>
         </div>
     </div>
