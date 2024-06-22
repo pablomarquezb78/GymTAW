@@ -72,6 +72,11 @@
             for (Pair<ImplementacionEjercicioRutinaDTO, FeedbackEjercicioDTO> par : listaPares) {
                 ImplementacionEjercicioRutinaDTO implementacion = par.a;
                 FeedbackEjercicioDTO feedback = par.b;
+                String setsDone = feedback == null ? null : feedback.getSeguimientoSetsDone();
+                String pesoDone = feedback == null ? null : feedback.getSeguimientoPesoDone();
+                String kcalDone = feedback == null ? null : feedback.getSeguimientoKilocaloriasDone();
+                String tiempoDone = feedback == null ? null : feedback.getSeguimientoTiempoDone();
+                String metrosDone = feedback == null ? null : feedback.getSeguimientoMetrosDone();
 
                 String tiempo = "-";
                 if (!implementacion.getTiempo().isEmpty()) {
@@ -89,14 +94,14 @@
             <td><%= implementacion.getEjercicio().getNombre() %></td>
             <td><%= implementacion.getEjercicio().getTipo().getTipoDeEjercicio() %></td>
             <td><%= implementacion.getSets().isEmpty() ? "-" : implementacion.getSets() %></td>
-            <td><%= feedback.getSeguimientoSetsDone() == null ? "-" : feedback.getSeguimientoSetsDone()%></td>
+            <td><%= setsDone == null ? "-" : feedback.getSeguimientoSetsDone()%></td>
             <td><%= implementacion.getRepeticiones().isEmpty() ? "-" : implementacion.getRepeticiones() %></td>
             <td>
                 <%
                     if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getRepeticiones() != null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() != null ? "-" : f.getRepeticionesRealizadas() %><br/>
+                Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
                 <%
                     }
                 } else {
@@ -112,12 +117,12 @@
                     if (feedbackEjercicioseries != null && !implementacion.getPeso().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado().isEmpty() ? "-" : f.getPesoRealizado() + "kg" %><br/>
+                Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado()==null ? "-" : f.getPesoRealizado() + "kg" %><br/>
                 <%
                     }
                 } else {
                 %>
-                <%= feedback.getSeguimientoPesoDone() != null ? feedback.getSeguimientoPesoDone() : "-" %>
+                <%= pesoDone != null ? feedback.getSeguimientoPesoDone() : "-" %>
                 <%
                     }
                 %>
@@ -142,7 +147,7 @@
                     }
                 } else {
                     tiempo = "-";
-                    if (feedback.getSeguimientoTiempoDone() != null) {
+                    if (tiempoDone != null) {
                         int tiempoINT = Integer.parseInt(feedback.getSeguimientoTiempoDone());
                         int minutos = tiempoINT / 60;
                         int segundos = tiempoINT % 60;
@@ -151,7 +156,7 @@
                         if (segundos != 0) tiempo += segundos + "s";
                     }
                 %>
-                <%= feedback.getSeguimientoTiempoDone() != null ? tiempo : "-" %>
+                <%= tiempoDone != null ? tiempo : "-" %>
                 <%
                     }
                 %>
@@ -167,7 +172,7 @@
                     }
                 } else {
                 %>
-                <%= feedback.getSeguimientoKilocaloriasDone() != null ? feedback.getSeguimientoKilocaloriasDone() : "-" %>
+                <%= kcalDone != null ? feedback.getSeguimientoKilocaloriasDone() : "-" %>
                 <%
                     }
                 %>
@@ -183,7 +188,7 @@
                     }
                 } else {
                 %>
-                <%= feedback.getSeguimientoMetrosDone() != null ? feedback.getSeguimientoMetrosDone() : "-" %>
+                <%= metrosDone != null ? feedback.getSeguimientoMetrosDone() : "-" %>
                 <%
                     }
                 %>

@@ -28,7 +28,7 @@
                 <a class="nav-link" href="/cliente/mostrarDesempenyo">Desempeño</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/comun/verperfil">Perfil</a>
+                <a class="nav-link" href="/comun/editarPerfil">Perfil</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/cerrarSesion">Cerrar sesión</a>
