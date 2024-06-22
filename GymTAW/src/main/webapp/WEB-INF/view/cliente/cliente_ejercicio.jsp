@@ -13,12 +13,10 @@
     ImplementacionEjercicioRutinaDTO implementacion = (ImplementacionEjercicioRutinaDTO) request.getAttribute("implementacion");
     String descripcion = implementacion.getEjercicio().getDescripcion();
     String enlaceVideo = implementacion.getEjercicio().getEnlaceVideo();
-    String tipoEjercicio = implementacion.getEjercicio().getTipo().getTipoDeEjercicio();
 
     //COMPROBACIONES PARAMETROS
     if(descripcion == null) descripcion="";
     if(enlaceVideo == null) enlaceVideo="";
-    if(tipoEjercicio == null) tipoEjercicio="";
 
     String tiempo = "-";
     if(implementacion.getTiempo()!=null && !implementacion.getTiempo().isEmpty()){

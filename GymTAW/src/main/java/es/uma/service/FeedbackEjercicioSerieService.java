@@ -1,5 +1,4 @@
 package es.uma.service;
-
 import es.uma.dao.FeedbackejercicioRepository;
 import es.uma.dao.FeedbackejercicioserieRepository;
 import es.uma.dto.FeedbackEjercicioserieDTO;
@@ -7,6 +6,7 @@ import es.uma.entity.FeedbackEjercicio;
 import es.uma.entity.FeedbackEjercicioserie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,10 +80,15 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserieList;
     }
 
-    public void borrarFeedbackEjercicioSerie(Integer feedbackEjercicioserieId){
-        FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.findById(feedbackEjercicioserieId).orElse(null);
-        if(feedbackEjercicioserie!=null){
-            feedbackejercicioserieRepository.delete(feedbackEjercicioserie);
+    @Transactional
+    public void borrarFeedbackEjercicioSerie(Integer feedbackEjercicioId){
+        FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
+        if (feedbackEjercicio != null) {
+            List<FeedbackEjercicioserie> feedbacks = feedbackEjercicio.getFeedbacks();
+            if (feedbacks != null) {
+                feedbacks.clear();
+                feedbackejercicioRepository.save(feedbackEjercicio);
+            }
         }
     }
 

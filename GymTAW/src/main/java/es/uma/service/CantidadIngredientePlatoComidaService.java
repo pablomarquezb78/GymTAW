@@ -164,6 +164,9 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaDTO.setComida(comidaService.convertEntityToDto(cantidadIngredientePlatoComida.getComida()));
         cantidadIngredientePlatoComidaDTO.setCantidadConsumida(cantidadIngredientePlatoComida.getCantidadConsumida());
         cantidadIngredientePlatoComidaDTO.setTipoCantidad(tipoCantidadService.convertEntityToDto(cantidadIngredientePlatoComida.getTipoCantidad()));
+        if(cantidadIngredientePlatoComida.getIngrediente()!=null){
+            cantidadIngredientePlatoComidaDTO.setIngrediente(ingredienteService.convertEntityToDto(cantidadIngredientePlatoComida.getIngrediente()));
+        }
         return cantidadIngredientePlatoComidaDTO;
     }
 
@@ -174,6 +177,10 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComida.setComida(comidaService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getComida()));
         cantidadIngredientePlatoComida.setCantidadConsumida(cantidadIngredientePlatoComidaDTO.getCantidadConsumida());
         cantidadIngredientePlatoComida.setTipoCantidad(tipoCantidadService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getTipoCantidad()));
+        if(cantidadIngredientePlatoComidaDTO.getIngrediente()!=null){
+            cantidadIngredientePlatoComida.setIngrediente(ingredienteService.convertDtoToEntity(cantidadIngredientePlatoComidaDTO.getIngrediente()));
+
+        }
         return cantidadIngredientePlatoComida;
     }
 

@@ -34,8 +34,6 @@ public class ClienteController extends BaseController{
     private CantidadIngredientePlatoComidaService cantidadIngredientePlatoComidaService;
     @Autowired
     private PlatoService platoService;
-    @Autowired
-    private UserService userService;
 
     //NOTA: LOS EJERCICIOS DE BODY SIEMPRE TENDRÁN SERIES, COMO MÍNIMO UNA, PERO LOS EJERCICIOS DE CROSSFIT PUEDEN TENER O NO TENER SERIES ESTIPULADAS.
     //AUNQUE LA INTERPRETACIÓN DE NO TENER UNA SERIE SEA EQUIVALENTE A TENER UNA SERIE, HACERLO ASÍ LO HACE MÁS SIMPLE Y COHERENTE, YA QUE EN BODY
@@ -294,15 +292,10 @@ public class ClienteController extends BaseController{
                     feedbackEjercicio.setSeguimientoSetsDone("" + seriesRealizadas);
 
                     //POR SIMPLIFICAR, SI SE MODIFICA EL NUMERO DE SETS REALIZADAS EL CLIENTE DEBERÁ VOLVER A RELLENAR EL FEEDBACK DE ESTAS NUEVAS SERIES
-                    List<FeedbackEjercicioserieDTO> feedbackAnterior = feedbackEjercicioSerieService.getFeedbackSeriePorFeedbackEjercicio(feedbackEjercicio.getId());
-
                     //SI HABIA FEEDBACK ANTERIOR LO BORRAMOS PARA DAR PASO AL NUEVO
-                    if(feedbackAnterior!=null){
-                        for(FeedbackEjercicioserieDTO f : feedbackAnterior){
-                            feedbackEjercicioSerieService.borrarFeedbackEjercicioSerie(f.getId());
-                        }
-                    }
+                    feedbackEjercicioSerieService.borrarFeedbackEjercicioSerie(feedbackEjercicio.getId());
 
+                    if(realizado==0) seriesRealizadas = 0;
                     //PREMARAMOS EL FEEBACK DE LAS NUEVAS SERIES REALIZADAS PARA QUE POSTERIORMENTE EL CLIENTE LAS RELLENE
                     for(int i = 1; i<= seriesRealizadas; i++){
                         feedbackEjercicioSerieService.prerararFeedbackEjercicioSeries(i,feedbackEjercicio.getId());
@@ -534,7 +527,6 @@ public class ClienteController extends BaseController{
                                                         @RequestParam("cantidadConsumida") Integer cantidadConsumida, HttpSession session){
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
             CantidadIngredientePlatoComidaDTO cantidad = cantidadIngredientePlatoComidaService.getById(cantidadID);
             if(cantidad!=null) {
