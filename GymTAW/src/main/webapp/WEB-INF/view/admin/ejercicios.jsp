@@ -26,6 +26,27 @@
     <title><%=title%></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <style>
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #343a40 !important;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="<%=cabecera%>"></jsp:include>
@@ -35,6 +56,8 @@
         if(ejercicios.size() > 0){
 
     %>
+<div class="container">
+    <h3> Lista de ejercicios</h3>
 <table class="table table-bordered table-hover">
     <thead class="text-white text-center" style="background-color: #343a40">
     <tr>
@@ -73,7 +96,11 @@
     </tbody>
 </table>
 <a href="/comun/crearNuevoEjercicio" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nuevo ejercicio</a>
+</div>
+</br>
 
+<div class="container">
+    <h5>Opciones de búsqueda</h5>
 <form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio" class="p-4">
     <div class="form-row">
         <div class="form-group col-md-4">
@@ -95,7 +122,7 @@
     </div>
     <button type="submit" class="btn btn-primary mt-3">Filtrar ejercicio</button>
 </form:form>
-
+</div>
     <%
         }else{
     %>

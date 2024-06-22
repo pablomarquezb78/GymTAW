@@ -15,8 +15,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <style>
-        .table_header {
-            background-color: #343a40;
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #343a40 !important;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -24,6 +40,9 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
+<div class="container">
+    <h3>Lista de clientes</h3>
+    <p>Asigna entrenadores o dietistas a un cliente</p>
     <table class="table table-bordered table-hover">
         <thead class="table_header text-white text-center">
         <tr>
@@ -64,5 +83,6 @@
         <% } %>
         </tbody>
     </table>
+</div>
 </body>
 </html>
