@@ -49,7 +49,7 @@
 <div class="container">
     <h1>Tipos de ejercicios</h1>
 
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th>ID</th>

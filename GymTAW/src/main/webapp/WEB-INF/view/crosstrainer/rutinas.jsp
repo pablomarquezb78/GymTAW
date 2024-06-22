@@ -14,18 +14,30 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <style>
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th {
+            background-color: #343a40 !important;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="<%=cabecera%>"></jsp:include>
 
-<div class="container mt-5">
-    <h2>Buscar Rutinas</h2>
+<div class="container mt-4">
+    <h1>Buscar Rutinas</h1>
 
     <form method="post" action="/entrenamientos/filtrarRutinas" class="mb-4">
         <div class="input-group mb-3">
-            <input id="nombrerutina" name="nombrerutina" type="text" class="form-control me-2" placeholder="Nombre de Rutina">
-            <button type="submit" class="btn btn-success me-1" name="pormi" value="1">SOLO CREADAS POR MI</button>
-            <button type="submit" class="btn btn-success" name="pormi" value="0">BUSCAR TODAS</button>
+            <input id="nombrerutina" name="nombrerutina" type="text" class="form-control rounded me-2" placeholder="Nombre de Rutina">
+            <button type="submit" class="btn btn-success rounded me-1" name="pormi" value="1">SOLO CREADAS POR MI</button>
+            <button type="submit" class="btn btn-success rounded" name="pormi" value="0">BUSCAR TODAS</button>
         </div>
     </form>
 

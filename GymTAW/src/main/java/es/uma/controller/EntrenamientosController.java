@@ -779,6 +779,7 @@ public class EntrenamientosController extends BaseController{
         return dir;
     }
 
+    //DONE
     @GetMapping("/mostrarRutinas")
     public String verRutinasCompletas(HttpSession session, Model model){
 
