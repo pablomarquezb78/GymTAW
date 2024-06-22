@@ -2,8 +2,10 @@ package es.uma.service;
 
 
 import es.uma.dao.DiaEntrenamientoRepository;
+import es.uma.dao.FeedbackejercicioRepository;
 import es.uma.dto.DiaEntrenamientoDTO;
 import es.uma.entity.DiaEntrenamiento;
+import es.uma.entity.FeedbackEjercicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +22,18 @@ public class DiaEntrenamientoService {
     private UserService userService;
     @Autowired
     private RutinaService rutinaService;
+    @Autowired
+    private FeedbackejercicioRepository feedbackejercicioRepository;
 
     public DiaEntrenamientoDTO getbyID(Integer id) {
         return convertEntityToDto(diaEntrenamientoRepository.getById(id));
     }
 
     public void borrarDiaID(Integer id){
+        List<FeedbackEjercicio> feedbacksEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorDia(id);
+        for(FeedbackEjercicio f: feedbacksEjercicio){
+            feedbackejercicioRepository.delete(f);
+        }
         this.diaEntrenamientoRepository.deleteById(id);
     }
 
