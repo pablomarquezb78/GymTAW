@@ -110,7 +110,7 @@
     </table>
 </div>
 
-<%if(diaEntrenamiento!=null){%>
+<%if(diaEntrenamiento!=null && !l.isEmpty()){%>
 <form method="post" action="/cliente/guardarSeguimientoEntrenamiento" class="d-flex flex-column align-items-center gap-3 mt-3">
     <h2>Seguimiento general del día:</h2>
     <textarea class="form-control w-25" style="height: 200px" name="seguimientoDieta" placeholder="<%=diaEntrenamiento.getSeguimiento() == null ? "Introduce seguimiento" : diaEntrenamiento.getSeguimiento()%>"></textarea>

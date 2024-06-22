@@ -878,10 +878,12 @@ public class EntrenamientosController extends BaseController{
                 for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
                     FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
                     List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
-                    if(feedbackEjercicio.getSeguimientoSetsDone()!=null){
-                        for(int serie = 0; serie<Integer.parseInt(feedbackEjercicio.getSeguimientoSetsDone());serie++){
-                            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
-                            fserie.add(feedbackEjercicioserie);
+                    if(feedbackEjercicio!=null){
+                        if(feedbackEjercicio.getSeguimientoSetsDone()!=null){
+                            for(int serie = 0; serie<Integer.parseInt(feedbackEjercicio.getSeguimientoSetsDone());serie++){
+                                FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
+                                fserie.add(feedbackEjercicioserie);
+                            }
                         }
                     }
                     implementacionEjercicioRutinaListMap.put(implementacion,fserie);
