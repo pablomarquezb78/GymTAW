@@ -53,10 +53,10 @@
 
     <div style="<%=realizado == 0 ? "display:none" : ""%>" class="bg-secondary m-3 w-25 rounded p-3">
         <%
-            boolean hayPeso = implementacion.getPeso()!=null;
-            boolean hayTiempo = implementacion.getTiempo()!=null;
-            boolean hayKilocalorias = implementacion.getKilocalorias()!=null;
-            boolean hayMetros = implementacion.getMetros()!=null;
+            boolean hayPeso = !implementacion.getPeso().isEmpty();
+            boolean hayTiempo = !implementacion.getTiempo().isEmpty();
+            boolean hayKilocalorias = !implementacion.getKilocalorias().isEmpty();
+            boolean hayMetros = !implementacion.getMetros().isEmpty();
         %>
         <h5>Feedback Ejercicio Realizado:</h5>
         <form:form method="post" action="/cliente/guardarFeedbackCross" modelAttribute="feedbackSerieForm">

@@ -192,5 +192,5 @@ public class CantidadIngredientePlatoComidaService {
         }
         return cantidadIngredientePlatoComida;
     }
-    
+
 }

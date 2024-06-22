@@ -91,11 +91,11 @@
             </div>
         </form>
         <%
-            boolean hayRepeticiones = implementacion.getRepeticiones()!=null;
-            boolean hayPeso = implementacion.getPeso()!=null;
-            boolean hayTiempo = implementacion.getTiempo()!=null;
-            boolean hayKilocalorias = implementacion.getKilocalorias()!=null;
-            boolean hayMetros = implementacion.getMetros()!=null;
+            boolean hayRepeticiones = !implementacion.getRepeticiones().isEmpty();
+            boolean hayPeso = !implementacion.getPeso().isEmpty();
+            boolean hayTiempo = !implementacion.getTiempo().isEmpty();
+            boolean hayKilocalorias = !implementacion.getKilocalorias().isEmpty();
+            boolean hayMetros = !implementacion.getMetros().isEmpty();
         %>
         <h3 class="text-center py-2">Feedback serie:</h3>
         <form:form method="post" action="/cliente/guardarFeedbackSerieCross" modelAttribute="feedbackSerieForm">

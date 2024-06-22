@@ -6,6 +6,7 @@
 <%@ page import="es.uma.dto.FeedbackEjercicioserieDTO" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="org.antlr.v4.runtime.misc.Pair" %>
+<%@ page import="org.hibernate.query.sql.internal.NativeQueryImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     LocalDate localDate = (LocalDate) request.getAttribute("fecha");
@@ -78,14 +79,14 @@
                 String tiempoDone = feedback == null ? null : feedback.getSeguimientoTiempoDone();
                 String metrosDone = feedback == null ? null : feedback.getSeguimientoMetrosDone();
 
-                String tiempo = "-";
+                String tiempoEstipulado = "-";
                 if (!implementacion.getTiempo().isEmpty()) {
                     int tiempoINT = Integer.parseInt(implementacion.getTiempo());
                     int minutos = tiempoINT / 60;
                     int segundos = tiempoINT % 60;
-                    tiempo = "";
-                    if (minutos != 0) tiempo += minutos + "m";
-                    if (segundos != 0) tiempo += segundos + "s";
+                    tiempoEstipulado = "";
+                    if (minutos != 0) tiempoEstipulado += minutos + "m";
+                    if (segundos != 0) tiempoEstipulado += segundos + "s";
                 }
 
                 List<FeedbackEjercicioserieDTO> feedbackEjercicioseries = map.get(implementacion);
@@ -98,10 +99,10 @@
             <td><%= implementacion.getRepeticiones().isEmpty() ? "-" : implementacion.getRepeticiones() %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && implementacion.getRepeticiones() != null) {
+                    if (feedbackEjercicioseries != null && !feedbackEjercicioseries.isEmpty() && !implementacion.getRepeticiones().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Repeticiones: <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
+                Ser<%= f.getSerie() %> -> <%= f.getRepeticionesRealizadas() == null ? "-" : f.getRepeticionesRealizadas() %><br/>
                 <%
                     }
                 } else {
@@ -117,7 +118,7 @@
                     if (feedbackEjercicioseries != null && !implementacion.getPeso().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Peso: <%= f.getPesoRealizado()==null ? "-" : f.getPesoRealizado() + "kg" %><br/>
+                Ser<%= f.getSerie() %> -> <%= f.getPesoRealizado()==null ? "-" : f.getPesoRealizado() + "kg" %><br/>
                 <%
                     }
                 } else {
@@ -127,36 +128,36 @@
                     }
                 %>
             </td>
-            <td><%= implementacion.getTiempo().isEmpty() ? "-" : tiempo %></td>
+            <td><%= implementacion.getTiempo().isEmpty() ? "-" : tiempoEstipulado %></td>
             <td>
                 <%
-                    if (feedbackEjercicioseries != null && !implementacion.getTiempo().isEmpty()) {
+                    String tiempoRealizado = "-";
+                    if (feedbackEjercicioseries!=null && !feedbackEjercicioseries.isEmpty() && !implementacion.getTiempo().isEmpty() && tiempoDone==null) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
-                            tiempo = "-";
                             if (f.getTiempoRealizado() != null) {
                                 int tiempoINT = Integer.parseInt(f.getTiempoRealizado());
                                 int minutos = tiempoINT / 60;
                                 int segundos = tiempoINT % 60;
-                                tiempo = "";
-                                if (minutos != 0) tiempo += minutos + "m";
-                                if (segundos != 0) tiempo += segundos + "s";
+                                tiempoRealizado = "";
+                                if (minutos != 0) tiempoRealizado += minutos + "m";
+                                if (segundos != 0) tiempoRealizado += segundos + "s";
                             }
                 %>
-                Ser<%= f.getSerie() %> -> Tiempo: <%= f.getTiempoRealizado() == null ? "-" : tiempo %><br/>
+                        Ser<%= f.getSerie() %> -> <%= f.getTiempoRealizado() == null ? "-" : tiempoRealizado %><br/>
                 <%
                     }
-                } else {
-                    tiempo = "-";
+                }else{
+                    String tiempoRealizadoDone = "-";
                     if (tiempoDone != null) {
                         int tiempoINT = Integer.parseInt(feedback.getSeguimientoTiempoDone());
                         int minutos = tiempoINT / 60;
                         int segundos = tiempoINT % 60;
-                        tiempo = "";
-                        if (minutos != 0) tiempo += minutos + "m";
-                        if (segundos != 0) tiempo += segundos + "s";
+                        tiempoRealizadoDone = "";
+                        if (minutos != 0) tiempoRealizadoDone += minutos + "m";
+                        if (segundos != 0) tiempoRealizadoDone += segundos + "s";
                     }
                 %>
-                <%= tiempoDone != null ? tiempo : "-" %>
+                <%=tiempoRealizadoDone%>
                 <%
                     }
                 %>
@@ -167,7 +168,7 @@
                     if (feedbackEjercicioseries != null && !implementacion.getKilocalorias().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Kcal: <%= f.getKilocaloriasRealizado() == null ? "-" : f.getKilocaloriasRealizado() %><br/>
+                Ser<%= f.getSerie() %> -> <%= f.getKilocaloriasRealizado() == null ? "-" : f.getKilocaloriasRealizado() %><br/>
                 <%
                     }
                 } else {
@@ -183,7 +184,7 @@
                     if (feedbackEjercicioseries != null && !implementacion.getMetros().isEmpty()) {
                         for (FeedbackEjercicioserieDTO f : feedbackEjercicioseries) {
                 %>
-                Ser<%= f.getSerie() %> -> Metros: <%= f.getMetrosRealizado() == null ? "-" : f.getMetrosRealizado() %><br/>
+                Ser<%= f.getSerie() %> -> <%= f.getMetrosRealizado() == null ? "-" : f.getMetrosRealizado() %><br/>
                 <%
                     }
                 } else {

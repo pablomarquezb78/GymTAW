@@ -117,7 +117,7 @@ public class ClienteController extends BaseController{
             feedbackSerieForm.setFeedbackEjercicioId(feedbackEjercicio.getId());
 
             //COMPROBAMOS SI EL EJERCICIO TIENE SERIES ESTIPULADAS
-            boolean tieneSeries = implementacion.getSets()!=null;
+            boolean tieneSeries = !implementacion.getSets().isEmpty();
 
             //EL EJERCICIO TIENE SERIES ESTIPULADAS
             if(tieneSeries){
@@ -153,18 +153,16 @@ public class ClienteController extends BaseController{
             }else{
 
                 //OBTENGO LOS DATOS ALMACENADOS EN EL FEEDBACK DEL EJERCICIO Y METO EN EL OBJETO UI LOS QUE PROCEDAN
-                if(feedbackEjercicio!=null){
-                    String pesoRealizado = feedbackEjercicio.getSeguimientoPesoDone();
-                    String tiempoRealizado = feedbackEjercicio.getSeguimientoTiempoDone();
-                    String metrosRealizado = feedbackEjercicio.getSeguimientoMetrosDone();
-                    String kilocaloriasRealizado = feedbackEjercicio.getSeguimientoKilocaloriasDone();
+                String pesoRealizado = feedbackEjercicio.getSeguimientoPesoDone();
+                String tiempoRealizado = feedbackEjercicio.getSeguimientoTiempoDone();
+                String metrosRealizado = feedbackEjercicio.getSeguimientoMetrosDone();
+                String kilocaloriasRealizado = feedbackEjercicio.getSeguimientoKilocaloriasDone();
 
-                    if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
-                    if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
-                    if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
-                    if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
-                    if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
-                }
+                if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
+                if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
+                if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
+                if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
+                if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
 
             }
 
@@ -295,7 +293,11 @@ public class ClienteController extends BaseController{
                     //SI HABIA FEEDBACK ANTERIOR LO BORRAMOS PARA DAR PASO AL NUEVO
                     feedbackEjercicioSerieService.borrarFeedbackEjercicioSerie(feedbackEjercicio.getId());
 
-                    if(realizado==0) seriesRealizadas = 0;
+                    //MODIFICAMOS LOS SETS REALIZADOS
+                    if(realizado==0){
+                        feedbackEjercicio.setSeguimientoSetsDone(null);
+                        seriesRealizadas = 0;
+                    }
                     //PREMARAMOS EL FEEBACK DE LAS NUEVAS SERIES REALIZADAS PARA QUE POSTERIORMENTE EL CLIENTE LAS RELLENE
                     for(int i = 1; i<= seriesRealizadas; i++){
                         feedbackEjercicioSerieService.prerararFeedbackEjercicioSeries(i,feedbackEjercicio.getId());
@@ -692,7 +694,7 @@ public class ClienteController extends BaseController{
             }
             diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechanueva);
 
-            List<ImplementacionEjercicioRutinaDTO> implementaciones;
+            List<ImplementacionEjercicioRutinaDTO> implementaciones = new ArrayList<>();
             Map<ImplementacionEjercicioRutinaDTO,List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
             List<Pair<ImplementacionEjercicioRutinaDTO,FeedbackEjercicioDTO>> listaPares = new ArrayList<>();
 
@@ -702,10 +704,12 @@ public class ClienteController extends BaseController{
                 for(ImplementacionEjercicioRutinaDTO implementacion : implementaciones){
                     FeedbackEjercicioDTO feedbackEjercicio = feedbackEjercicioService.getFeedbackEjercicioPorImplementacionYDia(implementacion,diaEntrenamiento);
                     List<FeedbackEjercicioserieDTO> fserie = new ArrayList<>();
-                    if(feedbackEjercicio.getSeguimientoSetsDone()!=null){
-                        for(int serie = 0; serie<Integer.parseInt(feedbackEjercicio.getSeguimientoSetsDone());serie++){
-                            FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
-                            fserie.add(feedbackEjercicioserie);
+                    if(feedbackEjercicio!=null){
+                        if(feedbackEjercicio.getSeguimientoSetsDone()!=null){
+                            for(int serie = 0; serie<Integer.parseInt(feedbackEjercicio.getSeguimientoSetsDone());serie++){
+                                FeedbackEjercicioserieDTO feedbackEjercicioserie = feedbackEjercicioSerieService.getFeedbackPorEjecicioYSerie(feedbackEjercicio.getId(), "" + (serie + 1));
+                                fserie.add(feedbackEjercicioserie);
+                            }
                         }
                     }
                     implementacionEjercicioRutinaListMap.put(implementacion,fserie);
