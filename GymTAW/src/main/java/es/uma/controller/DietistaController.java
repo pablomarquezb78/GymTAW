@@ -1,8 +1,6 @@
 package es.uma.controller;
 
-import es.uma.dao.*;
 import es.uma.dto.*;
-import es.uma.entity.*;
 import es.uma.service.*;
 import es.uma.ui.*;
 import org.antlr.v4.runtime.misc.Pair;
@@ -20,24 +18,6 @@ import java.util.*;
 @RequestMapping("/dietista")
 public class DietistaController extends BaseController{
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TipoComidaRepository tipoComidaRepository;
-    @Autowired
-    private DiaDietaRepository diaDietaRepository;
-    @Autowired
-    private ComidaRepository comidaRepository;
-    @Autowired
-    private CantidadIngredientePlatoComidaRepository cantidadIngredientePlatoComidaRepository;
-    @Autowired
-    private PlatosRepository platosRepository;
-    @Autowired
-    private TipoCantidadRepository tipoCantidadRepository;
-    @Autowired
-    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
-    @Autowired
-    private IngredienteRepository ingredienteRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -444,8 +424,8 @@ public class DietistaController extends BaseController{
         if (estaAutenticado(session) && esDietista(userRolDTO))
         {
             IngredienteImplementandoUI ingredienteImplementandoUI = ingredienteService.setUpEditIngredienteFromPlatoComida(cantidadId);
-            List<Ingrediente> listaIngredientes = ingredienteRepository.findAll();
-            List<TipoCantidad> listaTipoCantidad = tipoCantidadRepository.findAll();
+            List<IngredienteDTO> listaIngredientes = ingredienteService.findAllIngredientes();
+            List<TipoCantidadDTO> listaTipoCantidad = tipoCantidadService.getAll();
             model.addAttribute("ingredienteImplementandoUI", ingredienteImplementandoUI);
             model.addAttribute("listaIngredientes", listaIngredientes);
             model.addAttribute("listaTipoCantidad", listaTipoCantidad);
@@ -519,30 +499,29 @@ public class DietistaController extends BaseController{
         return dir;
     }
 
-    /*
     @GetMapping("/accederFeedbackComida")
     public String doLoadFeedbackComida(@RequestParam("comidaID") Integer comidaID, HttpSession session,
                                         Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            TipoComida tipoComida = tipoComidaRepository.findById(comidaID).orElse(null);
-            session.setAttribute("selectedComida", tipoComida);
+            TipoComidaDTO tipoComidaDTO = (TipoComidaDTO) session.getAttribute("selectedComida");
+            session.setAttribute("selectedComida", tipoComidaDTO);
 
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            List<Comida> listaComidas = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
-            Comida comida = listaComidas.getFirst();
-            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            List<ComidaDTO> listaComidas = comidaService.getComidasByDiaDietaAndTipoComida(diaDietaDTO, tipoComidaDTO);
+            ComidaDTO comidaDTO = listaComidas.getFirst();
+            List<PlatoDTO> listaPlatos = cantidadIngredientePlatoComidaService.getPlatosByComida(comidaDTO.getId());
             FeedbackDietistaMostrarUI feedback = new FeedbackDietistaMostrarUI();
             feedback.setPlatoMostrando(null);
             feedback.setCantidadesIngredientePlatoComida(new ArrayList<>());
 
-            model.addAttribute("diaDieta", diaDieta);
-            model.addAttribute("comida", comida);
+            model.addAttribute("diaDieta", diaDietaDTO);
+            model.addAttribute("comida", comidaDTO);
             model.addAttribute("listaPlatos", listaPlatos);
             model.addAttribute("feedback", feedback);
 
@@ -552,30 +531,28 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 
-    /*
     @PostMapping("/feedbackComidaSelectedPlato")
     public String doLoadFeedbackComidaConPlato(@ModelAttribute("feedback") FeedbackDietistaMostrarUI feedback, HttpSession session,
                                        Model model) {
         String dir;
-        UserRol rol = (UserRol) session.getAttribute("rol");
-        if (estaAutenticado(session) && esDietista(rol))
+        UserRolDTO userRolDTO = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esDietista(userRolDTO))
         {
-            User cliente = (User) session.getAttribute("clienteSeleccionado");
-            User dietista = (User) session.getAttribute("user");
+            UserDTO clienteDTO = (UserDTO) session.getAttribute("clienteSeleccionado");
+            UserDTO dietistaDTO = (UserDTO) session.getAttribute("user");
             LocalDate fecha = (LocalDate) session.getAttribute("fecha");
-            TipoComida tipoComida = (TipoComida) session.getAttribute("selectedComida");
+            TipoComidaDTO tipoComidaDTO = (TipoComidaDTO) session.getAttribute("selectedComida");
 
-            DiaDieta diaDieta = diaDietaRepository.findByFecha(dietista, cliente, fecha);
-            List<Comida> listaComidas = comidaRepository.findByDiaAndTipoComido(diaDieta, tipoComida);
-            Comida comida = listaComidas.getFirst();
-            List<Plato> listaPlatos = cantidadIngredientePlatoComidaRepository.findPlatosInComida(comida.getId());
-            List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando().getId(), comida.getId());
-            feedback.setCantidadesIngredientePlatoComida(listaCantidades);
+            DiaDietaDTO diaDietaDTO = diaDietaService.getDiaDietaByDietistaClienteFecha(dietistaDTO, clienteDTO, fecha);
+            List<ComidaDTO> listaComidas = comidaService.getComidasByDiaDietaAndTipoComida(diaDietaDTO, tipoComidaDTO);
+            ComidaDTO comidaDTO = listaComidas.getFirst();
+            List<PlatoDTO> listaPlatos = cantidadIngredientePlatoComidaService.getPlatosByComida(comidaDTO.getId());
+            feedback = cantidadIngredientePlatoComidaService.setUpFeedbackComidaSelectedPlato(feedback, comidaDTO);
 
-            model.addAttribute("diaDieta", diaDieta);
-            model.addAttribute("comida", comida);
+
+            model.addAttribute("diaDieta", diaDietaDTO);
+            model.addAttribute("comida", comidaDTO);
             model.addAttribute("listaPlatos", listaPlatos);
             model.addAttribute("feedback", feedback);
 
@@ -585,5 +562,4 @@ public class DietistaController extends BaseController{
         }
         return dir;
     }
-    */
 }

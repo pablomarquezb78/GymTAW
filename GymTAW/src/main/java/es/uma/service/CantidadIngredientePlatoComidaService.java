@@ -2,12 +2,10 @@ package es.uma.service;
 
 import es.uma.dao.CantidadIngredientePlatoComidaRepository;
 import es.uma.dao.ComidaRepository;
-import es.uma.dto.CantidadIngredientePlatoComidaDTO;
-import es.uma.dto.IngredienteDTO;
-import es.uma.dto.PlatoDTO;
-import es.uma.dto.TipoComidaDTO;
+import es.uma.dto.*;
 import es.uma.entity.*;
 import es.uma.ui.AsignacionPlatoComida;
+import es.uma.ui.FeedbackDietistaMostrarUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -155,6 +153,13 @@ public class CantidadIngredientePlatoComidaService {
         cipc.setCantidad(asignacionPlatoComida.getCantidad());
         cipc.setComida(comida);
         cantidadIngredientePlatoComidaRepository.save(cipc);
+    }
+
+    public FeedbackDietistaMostrarUI setUpFeedbackComidaSelectedPlato(FeedbackDietistaMostrarUI feedback, ComidaDTO comidaDTO)
+    {
+        List<CantidadIngredientePlatoComida> listaCantidades = cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(feedback.getPlatoMostrando().getId(), comidaDTO.getId());
+        feedback.setCantidadesIngredientePlatoComida(listaCantidades);
+        return feedback;
     }
 
     public CantidadIngredientePlatoComidaDTO convertEntityToDto(CantidadIngredientePlatoComida cantidadIngredientePlatoComida){

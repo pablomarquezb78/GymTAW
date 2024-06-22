@@ -1,14 +1,17 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.Year" %>
-<%@ page import="es.uma.entity.*" %>
 <%@ page import="es.uma.ui.FeedbackDietistaMostrarUI" %>
+<%@ page import="es.uma.dto.DiaDietaDTO" %>
+<%@ page import="es.uma.dto.ComidaDTO" %>
+<%@ page import="es.uma.dto.PlatoDTO" %>
+<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    DiaDieta diaDieta = (DiaDieta) request.getAttribute("diaDieta");
-    Comida comida = (Comida) request.getAttribute("comida");
-    List<Plato> listaPlatos = (List<Plato>) request.getAttribute("listaPlatos");
+    DiaDietaDTO diaDieta = (DiaDietaDTO) request.getAttribute("diaDieta");
+    ComidaDTO comida = (ComidaDTO) request.getAttribute("comida");
+    List<PlatoDTO> listaPlatos = (List<PlatoDTO>) request.getAttribute("listaPlatos");
     FeedbackDietistaMostrarUI feedback = (FeedbackDietistaMostrarUI) request.getAttribute("feedback");
 %>
 
