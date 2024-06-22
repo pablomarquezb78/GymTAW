@@ -65,7 +65,7 @@
     %>
     </tbody>
 </table>
-<a href="/admin/crearNuevoUsuario" class="btn btn-warning mt-3">Crear nuevo usuario</a>
+<a href="/admin/crearNuevoUsuario" class="btn btn-warning mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
 <br>
 
 <form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario" class="p-4">

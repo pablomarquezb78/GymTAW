@@ -34,9 +34,6 @@
         .form-input {
             margin-bottom: 15px;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>

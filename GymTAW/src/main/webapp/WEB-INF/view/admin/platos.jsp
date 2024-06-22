@@ -54,7 +54,7 @@
     </tbody>
 </table>
 
-<a href="/admin/crearNuevoPlato" class="btn btn-warning mt-3">Crear nuevo plato</a>
+<a href="/admin/crearNuevoPlato" class="btn btn-warning mt-3"><i class="fas fa-plus"></i> Crear nuevo plato</a>
 
 <form:form action="/admin/filtrarPlatos" method="post" modelAttribute="plato" class="p-4">
     <div class="form-row">

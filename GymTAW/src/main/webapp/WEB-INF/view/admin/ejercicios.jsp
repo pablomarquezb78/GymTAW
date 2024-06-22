@@ -75,7 +75,7 @@
     %>
     </tbody>
 </table>
-<a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3">Crear nuevo ejercicio</a>
+<a href="/comun/crearNuevoEjercicio" class="btn btn-warning mt-3"><i class="fas fa-plus"></i> Crear nuevo ejercicio</a>
 
 <form:form action="/comun/filtrarEjercicios" method="post" modelAttribute="ejercicio" class="p-4">
     <div class="form-row">
