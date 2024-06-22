@@ -6,6 +6,7 @@ import es.uma.dao.UserRepository;
 import es.uma.dto.UserDTO;
 import es.uma.dto.UserRolDTO;
 import es.uma.entity.Registro;
+import es.uma.service.PlatoService;
 import es.uma.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,18 +24,14 @@ import java.time.LocalDate;
 public class LoginController extends  BaseController {
 
     @Autowired
-    protected UserRepository userRepository;
-
-    @Autowired
-    protected PlatosRepository platosRepository;
+    private UserService userService;
 
     final String admin = "admin";
     final String cliente = "cliente";
     final String bodybuilder = "bodybuilder";
     final String crosstrainer = "crosstrainer";
     final String dietista = "dietista";
-    @Autowired
-    private UserService userService;
+
 
     @GetMapping("/")
     public String doLoad(Model model, HttpSession session) {

@@ -46,8 +46,8 @@
         <td><%=user.getApellidos()%></td>
         <td><%=user.getRol().getRolUsuario()%></td>
         <td><%=user.getFechaNacimiento()%></td>
-        <td><%=user.getPeso()%></td>
-        <td><%=user.getAltura()%></td>
+        <td><%=user.getPeso()%>Kg</td>
+        <td><%=user.getAltura()%>cm</td>
         <td><%=user.getTelefono()%></td>
         <td>
             <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-warning btn-sm">
@@ -79,8 +79,8 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="fechaNacimiento">Fecha de nacimiento (yyyy-MM-dd):</label>
-            <form:input path="fechaNacimiento" size="10" class="form-control" id="fechaNacimiento" style="width: auto;"></form:input>
+            <label for="fechaNacimiento">Fecha de nacimiento:</label>
+            <form:input path="fechaNacimiento" type="date" size="10" class="form-control" id="fechaNacimiento" style="width: auto;"></form:input>
         </div>
         <div class="form-group col-md-8">
             <label for="rol">Rol:</label>
@@ -91,7 +91,5 @@
     </div>
     <button type="submit" class="btn btn-primary mt-3">Filtrar usuario</button>
 </form:form>
-
-
 </body>
 </html>
