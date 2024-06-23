@@ -66,7 +66,7 @@ public class ComunController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
 
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-            dir = "admin/ejercicios";
+            dir = "ejercicios";
             List<EjercicioDTO> ejercicios = ejercicioService.getAllExercises();
             List<TipoEjercicioDTO> tipos = tipoEjercicioService.getAll();
             model.addAttribute("ejercicios", ejercicios);
@@ -221,7 +221,7 @@ public class ComunController extends BaseController{
                 } else {
                     model.addAttribute("ejercicios", ejercicioService.filterExercisesWithType(ejercicioUI.getNombre(), ejercicioUI.getDescripcion(), ejercicioUI.getIdTipo()));
                 }
-                dir = "admin/ejercicios";
+                dir = "ejercicios";
             }
             model.addAttribute("ejercicio", ejercicioUI);
             model.addAttribute("tipos", tipoEjercicioService.getAll());
@@ -295,7 +295,7 @@ public class ComunController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-            dir = "admin/mostrarImplementaciones";
+            dir = "mostrarImplementaciones";
             EjercicioDTO ejercicio = ejercicioService.getById(id);
             model.addAttribute("ejercicio", ejercicio);
             model.addAttribute("implementaciones", implementacionEjercicioRutinaService.findByExercise(ejercicio));
@@ -410,7 +410,7 @@ public class ComunController extends BaseController{
                         implementacion.getPeso(), implementacion.getTiempo(), implementacion.getMetros(), implementacion.getKilocalorias()));
                 model.addAttribute("implementacion", implementacion);
                 model.addAttribute("rol", rol);
-                dir = "admin/mostrarImplementaciones";
+                dir = "mostrarImplementaciones";
             }
         } else {
             dir = "redirect:/";

@@ -791,7 +791,7 @@ public class EntrenamientosController extends BaseController{
             model.addAttribute("rol",rol);
             model.addAttribute("ejercicio", new EjercicioUI());
 
-            return "admin/ejercicios";
+            return "ejercicios";
 
         }else{
             dir = "redirect:/";
