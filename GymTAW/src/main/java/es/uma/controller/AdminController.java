@@ -292,7 +292,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/asignarEntrenador?id="+id+"&idCliente="+idCliente;
+            dir = "redirect:/admin/asignarEntrenador?id="+idCliente;
             asignacionClienteEntrenadorService.addTrainer(id, idCliente);
 
         } else {
@@ -326,7 +326,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
-            dir = "redirect:/admin/asignarDietista?id="+id+"&idCliente="+idCliente;
+            dir = "redirect:/admin/asignarDietista?id="+idCliente;
             asignacionClienteDietistaService.addDietist(id, idCliente);
         } else {
             dir = "redirect:/";

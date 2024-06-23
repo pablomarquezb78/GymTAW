@@ -43,6 +43,7 @@
 <div class="container">
     <h3>Lista de dietistas</h3>
     <% if (dietistas.size() > 0) { %>
+    <p>Dietistas no asignados a <%=cliente.getNombre()%> <%=cliente.getApellidos()%></p>
     <table class="table table-bordered table-hover">
         <thead class="text-center" style="background-color: #343a40; color: white;">
         <tr>
