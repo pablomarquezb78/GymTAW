@@ -131,7 +131,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
   CONSTRAINT `cantidad-ingrediente_fk` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `cantidad-plato_fk` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`),
   CONSTRAINT `cantidad-tipo_cantidad_fk` FOREIGN KEY (`tipo_cantidad`) REFERENCES `tipo_cantidad` (`idtipo_cantidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
 
 LOCK TABLES `cantidad_ingrediente-plato-comida` WRITE;
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` DISABLE KEYS */;
-INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (25,0,1,NULL,1,11,2),(26,0,1,NULL,3,11,2),(27,0,1,NULL,9,11,2),(53,200,2,NULL,1,9,3),(54,100,2,NULL,2,9,3),(71,150,2,NULL,8,17,5),(72,50,2,NULL,10,17,5),(73,100,2,NULL,15,17,5),(74,100,2,NULL,16,17,5),(75,200,2,NULL,1,15,6),(76,100,3,NULL,3,15,6),(77,100,2,NULL,9,15,6),(78,100,2,NULL,11,16,7),(79,50,2,NULL,12,16,7),(80,2,4,NULL,14,16,7),(81,50,2,NULL,8,17,8),(82,20,2,NULL,10,17,8),(83,20,2,NULL,15,17,8),(84,20,2,NULL,16,17,8);
+INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (25,0,1,NULL,1,11,2),(26,0,1,NULL,3,11,2),(27,0,1,NULL,9,11,2),(53,200,2,NULL,1,9,3),(54,100,2,NULL,2,9,3),(71,150,2,NULL,8,17,5),(72,50,2,NULL,10,17,5),(73,100,2,NULL,15,17,5),(74,100,2,NULL,16,17,5),(75,200,2,NULL,1,15,6),(76,100,3,NULL,3,15,6),(77,100,2,NULL,9,15,6),(78,100,2,NULL,11,16,7),(79,50,2,NULL,12,16,7),(80,2,4,NULL,14,16,7),(81,50,2,NULL,8,17,8),(82,20,2,NULL,10,17,8),(83,20,2,NULL,15,17,8),(84,20,2,NULL,16,17,8),(85,50,2,50,1,15,9),(86,20,2,20,3,15,9),(87,20,2,20,9,15,9),(88,100,2,75,11,16,9),(89,75,2,50,12,16,9),(90,2,4,1,14,16,9);
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +161,7 @@ CREATE TABLE `comida` (
   KEY `comida-dia_dieta_fk_idx` (`dia_dieta`),
   CONSTRAINT `comida-dia_dieta_fk` FOREIGN KEY (`dia_dieta`) REFERENCES `dia_dieta` (`iddia_dieta`),
   CONSTRAINT `comida-tipo_comida_fk` FOREIGN KEY (`tipo_comida`) REFERENCES `tipo_comida` (`idtipo_comida`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +170,7 @@ CREATE TABLE `comida` (
 
 LOCK TABLES `comida` WRITE;
 /*!40000 ALTER TABLE `comida` DISABLE KEYS */;
-INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2),(4,NULL,5,2),(5,NULL,2,3),(6,NULL,3,4),(7,NULL,5,4),(8,NULL,2,5);
+INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2),(4,NULL,5,2),(5,NULL,2,3),(6,NULL,3,4),(7,NULL,5,4),(8,NULL,2,5),(9,1,3,6);
 /*!40000 ALTER TABLE `comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `dia_dieta` (
   KEY `dia_dieta-dietista_fk_idx` (`dietista`),
   CONSTRAINT `dia_dieta-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_dieta-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `dia_dieta` (
 
 LOCK TABLES `dia_dieta` WRITE;
 /*!40000 ALTER TABLE `dia_dieta` DISABLE KEYS */;
-INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5),(3,'2024-06-26 00:00:00',NULL,7,6),(4,'2024-06-26 00:00:00',NULL,8,6),(5,'2024-06-27 00:00:00',NULL,8,6);
+INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5),(3,'2024-07-01 00:00:00',NULL,7,6),(4,'2024-07-01 00:00:00',NULL,8,6),(5,'2024-07-02 00:00:00',NULL,8,6),(6,'2024-07-03 00:00:00','Dia de dieta ajetreado',8,6);
 /*!40000 ALTER TABLE `dia_dieta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,4 +620,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-23 12:00:45
+-- Dump completed on 2024-06-23 15:24:24
