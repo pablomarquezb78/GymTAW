@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@authors: Pablo Miguel Aguilar Blanco & Adrián Fernández Vera & Antonio Salvador Gámez Zafra
+//@authors: Pablo Miguel Aguilar Blanco: 60% & Adrián Fernández Vera: 20% & Antonio Salvador Gámez Zafra: 20%
 @Controller
 @RequestMapping("/comun")
 public class ComunController extends BaseController{
@@ -61,6 +61,7 @@ public class ComunController extends BaseController{
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
         String dir;
@@ -94,6 +95,19 @@ public class ComunController extends BaseController{
         return dir;
     }
 
+    @GetMapping("/borrarEjercicio")
+    public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
+        String dir;
+        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
+        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
+            dir = "redirect:/comun/mostrarEjercicios";
+            ejercicioService.deleteById(id);
+
+        } else {
+            dir = "redirect:/";
+        }
+        return dir;
+    }
 
 
     @GetMapping("/verperfil")
@@ -151,19 +165,6 @@ public class ComunController extends BaseController{
         return strTo;
     }
 
-    @GetMapping("/borrarEjercicio")
-    public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
-        String dir;
-        UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
-        if (estaAutenticado(session) && esAdmin(rol) || esEntrenador(rol)) {
-            dir = "redirect:/comun/mostrarEjercicios";
-            ejercicioService.deleteById(id);
-
-        } else {
-            dir = "redirect:/";
-        }
-        return dir;
-    }
 
     @GetMapping("/crearNuevoEjercicio")
     public String doCrearNuevoEjercicio(Model model, HttpSession session, EjercicioUI ejercicioUI) {
