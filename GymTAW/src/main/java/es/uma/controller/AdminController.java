@@ -417,6 +417,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/crearPlato";
             model.addAttribute("platoUI", platoUI);
+            model.addAttribute("disableName", false);
         } else {
             dir = "redirect:/";
         }
@@ -449,6 +450,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/crearPlato";
             model.addAttribute("platoUI", platoService.setPlatoUI(id, platoUI));
+            model.addAttribute("disableName", true);
         } else {
             dir = "redirect:/";
         }

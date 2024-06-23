@@ -64,7 +64,7 @@
         <tr class="text-center">
             <td><%=plato.getId()%></td>
             <td><%=plato.getNombre()%></td>
-            <td><%=plato.getTiempoDePreparacion()%>s</td>
+            <td><%=plato.getTiempoDePreparacion()%>min</td>
             <td><%=plato.getReceta()%></td>
             <td><%=plato.getEnlaceReceta()%></td>
 
@@ -96,15 +96,15 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label>Nombre:</label>
-            <form:input path="nombre" size="15" class="form-control" style="width: auto;"></form:input>
+            <form:input path="nombre" size="20" class="form-control" style="width: auto;"></form:input>
         </div>
         <div class="form-group col-md-4">
             <label>Tiempo:</label>
-            <form:input path="tiempoDePreparacion" size="10" class="form-control" style="width: auto;"></form:input>
+            <form:input path="tiempoDePreparacion" size="5" class="form-control" style="width: auto;"></form:input>
         </div>
         <div class="form-group col-md-4">
             <label>Receta:</label>
-            <form:input path="receta" size="30" class="form-control" style="width: auto;"></form:input>
+            <form:input path="receta" size="50" class="form-control" style="width: auto;"></form:input>
         </div>
     </div>
     <button type="submit" class="btn btn-primary mt-3">Filtrar plato</button>

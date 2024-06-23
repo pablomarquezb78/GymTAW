@@ -6,11 +6,12 @@
 
 <%
     PlatoUI platoUI = (PlatoUI) request.getAttribute("platoUI");
+    Boolean disableName = (Boolean) request.getAttribute("disableName");
     request.setAttribute("paginaActual", "platos");
 %>
 <html>
 <head>
-    <title>Admin</title>
+    <title>Admin~Platos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         .form-container {
@@ -45,9 +46,12 @@
 
                 <form:form action="/admin/anyadirPlato" method="post" modelAttribute="platoUI">
                     <form:hidden path="id"/>
+                    <% if (disableName){ %>
+                    <form:hidden path="nombre"/>
+                    <% } %>
                     <div class="form-group form-input">
                         <label class="form-label">Nombre:</label>
-                        <form:input path="nombre" class="form-control"/>
+                        <form:input disabled="<%=disableName%>" path="nombre" class="form-control"/>
                     </div>
                     <div class="form-group form-input">
                         <label class="form-label">Tiempo de preparación:</label>
