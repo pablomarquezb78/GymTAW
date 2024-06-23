@@ -1,4 +1,3 @@
-//@Author: Pablo Miguel Aguilar Blanco
 package es.uma.controller;
 
 import es.uma.dto.*;
