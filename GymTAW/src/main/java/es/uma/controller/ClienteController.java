@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 //@author: Pablo Márquez Benítez
@@ -203,13 +205,16 @@ public class ClienteController extends BaseController{
                 //ACTUALIZO CON EL DIA DEL FILTRO
                 int dia = Integer.parseInt(filtroDia);
 
-                //SEMANA 1
-                LocalDate fechaInicio = LocalDate.of(2000, 1, dia);
+                LocalDate fechaHoy = LocalDate.now();
+                LocalDate lunesAnterior = fechaHoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                int diaDeHoy = lunesAnterior.getDayOfMonth();
+
+                LocalDate fechaConDiaModificado = fechaHoy.withDayOfMonth(diaDeHoy + (dia - 1));
                 //METEMOS EN LA SESION LA FECHA SELECCIONADA
-                session.setAttribute("fechaSeleccionada",fechaInicio);
+                session.setAttribute("fechaSeleccionada",fechaConDiaModificado);
 
                 //Obtengo las rutinas del dia seleccionado
-                DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaInicio);
+                DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaConDiaModificado);
                 List<ImplementacionEjercicioRutinaDTO> implementaciones;
                 if(diaEntrenamiento != null){
                     //Obtengo la especifiacion de los ejercicios de las rutinas
@@ -249,13 +254,16 @@ public class ClienteController extends BaseController{
                 int dia = Integer.parseInt(filtroDia);
                 int semana = Integer.parseInt(filtroSemana);
 
-                //SEMANA Y DIA SELECCIONADO
-                LocalDate fechaInicio = LocalDate.of(2000, 1, dia + (semana*7));
+                LocalDate fechaHoy = LocalDate.now();
+                LocalDate lunesAnterior = fechaHoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                int diaDeHoy = lunesAnterior.getDayOfMonth();
+
+                LocalDate fechaConDiaModificado = fechaHoy.withDayOfMonth(diaDeHoy + ((dia - 1) + (semana*7)));
                 //METEMOS EN LA SESION LA FECHA SELECCIONADA
-                session.setAttribute("fechaSeleccionada",fechaInicio);
+                session.setAttribute("fechaSeleccionada",fechaConDiaModificado);
 
                 //Obtengo las rutinas del dia seleccionado
-                DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaInicio);
+                DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaConDiaModificado);
                 List<ComidaDTO> comidas;
                 if(diaDieta != null){
                     //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
