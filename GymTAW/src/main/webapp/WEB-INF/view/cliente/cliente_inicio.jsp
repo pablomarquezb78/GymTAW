@@ -1,11 +1,13 @@
 <%@ page import="es.uma.dto.DiaDietaDTO" %>
 <%@ page import="es.uma.dto.DiaEntrenamientoDTO" %>
+<%@ page import="java.time.LocalDate" %>
 <%-- @author: Pablo Márquez Benítez --%>
 <%
     //OBTENEMOS PARAMETROS
     DiaEntrenamientoDTO diaEntrenamiento = (DiaEntrenamientoDTO) request.getAttribute("diaEntrenamiento");
     DiaDietaDTO diaDieta = (DiaDietaDTO) request.getAttribute("diaDieta");
     String nombreUsuario = (String) request.getAttribute("nombreUsuario");
+    LocalDate fechaInicio = (LocalDate) request.getAttribute("fechaInicio");
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -17,21 +19,23 @@
 
 <jsp:include page="cabecera_cliente.jsp"/>
 
-<h1 class="text-center position-absolute top-50 start-50 translate-middle" style="padding-bottom: 2%">¡Bienvenido <%=nombreUsuario%>!</h1>
 
-<div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-top: 2%">
+<h1 class="text-center position-absolute top-50 start-50 translate-middle" style="padding-bottom: 2%">¡Bienvenido <%=nombreUsuario%>!</h1>
+<h2 class="position-absolute top-50 start-50 translate-middle mt-3">Hoy es: <%=fechaInicio%></h2>
+
+<div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-top: 3%">
     <div>
         <%if(diaEntrenamiento!=null){%>
-        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary my-3">Ver entrenamiento de hoy</button>
+        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary" style="margin-top: 17%">Ver entrenamiento de hoy</button>
         <%}else{%>
-        <h4 class="my-3">No hay entrenamiento hoy</h4>
+        <h4 style="margin-top: 20%">No hay entrenamiento hoy</h4>
         <%}%>
     </div>
     <div>
         <%if(diaDieta!=null){%>
-        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary my-3">Ver dieta de hoy</button>
+        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary my-3" style="margin-top: 17%">Ver dieta de hoy</button>
         <%}else{%>
-        <h4 class="my-3">No hay Dieta hoy</h4>
+        <h4 style="margin-top: 20%">No hay Dieta hoy</h4>
         <%}%>
     </div>
 </div>
