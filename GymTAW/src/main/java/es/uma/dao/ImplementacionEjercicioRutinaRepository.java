@@ -11,9 +11,6 @@ import java.util.List;
 
 public interface ImplementacionEjercicioRutinaRepository extends JpaRepository<ImplementacionEjercicioRutina, Integer> {
 
-    @Query("SELECT i from ImplementacionEjercicioRutina  i where i.rutina = :rutina")
-    List<ImplementacionEjercicioRutina> encontrarImplementacionesPorRutinas(@Param("rutina") Rutina rutina);
-
     @Query("SELECT i from ImplementacionEjercicioRutina  i where i.rutina.id = :idrutina")
     List<ImplementacionEjercicioRutina> encontrarImplementacionesPorRutinaID(@Param("idrutina") Integer idrutina);
 

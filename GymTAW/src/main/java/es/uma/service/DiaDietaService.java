@@ -23,11 +23,13 @@ public class DiaDietaService {
     @Autowired
     private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
+    //@author: Pablo Márquez Benítez
     public void guardarDiaDieta(DiaDietaDTO diaDietaDTO){
         DiaDieta diaDieta = convertDtoToEntity(diaDietaDTO);
         diaDietaRepository.save(diaDieta);
     }
 
+    //@author: Pablo Márquez Benítez
     public DiaDietaDTO getDiaDietaDeClienteFecha(Integer userId, LocalDate fecha){
         DiaDieta diaDieta = diaDietaRepository.diaDietaConcretoCliente(userId,fecha);
         if(diaDieta!=null){
@@ -111,6 +113,7 @@ public class DiaDietaService {
         return diaDietaDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public DiaDieta convertDtoToEntity(DiaDietaDTO diaDietaDTO) {
         DiaDieta diaDieta = new DiaDieta();
         diaDieta.setId(diaDietaDTO.getId());

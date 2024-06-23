@@ -47,6 +47,7 @@ public class ComidaService {
         comidaRepository.save(comida);
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarComida(ComidaDTO comidaDTO){
         Comida comida = comidaRepository.findById(comidaDTO.getId()).orElse(null);
         if(comida!=null){
@@ -70,6 +71,7 @@ public class ComidaService {
         return comidaRepository.findByDietist(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
+    //@author: Pablo Márquez Benítez
     public ComidaDTO getComidaByID(Integer id){
         Comida comida = comidaRepository.findById(id).orElse(null);
         if(comida!=null){
@@ -79,6 +81,7 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Márquez Benítez
     public List<ComidaDTO> getComidasByDiaDieta(Integer diaDietaID){
         if(diaDietaID!=null){
             return comidaRepository.findByDiaDieta(diaDietaID)
@@ -327,6 +330,7 @@ public class ComidaService {
         return comidaDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public Comida convertDtoToEntity(ComidaDTO comidaDTO) {
         Comida comida = new Comida();
         comida.setId(comidaDTO.getId());

@@ -8,6 +8,7 @@
 <%@ page import="org.antlr.v4.runtime.misc.Pair" %>
 <%@ page import="org.hibernate.query.sql.internal.NativeQueryImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- @author: Pablo Márquez Benítez --%>
 <%
     LocalDate localDate = (LocalDate) request.getAttribute("fecha");
     UserRolDTO userRol = (UserRolDTO) request.getAttribute("rol");

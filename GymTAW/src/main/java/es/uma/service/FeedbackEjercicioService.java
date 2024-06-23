@@ -12,8 +12,6 @@ import es.uma.entity.ImplementacionEjercicioRutina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class FeedbackEjercicioService {
 
@@ -30,6 +28,7 @@ public class FeedbackEjercicioService {
 
     //Feedbackserie e implementacion
 
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicioDTO getFeedbackEjercicioPorImplementacionYDia(ImplementacionEjercicioRutinaDTO implementacion, DiaEntrenamientoDTO diaEntrenamiento){
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorImplementacionYDia(implementacion.getId(),diaEntrenamiento.getId());
         if(feedbackEjercicio!=null){
@@ -39,6 +38,7 @@ public class FeedbackEjercicioService {
         }
     }
 
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicioDTO getFeedbackEjercicioById(Integer id){
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(id).orElse(null);
         if(feedbackEjercicio!=null){
@@ -48,6 +48,7 @@ public class FeedbackEjercicioService {
         }
     }
 
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicioDTO createFeedbackEjercicio(Integer diaEntrenamientoId, Integer implementacionId) {
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.findById(diaEntrenamientoId).orElse(null);
         ImplementacionEjercicioRutina implementacionEjercicioRutina = implementacionEjercicioRutinaRepository.findById(implementacionId).orElse(null);
@@ -81,6 +82,7 @@ public class FeedbackEjercicioService {
         return feedbackEjercicioDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicio convertDtoToEntity(FeedbackEjercicioDTO feedbackEjercicioDTO) {
         FeedbackEjercicio feedbackEjercicio = new FeedbackEjercicio();
         feedbackEjercicio.setId(feedbackEjercicioDTO.getId());
@@ -95,6 +97,7 @@ public class FeedbackEjercicioService {
         return feedbackEjercicio;
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarFeedbackEjercicio(FeedbackEjercicioDTO feedbackEjercicioDTO){
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioDTO.getId()).orElse(null);
         if(feedbackEjercicio!=null){

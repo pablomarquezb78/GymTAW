@@ -1,17 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
-<%@ page import="es.uma.entity.FeedbackEjercicioserie"%>
 <%@ page import="es.uma.ui.FeedbackSerieForm" %>
-<%@ page import="es.uma.entity.FeedbackEjercicio" %>
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
 <%@ page import="es.uma.dto.FeedbackEjercicioDTO" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Usuario
-  Date: 22/05/2024
-  Time: 0:23
-  To change this template use File | Settings | File Templates.
---%>
+<%-- @author: Pablo Márquez Benítez --%>
 <%
     //OBTENEMOS PARAMETROS
     ImplementacionEjercicioRutinaDTO implementacion = (ImplementacionEjercicioRutinaDTO) request.getAttribute("implementacion");
