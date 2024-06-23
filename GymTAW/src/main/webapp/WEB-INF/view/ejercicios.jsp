@@ -11,12 +11,12 @@
 
     UserRolDTO rol = (UserRolDTO) request.getAttribute("rol");
     String title = "Trainer";
-    String cabecera = "../crosstrainer/cabecera_entrenador.jsp";
+    String cabecera = "./crosstrainer/cabecera_entrenador.jsp";
     request.setAttribute("paginaActual", "ejercicios");
 
     if(rol.getId() == 1){
         title = "Admin";
-        cabecera = "cabeceraAdmin.jsp";
+        cabecera = "./admin/cabeceraAdmin.jsp";
 
     }
 %>
