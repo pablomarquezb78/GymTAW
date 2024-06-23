@@ -93,18 +93,7 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    private void setUser(Usuario usuario,User user){
-        usuario.setRol(user.getRol().getId());
-        usuario.setId(user.getId());
-        usuario.setUsername(user.getUsername());
-        usuario.setNombre(user.getNombre());
-        usuario.setApellidos(user.getApellidos());
-        usuario.setTelefono(user.getTelefono());
-        usuario.setPeso(user.getPeso());
-        usuario.setAltura(user.getAltura());
-        usuario.setFechaNacimiento(String.valueOf(user.getFechaNacimiento()));
-        usuario.setDescripcionPersonal(user.getDescripcionPersonal());
-    }
+
 
     @GetMapping("/verperfil")
     public String doVerPerfilPropio(HttpSession session,Model model){
@@ -232,17 +221,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    private void asignarImplementacionUI(Implementacion implementacion, ImplementacionEjercicioRutina imp){
-        implementacion.setId(imp.getId());
-        //implementacion.setEjercicio(imp.getEjercicio());
-        if(imp.getRutina()!=null) implementacion.setRutina(imp.getRutina().getId());
-        implementacion.setSets(imp.getSets());
-        implementacion.setRepeticiones(imp.getRepeticiones());
-        implementacion.setPeso(imp.getPeso());
-        implementacion.setTiempo(imp.getTiempo());
-        implementacion.setKilocalorias(imp.getKilocalorias());
-        implementacion.setMetros(imp.getMetros());
-    }
 
     //todo
     @PostMapping("/filtrartipo")
@@ -330,18 +308,8 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
-        //implementacion.setEjercicio(imp.getEjercicio());
-        implementacion.setSets(imp.getSets());
-        implementacion.setRepeticiones(imp.getRepeticiones());
-        implementacion.setPeso(imp.getPeso());
-        implementacion.setTiempo(imp.getTiempo());
-        implementacion.setKilocalorias(imp.getKilocalorias());
-        implementacion.setMetros(imp.getMetros());
-    }
 
     //Este guardar es para entrenador
-    //Este guardar es para admin
     @PostMapping("/guardarImplementacionTrainer")
     public String doGuardarImplementacionTrainer(@ModelAttribute("implementacion") Implementacion implementacion,
                                           @RequestParam("idejercicioseleccionado") Integer idej,HttpSession sesion){

@@ -56,6 +56,7 @@ public class RegistroService {
     public RegistroDTO convertEntityToDto(Registro registro){
         RegistroDTO registroDTO = new RegistroDTO();
         registroDTO.setId(registro.getId());
+        registroDTO.setUsername(registro.getUsername());
         registroDTO.setNombre(registro.getNombre());
         registroDTO.setApellidos(registro.getApellidos());
         registroDTO.setPassword(registro.getPassword());

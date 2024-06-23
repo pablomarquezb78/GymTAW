@@ -71,15 +71,20 @@ public class ClienteController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
-            //Semana 1 dia 1
+            //SEMANA 1 DIA 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAENTRENAMIENTO
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaInicio);
-            session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
-
-            //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
-            List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
+            List<ImplementacionEjercicioRutinaDTO> implementaciones;
+            //SI EL DIAENTRENAMIENTO EXISTE PONGO EN LA SESION LA FECHA SELECCIONADA Y OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA A ESE DIA
+            if(diaEntrenamiento!=null){
+                session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
+                implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
+            //SI EL DIAENTRENAMIENTO NO EXISTE LAS IMPLEMENTACIONES SERÁN UNA LISTA VACÍA Y NO SE MOSTRARÁ ENTRENAMIENTO
+            }else{
+                implementaciones = new ArrayList<>();
+            }
 
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("diaEntrenamiento",diaEntrenamiento);
@@ -197,8 +202,9 @@ public class ClienteController extends BaseController{
                 //ACTUALIZO CON EL DIA DEL FILTRO
                 int dia = Integer.parseInt(filtroDia);
 
-                //Semana 1
+                //SEMANA 1
                 LocalDate fechaInicio = LocalDate.of(2000, 1, dia);
+                //METEMOS EN LA SESION LA FECHA SELECCIONADA
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
@@ -242,8 +248,9 @@ public class ClienteController extends BaseController{
                 int dia = Integer.parseInt(filtroDia);
                 int semana = Integer.parseInt(filtroSemana);
 
-                //Semana y dia seleccionado
+                //SEMANA Y DIA SELECCIONADO
                 LocalDate fechaInicio = LocalDate.of(2000, 1, dia + (semana*7));
+                //METEMOS EN LA SESION LA FECHA SELECCIONADA
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
@@ -449,10 +456,17 @@ public class ClienteController extends BaseController{
 
             //OBTENGO EL DIAEDIETA
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaInicio);
-            session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
+            List<ComidaDTO> comidas;
 
             //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
-            List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
+            //SI EXISTE EL DIADIETA PONGO EN LA SESION LA FECHA SELECCIONADA Y OBTENGO LA LISTA DE COMIDAS
+            if(diaDieta!=null){
+                session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
+                comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
+            //SI NO EXISTE SE PASA LISTA VACIA Y NO MOSTRARA COMIDAS ESE DIA
+            }else{
+                comidas = new ArrayList<>();
+            }
 
             model.addAttribute("comidas",comidas);
             model.addAttribute("diaDieta",diaDieta);

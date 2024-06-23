@@ -1,6 +1,6 @@
+//@Author: Pablo Miguel Aguilar Blanco
 package es.uma.controller;
 
-import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
 import es.uma.dto.*;
 import es.uma.service.*;
 import es.uma.ui.*;
@@ -46,8 +46,6 @@ public class AdminController extends BaseController {
     private ComidaService comidaService;
     @Autowired
     private RutinaService rutinaService;
-    @Autowired
-    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
     @Autowired
     private AsignacionPlatoIngredienteDietistaCreadorService asignacionPlatoIngredienteDietistaCreadorService;
     @Autowired
@@ -276,7 +274,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionEntrenador";
 
-            //REFACTORIZAR
+
             List<AsignacionClienteEntrenadorDTO> ace = asignacionClienteEntrenadorService.findByCustomer(id);
             List<UserDTO> entrenadoresAsociados = userService.asociatedTrainers(ace);
             List<UserDTO> entrenadores = userService.noAsociatedTrainers(entrenadoresAsociados);
@@ -310,7 +308,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionDietista";
 
-            //REFACTORIZAR
+
             List<AsignacionClienteDietistaDTO> acd = asignacionClienteDietistaService.findByCustomer(id);
             List<UserDTO> dietistasAsociados = userService.asociatedDietist(acd);
             List<UserDTO> dietistas = userService.noAsociatedDietist(dietistasAsociados);
