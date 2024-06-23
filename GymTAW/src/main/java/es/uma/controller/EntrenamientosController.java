@@ -284,19 +284,7 @@ public class EntrenamientosController extends BaseController{
         RutinaDTO rutina = rutinaService.getRutinaByID(asociacionRutina.getIdRutina());
         UserDTO user = userService.getById(asociacionRutina.getIdCliente());
 
-
-        if(existeDia == null){
-
-            DiaEntrenamientoDTO diaEntrenamiento = new DiaEntrenamientoDTO();
-            diaEntrenamiento.setRutina(rutina);
-            diaEntrenamiento.setCliente(user);
-            diaEntrenamiento.setFecha(fechaConvertida);
-
-            diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
-
-            return "redirect:/entrenamientos/versemana?id="+asociacionRutina.getIdCliente();
-
-        }else{
+        if (!LocalDate.now().isBefore(fechaConvertida) || LocalDate.now().isEqual(fechaConvertida)) {
 
             AsociacionRutina asociacionRutinaAux = new AsociacionRutina();
             asociacionRutinaAux.setIdCliente(user.getId());
@@ -306,7 +294,32 @@ public class EntrenamientosController extends BaseController{
 
             model.addAttribute("asociacionRutina",asociacionRutina);
             model.addAttribute("rutinas", rutinas);
-            model.addAttribute("fallo",true);
+            model.addAttribute("fallo",0);
+
+            return "/crosstrainer/entrenador_asociar_rutina";
+
+        }
+        else if(existeDia == null) {
+
+            DiaEntrenamientoDTO diaEntrenamiento = new DiaEntrenamientoDTO();
+            diaEntrenamiento.setRutina(rutina);
+            diaEntrenamiento.setCliente(user);
+            diaEntrenamiento.setFecha(fechaConvertida);
+
+            diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
+
+            return "redirect:/entrenamientos/versemana?id=" + asociacionRutina.getIdCliente();
+        }
+         else{
+            AsociacionRutina asociacionRutinaAux = new AsociacionRutina();
+            asociacionRutinaAux.setIdCliente(user.getId());
+            asociacionRutinaAux.setIdTrainer(rutina.getEntrenador().getId());
+
+            List<RutinaDTO> rutinas = rutinaService.getAllRutinas();
+
+            model.addAttribute("asociacionRutina",asociacionRutina);
+            model.addAttribute("rutinas", rutinas);
+            model.addAttribute("fallo",1);
 
             return "/crosstrainer/entrenador_asociar_rutina";
         }
