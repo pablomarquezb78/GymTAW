@@ -13,7 +13,7 @@ public class Comida {
     @Column(name = "realizado")
     private Byte realizado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "tipo_comida")
     private TipoComida tipoComida;
 

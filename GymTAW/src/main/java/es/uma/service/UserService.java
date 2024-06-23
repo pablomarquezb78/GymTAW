@@ -202,7 +202,7 @@ public class UserService {
         return usuario;
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         userRepository.deleteById(id);
     }
 

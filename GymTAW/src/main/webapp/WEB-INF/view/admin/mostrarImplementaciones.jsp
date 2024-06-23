@@ -34,6 +34,27 @@
     <title>Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <style>
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #343a40 !important;
+            color: #ffffff;
+        }
+    </style>
 
 </head>
 <body>
@@ -41,6 +62,8 @@
 
 <br/>
 <% if (implementaciones.size() > 0) { %>
+<div class="container">
+    <h3>Rutinas asociadas al ejercicio: <%=ejercicio.getNombre()%></h3>
 <table class="table table-bordered table-hover">
     <thead class="text-center" style="background-color: #343a40; color: white;">
     <tr>
@@ -80,48 +103,50 @@
     if(rol.getId() == 1){
 %>
 <a href="/comun/crearImplementacion?id=<%= ejercicio.getId() %>" class="btn btn-primary"><i class="fas fa-plus"></i> Crear nueva implementación</a>
+</div>
 <%
     }
 %>
-
-<form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="rutina">Rutina:</label>
-            <form:select path="rutina" items="${rutinas}" itemLabel="nombre" itemValue="id" class="form-control" style="width: auto;"></form:select>
+</br>
+<div class="container">
+    <h5>Opciones de búsqueda</h5>
+    <form:form action="<%=dir%>" method="post" modelAttribute="implementacion" class="p-4">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="rutina">Rutina:</label>
+                <form:select path="rutina" items="${rutinas}" itemLabel="nombre" itemValue="id" class="form-control" style="width: auto;"></form:select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="sets">Series:</label>
+                <form:input path="sets" id="sets" class="form-control" size="10" style="width: auto;"/>
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label for="sets">Series:</label>
-            <form:input path="sets" id="sets" class="form-control" size="10" style="width: auto;"/>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="repeticiones">Repeticiones:</label>
+                <form:input path="repeticiones" id="repeticiones" class="form-control" size="10" style="width: auto;"/>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="peso">Peso:</label>
+                <form:input path="peso" id="peso" class="form-control" size="10" style="width: auto;"/>
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="repeticiones">Repeticiones:</label>
-            <form:input path="repeticiones" id="repeticiones" class="form-control" size="10" style="width: auto;"/>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="tiempo">Tiempo:</label>
+                <form:input path="tiempo" id="tiempo" class="form-control" size="10" style="width: auto;"/>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="metros">Metros:</label>
+                <form:input path="metros" id="metros" class="form-control" size="10" style="width: auto;"/>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="kilocalorias">Kcal:</label>
+                <form:input path="kilocalorias" id="kilocalorias" class="form-control" size="10" style="width: auto;"/>
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label for="peso">Peso:</label>
-            <form:input path="peso" id="peso" class="form-control" size="10" style="width: auto;"/>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="tiempo">Tiempo:</label>
-            <form:input path="tiempo" id="tiempo" class="form-control" size="10" style="width: auto;"/>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="metros">Metros:</label>
-            <form:input path="metros" id="metros" class="form-control" size="10" style="width: auto;"/>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="kilocalorias">Kcal:</label>
-            <form:input path="kilocalorias" id="kilocalorias" class="form-control" size="10" style="width: auto;"/>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Filtrar implementacion</button>
-</form:form>
-
-
+        <button type="submit" class="btn btn-primary mt-3">Filtrar implementacion</button>
+    </form:form>
+</div>
 </body>
 </html>

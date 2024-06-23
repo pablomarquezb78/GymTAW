@@ -1,3 +1,4 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.dto.UserDTO" %>
@@ -17,54 +18,91 @@
     <title>Admin~Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <style>
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #343a40 !important;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 </br>
-<table class="table table-bordered table-hover">
-    <thead class="text-white text-center" style="background-color: #343a40">
-    <tr>
-        <th>ID</th>
-        <th>NOMBRE</th>
-        <th>APELLIDOS</th>
-        <th>ROL</th>
-        <th>FECHA NACIMIENTO</th>
-        <th>PESO</th>
-        <th>ALTURA</th>
-        <th>TELEFONO</th>
-        <th>ACCIONES</th>
-    </tr>
-    </thead>
-    <tbody>
+<div class="container">
+    <h3>Lista de usuarios</h3>
     <%
-        for(UserDTO user : usuarios){
+        if (usuarios != null && !usuarios.isEmpty()) {
     %>
-    <tr class="text-center">
-        <td><%=user.getId()%></td>
-        <td><%=user.getNombre()%></td>
-        <td><%=user.getApellidos()%></td>
-        <td><%=user.getRol().getRolUsuario()%></td>
-        <td><%=user.getFechaNacimiento()%></td>
-        <td><%=user.getPeso()%>Kg</td>
-        <td><%=user.getAltura()%>cm</td>
-        <td><%=user.getTelefono()%></td>
-        <td>
-            <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-primary btn-sm">
-                <i class="fas fa-pencil-alt"></i> Editar
-            </a>
-            <a href="/admin/borrarUsuario?id=<%=user.getId()%>" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash-alt"></i> Borrar
-            </a>
-        </td>
-    </tr>
+    <table class="table table-bordered table-hover">
+        <thead class="text-white text-center" style="background-color: #343a40">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>APELLIDOS</th>
+            <th>ROL</th>
+            <th>FECHA NACIMIENTO</th>
+            <th>PESO</th>
+            <th>ALTURA</th>
+            <th>TELEFONO</th>
+            <th>ACCIONES</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+            for (UserDTO user : usuarios) {
+        %>
+        <tr class="text-center">
+            <td><%=user.getId()%></td>
+            <td><%=user.getNombre()%></td>
+            <td><%=user.getApellidos()%></td>
+            <td><%=user.getRol().getRolUsuario()%></td>
+            <td><%=user.getFechaNacimiento()%></td>
+            <td><%=user.getPeso()%>Kg</td>
+            <td><%=user.getAltura()%>cm</td>
+            <td><%=user.getTelefono()%></td>
+            <td>
+                <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-pencil-alt"></i> Editar
+                </a>
+                <a href="/admin/borrarUsuario?id=<%=user.getId()%>" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash-alt"></i> Borrar
+                </a>
+            </td>
+        </tr>
+        <%
+            }
+        %>
+        </tbody>
+    </table>
+    <%
+    } else {
+    %>
+    <p>No hay usuarios inscritos en la aplicación</p>
     <%
         }
     %>
-    </tbody>
-</table>
-<a href="/admin/crearNuevoUsuario" class="btn btn-primary mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
+    <a href="/admin/crearNuevoUsuario" class="btn btn-primary mt-3"> <i class="fas fa-plus"></i> Crear nuevo usuario</a>
+</div>
+
 <br>
 
+<div class="container">
+    <h5>Opciones de búsqueda</h5>
 <form:form action="/admin/filtrarUsuarios" method="post" modelAttribute="usuario" class="p-4">
     <div class="form-row">
         <div class="form-group col-md-4">
@@ -90,5 +128,6 @@
     </div>
     <button type="submit" class="btn btn-primary mt-3">Filtrar usuario</button>
 </form:form>
+</div>
 </body>
 </html>

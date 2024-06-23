@@ -1,3 +1,5 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.entity.User" %>

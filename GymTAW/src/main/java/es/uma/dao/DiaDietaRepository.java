@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface DiaDietaRepository extends JpaRepository<DiaDieta, Integer> {
 
@@ -23,4 +24,9 @@ public interface DiaDietaRepository extends JpaRepository<DiaDieta, Integer> {
     @Query("select distinct d from DiaDieta d where d.cliente.id = :clienteId and d.fecha = :fecha")
     DiaDieta diaDietaConcretoCliente(@Param("clienteId") Integer clienteId, @Param("fecha") LocalDate fecha);
 
+    @Query("select d from DiaDieta d where d.cliente.id = :id ")
+    List<DiaDieta> findByCustomer(@Param("id") Integer id);
+
+    @Query("select d from DiaDieta d where d.dietista.id = :id ")
+    List<DiaDieta> findByDietist(@Param("id") Integer id);
 }

@@ -11,4 +11,7 @@ import java.util.List;
 public interface AsignacionClienteEntrenadorRepository extends JpaRepository<AsignacionClienteEntrenador, Integer> {
     @Query("select ace from AsignacionClienteEntrenador ace where ace.cliente.id = :id")
     public List<AsignacionClienteEntrenador> buscarPorCliente(@Param("id") Integer id);
+
+    @Query("select ace from AsignacionClienteEntrenador ace where ace.entrenador.id = :id")
+    public List<AsignacionClienteEntrenador> buscarPorEntrenador(@Param("id") Integer id);
 }

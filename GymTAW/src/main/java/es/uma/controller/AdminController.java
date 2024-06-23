@@ -1,5 +1,6 @@
 package es.uma.controller;
 
+import es.uma.dao.AsignacionPlatoIngredienteDietistacreadorRepositoy;
 import es.uma.dto.*;
 import es.uma.service.*;
 import es.uma.ui.*;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,6 +38,18 @@ public class AdminController extends BaseController {
     private CantidadIngredientePlatoComidaService cantidadIngredientePlatoComidaService;
     @Autowired
     private TipoComidaService tipoComidaService;
+    @Autowired
+    private DiaDietaService diaDietaService;
+    @Autowired
+    private ComidaService comidaService;
+    @Autowired
+    private RutinaService rutinaService;
+    @Autowired
+    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
+    @Autowired
+    private AsignacionPlatoIngredienteDietistaCreadorService asignacionPlatoIngredienteDietistaCreadorService;
+    @Autowired
+    private DiaEntrenamientoService diaEntrenamientoService;
 
     @GetMapping("/")
     public String doWelcome(Model model, HttpSession session) {
@@ -201,6 +213,38 @@ public class AdminController extends BaseController {
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "redirect:/admin/mostrarUsuarios";
+            UserDTO user = userService.getById(id);
+            String rolUser = user.getRol().getRolUsuario();
+            if (rolUser.equals("dietista")) {
+                asignacionClienteDietistaService.deleteByDietist(id);
+                asignacionPlatoIngredienteDietistaCreadorService.deleteByDietist(id);
+                for(ComidaDTO comidaDTO : comidaService.getByDietist(id)){
+                    cantidadIngredientePlatoComidaService.deleteByFood(comidaDTO);
+                }
+                for(DiaDietaDTO diaDietaDTO : diaDietaService.getByDietist(id)){
+                    comidaService.deleteByDiaDieta(diaDietaDTO);
+                }
+                diaDietaService.deleteByDietist(id);
+
+            } else if (rolUser.equals("bodybuilder") || rolUser.equals("crosstrainer")) {
+                asignacionClienteEntrenadorService.deleteByTrainer(id);
+                rutinaService.deleteByTrainer(id);
+            } else if (rolUser.equals("cliente")) {
+                asignacionClienteDietistaService.deleteByCustomer(id);
+                asignacionClienteEntrenadorService.deleteByCustomer(id);
+
+                for(ComidaDTO comidaDTO : comidaService.getByCustomer(id)){
+                    cantidadIngredientePlatoComidaService.deleteByFood(comidaDTO);
+                }
+                for(DiaDietaDTO diaDietaDTO : diaDietaService.getByCustomer(id)){
+                    comidaService.deleteByDiaDieta(diaDietaDTO);
+                }
+                diaDietaService.deleteByCustomer(id);
+
+                for(DiaEntrenamientoDTO diaEntrenamientoDTO : diaEntrenamientoService.getByCustomer(id)){
+                    diaEntrenamientoService.borrarDiaID(diaEntrenamientoDTO.getId());
+                }
+            }
             userService.deleteById(id);
 
         } else {

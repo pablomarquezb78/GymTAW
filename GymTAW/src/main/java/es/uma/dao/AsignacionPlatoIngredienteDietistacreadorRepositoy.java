@@ -17,4 +17,9 @@ public interface AsignacionPlatoIngredienteDietistacreadorRepositoy extends JpaR
 
     @Query("select a from AsignacionPlatoIngredienteDietistaCreador a where a.ingrediente = :ingrediente and a.plato = :plato and a.dietista = :dietista")
     List<AsignacionPlatoIngredienteDietistaCreador> getAsignacionBy(@Param("ingrediente") Ingrediente ingrediente,@Param("plato") Plato plato,@Param("dietista") User dietista);
+
+    @Query("select a from AsignacionPlatoIngredienteDietistaCreador a where a.dietista.id = :id ")
+    List<AsignacionPlatoIngredienteDietistaCreador> getByDietist(@Param("id") Integer id);
+
+
 }
