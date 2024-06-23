@@ -1,3 +1,5 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String paginaActual = (String) request.getAttribute("paginaActual");

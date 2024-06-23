@@ -1,3 +1,5 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>

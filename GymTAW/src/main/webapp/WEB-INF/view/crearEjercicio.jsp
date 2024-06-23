@@ -1,6 +1,8 @@
+<!-- @Authors: Pablo Miguel Aguilar Blanco & Adrián Fernandez Vera & Antonio Salvador Gámez Zafra -->
+
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.TipoEjercicio" %>
 <%@ page import="es.uma.ui.EjercicioUI" %>
 <%@ page import="es.uma.dto.TipoEjercicioDTO" %>
 <%@ page import="es.uma.dto.UserRolDTO" %>

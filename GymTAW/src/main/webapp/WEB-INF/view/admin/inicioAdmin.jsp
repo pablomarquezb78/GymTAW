@@ -1,9 +1,6 @@
 <!-- @Author: Pablo Miguel Aguilar Blanco -->
 
-<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
-<%@ page import="java.util.List" %>
-<%@ page import="es.uma.entity.User" %>
-<%@ page import="es.uma.entity.Plato" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

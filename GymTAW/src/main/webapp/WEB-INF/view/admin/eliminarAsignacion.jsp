@@ -1,7 +1,6 @@
-<%@ page import="es.uma.entity.User" %>
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.AsignacionClienteEntrenador" %>
-<%@ page import="es.uma.entity.AsignacionClienteDietista" %>
 <%@ page import="es.uma.dto.AsignacionClienteEntrenadorDTO" %>
 <%@ page import="es.uma.dto.AsignacionClienteDietistaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

@@ -1,3 +1,5 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ page import="java.util.*" %>
 <%@ page import="es.uma.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

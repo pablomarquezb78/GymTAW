@@ -1,3 +1,5 @@
+<!-- @Author: Adrián Fernández Vera -->
+
 <%@ page import="es.uma.ui.TipoEjercicioUI" %>
 <%@ page import="es.uma.entity.UserRol" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>

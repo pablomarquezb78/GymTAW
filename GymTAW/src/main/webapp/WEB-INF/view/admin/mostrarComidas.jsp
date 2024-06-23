@@ -1,10 +1,7 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.uma.entity.CantidadIngredientePlatoComida" %>
-<%@ page import="es.uma.entity.Plato" %>
-<%@ page import="es.uma.entity.Ingrediente" %>
-<%@ page import="es.uma.entity.TipoComida" %>
 <%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
 <%@ page import="es.uma.dto.IngredienteDTO" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>

@@ -1,6 +1,6 @@
+<!-- @Author: Pablo Miguel Aguilar Blanco -->
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.uma.entity.UserRol" %>
-<%@ page import="java.util.*" %>
 <%@ page import="es.uma.ui.PlatoUI" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
