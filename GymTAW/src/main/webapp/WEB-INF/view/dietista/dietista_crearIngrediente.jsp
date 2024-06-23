@@ -51,23 +51,23 @@
                     <form:input type="text" path="nombre" id="nombre" size="50" maxlength="50" class="form-control"/> <br/>
                 </div>
                 <div class="mb-3">
-                    <label for="kilocalorias" class="form-label">Kilocalorias:</label>
+                    <label for="kilocalorias" class="form-label">Kilocalorias(cada 100 gramos):</label>
                     <form:input type="text" path="kilocalorias" id="kilocalorias" size="30" maxlength="30" class="form-control"/> <br/>
                 </div>
                 <div class="mb-3">
-                    <label for="proteinas" class="form-label">Proteinas:</label>
+                    <label for="proteinas" class="form-label">Proteinas(cada 100 gramos):</label>
                     <form:input type="text" path="proteinas" id="proteinas" size="30" maxlength="30" class="form-control"/> <br/>
                 </div>
                 <div class="mb-3">
-                    <label for="grasas" class="form-label">Grasas:</label>
+                    <label for="grasas" class="form-label">Grasas(cada 100 gramos):</label>
                     <form:input type="text" path="grasas" id="grasas" size="30" maxlength="30" class="form-control"/> <br/>
                 </div>
                 <div class="mb-3">
-                    <label for="azucares" class="form-label">Azucares:</label>
+                    <label for="azucares" class="form-label">Azucares(cada 100 gramos):</label>
                     <form:input type="text" path="azucares" id="azucares" size="30" maxlength="30" class="form-control"/> <br/>
                 </div>
                 <div class="mb-3">
-                    <label for="hidratosDeCarbono" class="form-label">Hidratos de carbono:</label>
+                    <label for="hidratosDeCarbono" class="form-label">Hidratos de carbono(cada 100 gramos):</label>
                     <form:input type="text" path="hidratosDeCarbono" id="hidratosDeCarbono" size="30" maxlength="30" class="form-control"/> <br/>
                 </div>
                 <button type="submit" class="btn btn-primary">Guardar</button>
