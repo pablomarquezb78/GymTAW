@@ -302,18 +302,38 @@ public class EntrenamientosController extends BaseController{
 
         LocalDate fechaConvertida = convertirStringALocalDate(asociacionRutina.getFecha());
 
+        DiaEntrenamientoDTO existeDia = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(asociacionRutina.getIdCliente(), fechaConvertida);
+
         RutinaDTO rutina = rutinaService.getRutinaByID(asociacionRutina.getIdRutina());
         UserDTO user = userService.getById(asociacionRutina.getIdCliente());
 
 
-        DiaEntrenamientoDTO diaEntrenamiento = new DiaEntrenamientoDTO();
-        diaEntrenamiento.setRutina(rutina);
-        diaEntrenamiento.setCliente(user);
-        diaEntrenamiento.setFecha(fechaConvertida);
+        if(existeDia == null){
 
-        diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
+            DiaEntrenamientoDTO diaEntrenamiento = new DiaEntrenamientoDTO();
+            diaEntrenamiento.setRutina(rutina);
+            diaEntrenamiento.setCliente(user);
+            diaEntrenamiento.setFecha(fechaConvertida);
 
-        return "redirect:/entrenamientos/versemana?id="+asociacionRutina.getIdCliente();
+            diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
+
+            return "redirect:/entrenamientos/versemana?id="+asociacionRutina.getIdCliente();
+
+        }else{
+
+            AsociacionRutina asociacionRutinaAux = new AsociacionRutina();
+            asociacionRutinaAux.setIdCliente(user.getId());
+            asociacionRutinaAux.setIdTrainer(rutina.getEntrenador().getId());
+
+            List<RutinaDTO> rutinas = rutinaService.getAllRutinas();
+
+            model.addAttribute("asociacionRutina",asociacionRutina);
+            model.addAttribute("rutinas", rutinas);
+            model.addAttribute("fallo",true);
+
+            return "/crosstrainer/entrenador_asociar_rutina";
+        }
+
     }
 
 

@@ -6,6 +6,7 @@
 
 <%
     List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
+    Boolean fallo = (Boolean) request.getAttribute("fallo");
 %>
 
 <html>
@@ -33,13 +34,27 @@
         .btn-custom {
             margin-top: 20px;
         }
+        .error-rutina{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <jsp:include page="cabecera_entrenador.jsp"/>
 
+
 <div class="container container-custom">
     <h1 class="header-title">Listado de Rutinas ya creadas</h1>
+
+    <%
+        if(fallo != null) {
+            if(fallo){
+    %>
+        <h3 class="error-rutina">No puedes ponerle a un cliente más de una rutina al día! Vuelve a intentarlo con otra fecha.</h3>
+    <%
+            }
+        }
+    %>
 
     <% if(rutinas != null && !rutinas.isEmpty()) { %>
 
