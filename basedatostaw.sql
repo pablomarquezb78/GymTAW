@@ -161,7 +161,7 @@ CREATE TABLE `comida` (
   KEY `comida-dia_dieta_fk_idx` (`dia_dieta`),
   CONSTRAINT `comida-dia_dieta_fk` FOREIGN KEY (`dia_dieta`) REFERENCES `dia_dieta` (`iddia_dieta`),
   CONSTRAINT `comida-tipo_comida_fk` FOREIGN KEY (`tipo_comida`) REFERENCES `tipo_comida` (`idtipo_comida`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +170,7 @@ CREATE TABLE `comida` (
 
 LOCK TABLES `comida` WRITE;
 /*!40000 ALTER TABLE `comida` DISABLE KEYS */;
-INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2),(4,NULL,5,2),(5,NULL,2,3),(6,NULL,3,4),(7,NULL,5,4),(8,NULL,2,5),(9,1,3,6);
+INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2),(4,NULL,5,2),(5,NULL,2,3),(6,NULL,3,4),(7,NULL,5,4),(8,NULL,2,5),(9,1,3,6),(10,NULL,3,7);
 /*!40000 ALTER TABLE `comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `dia_dieta` (
   KEY `dia_dieta-dietista_fk_idx` (`dietista`),
   CONSTRAINT `dia_dieta-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_dieta-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `dia_dieta` (
 
 LOCK TABLES `dia_dieta` WRITE;
 /*!40000 ALTER TABLE `dia_dieta` DISABLE KEYS */;
-INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5),(3,'2024-06-26 00:00:00',NULL,7,6),(4,'2024-06-26 00:00:00',NULL,8,6),(5,'2024-06-27 00:00:00',NULL,8,6),(6,'2024-06-28 00:00:00','Dia de dieta ajetreado',8,6);
+INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 00:00:00',NULL,1,5),(3,'2024-06-26 00:00:00',NULL,7,6),(4,'2024-06-26 00:00:00',NULL,8,6),(5,'2024-06-27 00:00:00',NULL,8,6),(6,'2024-06-28 00:00:00','Dia de dieta ajetreado',8,6),(7,'2024-06-23 00:00:00',NULL,1,5);
 /*!40000 ALTER TABLE `dia_dieta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +223,7 @@ CREATE TABLE `dia_entrenamiento` (
   KEY `dia_entrenamiento-rutina_fk_idx` (`rutina`),
   CONSTRAINT `dia_entrenamiento-cliente` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_entrenamiento-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +232,7 @@ CREATE TABLE `dia_entrenamiento` (
 
 LOCK TABLES `dia_entrenamiento` WRITE;
 /*!40000 ALTER TABLE `dia_entrenamiento` DISABLE KEYS */;
-INSERT INTO `dia_entrenamiento` VALUES (6,'2024-06-26 00:00:00',NULL,1,4),(7,'2024-06-27 00:00:00',NULL,1,5);
+INSERT INTO `dia_entrenamiento` VALUES (6,'2024-06-26 00:00:00',NULL,1,4),(7,'2024-06-27 00:00:00',NULL,1,5),(9,'2024-06-24 00:00:00',NULL,1,8);
 /*!40000 ALTER TABLE `dia_entrenamiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +353,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
   KEY `implementacion-rutina_fk_idx` (`rutina`),
   CONSTRAINT `implementacion-ejercicio_fk` FOREIGN KEY (`ejercicio`) REFERENCES `ejercicio` (`idejercicio`),
   CONSTRAINT `implementacion-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +466,7 @@ CREATE TABLE `rutina` (
   PRIMARY KEY (`idrutina`),
   KEY `rutina-entrenador_fk_idx` (`entrenador`),
   CONSTRAINT `rutina-entrenador_fk` FOREIGN KEY (`entrenador`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -619,4 +619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-23 16:00:46
+-- Dump completed on 2024-06-23 17:17:13

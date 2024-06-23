@@ -26,14 +26,14 @@
 <div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-top: 3%">
     <div>
         <%if(diaEntrenamiento!=null){%>
-        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary" style="margin-top: 17%">Ver entrenamiento de hoy</button>
+        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="mt-5 btn btn-primary" style="margin-top: 17%">Ver entrenamiento de hoy</button>
         <%}else{%>
         <h4 style="margin-top: 13%">No hay entrenamiento hoy</h4>
         <%}%>
     </div>
     <div>
         <%if(diaDieta!=null){%>
-        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary my-3" style="margin-top: 17%">Ver dieta de hoy</button>
+        <button onclick="location.href='/cliente/mostrarDietas'" class="mt-5 btn btn-primary my-3" style="margin-top: 17%">Ver dieta de hoy</button>
         <%}else{%>
         <h4 style="margin-top: 20%">No hay Dieta hoy</h4>
         <%}%>

@@ -52,7 +52,7 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)){
 
             //Semana 1 dia 1
-            LocalDate fechaInicio = LocalDate.of(2024, 6, 24);
+            LocalDate fechaInicio = LocalDate.now();
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaInicio);
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaInicio);
 
@@ -75,7 +75,7 @@ public class ClienteController extends BaseController{
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
             //SEMANA 1 DIA 1
-            LocalDate fechaInicio = LocalDate.of(2024, 6, 24);
+            LocalDate fechaInicio = LocalDate.now();
 
             //OBTENGO EL DIAENTRENAMIENTO
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaInicio);
@@ -461,7 +461,7 @@ public class ClienteController extends BaseController{
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
             //Semana 1
-            LocalDate fechaInicio = LocalDate.of(2024, 6, 24);
+            LocalDate fechaInicio = LocalDate.now();
 
             //OBTENGO EL DIAEDIETA
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaInicio);
