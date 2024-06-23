@@ -16,6 +16,7 @@ public class TipoComidaService {
     @Autowired
     TipoComidaRepository tipoComidaRepository;
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<TipoComidaDTO> getAll(){
         return tipoComidaRepository.findAll()
                 .stream()
@@ -23,6 +24,7 @@ public class TipoComidaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoComidaDTO getById(Integer id){
         return this.convertEntityToDto(tipoComidaRepository.findById(id).orElse(null));
     }
@@ -33,6 +35,7 @@ public class TipoComidaService {
         return convertEntityToDto(diaComida.getTipoComida());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoComidaDTO convertEntityToDto(TipoComida tipoComida){
         TipoComidaDTO tipoComidaDTO = new TipoComidaDTO();
         tipoComidaDTO.setId(tipoComida.getId());
@@ -40,6 +43,7 @@ public class TipoComidaService {
         return tipoComidaDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoComida convertDtoToEntity(TipoComidaDTO tipoComidaDTO){
         TipoComida tipoComida = new TipoComida();
         tipoComida.setId(tipoComidaDTO.getId());

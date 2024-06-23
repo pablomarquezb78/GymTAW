@@ -27,7 +27,7 @@
 <div class="container container-custom text-center">
     <h1 class="mb-4">Creador de Ejercicio</h1>
     <div class="d-flex justify-content-center">
-        <a class="btn btn-success btn-custom" href="/entrenamientos/entrenador-crearrutina?id=<%=id%>">Crear Rutina</a>
+        <a class="btn btn-success btn-custom" href="/entrenamientos/entrenador-crearrutina">Crear Rutina</a>
         <a class="btn btn-primary btn-custom" href="/entrenamientos/entrenador-rutina?id=<%=id%>">Asociar Rutina</a>
     </div>
 </div>

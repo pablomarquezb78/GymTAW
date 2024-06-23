@@ -47,6 +47,7 @@ public class ComidaService {
         comidaRepository.save(comida);
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarComida(ComidaDTO comidaDTO){
         Comida comida = comidaRepository.findById(comidaDTO.getId()).orElse(null);
         if(comida!=null){
@@ -55,6 +56,7 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteByDiaDieta(DiaDietaDTO diaDietaDTO){
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
         List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta.getId());
@@ -63,13 +65,17 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ComidaDTO> getByCustomer(Integer id){
         return comidaRepository.findByCustomer(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
+
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ComidaDTO> getByDietist(Integer id){
         return comidaRepository.findByDietist(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
+    //@author: Pablo Márquez Benítez
     public ComidaDTO getComidaByID(Integer id){
         Comida comida = comidaRepository.findById(id).orElse(null);
         if(comida!=null){
@@ -79,6 +85,7 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Márquez Benítez
     public List<ComidaDTO> getComidasByDiaDieta(Integer diaDietaID){
         if(diaDietaID!=null){
             return comidaRepository.findByDiaDieta(diaDietaID)
@@ -318,6 +325,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public ComidaDTO convertEntityToDto(Comida comida){
         ComidaDTO comidaDTO = new ComidaDTO();
         comidaDTO.setId(comida.getId());
@@ -327,6 +335,7 @@ public class ComidaService {
         return comidaDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public Comida convertDtoToEntity(ComidaDTO comidaDTO) {
         Comida comida = new Comida();
         comida.setId(comidaDTO.getId());

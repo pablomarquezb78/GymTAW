@@ -90,17 +90,6 @@
                     <div class="mb-3">
                         <label for="addedIngrediente" class="form-label">Agregar Ingrediente:</label>
                         <form:select path="addedIngrediente" items="${ingredientesExistentes}" itemValue="id" itemLabel="nombre" class="form-select"/>
-                        <%--
-                        <from:select id="addedIngrediente" name="addedIngrediente" class="form-select">
-                            <%
-                                for (IngredienteDTO ingrediente : ingredientesExistentes) {
-                            %>
-                            <option value="<%= ingrediente.getId() %>"><%= ingrediente.getNombre() %></option>
-                            <%
-                                }
-                            %>
-                        </from:select>
-                        --%>
                     </div>
                     <button class="btn btn-primary">Añadir este ingrediente</button>
                 </form:form>
@@ -113,7 +102,7 @@
                     <form:input path="nombre" id="nombre" maxlength="100" size="100" class="form-control"/>
                 </div>
                 <div class="border-box mb-3">
-                    <label for="tiempoDePreparacion" class="form-label">Tiempo de preparación:</label>
+                    <label for="tiempoDePreparacion" class="form-label">Tiempo de preparación(minutos):</label>
                     <form:input path="tiempoDePreparacion" id="tiempoDePreparacion" maxlength="30" size="30" class="form-control"/>
                 </div>
                 <div class="border-box mb-3">

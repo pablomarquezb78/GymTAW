@@ -3,6 +3,8 @@ package es.uma.ui;
 import es.uma.entity.TipoEjercicio;
 import jakarta.persistence.*;
 
+//@author: Pablo Miguel Aguilar Blanco
+
 public class EjercicioUI {
     private Integer id;
     private String nombre;

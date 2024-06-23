@@ -2,13 +2,7 @@
 <%@ page import="es.uma.dto.ComidaDTO" %>
 <%@ page import="es.uma.dto.PlatoDTO" %>
 <%@ page import="es.uma.dto.CantidadIngredientePlatoComidaDTO" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Usuario
-  Date: 18/06/2024
-  Time: 14:09
-  To change this template use File | Settings | File Templates.
---%>
+<%-- @author: Pablo Márquez Benítez --%>
 <%
     //OBTENEMOS PARAMETROS
     ComidaDTO comida = (ComidaDTO) request.getAttribute("comida");

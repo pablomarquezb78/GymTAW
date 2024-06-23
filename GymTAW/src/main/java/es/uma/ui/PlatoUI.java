@@ -1,6 +1,7 @@
 package es.uma.ui;
 
 
+//@author: Pablo Miguel Aguilar Blanco
 
 public class PlatoUI {
     private Integer id;

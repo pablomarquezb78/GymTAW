@@ -10,9 +10,11 @@ import java.util.List;
 
 public interface FeedbackejercicioserieRepository extends JpaRepository<FeedbackEjercicioserie,Integer> {
 
+    //@author: Pablo Márquez Benítez
     @Query("select f from FeedbackEjercicioserie f where f.feedbackEjercicio.id=:feedbackEjercicioId")
     public List<FeedbackEjercicioserie> encontrarPorFeedbackEjercicio(@Param("feedbackEjercicioId") Integer feedbackEjercicioId);
 
+    //@author: Pablo Márquez Benítez
     @Query("select f from FeedbackEjercicioserie f where f.feedbackEjercicio.id=:feedbackEjercicioId and f.serie=:set")
     public FeedbackEjercicioserie encontrarPorFeedbackEjercicioYSerie(@Param("feedbackEjercicioId") Integer feedbackEjercicioId, @Param("set") String set);
 

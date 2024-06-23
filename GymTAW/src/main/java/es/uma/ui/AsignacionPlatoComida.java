@@ -8,6 +8,8 @@ import lombok.Getter;
 
 import java.util.List;
 
+//@author: Pablo Miguel Aguilar Blanco
+
 @Getter
 public class AsignacionPlatoComida {
 

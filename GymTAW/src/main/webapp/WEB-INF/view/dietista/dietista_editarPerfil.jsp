@@ -64,7 +64,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="altura" class="form-label"><b>Altura:</b></label>
+                        <label for="altura" class="form-label"><b>Altura(cm):</b></label>
                         <form:input path="altura" id="altura" class="form-control" value="${dietista.altura}" size="20" maxlength="20"/>
                     </div>
                     <div class="col">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="peso" class="form-label"><b>Peso:</b></label>
+                        <label for="peso" class="form-label"><b>Peso(kg):</b></label>
                         <form:input path="peso" id="peso" class="form-control" value="${dietista.peso}" size="20" maxlength="20"/>
                     </div>
                     <div class="col">

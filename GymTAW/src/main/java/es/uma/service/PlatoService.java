@@ -28,6 +28,7 @@ public class PlatoService {
     private UserService userService;
 
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<PlatoDTO> getAllDishes(){
         return platosRepository.findAll()
                 .stream()
@@ -43,6 +44,7 @@ public class PlatoService {
         platosRepository.deleteById(id);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<PlatoDTO> dishesFilter(String nombre, String tiempo, String receta){
         return platosRepository.filtrarPlatos(nombre,tiempo,receta)
                 .stream()
@@ -50,7 +52,7 @@ public class PlatoService {
                 .collect(Collectors.toList());
     }
 
-
+    //@author: Pablo Miguel Aguilar Blanco
     public void addDish(PlatoUI platoUI){
         Plato nuevoPlato = new Plato();
         nuevoPlato.setNombre(platoUI.getNombre());
@@ -61,6 +63,7 @@ public class PlatoService {
         this.saveDish(nuevoPlato);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void editDish(PlatoUI platoUI){
         Plato plato = platosRepository.findById(platoUI.getId()).orElse(null);
         plato.setNombre(platoUI.getNombre());
@@ -71,6 +74,7 @@ public class PlatoService {
         this.saveDish(plato);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public PlatoUI setPlatoUI(Integer id, PlatoUI platoUI){
         Plato plato = platosRepository.findById(id).orElse(null);
         platoUI.setNombre(plato.getNombre());
@@ -209,6 +213,7 @@ public class PlatoService {
         return platoDietistaUI;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public PlatoDTO convertEntityToDto(Plato plato){
         PlatoDTO platoDTO = new PlatoDTO();
         platoDTO.setId(plato.getId());
@@ -219,6 +224,7 @@ public class PlatoService {
         return platoDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public Plato convertDtoToEntity(PlatoDTO platoDTO){
         Plato plato = new Plato();
         plato.setId(platoDTO.getId());

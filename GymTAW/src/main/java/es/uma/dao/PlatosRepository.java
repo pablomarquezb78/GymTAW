@@ -23,6 +23,7 @@ public interface PlatosRepository extends JpaRepository<Plato, Integer> {
     @Query("select distinct i from Ingrediente i,AsignacionPlatoIngredienteDietistaCreador a where a.plato = :plato and a.ingrediente = i")
     List<Ingrediente> getIngredientesLinkedToPlato(@Param("plato") Plato plato);
 
+    //@author: Pablo Miguel Aguilar Blanco
     @Query("select p from Plato p where p.nombre like concat('%', :nombre, '%') and p.tiempoDePreparacion like concat('%', :tiempo, '%') and p.receta like concat('%', :receta, '%')")
     List<Plato> filtrarPlatos(@Param("nombre") String nombre, @Param("tiempo") String tiempo, @Param("receta") String receta);
 

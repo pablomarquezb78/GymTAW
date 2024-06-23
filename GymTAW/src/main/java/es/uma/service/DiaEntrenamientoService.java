@@ -29,6 +29,7 @@ public class DiaEntrenamientoService {
         return convertEntityToDto(diaEntrenamientoRepository.getById(id));
     }
 
+    //@author: Pablo Márquez Benítez
     public void borrarDiaID(Integer id){
         List<FeedbackEjercicio> feedbacksEjercicio = feedbackejercicioRepository.encontrarFeedbackEjercicioPorDia(id);
         for(FeedbackEjercicio f: feedbacksEjercicio){
@@ -37,6 +38,7 @@ public class DiaEntrenamientoService {
         this.diaEntrenamientoRepository.deleteById(id);
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarDiaEntrenamiento(DiaEntrenamientoDTO diaEntrenamientoDTO){
         DiaEntrenamiento diaEntrenamiento = convertDtoToEntity(diaEntrenamientoDTO);
         diaEntrenamientoRepository.save(diaEntrenamiento);
@@ -51,6 +53,7 @@ public class DiaEntrenamientoService {
         return dias;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<DiaEntrenamientoDTO> getByCustomer(Integer idclient){
         List<DiaEntrenamientoDTO> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idclient)
                 .stream()
@@ -60,6 +63,7 @@ public class DiaEntrenamientoService {
         return dias;
     }
 
+    //@author: Pablo Márquez Benítez
     public DiaEntrenamientoDTO getDiaEntrenamientoDeClienteFecha(Integer idClient, LocalDate fecha){
         DiaEntrenamiento diaEntrenamiento = diaEntrenamientoRepository.diaEntrenamientoConcretoCliente(idClient,fecha);
         if(diaEntrenamiento!=null){
@@ -79,12 +83,14 @@ public class DiaEntrenamientoService {
         return diaEntrenamientoDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public DiaEntrenamientoDTO convertEntityToDtoAdmin(DiaEntrenamiento diaEntrenamiento) {
         DiaEntrenamientoDTO diaEntrenamientoDTO = new DiaEntrenamientoDTO();
         diaEntrenamientoDTO.setId(diaEntrenamiento.getId());
         return diaEntrenamientoDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public DiaEntrenamiento convertDtoToEntity(DiaEntrenamientoDTO diaEntrenamientoDTO) {
         DiaEntrenamiento diaEntrenamiento = new DiaEntrenamiento();
         diaEntrenamiento.setId(diaEntrenamientoDTO.getId());

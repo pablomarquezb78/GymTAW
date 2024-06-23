@@ -18,7 +18,7 @@ public class RegistroService {
     @Autowired
     public RegistroRepository registroRepository;
 
-
+    //@author: Pablo Miguel Aguilar Blanco
     public List<RegistroDTO> getAllRegisters(){
         return registroRepository.findAll()
                 .stream()
@@ -26,10 +26,12 @@ public class RegistroService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public RegistroDTO getRegisterById(Integer id){
         return this.convertEntityToDto(registroRepository.findById(id).orElse(null));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void save(String username, String password, String nombre, String apellidos, String nacimiento, Integer telefono, Integer rol){
         Registro peticion = new Registro();
         peticion.setUsername(username);
@@ -50,9 +52,11 @@ public class RegistroService {
         registroRepository.deleteById(id);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public RegistroDTO convertEntityToDto(Registro registro){
         RegistroDTO registroDTO = new RegistroDTO();
         registroDTO.setId(registro.getId());
+        registroDTO.setUsername(registro.getUsername());
         registroDTO.setNombre(registro.getNombre());
         registroDTO.setApellidos(registro.getApellidos());
         registroDTO.setPassword(registro.getPassword());

@@ -27,6 +27,7 @@ public class RutinaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public Rutina convertDtoToEntity(RutinaDTO rutinaDTO) {
         Rutina rutina = new Rutina();
         rutina.setId(rutinaDTO.getId());
@@ -40,6 +41,7 @@ public class RutinaService {
         rutinaRepository.deleteById(id);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteByTrainer(Integer id){
         for(Rutina rutina : rutinaRepository.buscarPorEntrenador(id)){
             rutinaRepository.deleteById(rutina.getId());
@@ -63,6 +65,7 @@ public class RutinaService {
         rutinaRepository.save(rutina);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public RutinaDTO convertEntityToDto(Rutina rutina) {
         RutinaDTO rutinaDTO = new RutinaDTO();
         rutinaDTO.setId(rutina.getId());

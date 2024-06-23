@@ -4,6 +4,7 @@ import es.uma.entity.Ingrediente;
 import es.uma.entity.TipoCantidad;
 
 //@author: Jaime Ezequiel Rodriguez Rodriguez
+
 public class IngredienteImplementandoUI {
 
     protected Ingrediente ingrediente;

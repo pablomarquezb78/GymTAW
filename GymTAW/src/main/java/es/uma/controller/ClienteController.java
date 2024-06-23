@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+//@author: Pablo Márquez Benítez
+
 @Controller
 @RequestMapping("/cliente")
 public class ClienteController extends BaseController{
@@ -69,15 +71,20 @@ public class ClienteController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
-            //Semana 1 dia 1
+            //SEMANA 1 DIA 1
             LocalDate fechaInicio = LocalDate.of(2000, 1, 1);
 
             //OBTENGO EL DIAENTRENAMIENTO
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechaInicio);
-            session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
-
-            //OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA ESE DIA
-            List<ImplementacionEjercicioRutinaDTO> implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
+            List<ImplementacionEjercicioRutinaDTO> implementaciones;
+            //SI EL DIAENTRENAMIENTO EXISTE PONGO EN LA SESION LA FECHA SELECCIONADA Y OBTENGO LOS EJERCICIOS DE LA RUTINA ASIGNADA A ESE DIA
+            if(diaEntrenamiento!=null){
+                session.setAttribute("fechaSeleccionada",diaEntrenamiento.getFecha());
+                implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
+            //SI EL DIAENTRENAMIENTO NO EXISTE LAS IMPLEMENTACIONES SERÁN UNA LISTA VACÍA Y NO SE MOSTRARÁ ENTRENAMIENTO
+            }else{
+                implementaciones = new ArrayList<>();
+            }
 
             model.addAttribute("implementaciones",implementaciones);
             model.addAttribute("diaEntrenamiento",diaEntrenamiento);
@@ -119,6 +126,11 @@ public class ClienteController extends BaseController{
             //COMPROBAMOS SI EL EJERCICIO TIENE SERIES ESTIPULADAS
             boolean tieneSeries = !implementacion.getSets().isEmpty();
 
+            String pesoRealizado = null;
+            String tiempoRealizado = null;
+            String metrosRealizado = null;
+            String kilocaloriasRealizado = null;
+
             //EL EJERCICIO TIENE SERIES ESTIPULADAS
             if(tieneSeries){
                 //CONSIDERO QUE AL HABER SERIES ESTIPULADAS SIEMPRE HABRÁ COMO MÍNIMO UNA SERIE ESTIPULADA, POR TANTO EN CASO DE QUE EL USUARIO NO HAYA SELECCIONADO
@@ -136,35 +148,28 @@ public class ClienteController extends BaseController{
 
                 //OBTENGO LOS DATOS ALMACENADOS EN EL FEEDBACK DE LA SERIE Y METO EN EL OBJETO UI LOS QUE PROCEDAN
                 if(feedbackEjercicioSerie!=null){
-                    String pesoRealizado = feedbackEjercicioSerie.getPesoRealizado();
-                    String repeticionesRealizadas = feedbackEjercicioSerie.getRepeticionesRealizadas();
-                    String tiempoRealizado = feedbackEjercicioSerie.getTiempoRealizado();
-                    String metrosRealizado = feedbackEjercicioSerie.getMetrosRealizado();
-                    String kilocaloriasRealizado = feedbackEjercicioSerie.getKilocaloriasRealizado();
+                    pesoRealizado = feedbackEjercicioSerie.getPesoRealizado();
+                    tiempoRealizado = feedbackEjercicioSerie.getTiempoRealizado();
+                    metrosRealizado = feedbackEjercicioSerie.getMetrosRealizado();
+                    kilocaloriasRealizado = feedbackEjercicioSerie.getKilocaloriasRealizado();
 
-                    if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
+                    String repeticionesRealizadas = feedbackEjercicioSerie.getRepeticionesRealizadas();
                     if(repeticionesRealizadas!=null) feedbackSerieForm.setRepeticionesRealizadas(repeticionesRealizadas);
-                    if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
-                    if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
-                    if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
-                    if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
                 }
             //EL EJERCICIO NO TIENE SERIES ESTIPULADAS
             }else{
-
                 //OBTENGO LOS DATOS ALMACENADOS EN EL FEEDBACK DEL EJERCICIO Y METO EN EL OBJETO UI LOS QUE PROCEDAN
-                String pesoRealizado = feedbackEjercicio.getSeguimientoPesoDone();
-                String tiempoRealizado = feedbackEjercicio.getSeguimientoTiempoDone();
-                String metrosRealizado = feedbackEjercicio.getSeguimientoMetrosDone();
-                String kilocaloriasRealizado = feedbackEjercicio.getSeguimientoKilocaloriasDone();
-
-                if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
-                if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
-                if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
-                if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
-                if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
-
+                pesoRealizado = feedbackEjercicio.getSeguimientoPesoDone();
+                tiempoRealizado = feedbackEjercicio.getSeguimientoTiempoDone();
+                metrosRealizado = feedbackEjercicio.getSeguimientoMetrosDone();
+                kilocaloriasRealizado = feedbackEjercicio.getSeguimientoKilocaloriasDone();
             }
+
+            if(pesoRealizado!=null) feedbackSerieForm.setPesoRealizado(pesoRealizado);
+            if(tiempoRealizado!=null) feedbackSerieForm.setMinutosRealizados(Integer.parseInt(tiempoRealizado)/60);
+            if(tiempoRealizado!=null) feedbackSerieForm.setSegundosRealizados(Integer.parseInt(tiempoRealizado)%60);
+            if(metrosRealizado!=null) feedbackSerieForm.setMetrosRealizado(metrosRealizado);
+            if(kilocaloriasRealizado!=null) feedbackSerieForm.setKilocaloriasRealizado(kilocaloriasRealizado);
 
             //AÑADO AL MODELO EL OBJETO UI
             model.addAttribute("feedbackSerieForm",feedbackSerieForm);
@@ -197,8 +202,9 @@ public class ClienteController extends BaseController{
                 //ACTUALIZO CON EL DIA DEL FILTRO
                 int dia = Integer.parseInt(filtroDia);
 
-                //Semana 1
+                //SEMANA 1
                 LocalDate fechaInicio = LocalDate.of(2000, 1, dia);
+                //METEMOS EN LA SESION LA FECHA SELECCIONADA
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
@@ -242,8 +248,9 @@ public class ClienteController extends BaseController{
                 int dia = Integer.parseInt(filtroDia);
                 int semana = Integer.parseInt(filtroSemana);
 
-                //Semana y dia seleccionado
+                //SEMANA Y DIA SELECCIONADO
                 LocalDate fechaInicio = LocalDate.of(2000, 1, dia + (semana*7));
+                //METEMOS EN LA SESION LA FECHA SELECCIONADA
                 session.setAttribute("fechaSeleccionada",fechaInicio);
 
                 //Obtengo las rutinas del dia seleccionado
@@ -449,10 +456,17 @@ public class ClienteController extends BaseController{
 
             //OBTENGO EL DIAEDIETA
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechaInicio);
-            session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
+            List<ComidaDTO> comidas;
 
             //OBTENGO LAS COMIDAS ASIGNADAS A ESE DIA
-            List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
+            //SI EXISTE EL DIADIETA PONGO EN LA SESION LA FECHA SELECCIONADA Y OBTENGO LA LISTA DE COMIDAS
+            if(diaDieta!=null){
+                session.setAttribute("fechaSeleccionada",diaDieta.getFecha());
+                comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
+            //SI NO EXISTE SE PASA LISTA VACIA Y NO MOSTRARA COMIDAS ESE DIA
+            }else{
+                comidas = new ArrayList<>();
+            }
 
             model.addAttribute("comidas",comidas);
             model.addAttribute("diaDieta",diaDieta);
@@ -470,16 +484,21 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)){
+            //OBTENEMOS LA COMIDA POR SU ID
             ComidaDTO comida = comidaService.getComidaByID(Integer.parseInt(id));
 
+            //OBTENEMOS LOS PLATOS ASOCIADOS A ESA COMIDA
             List<PlatoDTO> platos = cantidadIngredientePlatoComidaService.getPlatosByComida(comida.getId());
+            //COMPROBAMOS SI SE HA SELECCIONADO PLATO, SI NO ES ASI POR DEFECTO SE PUESTRA EL PRIMERO
             PlatoDTO platoSeleccionadoEntity;
             if(platoSeleccionado == null){
                 platoSeleccionadoEntity = platos.getFirst();
             }else{
                 platoSeleccionadoEntity = platoService.getById(Integer.parseInt(platoSeleccionado));
             }
+            //OBTENEMOS LA INFORMACION DE CANTIDAD Y NUTRICION DE LOS INGREDIENTES DEL PLATO SELECCIONADO
             List<CantidadIngredientePlatoComidaDTO> cantidades = cantidadIngredientePlatoComidaService.getCantidadesByPlatoComida(platoSeleccionadoEntity.getId(),comida.getId());
+            //COMPROBAMOS SI SE HA SELECCIONADO UN INGREDIENTE, SI NO ES ASI POR DEFECTO SE MUESTRA EL PRIMERO
             CantidadIngredientePlatoComidaDTO cantidadSeleccionadaEntity;
             if(cantidadSeleccionada == null){
                 cantidadSeleccionadaEntity = cantidades.getFirst();
@@ -530,6 +549,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)){
+            //OBTENEMOS LA CANTIDAD SELECCIONADA PARA GUARDAR EL FEEDBACK DE LA CANTIDAD CONSUMIDA
             CantidadIngredientePlatoComidaDTO cantidad = cantidadIngredientePlatoComidaService.getById(cantidadID);
             if(cantidad!=null) {
                 cantidad.setCantidadConsumida(cantidadConsumida);
@@ -548,6 +568,7 @@ public class ClienteController extends BaseController{
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esCliente(rol)){
+            //OBTENEMOS LA COMIDA PARA GUARDAR EL FEEDBACK DE SI EL CLIENTE HA REALIZADO ESA COMIDA
             ComidaDTO comida = comidaService.getComidaByID(comidaId);
 
             if(comida!=null){
@@ -573,9 +594,11 @@ public class ClienteController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
+            //OBTENEMOS LA FECHA SELECCIONADA Y CON ESTA EL DIADIETA
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
             DiaDietaDTO diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fecha);
 
+            //GUARDAMOS EL SEGUIMIENTO DE LA DIETA
             if(diaDieta!=null){
                 diaDieta.setSeguimiento(seguimientoDieta);
                 diaDietaService.guardarDiaDieta(diaDieta);
@@ -587,6 +610,7 @@ public class ClienteController extends BaseController{
                 model.addAttribute("diaDieta",diaDieta);
 
             }
+            //SE VUELVE A MOSTRAR LAS DIETAS DE ESE DIA
             dir = "/cliente/cliente_dietas";
         } else {
             dir = "redirect:/";
@@ -600,9 +624,11 @@ public class ClienteController extends BaseController{
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (estaAutenticado(session) && esCliente(rol)){
+            //OBTENEMOS LA FECHA SELECCIONADA Y CON ESTA EL DIAENTRENAMIENTO
             LocalDate fecha = (LocalDate) session.getAttribute("fechaSeleccionada");
             DiaEntrenamientoDTO diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fecha);
 
+            //GUARDAMOS EL SEGUIMIENTO DEL ENTRENAMIENTO
             if(diaEntrenamiento!=null){
                 diaEntrenamiento.setSeguimiento(seguimientoDieta);
                 diaEntrenamientoService.guardarDiaEntrenamiento(diaEntrenamiento);
@@ -613,7 +639,7 @@ public class ClienteController extends BaseController{
                 model.addAttribute("implementaciones",implementaciones);
                 model.addAttribute("diaEntrenamiento",diaEntrenamiento);
             }
-
+            //SE VUELVE A MOSTRAR LOS ENTRENAMIENTOS DE ESE DIA
             dir = "/cliente/cliente_entrenamientos";
         } else {
             dir = "redirect:/";
@@ -641,17 +667,19 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)){
             DiaDietaDTO diaDieta;
             LocalDate fechanueva;
+            //OBTENEMOS EL DIA DIETA SEGUN EL FILTRADO, SI NO SE HA FILTRADO SE PONE EL "DÍA DE HOY"
             if(fechaDesempenyoDieta==null){
                 fechanueva = LocalDate.of(2000, 1, 1);
-                diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechanueva);
             }else{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 fechanueva = LocalDate.parse(fechaDesempenyoDieta, formatter);
-                diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechanueva);
             }
+            diaDieta = diaDietaService.getDiaDietaDeClienteFecha(user.getId(),fechanueva);
 
+            //PREPARAMOS UNA ESTRUCTURA QUE RELACIONA CADA COMIDA CON LA LISTA DE PLATOS Y CADA PLATO CON LA LISTA DE CANTIDADESINGREDIENTE
             Map<ComidaDTO, Map<PlatoDTO, List<CantidadIngredientePlatoComidaDTO>>> comidaPlatosCantidades = new HashMap<>();
 
+            //OBTENEMOS ESA INFORMACION ITERATIVAMENTE Y VAMOS GUARDANDO EN LA ESTRUCTURA
             if(diaDieta!=null){
                 List<ComidaDTO> comidas = comidaService.getComidasByDiaDieta(diaDieta.getId());
 
@@ -686,6 +714,7 @@ public class ClienteController extends BaseController{
         if (estaAutenticado(session) && esCliente(rol)){
             DiaEntrenamientoDTO diaEntrenamiento;
             LocalDate fechanueva;
+            //OBTENEMOS EL DIA ENTRENAMIENTO SEGUN EL FILTRADO, SI NO SE HA FILTRADO SE PONE EL "DÍA DE HOY"
             if(fechaDesempenyoEntrenamiento==null){
                 fechanueva = LocalDate.of(2000, 1, 1);
             }else{
@@ -694,10 +723,15 @@ public class ClienteController extends BaseController{
             }
             diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(user.getId(),fechanueva);
 
-            List<ImplementacionEjercicioRutinaDTO> implementaciones = new ArrayList<>();
+            //PREPARAMOS LAS SIGUIENTES ESTRUCTURAS DE DATOS:
+            //1.LISTA DE IMPLEMENTACIONES DEL DIA PARA RECORRERLAS
+            //2.MAP DE IMPLEMENTACION Y FEEDBACK DE LAS SERIES PARA VER PARA CADA IMPLEMENTACION SI TIENE FEEDBACK EN LAS SERIES O SI TIENE UNA LISTA VACIA (NO TIENE FEEDBACK EN LAS SERIES)
+            //3.LISTA DE PARES IMPLEMENTACION-FEEDBACKEJERCICIO PARA LLEVAR A LA JSP TODAS LAS IMPLEMENTACIONES Y SU FEEDBACK ASOCIADO
+            List<ImplementacionEjercicioRutinaDTO> implementaciones;
             Map<ImplementacionEjercicioRutinaDTO,List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
             List<Pair<ImplementacionEjercicioRutinaDTO,FeedbackEjercicioDTO>> listaPares = new ArrayList<>();
 
+            //OBTENEMOS ESA INFORMACION ITERATIVAMENTE Y VAMOS GUARDANDO EN LAS ESTRUCTURAS
             if(diaEntrenamiento!=null){
                 implementaciones = implementacionEjercicioRutinaService.getImplementacionByRutina(diaEntrenamiento.getRutina().getId());
 
