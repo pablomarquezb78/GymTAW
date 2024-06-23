@@ -63,12 +63,13 @@
         <% } %>
         </tbody>
     </table>
-    <div class="d-flex justify-content-center">
-        <a class="btn btn-success btn-custom" href="/entrenamientos/entrenador-crearrutina">Crear Rutina</a>
-    </div>
+
     <% } else { %>
     <h3>No hay rutinas creadas :(</h3>
     <% } %>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-success btn-custom" href="/entrenamientos/entrenador-crearrutina">Crear Rutina</a>
+    </div>
 </div>
 
 <!-- Bootstrap JS and dependencies (optional, only if needed) -->
