@@ -20,6 +20,7 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
         th {
             background-color: #343a40 !important;
@@ -62,6 +63,9 @@
         <% } %>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-success btn-custom" href="/entrenamientos/entrenador-crearrutina">Crear Rutina</a>
+    </div>
     <% } else { %>
     <h3>No hay rutinas creadas :(</h3>
     <% } %>
