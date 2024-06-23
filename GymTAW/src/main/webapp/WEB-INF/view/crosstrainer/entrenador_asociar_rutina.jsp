@@ -6,7 +6,7 @@
 
 <%
     List<RutinaDTO> rutinas = (List<RutinaDTO>) request.getAttribute("rutinas");
-    Boolean fallo = (Boolean) request.getAttribute("fallo");
+    Integer fallo = (Integer) request.getAttribute("fallo");
 %>
 
 <html>
@@ -48,9 +48,14 @@
 
     <%
         if(fallo != null) {
-            if(fallo){
+            if(fallo == 1){
     %>
         <h3 class="error-rutina">No puedes ponerle a un cliente más de una rutina al día! Vuelve a intentarlo con otra fecha.</h3>
+    <%
+            } else if(fallo == 0) {
+                %>
+        <h3 class="error-rutina">No puedes ponerle a un cliente una fecha pasada! Vuelve a intentarlo con otra fecha.</h3>
+
     <%
             }
         }
