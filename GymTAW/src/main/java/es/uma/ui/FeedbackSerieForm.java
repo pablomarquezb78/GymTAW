@@ -1,5 +1,7 @@
 package es.uma.ui;
 
+
+//@author: Pablo Márquez Benítez
 public class FeedbackSerieForm {
 
     protected Integer implementacionId;
