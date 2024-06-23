@@ -57,6 +57,7 @@ public class ClienteController extends BaseController{
             model.addAttribute("nombreUsuario", user.getNombre() + " " + user.getApellidos());
             model.addAttribute("diaDieta",diaDieta);
             model.addAttribute("diaEntrenamiento",diaEntrenamiento);
+            model.addAttribute("fechaInicio",fechaInicio);
 
             dir = "/cliente/cliente_inicio";
         } else {
