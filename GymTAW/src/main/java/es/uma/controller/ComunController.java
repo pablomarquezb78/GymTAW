@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@authors: Pablo Miguel Aguilar Blanco & Adrián Fernández Vera & Antonio Salvador Gámez Zafra
+//@authors: Pablo Miguel Aguilar Blanco: 60% & Adrián Fernández Vera: 20% & Antonio Salvador Gámez Zafra: 20%
 @Controller
 @RequestMapping("/comun")
 public class ComunController extends BaseController{
@@ -61,8 +61,7 @@ public class ComunController extends BaseController{
     @Autowired
     private UserService userService;
 
-    
-    //@author: Pablo Miguel Aguilar Blanco
+
     @GetMapping("/mostrarEjercicios")
     public String doEjercicios(Model model, HttpSession session) {
         String dir;
@@ -82,7 +81,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/editarEjercicio")
     public String doEditarEjercicio(@RequestParam("id") Integer id, Model model, HttpSession session, EjercicioUI ejercicioUI) {
         String dir;
@@ -97,7 +95,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/borrarEjercicio")
     public String doBorrarEjercicio(@RequestParam("id") Integer id, HttpSession session){
         String dir;
@@ -169,7 +166,6 @@ public class ComunController extends BaseController{
     }
 
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/crearNuevoEjercicio")
     public String doCrearNuevoEjercicio(Model model, HttpSession session, EjercicioUI ejercicioUI) {
         String dir;
@@ -184,7 +180,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @PostMapping("/guardarEjercicio")
     public String doGuardarEjercicio(@ModelAttribute EjercicioUI ejercicioUI, HttpSession session){
         String dir;
@@ -203,7 +198,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @PostMapping("/filtrarEjercicios")
     public String doFiltrarEjercicios(Model model, HttpSession session, @ModelAttribute EjercicioUI ejercicioUI) {
         String dir;
@@ -276,7 +270,6 @@ public class ComunController extends BaseController{
     }
 
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/verImplementacionesAsociadas")
     public String doVerImplementacionesAsociadas(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
@@ -295,7 +288,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/crearImplementacion")
     public String doCrearImplementacion(@RequestParam("id") Integer id, HttpSession session, Model model){
         String dir;
@@ -339,7 +331,6 @@ public class ComunController extends BaseController{
     }
 
     //Este guardar es para admin
-    //@author: Pablo Miguel Aguilar Blanco
     @PostMapping("/guardarImplementacion")
     public String doGuardarImplementacion(@ModelAttribute("implementacion") Implementacion implementacion,
                                           @RequestParam("idejercicioseleccionado") Integer idej,HttpSession session){
@@ -359,7 +350,6 @@ public class ComunController extends BaseController{
     }
 
 
-    //@author: Pablo Miguel Aguilar Blanco
     @GetMapping("/borrarImplementacion")
     public String doBorrarImplementacion(@RequestParam("idEjercicio") Integer idEjercicio, @RequestParam("idImplementacion") Integer idImplementacion, HttpSession session){
         String dir;
@@ -374,7 +364,6 @@ public class ComunController extends BaseController{
         return dir;
     }
 
-    //@author: Pablo Miguel Aguilar Blanco
     @PostMapping("/filtrarImplementaciones")
     public String doFiltradoImplementaciones(@RequestParam("id") Integer id, HttpSession session, Model model, @ModelAttribute Implementacion implementacion){
         String dir;
