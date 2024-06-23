@@ -28,7 +28,7 @@
         <%if(diaEntrenamiento!=null){%>
         <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary" style="margin-top: 17%">Ver entrenamiento de hoy</button>
         <%}else{%>
-        <h4 style="margin-top: 20%">No hay entrenamiento hoy</h4>
+        <h4 style="margin-top: 13%">No hay entrenamiento hoy</h4>
         <%}%>
     </div>
     <div>
