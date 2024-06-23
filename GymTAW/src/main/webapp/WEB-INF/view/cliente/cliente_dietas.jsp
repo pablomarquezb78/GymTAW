@@ -1,13 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uma.dto.ComidaDTO" %>
 <%@ page import="es.uma.dto.DiaDietaDTO" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Pablo Márquez Benítez
-  Date: 29/04/2024
-  Time: 17:45
-  To change this template use File | Settings | File Templates.
---%>
+<%-- @author: Pablo Márquez Benítez --%>
 <%
     //OBTENEMOS PARAMETROS
     List<ComidaDTO> comidas = (List<ComidaDTO>) request.getAttribute("comidas");

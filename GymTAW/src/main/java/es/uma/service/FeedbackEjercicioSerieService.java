@@ -20,13 +20,7 @@ public class FeedbackEjercicioSerieService {
     @Autowired
     private FeedbackejercicioRepository feedbackejercicioRepository;
 
-    public List<FeedbackEjercicioserieDTO> getFeedbackSeriePorFeedbackEjercicio(Integer feedbackEjercicioId){
-        return feedbackejercicioserieRepository.encontrarPorFeedbackEjercicio(feedbackEjercicioId)
-                .stream()
-                .map(this::convertEntityToDto)
-                .collect(Collectors.toList());
-    }
-
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicioserieDTO getFeedbackPorEjecicioYSerie(Integer feedbackEjercicioId, String set){
         if(feedbackEjercicioId==null){
             return null;
@@ -51,6 +45,7 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserieDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public FeedbackEjercicioserie convertDtoToEntity(FeedbackEjercicioserieDTO feedbackEjercicioserieDTO) {
         FeedbackEjercicioserie feedbackEjercicioserie = new FeedbackEjercicioserie();
         feedbackEjercicioserie.setId(feedbackEjercicioserieDTO.getId());
@@ -72,6 +67,7 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserieDTOSList;
     }
 
+    //@author: Pablo Márquez Benítez
     public List<FeedbackEjercicioserie> convertListDtoToEntity(List<FeedbackEjercicioserieDTO> feedbackEjercicioserieDTOs){
         List<FeedbackEjercicioserie> feedbackEjercicioserieList = new ArrayList<>();
         for (FeedbackEjercicioserieDTO feedbackEjercicioserieDTO : feedbackEjercicioserieDTOs){
@@ -80,7 +76,7 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserieList;
     }
 
-    @Transactional
+    //@author: Pablo Márquez Benítez
     public void borrarFeedbackEjercicioSerie(Integer feedbackEjercicioId){
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
         if (feedbackEjercicio != null) {
@@ -92,6 +88,7 @@ public class FeedbackEjercicioSerieService {
         }
     }
 
+    //@author: Pablo Márquez Benítez
     public void prerararFeedbackEjercicioSeries(Integer serie,Integer feedbackEjercicioId){
         FeedbackEjercicio feedbackEjercicio = feedbackejercicioRepository.findById(feedbackEjercicioId).orElse(null);
 
@@ -102,6 +99,7 @@ public class FeedbackEjercicioSerieService {
         feedbackejercicioserieRepository.save(feedbackEjercicioSerie);
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarFeedbackEjercicioSerie(FeedbackEjercicioserieDTO feedbackEjercicioserieDTO){
         FeedbackEjercicioserie feedbackEjercicioserie = feedbackejercicioserieRepository.findById(feedbackEjercicioserieDTO.getId()).orElse(null);
         if(feedbackEjercicioserie!=null){

@@ -1,13 +1,5 @@
-
-<%@ page import="es.uma.entity.ImplementacionEjercicioRutina" %>
 <%@ page import="es.uma.dto.ImplementacionEjercicioRutinaDTO" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Pablo Márquez Benítez
-  Date: 21/05/2024
-  Time: 13:12
-  To change this template use File | Settings | File Templates.
---%>
+<%-- @author: Pablo Márquez Benítez --%>
 <%
     //OBTENEMOS PARAMETROS
     ImplementacionEjercicioRutinaDTO implementacion = (ImplementacionEjercicioRutinaDTO) request.getAttribute("implementacion");

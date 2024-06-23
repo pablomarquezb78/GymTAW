@@ -35,10 +35,6 @@ public class ImplementacionEjercicioRutinaService {
     @Autowired
     private DiaEntrenamientoRepository diaEntrenamientoRepository;
 
-    public void guardarImplementacion(ImplementacionEjercicioRutinaDTO implmentacionDTO){
-        this.implementacionEjercicioRutinaRepository.save(convertDtoToEntity(implmentacionDTO));
-    }
-
     private void asignarImplementacionReal(ImplementacionEjercicioRutina implementacion, Implementacion imp){
         implementacion.setEjercicio(ejercicioService.convertDtoToEntity(imp.getEjercicio()));
         implementacion.setSets(imp.getSets());
@@ -116,6 +112,7 @@ public class ImplementacionEjercicioRutinaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Márquez Benítez
     public List<ImplementacionEjercicioRutinaDTO> getImplementacionByRutina(Integer rutinaId){
         List<ImplementacionEjercicioRutina> implementacionEjercicioRutinaList = implementacionEjercicioRutinaRepository.encontrarImplementacionesPorRutinaID(rutinaId);
         if(implementacionEjercicioRutinaList!=null){
@@ -160,6 +157,7 @@ public class ImplementacionEjercicioRutinaService {
         return implementacionEjercicioRutinaDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public ImplementacionEjercicioRutina convertDtoToEntity(ImplementacionEjercicioRutinaDTO implementacionEjercicioRutinaDTO) {
         ImplementacionEjercicioRutina implementacionEjercicioRutina = new ImplementacionEjercicioRutina();
         implementacionEjercicioRutina.setId(implementacionEjercicioRutinaDTO.getId());
@@ -176,14 +174,7 @@ public class ImplementacionEjercicioRutinaService {
         return implementacionEjercicioRutina;
     }
 
-    public List<ImplementacionEjercicioRutinaDTO> convertListEntityToDto(List<ImplementacionEjercicioRutina> implementacionEjercicioRutinaList){
-        List<ImplementacionEjercicioRutinaDTO> implementacionEjercicioRutinaDTOList = new ArrayList<>();
-        for (ImplementacionEjercicioRutina implementacionEjercicioRutina : implementacionEjercicioRutinaList){
-            implementacionEjercicioRutinaDTOList.add(this.convertEntityToDto(implementacionEjercicioRutina));
-        }
-        return implementacionEjercicioRutinaDTOList;
-    }
-
+    //@author: Pablo Márquez Benítez
     public ImplementacionEjercicioRutinaDTO getImplementacionPorId(Integer id){
         return convertEntityToDto(implementacionEjercicioRutinaRepository.findById(id).orElse(null));
     }

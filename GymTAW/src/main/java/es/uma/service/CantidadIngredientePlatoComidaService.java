@@ -35,6 +35,7 @@ public class CantidadIngredientePlatoComidaService {
     @Autowired
     private TipoCantidadService tipoCantidadService;
 
+    //@author: Pablo Márquez Benítez
     public List<PlatoDTO> getPlatosByComida(Integer comidaId){
         return cantidadIngredientePlatoComidaRepository.findPlatosInComida(comidaId)
                 .stream()
@@ -42,6 +43,7 @@ public class CantidadIngredientePlatoComidaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Márquez Benítez
     public List<CantidadIngredientePlatoComidaDTO> getCantidadesByPlatoComida(Integer platoId,Integer comidaId){
         return cantidadIngredientePlatoComidaRepository.findCantidadByPlatoComida(platoId,comidaId)
                 .stream()
@@ -49,6 +51,7 @@ public class CantidadIngredientePlatoComidaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Márquez Benítez
     public void guardarCantidad(CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO){
         CantidadIngredientePlatoComida cantidadIngredientePlatoComida = cantidadIngredientePlatoComidaRepository.findById(cantidadIngredientePlatoComidaDTO.getId()).orElse(null);
         if(cantidadIngredientePlatoComida!=null){
@@ -185,6 +188,7 @@ public class CantidadIngredientePlatoComidaService {
         return cantidadIngredientePlatoComidaDTO;
     }
 
+    //@author: Pablo Márquez Benítez
     public CantidadIngredientePlatoComida convertDtoToEntity(CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO) {
         CantidadIngredientePlatoComida cantidadIngredientePlatoComida = new CantidadIngredientePlatoComida();
         cantidadIngredientePlatoComida.setId(cantidadIngredientePlatoComidaDTO.getId());

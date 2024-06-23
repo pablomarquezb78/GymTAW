@@ -853,6 +853,7 @@ public class EntrenamientosController extends BaseController{
         return dir;
     }
 
+    //@AUTHOR PABLO MÁRQUEZ BENÍTEZ
     @GetMapping("/verDesempenyoEntrenamientosEntrenador")
     public String doVerDesmepenyoEntrenamientos(@RequestParam(required = false, value = "fecha") String fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
         String dir;
@@ -860,7 +861,6 @@ public class EntrenamientosController extends BaseController{
         if (estaAutenticado(session) && esEntrenador(rol)) {
             UserDTO userEntity = userService.getById(idUsuario);
             DiaEntrenamientoDTO diaEntrenamiento;
-
             LocalDate fechanueva;
             if(fecha==null){
                 fechanueva = LocalDate.of(2000, 1, 1);
@@ -870,7 +870,7 @@ public class EntrenamientosController extends BaseController{
             }
             diaEntrenamiento = diaEntrenamientoService.getDiaEntrenamientoDeClienteFecha(userEntity.getId(), fechanueva);
 
-            List<ImplementacionEjercicioRutinaDTO> implementaciones = new ArrayList<>();
+            List<ImplementacionEjercicioRutinaDTO> implementaciones;
             Map<ImplementacionEjercicioRutinaDTO, List<FeedbackEjercicioserieDTO>> implementacionEjercicioRutinaListMap = new HashMap<>();
             List<Pair<ImplementacionEjercicioRutinaDTO, FeedbackEjercicioDTO>> listaPares = new ArrayList<>();
 

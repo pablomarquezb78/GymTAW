@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ComidaRepository extends JpaRepository<Comida, Integer> {
 
+    //@author: Pablo Márquez Benítez
     @Query("select c from Comida c where c.diaDieta.id = :diaDietaId order by c.tipoComida.id")
     List<Comida> findByDiaDieta(@Param("diaDietaId") Integer diaDietaId);
 
