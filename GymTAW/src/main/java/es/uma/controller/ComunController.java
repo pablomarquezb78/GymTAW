@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//@authors: Pablo Miguel Aguilar Blanco & Adrián Fernández Vera & Antonio Salvador Gámez Zafra
 @Controller
 @RequestMapping("/comun")
 public class ComunController extends BaseController{
