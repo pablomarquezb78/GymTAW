@@ -223,7 +223,7 @@ CREATE TABLE `dia_entrenamiento` (
   KEY `dia_entrenamiento-rutina_fk_idx` (`rutina`),
   CONSTRAINT `dia_entrenamiento-cliente` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_entrenamiento-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +232,7 @@ CREATE TABLE `dia_entrenamiento` (
 
 LOCK TABLES `dia_entrenamiento` WRITE;
 /*!40000 ALTER TABLE `dia_entrenamiento` DISABLE KEYS */;
-INSERT INTO `dia_entrenamiento` VALUES (1,'2000-01-01 00:00:00',NULL,1,1),(4,'2024-05-20 00:00:00',NULL,1,NULL);
+INSERT INTO `dia_entrenamiento` VALUES (6,'2024-06-26 00:00:00',NULL,1,4),(7,'2024-06-27 00:00:00',NULL,1,5);
 /*!40000 ALTER TABLE `dia_entrenamiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +252,7 @@ CREATE TABLE `ejercicio` (
   PRIMARY KEY (`idejercicio`),
   KEY `ejercicio-tipo_ejercicio_fk_idx` (`tipo`),
   CONSTRAINT `ejercicio-tipo_ejercicio_fk` FOREIGN KEY (`tipo`) REFERENCES `tipo_ejercicio` (`idtipo_ejercicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,7 +261,7 @@ CREATE TABLE `ejercicio` (
 
 LOCK TABLES `ejercicio` WRITE;
 /*!40000 ALTER TABLE `ejercicio` DISABLE KEYS */;
-INSERT INTO `ejercicio` VALUES (1,'Press de Banca',1,'Ejercicio orientado a el pectoral mayor','https://videosample.com'),(2,'Press Inclinado',1,'Ejercicio orientado a el pectoral superior','https://videosample.com'),(3,'Dominadas',2,'Descripion dominada','https://videosample.com'),(4,'Sprints',4,'Descripcion sprints','https://videosample.com'),(5,'Bicicleta estática',3,'Descripcion Bicicleta estática','https://videosample.com');
+INSERT INTO `ejercicio` VALUES (1,'Press de Banca',1,'Ejercicio de fuerza que se realiza acostado en un banco plano, donde se baja una barra con pesas hacia el pecho y luego se empuja hacia arriba hasta extender completamente los brazos.','https://videosample.com'),(2,'Press Inclinado',1,'Ejercicio de fuerza realizado en un banco inclinado, donde se baja una barra con pesas hacia la parte superior del pecho y luego se empuja hacia arriba hasta extender completamente los brazos.','https://videosample.com'),(3,'Dominadas',2,'Ejercicio donde te agarras a una barra y tiras de tu cuerpo hacia arriba hasta que la barbilla pase la barra, luego bajas de manera controlada.','https://videosample.com'),(4,'Sprints',4,'Carrera de corta distancia a máxima velocidad para mejorar la velocidad y la potencia explosiva.','https://videosample.com'),(5,'Bicicleta estática',3,'Ejercicio aeróbico realizado en una bicicleta fija, ideal para mejorar la resistencia cardiovascular y quemar calorías.','https://videosample.com'),(6,'Flexiones',2,'Ejercicio de peso corporal donde, en posición de plancha, bajas y subes el cuerpo doblando y extendiendo los brazos mientras mantienes el cuerpo recto.','https://videosample.com	'),(7,'Abdominales',1,'Estando acostado boca arriba con las rodillas dobladas, elevas el torso hacia las rodillas utilizando los músculos abdominales.			','https://videosample.com	'),(8,'Burpees',3,'Desde posición de pie, baja al suelo, realiza una flexión, vuelve a subir y salta con las manos sobre la cabeza.','https://videosample.com	'),(9,'Sentadillas',2,'La sentadilla es un ejercicio donde flexionas las rodillas y las caderas para bajar el cuerpo hacia el suelo, luego empujas a través de los talones para regresar a la posición inicial.			','https://videosample.com	'),(10,'Carrera continua',3,'Trote suave			','https://videosample.com	'),(11,'Plancha Lateral con Elevacion de Pierna',5,'La plancha lateral es un ejercicio donde te apoyas sobre un antebrazo y los pies, manteniendo el cuerpo en línea recta y la cadera elevada, trabajando principalmente los músculos abdominales y oblicuos.			','https://videosample.com	'),(12,'Estiramiento de Puente de Cadera',6,'El estiramiento de puente de cadera consiste en elevar las caderas hacia arriba desde una posición acostada boca arriba, creando una línea recta desde las rodillas hasta los hombros para mejorar la flexibilidad y la movilidad de la columna vertebral y las caderas.			','https://videosample.com	'),(13,'Peso Muerto',1,'El peso muerto es un ejercicio fundamental de levantamiento de peso que involucra levantar una barra desde el suelo hasta la cadera, utilizando principalmente los músculos de la espalda baja, los glúteos y los isquiotibiales','https://videosample.com	'),(14,'Prensa de Piernas',1,'La prensa de piernas es un ejercicio de entrenamiento de fuerza donde se empuja un peso hacia arriba usando las piernas, principalmente los cuádriceps y glúteos, fortaleciendo las extremidades inferiores y mejorando la resistencia muscular.','https://videosample.com	');
 /*!40000 ALTER TABLE `ejercicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,7 +296,6 @@ CREATE TABLE `feedback_ejercicio` (
 
 LOCK TABLES `feedback_ejercicio` WRITE;
 /*!40000 ALTER TABLE `feedback_ejercicio` DISABLE KEYS */;
-INSERT INTO `feedback_ejercicio` VALUES (1,2,1,1,'3',NULL,NULL,NULL,NULL),(2,4,1,NULL,NULL,NULL,NULL,NULL,NULL),(3,5,1,1,'5',NULL,NULL,NULL,NULL),(4,6,1,1,NULL,'900',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `feedback_ejercicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +327,7 @@ CREATE TABLE `feedback_ejercicioserie` (
 
 LOCK TABLES `feedback_ejercicioserie` WRITE;
 /*!40000 ALTER TABLE `feedback_ejercicioserie` DISABLE KEYS */;
-INSERT INTO `feedback_ejercicioserie` VALUES (64,'1',NULL,NULL,NULL,NULL,NULL,NULL),(85,'1',NULL,NULL,NULL,NULL,NULL,NULL),(86,'2',NULL,NULL,NULL,NULL,NULL,NULL),(87,'3',NULL,NULL,NULL,NULL,NULL,NULL),(88,'4',NULL,NULL,NULL,NULL,NULL,NULL),(89,'1',NULL,NULL,NULL,NULL,NULL,NULL),(90,'2',NULL,NULL,NULL,NULL,NULL,NULL),(91,'3',NULL,NULL,NULL,NULL,NULL,NULL),(92,'4',NULL,NULL,NULL,NULL,NULL,NULL),(93,'1','8','45',NULL,NULL,NULL,1),(94,'2','8','40',NULL,NULL,NULL,1),(95,'3',NULL,NULL,NULL,NULL,NULL,1),(96,'1',NULL,NULL,'30',NULL,NULL,3),(97,'2',NULL,NULL,'25',NULL,NULL,3),(98,'3',NULL,NULL,NULL,NULL,NULL,3),(99,'4',NULL,NULL,NULL,NULL,NULL,3),(100,'5',NULL,NULL,NULL,NULL,NULL,3);
+INSERT INTO `feedback_ejercicioserie` VALUES (64,'1',NULL,NULL,NULL,NULL,NULL,NULL),(85,'1',NULL,NULL,NULL,NULL,NULL,NULL),(86,'2',NULL,NULL,NULL,NULL,NULL,NULL),(87,'3',NULL,NULL,NULL,NULL,NULL,NULL),(88,'4',NULL,NULL,NULL,NULL,NULL,NULL),(89,'1',NULL,NULL,NULL,NULL,NULL,NULL),(90,'2',NULL,NULL,NULL,NULL,NULL,NULL),(91,'3',NULL,NULL,NULL,NULL,NULL,NULL),(92,'4',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `feedback_ejercicioserie` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,7 +353,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
   KEY `implementacion-rutina_fk_idx` (`rutina`),
   CONSTRAINT `implementacion-ejercicio_fk` FOREIGN KEY (`ejercicio`) REFERENCES `ejercicio` (`idejercicio`),
   CONSTRAINT `implementacion-rutina_fk` FOREIGN KEY (`rutina`) REFERENCES `rutina` (`idrutina`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -363,7 +362,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
 
 LOCK TABLES `implementacion_ejercicio-rutina` WRITE;
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` DISABLE KEYS */;
-INSERT INTO `implementacion_ejercicio-rutina` VALUES (2,2,1,'4','8','45',NULL,NULL,NULL),(4,1,1,'4','8','60',NULL,NULL,NULL),(5,4,1,'5',NULL,NULL,'30',NULL,NULL),(6,5,1,NULL,NULL,NULL,'900',NULL,NULL);
+INSERT INTO `implementacion_ejercicio-rutina` VALUES (8,8,4,'','5','','','',''),(9,3,4,'','10','','','',''),(10,9,4,'','15','','','',''),(11,10,5,'','','','','','800'),(12,9,5,'','15','','','',''),(13,6,5,'','10','','','',''),(14,11,5,'','','','30','',''),(15,8,6,'','15','','','',''),(16,4,6,'','','','100','200',''),(17,12,6,'','','','30','',''),(18,1,7,'4','8','75','','',''),(19,3,7,'3','8','','','',''),(20,6,7,'','','','','',''),(21,13,8,'3','9','120','','',''),(22,14,8,'3','9','100','','',''),(23,9,8,'3','9','100','','','');
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -467,7 +466,7 @@ CREATE TABLE `rutina` (
   PRIMARY KEY (`idrutina`),
   KEY `rutina-entrenador_fk_idx` (`entrenador`),
   CONSTRAINT `rutina-entrenador_fk` FOREIGN KEY (`entrenador`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -476,7 +475,7 @@ CREATE TABLE `rutina` (
 
 LOCK TABLES `rutina` WRITE;
 /*!40000 ALTER TABLE `rutina` DISABLE KEYS */;
-INSERT INTO `rutina` VALUES (1,'2000-01-01 00:00:00','rutina1',3),(2,'2000-01-01 00:00:00','rutina2',4),(3,'2024-05-20 11:39:27',NULL,4);
+INSERT INTO `rutina` VALUES (4,'2024-06-23 13:46:49','AMRAP (As Many Rounds As Possible) en 20 minutos',4),(5,'2024-06-23 13:48:04','Rutina de Cardio Y Fuerza (5 rondas)',4),(6,'2024-06-23 13:48:40','Entrenamiento Variado de Alta Intensidad	',4),(7,'2024-06-23 13:52:28','Rutina de Tren Superior',3),(8,'2024-06-23 13:53:26','Rutina de Pierna',3);
 /*!40000 ALTER TABLE `rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,4 +619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-23 15:34:31
+-- Dump completed on 2024-06-23 16:00:46
