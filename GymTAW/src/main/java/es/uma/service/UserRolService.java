@@ -17,14 +17,17 @@ public class UserRolService {
     @Autowired
     UserRolRepository userRolRepository;
 
+    //@author: Pablo Miguel Aguilar Blanco
     public UserRolDTO getUserRolById(Integer rolId){
         return this.convertEntityToDto(userRolRepository.findById(rolId).orElse(null));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserRolDTO> getAllRoles(){
         return userRolRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public UserRol convertDtoToEntity(UserRolDTO userRolDTO) {
         UserRol userRol = new UserRol();
         userRol.setId(userRolDTO.getId());
@@ -32,6 +35,7 @@ public class UserRolService {
         return userRol;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public UserRolDTO convertEntityToDto(UserRol userRol) {
         UserRolDTO userRolDTO = new UserRolDTO();
         userRolDTO.setId(userRol.getId());

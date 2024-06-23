@@ -33,6 +33,7 @@ public class FeedbackEjercicioSerieService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public FeedbackEjercicioserieDTO convertEntityToDto(FeedbackEjercicioserie feedbackEjercicioserie) {
         FeedbackEjercicioserieDTO feedbackEjercicioserieDTO = new FeedbackEjercicioserieDTO();
         feedbackEjercicioserieDTO.setId(feedbackEjercicioserie.getId());
@@ -58,7 +59,7 @@ public class FeedbackEjercicioSerieService {
         return feedbackEjercicioserie;
     }
 
-
+    //@author: Pablo Miguel Aguilar Blanco
     public List<FeedbackEjercicioserieDTO> convertListEntityToDto(List<FeedbackEjercicioserie> feedbackEjercicioseries){
         List<FeedbackEjercicioserieDTO> feedbackEjercicioserieDTOSList = new ArrayList<>();
         for (FeedbackEjercicioserie feedbackEjercicioserie : feedbackEjercicioseries){

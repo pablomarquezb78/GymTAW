@@ -60,6 +60,7 @@ public class CantidadIngredientePlatoComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<CantidadIngredientePlatoComidaDTO> getByDish(Integer id){
         return cantidadIngredientePlatoComidaRepository.buscarPorPlato(id)
                 .stream()
@@ -67,6 +68,7 @@ public class CantidadIngredientePlatoComidaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<CantidadIngredientePlatoComidaDTO> dishFilter(PlatoDTO platoDTO, String nombreCliente, String nombreDietista, Integer tipoComidaId){
         Plato plato = platoService.convertDtoToEntity(platoDTO);
         TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaService.getById(tipoComidaId));
@@ -77,10 +79,12 @@ public class CantidadIngredientePlatoComidaService {
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public CantidadIngredientePlatoComidaDTO getById(Integer id){
         return this.convertEntityToDto(cantidadIngredientePlatoComidaRepository.findById(id).orElse(null));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<CantidadIngredientePlatoComidaDTO> dishFilterWithCuantity(PlatoDTO platoDTO, String nombreCliente, String nombreDietista, Integer tipoComidaId, Integer cantidad){
         Plato plato = platoService.convertDtoToEntity(platoDTO);
         TipoComida tipoComida = tipoComidaService.convertDtoToEntity(tipoComidaService.getById(tipoComidaId));
@@ -91,6 +95,7 @@ public class CantidadIngredientePlatoComidaService {
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<IngredienteDTO> getIngredientsByDish(Integer id){
         return cantidadIngredientePlatoComidaRepository.buscarIngredientesPorPlato(id)
                 .stream()
@@ -98,10 +103,12 @@ public class CantidadIngredientePlatoComidaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteById(Integer id){
         cantidadIngredientePlatoComidaRepository.deleteById(id);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteByFood(ComidaDTO comidaDTO){
         Comida comida = comidaService.convertDtoToEntity(comidaDTO);
         List<CantidadIngredientePlatoComida> cantidadIngredientePlatoComidaList = cantidadIngredientePlatoComidaRepository.buscarPorComida(comida.getId());
@@ -110,6 +117,7 @@ public class CantidadIngredientePlatoComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public AsignacionPlatoComida setAsignacionPlatoComida(AsignacionPlatoComida asignacionPlatoComida, Integer idComida, Integer idPlato){
         CantidadIngredientePlatoComida apidc = cantidadIngredientePlatoComidaRepository.findById(idComida).orElse(null);
         asignacionPlatoComida.setIdCliente(apidc.getComida().getDiaDieta().getCliente().getId());
@@ -125,6 +133,7 @@ public class CantidadIngredientePlatoComidaService {
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void saveFood(AsignacionPlatoComida asignacionPlatoComida){
         CantidadIngredientePlatoComida cipc = new CantidadIngredientePlatoComida();
         Plato plato = platoService.convertDtoToEntity(platoService.getById(asignacionPlatoComida.getIdPlato()));
@@ -146,6 +155,7 @@ public class CantidadIngredientePlatoComidaService {
         cantidadIngredientePlatoComidaRepository.save(cipc);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void editFood(AsignacionPlatoComida asignacionPlatoComida){
         CantidadIngredientePlatoComida cipc = cantidadIngredientePlatoComidaRepository.findById(asignacionPlatoComida.getIdComida()).orElse(null);
         Comida comida = cipc.getComida();
@@ -173,6 +183,7 @@ public class CantidadIngredientePlatoComidaService {
         return feedback;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public CantidadIngredientePlatoComidaDTO convertEntityToDto(CantidadIngredientePlatoComida cantidadIngredientePlatoComida){
         CantidadIngredientePlatoComidaDTO cantidadIngredientePlatoComidaDTO = new CantidadIngredientePlatoComidaDTO();
         cantidadIngredientePlatoComidaDTO.setId(cantidadIngredientePlatoComida.getId());

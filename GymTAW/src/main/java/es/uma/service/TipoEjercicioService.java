@@ -22,6 +22,7 @@ public class TipoEjercicioService {
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<TipoEjercicioDTO> getAll(){
         return tipoEjercicioRepository.findAll()
                 .stream()
@@ -33,10 +34,12 @@ public class TipoEjercicioService {
         tipoEjercicioRepository.save(convertDtoToEntity(nuevoTipoEjercicio));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoEjercicioDTO getById(Integer id){
         return convertEntityToDto(tipoEjercicioRepository.findById(id).orElse(null));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoEjercicioDTO convertEntityToDto(TipoEjercicio tipoEjercicio) {
         TipoEjercicioDTO tipoEjercicioDTO = new TipoEjercicioDTO();
         tipoEjercicioDTO.setId(tipoEjercicio.getId());
@@ -44,6 +47,7 @@ public class TipoEjercicioService {
         return tipoEjercicioDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public TipoEjercicio convertDtoToEntity(TipoEjercicioDTO tipoEjercicioDTO) {
         TipoEjercicio tipoEjercicio = new TipoEjercicio();
         tipoEjercicio.setId(tipoEjercicioDTO.getId());

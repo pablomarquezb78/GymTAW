@@ -3,6 +3,7 @@ package es.uma.ui;
 import es.uma.dto.TipoComidaDTO;
 import es.uma.entity.TipoComida;
 
+//@author: Pablo Miguel Aguilar Blanco
 
 public class CantidadPlatoComida {
     private Integer id;

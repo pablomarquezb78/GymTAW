@@ -53,6 +53,7 @@ public class DiaEntrenamientoService {
         return dias;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<DiaEntrenamientoDTO> getByCustomer(Integer idclient){
         List<DiaEntrenamientoDTO> dias = diaEntrenamientoRepository.diasEntrenamientosdeCliente(idclient)
                 .stream()
@@ -82,6 +83,7 @@ public class DiaEntrenamientoService {
         return diaEntrenamientoDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public DiaEntrenamientoDTO convertEntityToDtoAdmin(DiaEntrenamiento diaEntrenamiento) {
         DiaEntrenamientoDTO diaEntrenamientoDTO = new DiaEntrenamientoDTO();
         diaEntrenamientoDTO.setId(diaEntrenamiento.getId());

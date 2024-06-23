@@ -39,6 +39,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> getAllCustomers() {
         return userRepository.listarClientes()
                 .stream()
@@ -75,7 +76,7 @@ public class UserService {
     }
 
 
-
+    //@author: Pablo Miguel Aguilar Blanco
     public UserDTO createNewUser(Integer registerId){
         UserDTO userDTO = new UserDTO();
         RegistroDTO registroDTO = registroService.getRegisterById(registerId);
@@ -121,6 +122,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void saveNewUser(UserDTO userDTO){
         User user = new User();
         user.setUsername(userDTO.getUsername());
@@ -134,6 +136,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void saveUser(Usuario usuario){
         User user = new User();
         user.setUsername(usuario.getUsername());
@@ -150,6 +153,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void editUser(Usuario usuario){
         User user = userRepository.findById(usuario.getId()).orElse(null);
         user.setUsername(usuario.getUsername());
@@ -166,18 +170,22 @@ public class UserService {
         userRepository.save(user);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> filterUsers(String nombre, String apellidos){
         return this.convertlistEntityToDto(userRepository.filtrarUsuarios(nombre, apellidos));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> filterUsersWithDate(String nombre, String apellidos, LocalDate fechaNacimiento){
         return this.convertlistEntityToDto(userRepository.filtrarUsuariosConFecha(nombre, apellidos, fechaNacimiento));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> filterUsersWithRol(String nombre, String apellidos, Integer rol){
         return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRol(nombre, apellidos, rol));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> filterUsersWithRolAndDate(String nombre, String apellidos, LocalDate fechaNacimiento, Integer rol){
         return this.convertlistEntityToDto(userRepository.filtrarUsuariosConRolYFecha(nombre, apellidos, fechaNacimiento, rol));
     }
@@ -188,6 +196,7 @@ public class UserService {
         return this.convertEntityToDto(userRepository.findById(id).orElse(null));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public Usuario setUsuario(Usuario usuario, UserDTO user){
         usuario.setUsername(user.getUsername());
         usuario.setPassword(user.getPassword());
@@ -206,6 +215,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> asociatedTrainers(List<AsignacionClienteEntrenadorDTO> asignacionClienteEntrenadorDTO){
         List<UserDTO> entrenadoresAsociados = new ArrayList<>();
         for(AsignacionClienteEntrenadorDTO asignacion : asignacionClienteEntrenadorDTO){
@@ -214,10 +224,12 @@ public class UserService {
         return  entrenadoresAsociados;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> noAsociatedTrainers(List<UserDTO> noTrainers){
         return this.convertlistEntityToDto(userRepository.entrenadoresNoAsociadosAlCliente(this.convertlistDtoToEntity(noTrainers)));
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> asociatedDietist(List<AsignacionClienteDietistaDTO> asignacionClienteDietistaDTO){
         List<UserDTO> dietistasAsociados = new ArrayList<>();
         for(AsignacionClienteDietistaDTO asignacion : asignacionClienteDietistaDTO){
@@ -226,6 +238,7 @@ public class UserService {
         return  dietistasAsociados;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> noAsociatedDietist(List<UserDTO> noDietist){
         return this.convertlistEntityToDto(userRepository.dietistasNoAsociadosAlCliente(this.convertlistDtoToEntity(noDietist)));
     }
@@ -261,6 +274,7 @@ public class UserService {
         return clientesDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public User convertDtoToEntity(UserDTO userDTO){
         User user = new User();
         user.setId(userDTO.getId());
@@ -294,6 +308,7 @@ public class UserService {
         return userDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<UserDTO> convertlistEntityToDto(List<User> userList){
         List<UserDTO> userDTOList = new ArrayList<>();
         for(User user : userList){
@@ -302,6 +317,7 @@ public class UserService {
         return userDTOList;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<User> convertlistDtoToEntity(List<UserDTO> userDtoList){
         List<User> userList = new ArrayList<>();
         for(UserDTO user : userDtoList){
@@ -310,6 +326,7 @@ public class UserService {
         return userList;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     private LocalDate convertirStringALocalDate(String fechaStr) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

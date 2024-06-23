@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 
+//@author: Pablo Miguel Aguilar Blanco
+
 @Controller
 public class RegisterController extends BaseController{
 

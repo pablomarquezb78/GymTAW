@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
+//@author: Pablo Miguel Aguilar Blanco
+
 public class Usuario {
     protected Integer id;
     protected String username;
