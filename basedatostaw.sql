@@ -363,7 +363,7 @@ CREATE TABLE `implementacion_ejercicio-rutina` (
 
 LOCK TABLES `implementacion_ejercicio-rutina` WRITE;
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` DISABLE KEYS */;
-INSERT INTO `implementacion_ejercicio-rutina` VALUES (2,2,1,'4','8','45',NULL,NULL,NULL),(4,1,1,'4','8','60',NULL,NULL,NULL),(5,4,1,'5',NULL,NULL,'30',NULL,NULL),(6,5,1,NULL,NULL,NULL,'900',NULL,NULL);
+INSERT INTO `implementacion_ejercicio-rutina` VALUES (2,2,1,'4','8','45','','',''),(4,1,1,'4','8','60','','',''),(5,4,1,'5','','','30','',''),(6,5,1,'','','','900','','');
 /*!40000 ALTER TABLE `implementacion_ejercicio-rutina` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,4 +620,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-23 12:00:45
+-- Dump completed on 2024-06-23 12:36:53
