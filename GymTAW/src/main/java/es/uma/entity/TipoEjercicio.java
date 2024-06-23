@@ -2,6 +2,8 @@ package es.uma.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tipo_ejercicio")
 public class TipoEjercicio {
@@ -13,6 +15,9 @@ public class TipoEjercicio {
 
     @Column(name = "tipo_de_ejercicio", length = 45)
     private String tipoDeEjercicio;
+
+    @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ejercicio> ejercicios;
 
     public Integer getId() {
         return id;
