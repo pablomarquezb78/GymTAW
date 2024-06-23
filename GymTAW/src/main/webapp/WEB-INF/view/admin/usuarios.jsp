@@ -60,7 +60,8 @@
             <th>PESO</th>
             <th>ALTURA</th>
             <th>TELEFONO</th>
-            <th>ACCIONES</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -81,6 +82,8 @@
                 <a href="/admin/editarUsuario?id=<%=user.getId()%>" class="btn btn-primary btn-sm">
                     <i class="fas fa-pencil-alt"></i> Editar
                 </a>
+            </td>
+            <td>
                 <a href="/admin/borrarUsuario?id=<%=user.getId()%>" class="btn btn-danger btn-sm">
                     <i class="fas fa-trash-alt"></i> Borrar
                 </a>

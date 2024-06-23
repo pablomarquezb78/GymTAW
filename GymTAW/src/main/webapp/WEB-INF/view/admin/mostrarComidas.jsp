@@ -22,7 +22,7 @@
 
 <html>
 <head>
-    <title>Admin</title>
+    <title>Admin~Platos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
     <style>
@@ -64,7 +64,8 @@
         <th>FRANJA HORARIA</th>
         <th>CANTIDAD</th>
         <th>INGREDIENTES</th>
-        <th>ACCIONES</th>
+        <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -88,8 +89,8 @@
             %>
             <%= ingredientesStr %>
         </td>
-        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Editar</a>
-        <a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a></td>
+        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+        <td><a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a></td>
     </tr>
     <% } %>
     </tbody>

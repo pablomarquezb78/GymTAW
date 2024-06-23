@@ -15,7 +15,7 @@
     request.setAttribute("paginaActual", "ejercicios");
 
     if(rol.getId() == 1){
-        title = "Admin";
+        title = "Admin~Ejercicios";
         cabecera = "./admin/cabeceraAdmin.jsp";
 
     }
@@ -66,7 +66,9 @@
         <th>TIPO DE EJERCICIO</th>
         <th>ENLACE DEL VÍDEO</th>
         <th>DESCRIPCIÓN</th>
-        <th>ACCIONES</th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -83,9 +85,13 @@
             <a href="/comun/editarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-primary btn-sm">
                 <i class="fas fa-pencil-alt"></i> Editar
             </a>
+        </td>
+       <td>
             <a href="/comun/borrarEjercicio?id=<%=ejercicio.getId()%>" class="btn btn-danger btn-sm">
                 <i class="fas fa-trash-alt"></i> Borrar
             </a>
+       </td>
+        <td>
             <a href="/comun/verImplementacionesAsociadas?id=<%=ejercicio.getId()%>" class="btn btn-info btn-sm"> <i class="fas fa-eye"></i> Ver rutinas asociadas
             </a>
         </td>
