@@ -28,7 +28,7 @@ public class CantidadIngredientePlatoComida {
     @JoinColumn(name = "plato")
     private Plato plato;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comida")
     private Comida comida;
 
