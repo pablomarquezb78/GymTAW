@@ -55,6 +55,7 @@ public class AdminController extends BaseController {
         String dir;
         UserRolDTO rol = (UserRolDTO) session.getAttribute("rol");
         if (estaAutenticado(session) && esAdmin(rol)) {
+            model.addAttribute("peticiones", registroService.getAllRegisters().size());
             model.addAttribute("clientes", userService.getAllCustomers().size());
             model.addAttribute("entrenadores", userService.getAllTrainers().size());
             model.addAttribute("dietistas", userService.getAllDietistas().size());

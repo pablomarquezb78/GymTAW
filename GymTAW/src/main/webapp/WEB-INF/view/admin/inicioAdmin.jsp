@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    Integer peticiones = (Integer) request.getAttribute("peticiones");
     Integer clientes = (Integer) request.getAttribute("clientes");
     Integer entrenadores = (Integer) request.getAttribute("entrenadores");
     Integer dietistas = (Integer) request.getAttribute("dietistas");
@@ -28,6 +29,10 @@
             <h1 class="text-center mb-4">Bienvenido admin</h1>
             <section class="bg-light p-4 rounded shadow-sm">
                 <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Peticiones de registro:
+                        <span class="badge bg-info rounded-pill text-dark"><%=peticiones%></span>
+                    </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Clientes registrados:
                         <span class="badge bg-info rounded-pill text-dark"><%=clientes%></span>
