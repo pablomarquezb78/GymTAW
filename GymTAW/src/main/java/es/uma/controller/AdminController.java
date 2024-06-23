@@ -45,8 +45,6 @@ public class AdminController extends BaseController {
     @Autowired
     private RutinaService rutinaService;
     @Autowired
-    private AsignacionPlatoIngredienteDietistacreadorRepositoy asignacionPlatoIngredienteDietistacreadorRepositoy;
-    @Autowired
     private AsignacionPlatoIngredienteDietistaCreadorService asignacionPlatoIngredienteDietistaCreadorService;
     @Autowired
     private DiaEntrenamientoService diaEntrenamientoService;
@@ -308,7 +306,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionDietista";
 
-            
+
             List<AsignacionClienteDietistaDTO> acd = asignacionClienteDietistaService.findByCustomer(id);
             List<UserDTO> dietistasAsociados = userService.asociatedDietist(acd);
             List<UserDTO> dietistas = userService.noAsociatedDietist(dietistasAsociados);
