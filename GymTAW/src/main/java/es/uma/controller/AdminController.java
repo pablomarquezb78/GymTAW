@@ -274,7 +274,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionEntrenador";
 
-            //REFACTORIZAR
+
             List<AsignacionClienteEntrenadorDTO> ace = asignacionClienteEntrenadorService.findByCustomer(id);
             List<UserDTO> entrenadoresAsociados = userService.asociatedTrainers(ace);
             List<UserDTO> entrenadores = userService.noAsociatedTrainers(entrenadoresAsociados);
@@ -308,7 +308,7 @@ public class AdminController extends BaseController {
         if (estaAutenticado(session) && esAdmin(rol)) {
             dir = "admin/asignacionDietista";
 
-            //REFACTORIZAR
+            
             List<AsignacionClienteDietistaDTO> acd = asignacionClienteDietistaService.findByCustomer(id);
             List<UserDTO> dietistasAsociados = userService.asociatedDietist(acd);
             List<UserDTO> dietistas = userService.noAsociatedDietist(dietistasAsociados);

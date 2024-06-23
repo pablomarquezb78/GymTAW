@@ -52,6 +52,7 @@
         <thead class="text-white text-center" style="background-color: #343a40">
         <tr>
             <th>ID</th>
+            <th>USERNAME</th>
             <th>NOMBRE</th>
             <th>APELLIDOS</th>
             <th>ROL</th>
@@ -68,6 +69,7 @@
         %>
         <tr class="text-center">
             <td><%=user.getId()%></td>
+            <td><%=user.getUsername()%></td>
             <td><%=user.getNombre()%></td>
             <td><%=user.getApellidos()%></td>
             <td><%=user.getRol().getRolUsuario()%></td>
