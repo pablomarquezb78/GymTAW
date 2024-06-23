@@ -6,6 +6,7 @@ import es.uma.entity.Plato;
 import java.util.List;
 
 //@author: Jaime Ezequiel Rodriguez Rodriguez
+
 public class ComidaUI {
 
     protected List<Plato> listaPlatosComida;

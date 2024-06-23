@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer> {
 
+    //@author: Pablo Miguel Aguilar Blanco
     @Query("select i.ejercicio from ImplementacionEjercicioRutina i where i.rutina =:rutina")
     String findEjerciciosPorRutina(@Param("rutina") Rutina rutina);
 
+    //@author: Pablo Miguel Aguilar Blanco
     @Query("select e from Ejercicio e where e.nombre  like concat('%', :nombre, '%') and e.descripcion  like concat('%', :descripcion, '%')")
     List<Ejercicio> filtrarEjercicios(@Param("nombre") String nombre, @Param("descripcion") String descripcion);
 
+    //@author: Pablo Miguel Aguilar Blanco
     @Query("select e from Ejercicio e where e.nombre  like concat('%', :nombre, '%') and e.descripcion  like concat('%', :descripcion, '%') and e.tipo.id = :idTipo")
     List<Ejercicio> filtrarEjerciciosConTipo(@Param("nombre") String nombre, @Param("descripcion") String descripcion, @Param("idTipo") Integer idTipo);
 

@@ -5,6 +5,8 @@ import es.uma.entity.AsignacionPlatoIngredienteDietistaCreador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//@author: Pablo Miguel Aguilar Blanco
+
 @Service
 public class AsignacionPlatoIngredienteDietistaCreadorService {
 

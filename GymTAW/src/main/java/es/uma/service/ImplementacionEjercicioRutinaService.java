@@ -94,6 +94,7 @@ public class ImplementacionEjercicioRutinaService {
         implementacionUI.setMetros(implementacionDTO.getMetros());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ImplementacionEjercicioRutinaDTO> findByExercise(EjercicioDTO ejercicioDTO){
         Ejercicio ejercicio = ejercicioService.convertDtoToEntity(ejercicioDTO);
         return implementacionEjercicioRutinaRepository.buscarPorEjercicio(ejercicio)
@@ -102,6 +103,7 @@ public class ImplementacionEjercicioRutinaService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ImplementacionEjercicioRutinaDTO> filterImplementations(EjercicioDTO ejercicioDTO, Integer idRutina, String sets,
                                                                         String repeticiones, String peso, String tiempo, String metros, String kcal){
         Ejercicio ejercicio = ejercicioService.convertDtoToEntity(ejercicioDTO);
@@ -122,6 +124,7 @@ public class ImplementacionEjercicioRutinaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteById(Integer id){
         implementacionEjercicioRutinaRepository.deleteById(id);
     }
@@ -141,6 +144,7 @@ public class ImplementacionEjercicioRutinaService {
         this.implementacionEjercicioRutinaRepository.save(imp);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public ImplementacionEjercicioRutinaDTO convertEntityToDto(ImplementacionEjercicioRutina implementacionEjercicioRutina) {
         ImplementacionEjercicioRutinaDTO implementacionEjercicioRutinaDTO = new ImplementacionEjercicioRutinaDTO();
         implementacionEjercicioRutinaDTO.setId(implementacionEjercicioRutina.getId());

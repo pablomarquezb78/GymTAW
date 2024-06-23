@@ -56,6 +56,7 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteByDiaDieta(DiaDietaDTO diaDietaDTO){
         DiaDieta diaDieta = diaDietaService.convertDtoToEntity(diaDietaDTO);
         List<Comida> comidas = comidaRepository.findByDiaDieta(diaDieta.getId());
@@ -64,9 +65,12 @@ public class ComidaService {
         }
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ComidaDTO> getByCustomer(Integer id){
         return comidaRepository.findByCustomer(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
+
+    //@author: Pablo Miguel Aguilar Blanco
     public List<ComidaDTO> getByDietist(Integer id){
         return comidaRepository.findByDietist(id).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
@@ -321,6 +325,7 @@ public class ComidaService {
         return comidaUI;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public ComidaDTO convertEntityToDto(Comida comida){
         ComidaDTO comidaDTO = new ComidaDTO();
         comidaDTO.setId(comida.getId());

@@ -1,4 +1,3 @@
-//@Author: Pablo Miguel Aguilar Blanco
 package es.uma.controller;
 
 import es.uma.dto.*;
@@ -15,6 +14,8 @@ import org.springframework.ui.Model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+//@author: Pablo Miguel Aguilar Blanco
 
 @Controller
 @RequestMapping("/admin")

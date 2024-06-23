@@ -375,8 +375,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //final boss:
-    //todo //CHECK?
+
     @GetMapping("/editarimplementaciondefinitiva")
     public String doEditarImplementacionDefinitiva(@RequestParam("id") Integer id,
                                          Model model,HttpSession sesion){
@@ -414,8 +413,7 @@ public class EntrenamientosController extends BaseController{
         return strTo;
     }
 
-    //final boss:
-    //todo //CHECK?
+
     @GetMapping("/editarimplementacionentrenamientos")
     public String doEditarImplementacionEntrenamientos(@RequestParam("id") Integer id,
                                                    Model model,HttpSession sesion){
@@ -611,7 +609,7 @@ public class EntrenamientosController extends BaseController{
             model.addAttribute("rol",rol);
             model.addAttribute("ejercicio", new EjercicioUI());
 
-            return "admin/ejercicios";
+            return "ejercicios";
 
         }else{
             dir = "redirect:/";

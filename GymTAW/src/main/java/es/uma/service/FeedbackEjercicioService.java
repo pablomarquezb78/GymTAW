@@ -67,7 +67,7 @@ public class FeedbackEjercicioService {
         return feedbackEjercicioDTO;
     }
 
-
+    //@author: Pablo Miguel Aguilar Blanco
     public FeedbackEjercicioDTO convertEntityToDto(FeedbackEjercicio feedbackEjercicio) {
         FeedbackEjercicioDTO feedbackEjercicioDTO = new FeedbackEjercicioDTO();
         feedbackEjercicioDTO.setId(feedbackEjercicio.getId());

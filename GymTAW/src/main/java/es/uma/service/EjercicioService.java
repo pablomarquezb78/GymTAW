@@ -32,17 +32,20 @@ public class EjercicioService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<EjercicioDTO> getAllExercises(){
         return ejercicioRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
-    
+
+    //@author: Pablo Miguel Aguilar Blanco
     public EjercicioDTO getById(Integer id){
         return ejercicioRepository.findById(id).map(this::convertEntityToDto).orElse(null);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<EjercicioDTO> filterExercises(String nombre, String descripcion){
         return ejercicioRepository.filtrarEjercicios(nombre, descripcion)
                 .stream()
@@ -50,6 +53,7 @@ public class EjercicioService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public List<EjercicioDTO> filterExercisesWithType(String nombre, String descripcion, Integer idTipo){
         return ejercicioRepository.filtrarEjerciciosConTipo(nombre, descripcion, idTipo)
                 .stream()
@@ -57,6 +61,7 @@ public class EjercicioService {
                 .collect(Collectors.toList());
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void saveExercise(EjercicioUI ejercicioUI){
         Ejercicio nuevoEjercicio = new Ejercicio();
         nuevoEjercicio.setNombre(ejercicioUI.getNombre());
@@ -68,6 +73,7 @@ public class EjercicioService {
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void editExercise(EjercicioUI ejercicioUI){
         Ejercicio ejercicio = ejercicioRepository.findById(ejercicioUI.getId()).orElse(null);
         ejercicio.setNombre(ejercicioUI.getNombre());
@@ -78,11 +84,13 @@ public class EjercicioService {
         this.save(ejercicio);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void save(Ejercicio ejercicio){
         ejercicioRepository.save(ejercicio);
 
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public EjercicioUI setEjercicioUI(Integer id, EjercicioUI ejercicioUI){
         Ejercicio ejercicio = ejercicioRepository.findById(id).orElse(null);
         ejercicioUI.setNombre(ejercicio.getNombre());
@@ -92,6 +100,7 @@ public class EjercicioService {
         return ejercicioUI;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public void deleteById(Integer id){
         ejercicioRepository.deleteById(id);
     }
@@ -113,6 +122,7 @@ public class EjercicioService {
         ejercicioRepository.save(nuevoEjercicio);
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public EjercicioDTO convertEntityToDto(Ejercicio ejercicio){
         EjercicioDTO ejercicioDTO = new EjercicioDTO();
         ejercicioDTO.setId(ejercicio.getId());
@@ -123,6 +133,7 @@ public class EjercicioService {
        return ejercicioDTO;
     }
 
+    //@author: Pablo Miguel Aguilar Blanco
     public Ejercicio convertDtoToEntity(EjercicioDTO ejercicioDTO){
         Ejercicio ejercicio = new Ejercicio();
         ejercicio.setId(ejercicioDTO.getId());
