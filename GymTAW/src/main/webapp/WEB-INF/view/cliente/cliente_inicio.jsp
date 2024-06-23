@@ -22,14 +22,14 @@
 <div class="d-flex justify-content-center gap-3 position-absolute top-50 start-50 translate-middle" style="margin-top: 2%">
     <div>
         <%if(diaEntrenamiento!=null){%>
-        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary">Ver entrenamiento de hoy</button>
+        <button onclick="location.href='/cliente/mostrarEntrenamientos'" class="btn btn-primary my-3">Ver entrenamiento de hoy</button>
         <%}else{%>
         <h4 class="my-3">No hay entrenamiento hoy</h4>
         <%}%>
     </div>
     <div>
         <%if(diaDieta!=null){%>
-        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary">Ver dieta de hoy</button>
+        <button onclick="location.href='/cliente/mostrarDietas'" class="btn btn-primary my-3">Ver dieta de hoy</button>
         <%}else{%>
         <h4 class="my-3">No hay Dieta hoy</h4>
         <%}%>

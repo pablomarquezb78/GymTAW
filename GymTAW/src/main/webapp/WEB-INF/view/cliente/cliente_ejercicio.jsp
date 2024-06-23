@@ -62,15 +62,7 @@
     <h3>Descripción:</h3>
     <p class="text-white"><%= descripcion %></p><br/>
     <h3>URL:</h3>
-    <style>
-        .bg-secondary img {
-            max-width: 100%; /* Ajusta el ancho máximo de la imagen al tamaño del contenedor */
-            height: auto; /* Mantiene la proporción de aspecto */
-            display: block; /* Asegura que la imagen se muestre como un bloque */
-            margin: auto; /* Centra la imagen horizontalmente dentro del contenedor */
-        }
-    </style>
-    <img src="https://img.youtube.com/vi/<%= enlaceVideo %>/hqdefault.jpg" alt="Miniatura del video">
+    <a class="text-white"><%=enlaceVideo%></a>
 </div>
 
 <br/>
