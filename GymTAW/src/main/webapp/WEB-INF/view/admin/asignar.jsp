@@ -57,7 +57,9 @@
             <th>PESO</th>
             <th>ALTURA</th>
             <th>TELEFONO</th>
-            <th>ACCIONES</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -77,9 +79,13 @@
                 <a href="/admin/asignarEntrenador?id=<%= cliente.getId() %>" class="btn btn-primary btn-sm">
                     <i class="fas fa-user-plus"></i> Asignar entrenador
                 </a>
+            </td>
+            <td>
                 <a href="/admin/asignarDietista?id=<%= cliente.getId() %>" class="btn btn-primary btn-sm">
                     <i class="fas fa-user-plus"></i> Asignar dietista
                 </a>
+            </td>
+            <td>
                 <a href="/admin/eliminarAsignaciones?id=<%= cliente.getId() %>" class="btn btn-danger btn-sm">
                     <i class="fas fa-trash-alt"></i> Eliminar asignaciones
                 </a>

@@ -49,7 +49,9 @@
         <th>TIEMPO</th>
         <th>RECETA</th>
         <th>ENLACE DEL VÍDEO</th>
-        <th>ACCIONES</th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -65,7 +67,11 @@
 
         <td>
             <a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Editar</a>
+        </td>
+        <td>
             <a href="/admin/borrarPlato?id=<%=plato.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a>
+        </td>
+        <td>
             <a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>" class="btn btn-info"> <i class="fas fa-eye"></i> Ver comidas asociadas</a>
         </td>
     </tr>

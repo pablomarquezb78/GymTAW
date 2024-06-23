@@ -50,7 +50,7 @@
 } else {
 %>
 <div class="container">
-    <h1>Listado de peticiones de registro</h1>
+    <h3>Listado de peticiones de registro</h3>
     <table class="table table-bordered table-hover">
         <thead class="text-center" style="background-color: #343a40; color: white;">
         <tr>
@@ -61,7 +61,8 @@
             <th>ROL</th>
             <th>FECHA NACIMIENTO</th>
             <th>TELEFONO</th>
-            <th>ACCIONES</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -88,6 +89,8 @@
             <td><%= usuario.getTelefono() %></td>
             <td>
                 <a href="/admin/autenticar?id=<%= usuario.getId() %>" class="btn btn-success btn-sm"> Autenticar </a>
+            </td>
+            <td>
                 <a href="/admin/borrarPeticion?id=<%= usuario.getId() %>" class="btn btn-danger btn-sm">
                     <i class="fas fa-trash-alt"></i> Cancelar
                 </a>
