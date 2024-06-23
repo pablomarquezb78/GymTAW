@@ -68,6 +68,7 @@
         <tr>
             <th>ID</th>
             <th>NOMBRE DE LA RUTINA</th>
+            <th>ENTRENADOR</th>
             <th>SERIES</th>
             <th>REPETICIONES</th>
             <th>PESO</th>
@@ -83,6 +84,7 @@
         <tr class="text-center">
             <td><%= implementacion.getId() %></td>
             <td><%= implementacion.getRutina().getNombre() %></td>
+            <td><%= implementacion.getRutina().getEntrenador().getNombre()%> <%=implementacion.getRutina().getEntrenador().getApellidos()%></td>
             <td><%= implementacion.getSets() %></td>
             <td><%= implementacion.getRepeticiones() %></td>
             <td><%= implementacion.getPeso()%>Kg</td>
