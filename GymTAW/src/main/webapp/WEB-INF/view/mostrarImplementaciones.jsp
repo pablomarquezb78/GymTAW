@@ -61,45 +61,44 @@
 <jsp:include page="<%=cabecera%>"></jsp:include>
 
 <br/>
-<% if (implementaciones.size() > 0) { %>
+
 <div class="container">
     <h3>Rutinas asociadas al ejercicio: <%=ejercicio.getNombre()%></h3>
-<table class="table table-bordered table-hover">
-    <thead class="text-center" style="background-color: #343a40; color: white;">
-    <tr>
-        <th>ID</th>
-        <th>NOMBRE DE LA RUTINA</th>
-        <th>SERIES</th>
-        <th>REPETICIONES</th>
-        <th>PESO</th>
-        <th>METROS</th>
-        <th>TIEMPO</th>
-        <th>KCAL</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% for (ImplementacionEjercicioRutinaDTO implementacion : implementaciones) { %>
-    <tr class="text-center">
-        <td><%= implementacion.getId() %></td>
-        <td><%= implementacion.getRutina().getNombre() %></td>
-        <td><%= implementacion.getSets() %></td>
-        <td><%= implementacion.getRepeticiones() %></td>
-        <td><%= implementacion.getPeso()%>Kg</td>
-        <td><%= implementacion.getMetros()%></td>
-        <td><%= implementacion.getTiempo()%>s</td>
-        <td><%= implementacion.getKilocalorias() %></td>
-        <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-primary btn-sm"> <i class="fas fa-pencil-alt"></i> Editar</a></td>
-        <td><a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm"> <i class="fas fa-trash-alt"></i> Borrar</a></td>
-    </tr>
-    <% } %>
-    </tbody>
-</table>
+    <% if (implementaciones.size() > 0) { %>
+    <table class="table table-bordered table-hover">
+        <thead class="text-center" style="background-color: #343a40; color: white;">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE DE LA RUTINA</th>
+            <th>SERIES</th>
+            <th>REPETICIONES</th>
+            <th>PESO</th>
+            <th>METROS</th>
+            <th>TIEMPO</th>
+            <th>KCAL</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (ImplementacionEjercicioRutinaDTO implementacion : implementaciones) { %>
+        <tr class="text-center">
+            <td><%= implementacion.getId() %></td>
+            <td><%= implementacion.getRutina().getNombre() %></td>
+            <td><%= implementacion.getSets() %></td>
+            <td><%= implementacion.getRepeticiones() %></td>
+            <td><%= implementacion.getPeso()%>Kg</td>
+            <td><%= implementacion.getMetros()%></td>
+            <td><%= implementacion.getTiempo()%>s</td>
+            <td><%= implementacion.getKilocalorias() %></td>
+            <td><a href="/entrenamientos/editarimplementaciondefinitiva?id=<%= implementacion.getId() %>" class="btn btn-primary btn-sm"> <i class="fas fa-pencil-alt"></i> Editar</a></td>
+            <td><a href="/comun/borrarImplementacion?idEjercicio=<%= ejercicio.getId() %>&idImplementacion=<%= implementacion.getId() %>" class="btn btn-danger btn-sm"> <i class="fas fa-trash-alt"></i> Borrar</a></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
 <% } else { %>
-<div class="text-center">
-    <h1>No hay ninguna implementación :(</h1>
-</div>
+    <p>No hay ninguna implementación creada</p>
 <% }
     if(rol.getId() == 1){
 %>

@@ -51,59 +51,55 @@
 <jsp:include page="cabeceraAdmin.jsp"></jsp:include>
 
 <br/>
-<% if (comidas.size() > 0) { %>
+
 <div class="container">
     <h3>Comidas asociadas al plato: <%=plato.getNombre()%></h3>
-<table class="table table-bordered table-hover">
-    <thead class="text-center" style="background-color: #343a40; color: white;">
-    <tr>
-        <th>ID</th>
-        <th>FECHA/DÍA</th>
-        <th>CLIENTE</th>
-        <th>DIETISTA</th>
-        <th>FRANJA HORARIA</th>
-        <th>CANTIDAD</th>
-        <th>INGREDIENTES</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% for (CantidadIngredientePlatoComidaDTO comida : comidas) { %>
-    <tr class="text-center">
-        <td><%= comida.getId() %></td>
-        <td><%= comida.getComida().getDiaDieta().getFecha() %></td>
-        <td><%= comida.getComida().getDiaDieta().getCliente().getNombre() %></td>
-        <td><%= comida.getComida().getDiaDieta().getDietista().getNombre() %></td>
-        <td><%= comida.getComida().getTipoComida().getComidaDelDia() %></td>
-        <td><%= comida.getCantidad() %>g</td>
-        <td>
-            <%
-                String ingredientesStr = "";
-                for (IngredienteDTO ingrediente : ingredientes) {
-                    ingredientesStr += ingrediente.getNombre() + ", ";
-                }
-                if (ingredientesStr.length() > 0) {
-                    ingredientesStr = ingredientesStr.substring(0, ingredientesStr.length() - 2);
-                }
-            %>
-            <%= ingredientesStr %>
-        </td>
-        <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Editar</a></td>
-        <td><a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a></td>
-    </tr>
-    <% } %>
-    </tbody>
-</table>
+    <% if (comidas.size() > 0) { %>
+    <table class="table table-bordered table-hover">
+        <thead class="text-center" style="background-color: #343a40; color: white;">
+        <tr>
+            <th>ID</th>
+            <th>FECHA/DÍA</th>
+            <th>CLIENTE</th>
+            <th>DIETISTA</th>
+            <th>FRANJA HORARIA</th>
+            <th>CANTIDAD</th>
+            <th>INGREDIENTES</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (CantidadIngredientePlatoComidaDTO comida : comidas) { %>
+        <tr class="text-center">
+            <td><%= comida.getId() %></td>
+            <td><%= comida.getComida().getDiaDieta().getFecha() %></td>
+            <td><%= comida.getComida().getDiaDieta().getCliente().getNombre() %></td>
+            <td><%= comida.getComida().getDiaDieta().getDietista().getNombre() %></td>
+            <td><%= comida.getComida().getTipoComida().getComidaDelDia() %></td>
+            <td><%= comida.getCantidad() %>g</td>
+            <td>
+                <%
+                    String ingredientesStr = "";
+                    for (IngredienteDTO ingrediente : ingredientes) {
+                        ingredientesStr += ingrediente.getNombre() + ", ";
+                    }
+                    if (ingredientesStr.length() > 0) {
+                        ingredientesStr = ingredientesStr.substring(0, ingredientesStr.length() - 2);
+                    }
+                %>
+                <%= ingredientesStr %>
+            </td>
+            <td><a href="/admin/editarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+            <td><a href="/admin/borrarComida?idPlato=<%= plato.getId() %>&idComida=<%= comida.getId() %>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
 <% } else { %>
-<div class="text-center">
-    <h1>No hay comidas creadas para el plato <%=plato.getNombre()%></h1>
-</div>
+    <p>No hay comidas creadas para el plato <%=plato.getNombre()%></p>
 <% } %>
-
-<div>
     <a href="/admin/crearNuevaComida?idPlato=<%= plato.getId() %>" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nueva comida</a>
-</div>
 </div>
 
 <br>

@@ -41,47 +41,51 @@
 <br/>
 <div class="container">
     <h3>Lista de platos</h3>
-<table class="table table-bordered table-hover">
-    <thead class="text-white text-center" style="background-color: #343a40">
-    <tr>
-        <th>ID</th>
-        <th>NOMBRE</th>
-        <th>TIEMPO</th>
-        <th>RECETA</th>
-        <th>ENLACE DEL VÍDEO</th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-        for(PlatoDTO plato : platos){
-    %>
-    <tr class="text-center">
-        <td><%=plato.getId()%></td>
-        <td><%=plato.getNombre()%></td>
-        <td><%=plato.getTiempoDePreparacion()%>s</td>
-        <td><%=plato.getReceta()%></td>
-        <td><%=plato.getEnlaceReceta()%></td>
+    <% if (platos.size() > 0) { %>
+    <table class="table table-bordered table-hover">
+        <thead class="text-white text-center" style="background-color: #343a40">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>TIEMPO</th>
+            <th>RECETA</th>
+            <th>ENLACE DEL VÍDEO</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+            for(PlatoDTO plato : platos){
+        %>
+        <tr class="text-center">
+            <td><%=plato.getId()%></td>
+            <td><%=plato.getNombre()%></td>
+            <td><%=plato.getTiempoDePreparacion()%>s</td>
+            <td><%=plato.getReceta()%></td>
+            <td><%=plato.getEnlaceReceta()%></td>
 
-        <td>
-            <a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Editar</a>
-        </td>
-        <td>
-            <a href="/admin/borrarPlato?id=<%=plato.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a>
-        </td>
-        <td>
-            <a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>" class="btn btn-info"> <i class="fas fa-eye"></i> Ver comidas asociadas</a>
-        </td>
-    </tr>
-    <%
-        }
-    %>
-    </tbody>
-</table>
-
+            <td>
+                <a href="/admin/editarPlato?id=<%=plato.getId()%>" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Editar</a>
+            </td>
+            <td>
+                <a href="/admin/borrarPlato?id=<%=plato.getId()%>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar</a>
+            </td>
+            <td>
+                <a href="/admin/verComidasAsociadas?id=<%=plato.getId()%>" class="btn btn-info"> <i class="fas fa-eye"></i> Ver comidas asociadas</a>
+            </td>
+        </tr>
+        <%
+            }
+        %>
+        </tbody>
+    </table>
+ <% } else { %>
+    <p>No hay platos creados en la aplicación</p>
+<% } %>
 <a href="/admin/crearNuevoPlato" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Crear nuevo plato</a>
+
 </div>
 </br>
 <div class="container">

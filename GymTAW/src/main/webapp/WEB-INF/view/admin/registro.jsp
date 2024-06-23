@@ -42,15 +42,11 @@
 
 <br/>
 
-<%
-    if (peticiones.isEmpty()) {
-%>
-<h1 class="text-center">No hay peticiones de registro</h1>
-<%
-} else {
-%>
 <div class="container">
     <h3>Listado de peticiones de registro</h3>
+    <%
+        if (peticiones.size() > 0) {
+    %>
     <table class="table table-bordered table-hover">
         <thead class="text-center" style="background-color: #343a40; color: white;">
         <tr>
@@ -99,10 +95,12 @@
         <% } %>
         </tbody>
     </table>
+    <%
+    } else {
+    %>
+    <p>No hay peticiones de registro</p>
+    <% } %>
 </div>
-<%
-    }
-%>
 
 
 </body>

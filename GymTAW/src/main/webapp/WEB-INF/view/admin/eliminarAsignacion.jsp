@@ -46,6 +46,7 @@
     <div class="col-md-6">
         <div class="container">
             <h3>Entrenadores asignados</h3>
+            <% if (asignacionesEntrenador.size() > 0) { %>
             <table class="table table-bordered table-hover">
                 <thead class="text-center" style="background-color: #343a40; color: white;">
                 <tr>
@@ -68,11 +69,15 @@
                 <% } %>
                 </tbody>
             </table>
+            <% } else { %>
+            <p>No hay asignado ningún entrenador</p>
+            <% } %>
         </div>
     </div>
     <div class="col-md-6">
         <div class="container">
             <h3>Dietistas asignados</h3>
+            <% if (asignacionesDietista.size() > 0) { %>
             <table class="table table-bordered table-hover">
                 <thead class="text-center" style="background-color: #343a40; color: white;">
                 <tr>
@@ -95,6 +100,9 @@
                 <% } %>
                 </tbody>
             </table>
+            <% } else { %>
+            <p>No hay asignado ningún dietista</p>
+            <% } %>
         </div>
     </div>
 </div>

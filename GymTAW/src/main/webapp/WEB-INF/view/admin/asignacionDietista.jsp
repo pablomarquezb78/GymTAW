@@ -40,6 +40,7 @@
 <br/>
 <div class="container">
     <h3>Lista de dietistas</h3>
+    <% if (dietistas.size() > 0) { %>
     <table class="table table-bordered table-hover">
         <thead class="text-center" style="background-color: #343a40; color: white;">
         <tr>
@@ -64,6 +65,9 @@
         <% } %>
         </tbody>
     </table>
+    <% } else { %>
+    <p>No hay dietistas para asignar al cliente <%=cliente.getNombre()%> <%=cliente.getApellidos()%></p>
+    <% } %>
 </div>
 </body>
 </html>

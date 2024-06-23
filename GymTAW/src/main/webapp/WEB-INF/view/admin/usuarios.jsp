@@ -46,7 +46,7 @@
 <div class="container">
     <h3>Lista de usuarios</h3>
     <%
-        if (usuarios != null && !usuarios.isEmpty()) {
+        if (usuarios.size() > 0) {
     %>
     <table class="table table-bordered table-hover">
         <thead class="text-white text-center" style="background-color: #343a40">
