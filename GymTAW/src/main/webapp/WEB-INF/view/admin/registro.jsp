@@ -55,6 +55,7 @@
         <thead class="text-center" style="background-color: #343a40; color: white;">
         <tr>
             <th>ID</th>
+            <th>USERNAME</th>
             <th>NOMBRE</th>
             <th>APELLIDOS</th>
             <th>ROL</th>
@@ -67,6 +68,7 @@
         <% for (RegistroDTO usuario : peticiones) { %>
         <tr class="text-center">
             <td><%= usuario.getId() %></td>
+            <td><%= usuario.getUsername() %></td>
             <td><%= usuario.getNombre() %></td>
             <td><%= usuario.getApellidos() %></td>
             <td>

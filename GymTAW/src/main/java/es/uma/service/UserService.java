@@ -76,7 +76,7 @@ public class UserService {
 
 
 
-    public UserDTO createNewUser(Integer registerId){
+    public void createNewUser(Integer registerId){
         UserDTO userDTO = new UserDTO();
         RegistroDTO registroDTO = registroService.getRegisterById(registerId);
         UserRolDTO userRolDTO = userRolService.getUserRolById(registroDTO.getRol());
@@ -91,7 +91,6 @@ public class UserService {
 
         this.saveNewUser(userDTO);
 
-        return userDTO;
     }
 
     public void setUserVerPerfilCliente(Usuario usuario,User user){
