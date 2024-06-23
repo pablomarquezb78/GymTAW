@@ -683,7 +683,6 @@ public class EntrenamientosController extends BaseController{
         return dir;
     }
 
-    //@AUTHOR PABLO MÁRQUEZ BENÍTEZ
     @GetMapping("/verDesempenyoEntrenamientosEntrenador")
     public String doVerDesmepenyoEntrenamientos(@RequestParam(required = false, value = "fecha") String fecha, @RequestParam("idUsuario") Integer idUsuario, HttpSession session, Model model) {
         String dir;
