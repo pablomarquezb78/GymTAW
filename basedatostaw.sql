@@ -33,7 +33,7 @@ CREATE TABLE `asignacion_cliente_dietista` (
   KEY `asignacion-dietista_fk_idx` (`dietista`),
   CONSTRAINT `asignacion-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `asignacion-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `asignacion_cliente_dietista` (
 
 LOCK TABLES `asignacion_cliente_dietista` WRITE;
 /*!40000 ALTER TABLE `asignacion_cliente_dietista` DISABLE KEYS */;
-INSERT INTO `asignacion_cliente_dietista` VALUES (1,1,5);
+INSERT INTO `asignacion_cliente_dietista` VALUES (1,1,5),(2,7,6),(3,8,6);
 /*!40000 ALTER TABLE `asignacion_cliente_dietista` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +94,7 @@ CREATE TABLE `asignacion_plato_ingrediente_dietista_creador` (
   CONSTRAINT `asignacion_con_dietista` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`),
   CONSTRAINT `asignacion_con_ingrediente` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `asignacion_plato_con_plato` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +103,7 @@ CREATE TABLE `asignacion_plato_ingrediente_dietista_creador` (
 
 LOCK TABLES `asignacion_plato_ingrediente_dietista_creador` WRITE;
 /*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietista_creador` DISABLE KEYS */;
-INSERT INTO `asignacion_plato_ingrediente_dietista_creador` VALUES (7,9,1,5),(8,9,2,5),(9,9,2,5),(13,11,1,5),(14,11,3,5),(15,11,9,5);
+INSERT INTO `asignacion_plato_ingrediente_dietista_creador` VALUES (7,9,1,5),(8,9,2,5),(9,9,2,5),(13,11,1,5),(14,11,3,5),(15,11,9,5),(16,12,10,5),(17,12,8,5),(27,15,1,6),(28,15,3,6),(29,15,9,6),(30,16,11,6),(31,16,12,6),(32,16,14,6),(33,17,8,6),(34,17,10,6),(35,17,15,6),(36,17,16,6);
 /*!40000 ALTER TABLE `asignacion_plato_ingrediente_dietista_creador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
   CONSTRAINT `cantidad-ingrediente_fk` FOREIGN KEY (`ingrediente`) REFERENCES `ingrediente` (`idingrediente`),
   CONSTRAINT `cantidad-plato_fk` FOREIGN KEY (`plato`) REFERENCES `plato` (`idplato`),
   CONSTRAINT `cantidad-tipo_cantidad_fk` FOREIGN KEY (`tipo_cantidad`) REFERENCES `tipo_cantidad` (`idtipo_cantidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `cantidad_ingrediente-plato-comida` (
 
 LOCK TABLES `cantidad_ingrediente-plato-comida` WRITE;
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` DISABLE KEYS */;
-INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (25,0,1,NULL,1,11,2),(26,0,1,NULL,3,11,2),(27,0,1,NULL,9,11,2),(53,200,2,NULL,1,9,3),(54,100,2,NULL,2,9,3);
+INSERT INTO `cantidad_ingrediente-plato-comida` VALUES (25,0,1,NULL,1,11,2),(26,0,1,NULL,3,11,2),(27,0,1,NULL,9,11,2),(53,200,2,NULL,1,9,3),(54,100,2,NULL,2,9,3),(71,150,2,NULL,8,17,5),(72,50,2,NULL,10,17,5),(73,100,2,NULL,15,17,5),(74,100,2,NULL,16,17,5),(75,200,2,NULL,1,15,6),(76,100,3,NULL,3,15,6),(77,100,2,NULL,9,15,6),(78,100,2,NULL,11,16,7),(79,50,2,NULL,12,16,7),(80,2,4,NULL,14,16,7),(81,50,2,NULL,8,17,8),(82,20,2,NULL,10,17,8),(83,20,2,NULL,15,17,8),(84,20,2,NULL,16,17,8);
 /*!40000 ALTER TABLE `cantidad_ingrediente-plato-comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +161,7 @@ CREATE TABLE `comida` (
   KEY `comida-dia_dieta_fk_idx` (`dia_dieta`),
   CONSTRAINT `comida-dia_dieta_fk` FOREIGN KEY (`dia_dieta`) REFERENCES `dia_dieta` (`iddia_dieta`),
   CONSTRAINT `comida-tipo_comida_fk` FOREIGN KEY (`tipo_comida`) REFERENCES `tipo_comida` (`idtipo_comida`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +170,7 @@ CREATE TABLE `comida` (
 
 LOCK TABLES `comida` WRITE;
 /*!40000 ALTER TABLE `comida` DISABLE KEYS */;
-INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2);
+INSERT INTO `comida` VALUES (2,NULL,3,2),(3,NULL,1,2),(4,NULL,5,2),(5,NULL,2,3),(6,NULL,3,4),(7,NULL,5,4),(8,NULL,2,5);
 /*!40000 ALTER TABLE `comida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `dia_dieta` (
   KEY `dia_dieta-dietista_fk_idx` (`dietista`),
   CONSTRAINT `dia_dieta-cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `user` (`iduser`),
   CONSTRAINT `dia_dieta-dietista_fk` FOREIGN KEY (`dietista`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `dia_dieta` (
 
 LOCK TABLES `dia_dieta` WRITE;
 /*!40000 ALTER TABLE `dia_dieta` DISABLE KEYS */;
-INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5);
+INSERT INTO `dia_dieta` VALUES (2,'2024-06-26 10:48:56',NULL,1,5),(3,'2024-06-26 00:00:00',NULL,7,6),(4,'2024-06-26 00:00:00',NULL,8,6),(5,'2024-06-27 00:00:00',NULL,8,6);
 /*!40000 ALTER TABLE `dia_dieta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -383,7 +383,7 @@ CREATE TABLE `ingrediente` (
   `azucares` varchar(30) DEFAULT NULL,
   `hidratos_de_carbono` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idingrediente`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -392,7 +392,7 @@ CREATE TABLE `ingrediente` (
 
 LOCK TABLES `ingrediente` WRITE;
 /*!40000 ALTER TABLE `ingrediente` DISABLE KEYS */;
-INSERT INTO `ingrediente` VALUES (1,'Pasta','5','5','5','5','5'),(2,'Tomate','1','1','1','1','1'),(3,'Nata','2','2','2','2','2'),(8,'Pan','30','5','5','5','50'),(9,'Bacon','50','30','30','1','5');
+INSERT INTO `ingrediente` VALUES (1,'Pasta','5','5','5','5','5'),(2,'Tomate','1','1','1','1','1'),(3,'Nata','2','2','2','2','2'),(8,'Pan','30','5','5','5','50'),(9,'Bacon','50','30','30','1','5'),(10,'Jamón','100','10','10','10','10'),(11,'Lechuga','30','3','0','1','10'),(12,'Tomate','10','5','2','2','10'),(13,'Mayonesa','50','30','30','10','10'),(14,'Aceite','30','10','20','5','5'),(15,'Pimiento','50','6','10','10','15'),(16,'Lomo','50','50','30','1','10');
 /*!40000 ALTER TABLE `ingrediente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,7 +410,7 @@ CREATE TABLE `plato` (
   `receta` varchar(1500) DEFAULT NULL,
   `enlace_receta` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idplato`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -419,7 +419,7 @@ CREATE TABLE `plato` (
 
 LOCK TABLES `plato` WRITE;
 /*!40000 ALTER TABLE `plato` DISABLE KEYS */;
-INSERT INTO `plato` VALUES (9,'Pasta tomate','10','Cocer pasta y añadir tomate','https://www.youtube.com/watch?v=jNQXAC9IVRw'),(11,'Pasta con nata y bacon','10','Pasta y nata y bacon','https://www.youtube.com/watch?v=jNQXAC9IVRw');
+INSERT INTO `plato` VALUES (9,'Pasta tomate','10','Cocer pasta y añadir tomate','https://www.youtube.com/watch?v=jNQXAC9IVRw'),(11,'Pasta con nata y bacon','10','Pasta y nata y bacon','https://www.youtube.com/watch?v=jNQXAC9IVRw'),(12,'Bocadillo de jamón','5','Cortas el pan y metes jamón','https://www.youtube.com/watch?v=vAOzFvVz718'),(15,'Pasta con nata y bacon','20','Hervir la pasta y añadir nata junto con el bacon calentado','https://www.youtube.com/watch?v=SUjTxy5_NNY'),(16,'Ensalada pobre','10','Lavar la lechuga, cortar el tomate, mezclar todo con un chorrito de aceite','https://www.youtube.com/watch?v=UYyHci_ZzxY'),(17,'Serranito','12','Cocinar el lomo y los pimientos. Abrir el pan. Montar el bocadillo con cariño','https://www.youtube.com/watch?v=z5zMs9WztJc');
 /*!40000 ALTER TABLE `plato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +440,7 @@ CREATE TABLE `registro` (
   `fecha_nacimiento` datetime DEFAULT NULL,
   `rol` int DEFAULT NULL,
   PRIMARY KEY (`idregistro`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -574,7 +574,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`iduser`),
   KEY `user-rol_fk_idx` (`rol`),
   CONSTRAINT `user-rol_fk` FOREIGN KEY (`rol`) REFERENCES `user_rol` (`iduser_rol`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -583,7 +583,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'cliente_test','cliente','cliente','clientado',999,80,180,'2000-04-20 00:00:00','soy una cuenta de testeo de cliente',2),(2,'admin_test','admin','admin','administrador',111,100,200,'2000-01-01 00:00:00','soy una cuenta de testeo de administrador',1),(3,'bodybuilder_test','bodybuilder','bodybuilder','bodybuilding',222,120,150,'2003-03-02 00:00:00','soy una cuenta de testeo',3),(4,'crosstrainer_test','crosstrainer','crosstrainer','crosstraining',333,72,185,'1990-05-27 00:00:00','soy una cuenta de testeo',4),(5,'dietista_test','dietista','dietista','dieta dietada',444,96,175,'1995-10-10 00:00:00','soy una cuenta de testeo',5);
+INSERT INTO `user` VALUES (1,'cliente_test','cliente','cliente','clientado',999,80,180,'2000-04-20 00:00:00','soy una cuenta de testeo de cliente',2),(2,'admin_test','admin','admin','administrador',111,100,200,'2000-01-01 00:00:00','soy una cuenta de testeo de administrador',1),(3,'bodybuilder_test','bodybuilder','bodybuilder','bodybuilding',222,120,150,'2003-03-02 00:00:00','soy una cuenta de testeo',3),(4,'crosstrainer_test','crosstrainer','crosstrainer','crosstraining',333,72,185,'1990-05-27 00:00:00','soy una cuenta de testeo',4),(5,'dietista_test','dietista','dietista','dieta dietada',444,90,175,'1995-10-10 00:00:00','soy una cuenta de testeo',5),(6,'jaime_dietista','jaime','Jaime Ezequiel','Rodriguez Rodriguez',666555444,75,187,'2003-10-03 00:00:00','Delgado y sano',5),(7,'dani_cliente','dani','Daniel','El cliente',777888999,NULL,NULL,'2003-07-19 00:00:00',NULL,2),(8,'ana_cliente','ana','Ana','La clienta',111222333,NULL,NULL,'2003-09-17 00:00:00',NULL,2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,4 +620,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-17 12:52:57
+-- Dump completed on 2024-06-23 12:00:45
